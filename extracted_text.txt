@@ -1,0 +1,340 @@
+=== Page 1 ===
+Microbial Resistance Classification
+Student Name: Sidhant Kumar Agrawal
+Roll Number: 2021495
+BTP report submitted in partial fulfillment of the requirements
+for the Degree of B.Tech. in Computer Science & Bioscience
+on April 29, 2024
+BTP Track: Entrepreneurship Track
+BTP Advisor
+Dr. Debarka Sengupta
+Indraprastha Institute of Information Technology
+New Delhi
+
+
+=== Page 2 ===
+Student’s Declaration
+I hereby declare that the work presented in the report entitled Microbial Resistance Clas-
+sification submitted by me for the partial fulfillment of the requirements for the degree of
+Bachelor of Technology in Computer Science & Bioscience at Indraprastha Institute of Infor-
+mation Technology, Delhi, is an authentic record of my work carried out under guidance of Dr.
+Debarka Sengupta. Due acknowledgements have been given in the report to all material
+used. This work has not been submitted anywhere else for the reward of any other degree.
+.............................. Place & Date: .............................
+Sidhant Kumar Agrawal
+Certificate
+This is to certify that the above statement made by the candidate is correct to the best of my
+knowledge.
+.............................. Place & Date: .............................
+Dr. Debarka Sengupta
+2
+
+
+=== Page 3 ===
+Abstract
+This project explores the implementation of a novel algorithm for the detection of antimicrobial
+resistance (AMR) using the NVIDIA Jetson Orin Nano platform, a compact computing system
+ideal for point-of-care diagnostics. Antimicrobial resistance poses a significant threat to global
+health by reducing the effectiveness of antibiotics, making the rapid and accurate detection of
+AMR critical for appropriate treatment decisions.
+Leveragingadvancedmachinelearningtechniquesandgenomicdataanalysis,thisprojectadapts
+an existing algorithm, previously developed and available on GitHub, for deployment on an
+embedded system. The primary objectives included optimizing and testing the algorithm on
+the Jetson Orin Nano to ensure high accuracy and speed, crucial for real-time applications.
+Various machine learning models such as Random Forest, Logistic Regression, Support Vector
+Machine, and Convolutional Neural Network were evaluated for their performance in AMR
+prediction. The results demonstrated that these models could effectively process and predict
+AMR from genomic data, with Random Forest showing the highest overall performance.
+The project not only proved the technical feasibility of the system but also highlighted its
+potential market opportunities in enhancing point-of-care diagnostics in healthcare settings,
+particularly where access to comprehensive lab facilities is limited. This approach promises
+to significantly impact public health by enabling more precise and timely antibiotic treatment
+decisions, contributing to the global effort to curb the spread of antimicrobial resistance.
+
+
+=== Page 4 ===
+Acknowledgments
+I extend my sincere gratitude to Dr. Debarka Sengputa for his invaluable guidance and to my
+mentor, Abhishek Halder, for his continuous support throughout this project. Their expertise
+and encouragement have been crucial.
+Special thanks to my family and friends for their unwavering support. This project would not
+have been possible without the collaborative efforts and encouragement of these individuals,
+and for that, I am truly thankful.
+i
+
+
+=== Page 5 ===
+Contents
+1 Introduction iv
+1.1 Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . iv
+1.1.1 Technical Implementation . . . . . . . . . . . . . . . . . . . . . . . . . . . iv
+1.1.2 Broader Impact . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . iv
+2 Background and Literature Review vi
+2.1 Previous Work in AMR Detection . . . . . . . . . . . . . . . . . . . . . . . . . . vi
+2.1.1 Phenotypic Testing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . vi
+2.1.2 Molecular Diagnostics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . vi
+2.1.3 Whole Genome Sequencing (WGS) . . . . . . . . . . . . . . . . . . . . . . vi
+2.2 Genomic Approaches and Machine Learning . . . . . . . . . . . . . . . . . . . . . vii
+2.3 Novelty of the Current Approach . . . . . . . . . . . . . . . . . . . . . . . . . . . vii
+3 Technical Descriptions viii
+3.1 Data Preprocessing for AMR Prediction Using FCGR . . . . . . . . . . . . . . . viii
+3.1.1 Understanding FCGR (Frequency Chaos Game Representation). . . . . . viii
+3.1.2 Rationale for Using FCGR . . . . . . . . . . . . . . . . . . . . . . . . . . viii
+3.2 Machine Learning Models for AMR Prediction . . . . . . . . . . . . . . . . . . . ix
+3.2.1 Logistic Regression (LR) . . . . . . . . . . . . . . . . . . . . . . . . . . . . ix
+3.2.2 Support Vector Machine (SVM) . . . . . . . . . . . . . . . . . . . . . . . ix
+3.2.3 Random Forest (RF) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ix
+3.2.4 Convolutional Neural Network (CNN) . . . . . . . . . . . . . . . . . . . . ix
+3.2.5 Cross-Validation and Evaluation Metrics . . . . . . . . . . . . . . . . . . . ix
+3.2.6 Visualization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ix
+4 Results and Discussion x
+4.1 Overview . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . x
+4.2 Model Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . x
+5 Hardware Implementation Overview xi
+ii
+
+
+=== Page 6 ===
+6 Entrepreneurial Perspective xii
+6.1 Market Opportunities . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xii
+7 Conclusion xiii
+iii
+
+
+=== Page 7 ===
+Chapter 1
+Introduction
+Antimicrobial resistance (AMR) represents one of the most pressing health challenges of our
+time, posing a significant threat to the effectiveness of antibiotics which are crucial for treating
+bacterial infections. The ability to rapidly and accurately detect AMR can greatly enhance
+medical outcomes by guiding appropriate antibiotic usage, thus preserving their effectiveness
+and preventing further resistance spread. With the advent of advanced computing platforms
+and machine learning technologies, there is an unprecedented opportunity to leverage these
+tools in the fight against AMR.
+This project focuses on the application of a cutting-edge algorithm, previously developed and
+available on GitHub and described in scientific literature, for the detection of antimicrobial
+resistance. Thealgorithmemploysgenomicdatatopredictresistance,utilizingmachinelearning
+techniques refined and tested both on standard computing systems and, specifically for this
+project, on the NVIDIA Jetson Orin Nano. This compact yet powerful device is ideal for
+deploying sophisticated algorithms directly in clinical and field settings, providing a practical
+solution for point-of-care diagnostics.
+1.1 Objectives
+The primary objectives of this project are twofold:
+1.1.1 Technical Implementation
+• To adapt and implement the AMR detection algorithm on the NVIDIA Jetson Orin Nano
+platform. This involves configuring the device, installing necessary software, and optimiz-
+ing the algorithm to run efficiently in a low-power, embedded system environment.
+• To test and evaluate the performance of the algorithm on the Jetson Orin Nano, ensuring
+that it maintains high accuracy and speed, which are crucial for real-time diagnostic
+applications.
+1.1.2 Broader Impact
+• To demonstrate the feasibility of using an embedded system for rapid AMR detection at
+thepointofcare. ThisincludesassessingthepotentialfortheJetsonOrinNanotoprocess
+iv
+
+
+=== Page 8 ===
+genetic data quickly and accurately enough to inform treatment decisions directly at the
+site of patient care.
+• To explore the scalability of this technology for broader adoption in healthcare settings,
+particularly in low-resource environments where laboratory access may be limited. The
+ultimategoalistocontributetoaglobalreductioninthespreadofantimicrobialresistance
+by enabling more targeted use of antibiotics.
+By achieving these objectives, the project aims to bridge the gap between advanced genomic
+research and practical, everyday applications in healthcare, enhancing the capability to combat
+antimicrobial resistance effectively.
+v
+
+
+=== Page 9 ===
+Chapter 2
+Background and Literature Review
+The problem of antimicrobial resistance (AMR) is not only a pivotal health issue but also
+an evolving challenge in medical science and technology. The ability to detect AMR swiftly
+and accurately is crucial, as it directly influences treatment decisions and outcomes. Tradi-
+tional methods for detecting AMR typically involve culture-based techniques, which can be
+time-consuming and may not always provide the rapid responses required in clinical settings.
+In response, recent advancements have focused on genomic and computational approaches to
+predict AMR, offering the potential for faster, and often more precise, diagnostics.
+2.1 Previous Work in AMR Detection
+Several methods have been developed to detect AMR, each with its advantages and limitations:
+2.1.1 Phenotypic Testing
+The traditional gold standard for AMR detection involves culturing bacteria and testing their
+growth responses to antibiotics. This method is reliable but typically requires 24-48 hours to
+yield results, which can be detrimental in urgent care scenarios.
+2.1.2 Molecular Diagnostics
+Techniques such as PCR (Polymerase Chain Reaction) and real-time PCR have been employed
+todetectspecificresistancegenes. Thesemethodsarefasterthanphenotypictestingbutrequire
+prior knowledge of the resistance mechanisms involved.
+2.1.3 Whole Genome Sequencing (WGS)
+WGS offers comprehensive insights into the genetic material of pathogens, allowing for the
+detection of all known and novel resistance genes. However, the analysis and interpretation of
+WGS data demand significant computational resources and expertise.
+vi
+
+
+=== Page 10 ===
+2.2 Genomic Approaches and Machine Learning
+The use of genomic data combined with machine learning methods has emerged as a powerful
+approach to predict AMR. This strategy involves several steps, each critical for ensuring the
+accuracy and efficacy of the predictions:
+1. Data Acquisition: Genomic data is acquired, typically through sequencing, and involves
+collecting and preprocessing information to make it suitable for analysis.
+2. VariantCalling: Usingtoolslikebcftools,geneticvariantsareidentifiedagainstareference
+genome, suchasEscherichiacoliK-12strainMG1655. Thisprocesshelpspinpointgenetic
+differences that may confer resistance.
+3. SNP-matrix Construction: Identified single nucleotide polymorphisms (SNPs) are used
+to construct an SNP-matrix, representing the genomic landscape of the bacteria. This
+matrix is crucial for subsequent analysis.
+4. Data Encoding: SNP data is encoded using methods like label encoding and one-hot
+encoding to transform qualitative genetic information into a quantitative format that is
+amenable to machine learning algorithms.
+2.3 Novelty of the Current Approach
+This project builds upon these existing methods by implementing an AMR detection algorithm
+on the NVIDIA Jetson Orin Nano, a compact yet powerful computing platform suitable for
+point-of-care settings. By adapting the algorithm for use on an embedded system, this project
+aims to demonstrate the feasibility of conducting rapid, on-site AMR diagnostics, which could
+significantlyimpactclinicaldecision-makingandpatientoutcomes. Thecombinationofgenomic
+data analysis with advanced machine learning models and edge computing represents a novel
+and potentially transformative approach to combating the global challenge of antimicrobial
+resistance.
+vii
+
+
+=== Page 11 ===
+Chapter 3
+Technical Descriptions
+3.1 Data Preprocessing for AMR Prediction Using FCGR
+3.1.1 Understanding FCGR (Frequency Chaos Game Representation)
+Frequency Chaos Game Representation (FCGR) is a bioinformatics technique that transforms
+DNA sequences into a two-dimensional representation. Each nucleotide base (A, C, G, T) is
+assigned to a quadrant in a square, allowing the sequence to be plotted as a continuous path
+withinthissquare. ThismethodcondensescomplexDNAsequencesintoacompactformatthat
+retains essential information, making it particularly useful for machine learning applications
+where patterns in the data need to be clearly identified and analyzed.
+3.1.2 Rationale for Using FCGR
+The genomic sequences associated with AMR contain complex patterns that could indicate
+resistance traits. FCGR converts these patterns into numerical matrices that machine learning
+algorithms can more easily process. The goal is to extract features that significantly enhance
+the ability to predict AMR from genomic data effectively.
+In the preprocessing workflow for AMR prediction using FCGR, several essential steps are
+undertaken to prepare the genomic data for analysis. Initially, necessary libraries such as
+data.tableforefficientdatamanipulationandkaosforperformingFCGRongeneticsequences
+are loaded. The genomic data, stored in “example data.csv,” is then loaded using the fread
+functionfromdata.tableanddecodedbackintonucleotidecharacters(’N’,’A’,’G’,’C’,’T’)for
+further processing. Subsequently, the data is transposed to align the sequences correctly for the
+FCGRprocess. Aftertransposition,thedataisconvertedintocharactervectors,preparingitfor
+theencodingprocess. Finally,eachsequenceisprocessedindividuallytocreateanFCGRmatrix
+witharesolutionof200,andthesematricesaresavedasindividualCSVfiles. Thisstepiscrucial
+for transforming genomic sequences into a format suitable for subsequent machine learning
+models, leveraging a novel approach to capture the essence of the genomic data effectively.
+This streamlined approach ensures that genomic sequences are accurately and efficiently con-
+verted into a format suitable for advanced machine learning analysis.
+viii
+
+
+=== Page 12 ===
+3.2 Machine Learning Models for AMR Prediction
+3.2.1 Logistic Regression (LR)
+Function: Estimates the probability of antibiotic resistance using a logistic function.
+Training: Utilizes LogisticRegression from sklearn.linear model with the ’lbfgs’ solver for
+optimization, allowing up to 1000 iterations.
+3.2.2 Support Vector Machine (SVM)
+Structure: Finds the optimal hyperplane that maximizes the margin between two classes.
+Training: Implemented with SVC from sklearn.svm, using a linear kernel to balance efficiency
+and performance.
+3.2.3 Random Forest (RF)
+Structure: An ensemble method using multiple decision trees to make predictions.
+Training: Uses RandomForestClassifier from sklearn.ensemble with 200 estimators to cre-
+ate a comprehensive model of the data.
+3.2.4 Convolutional Neural Network (CNN)
+Training: Built using Keras’ Sequential model, it features layers designed to process sequence
+data represented as images through FCGR. Includes Conv1D layers, BatchNormalization,
+MaxPooling1D, Flatten, Dense, and Dropout layers.
+Activation: Uses softmax for multi-class classification.
+Loss and Optimization: Employs ’categorical crossentropy’ and ’adam’ optimizer.
+3.2.5 Cross-Validation and Evaluation Metrics
+Models undergo k-fold cross-validation with performance metrics such as Matthews Correlation
+Coefficient (MCC), F1 score, accuracy, precision, and recall evaluated to ensure robustness.
+3.2.6 Visualization
+ROC and Precision-Recall curves are plotted to assess model performance, crucial for under-
+standing the balance between sensitivity and specificity, particularly important in medical di-
+agnostics.
+ix
+
+
+=== Page 13 ===
+Chapter 4
+Results and Discussion
+4.1 Overview
+In this section, we discuss the results obtained from testing different machine learning models
+designed to predict antimicrobial resistance (AMR). We will compare the performance of Ran-
+dom Forest, Logistic Regression, Support Vector Machine (SVM), and Convolutional Neural
+Network (CNN) models based on several metrics, including accuracy, precision, recall, F1 score,
+andROCAUC.Eachofthesemetricsprovidesinsightsintohowwellthemodelsareperforming
+and their practical implications for detecting AMR in clinical settings.
+4.2 Model Performance
+The performance of each model is summarized in the following table:
+Table 4.1: Performance Metrics for AMR Prediction Models
+Model Accuracy (%) Precision (%) Recall (%) ROC AUC (%)
+Random Forest (RF) 92.78 96.10 88.10 97.28
+Logistic Regression (LR) 91.11 92.50 88.10 92.97
+Support Vector Machine (SVM) 89.44 90.12 86.90 92.45
+Convolutional Neural Network
+96.53 96.53 96.53 -
+(CNN) - Training
+Convolutional Neural Network
+92.36 92.36 92.36 -
+(CNN) - Validation
+The table above provides a concise summary of the key performance metrics for each model
+used in the study. It highlights the strengths and weaknesses of each model in terms of their
+ability to predict AMR.
+x
+
+
+=== Page 14 ===
+Chapter 5
+Hardware Implementation Overview
+During my B.Tech project, I focused on implementing and configuring the NVIDIA Jetson
+Orin Nano for our antimicrobial resistance (AMR) detection system. The initial setup required
+installingtheoperatingsystemandnecessarylibraries, whichIcompletedusingNVIDIA’sSDK
+Manager to install JetPack components. This setup proved complex, particularly for someone
+setting it up for the first time. I faced several challenges, such as issues with flashing the Jetson
+with a new operating system and booting from an SSD, often caused by incorrect bootloader
+settings or SSD compatibility issues.
+Once the hardware was ready, I began testing various machine learning models, including Ran-
+domForest(RF),SupportVectorMachine(SVM),LogisticRegression(LR),andConvolutional
+Neural Network (CNN). My goal was to evaluate the Jetson Orin Nano’s capability to handle
+the complex computational tasks these models demand. This involved ensuring that the system
+could efficiently run the necessary software and models for effective AMR detection.
+Looking ahead, I plan to develop a user-friendly external display, likely using an OLED device,
+to show the prediction results clearly. This will allow clinicians to easily determine the presence
+of AMR in patients, enhancing the practical utility of our system in clinical settings.
+xi
+
+
+=== Page 15 ===
+Chapter 6
+Entrepreneurial Perspective
+6.1 Market Opportunities
+The deployment of the AMR detection system on the NVIDIA Jetson Orin Nano offers signif-
+icant market opportunities, particularly in the field of point-of-care diagnostics. This technol-
+ogy can be particularly transformative for healthcare facilities that lack the infrastructure for
+comprehensivelabtesting. Thedevice’sabilitytorapidlyprocessgenomicdataandprovideim-
+mediate AMR detection results allows for quicker, more accurate treatment decisions, reducing
+the misuse of antibiotics and enhancing patient care.
+xii
+
+
+=== Page 16 ===
+Chapter 7
+Conclusion
+ThisprojecthassuccessfullydemonstratedthefeasibilityofusingtheNVIDIAJetsonOrinNano
+for deploying an advanced AMR detection system, leveraging the power of machine learning to
+offer rapid and accurate diagnostics at the point of care. The successful implementation and
+testing of various predictive models (RF, SVM, LR, and CNN) on this compact platform high-
+light its potential to significantly impact public health by enabling timely and precise antibiotic
+treatment decisions.
+xiii
+
+

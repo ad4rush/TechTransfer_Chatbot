@@ -1,0 +1,6 @@
+/extracted_images
+.env
+temp.pdf
+*.json
+extracted_images.txt
+.venv
