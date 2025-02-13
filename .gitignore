@@ -2,5 +2,9 @@
 .env
 temp.pdf
 *.json
-extracted_images.txt
+extracted_text.txt
 .venv
+app.py
+research_analysis.html
+research_analysis.pdf
+testing_pdf.py
