@@ -126,7 +126,7 @@ if st.session_state.processed:
             #HTML(string=html_content).write_pdf(pdf_file)
             asyncio.run(html_to_pdf(html_content, pdf_file))
         except Exception as e:
-            st.error("PDF conversion failed. Please ensure pdfkit and wkhtmltopdf are installed.")
+            st.error("PDF conversion failed.")
             pdf_file = None
 
         # Download buttons
