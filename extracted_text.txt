@@ -1,340 +1,1776 @@
 === Page 1 ===
-Microbial Resistance Classification
-Student Name: Sidhant Kumar Agrawal
-Roll Number: 2021495
+Risk Calculator For Heart Attack Patients
+Student Name: MOHIT
+Roll Number: 2021542
 BTP report submitted in partial fulfillment of the requirements
-for the Degree of B.Tech. in Computer Science & Bioscience
-on April 29, 2024
-BTP Track: Entrepreneurship Track
+for the Degree of B.Tech. in Computer Science & Engineering
+on 28-04-2023
+BTP Track: Research BTP Track
 BTP Advisor
-Dr. Debarka Sengupta
+Dr. Anubha Gupta
 Indraprastha Institute of Information Technology
 New Delhi
 
 
 === Page 2 ===
 Student’s Declaration
-I hereby declare that the work presented in the report entitled Microbial Resistance Clas-
-sification submitted by me for the partial fulfillment of the requirements for the degree of
-Bachelor of Technology in Computer Science & Bioscience at Indraprastha Institute of Infor-
-mation Technology, Delhi, is an authentic record of my work carried out under guidance of Dr.
-Debarka Sengupta. Due acknowledgements have been given in the report to all material
-used. This work has not been submitted anywhere else for the reward of any other degree.
-.............................. Place & Date: .............................
-Sidhant Kumar Agrawal
+I hereby declare that the work presented in the report entitled “Risk Calculators for Heart
+Attack Patients” submitted by me for the partial fulfillment of the requirements for the
+degree of Bachelor of Technology in Computer Science & Artificial Intelligence at Indraprastha
+Institute of Information Technology, Delhi, is an authentic record of my work carried out under
+guidance of Dr. Anubha Gupta. Due acknowledgements have been given in the report to
+all material used. This work has not been submitted anywhere else for the reward of any other
+degree.
+MOHIT Place & Date: IIIT-Delhi, 28-04-2023
 Certificate
 This is to certify that the above statement made by the candidate is correct to the best of my
 knowledge.
-.............................. Place & Date: .............................
-Dr. Debarka Sengupta
+Dr. Anubha Gupta Place & Date: IIIT-Delhi, 28-04-2023
 2
 
 
 === Page 3 ===
 Abstract
-This project explores the implementation of a novel algorithm for the detection of antimicrobial
-resistance (AMR) using the NVIDIA Jetson Orin Nano platform, a compact computing system
-ideal for point-of-care diagnostics. Antimicrobial resistance poses a significant threat to global
-health by reducing the effectiveness of antibiotics, making the rapid and accurate detection of
-AMR critical for appropriate treatment decisions.
-Leveragingadvancedmachinelearningtechniquesandgenomicdataanalysis,thisprojectadapts
-an existing algorithm, previously developed and available on GitHub, for deployment on an
-embedded system. The primary objectives included optimizing and testing the algorithm on
-the Jetson Orin Nano to ensure high accuracy and speed, crucial for real-time applications.
-Various machine learning models such as Random Forest, Logistic Regression, Support Vector
-Machine, and Convolutional Neural Network were evaluated for their performance in AMR
-prediction. The results demonstrated that these models could effectively process and predict
-AMR from genomic data, with Random Forest showing the highest overall performance.
-The project not only proved the technical feasibility of the system but also highlighted its
-potential market opportunities in enhancing point-of-care diagnostics in healthcare settings,
-particularly where access to comprehensive lab facilities is limited. This approach promises
-to significantly impact public health by enabling more precise and timely antibiotic treatment
-decisions, contributing to the global effort to curb the spread of antimicrobial resistance.
+This study aims to enhance the accuracy of predicting the 30-day mortality rate among patients
+following their first heart attack by leveraging machine learning and deep learning techniques.
+Thecurrentcardiacriskstratificationtool,theRevisedCardiacRiskIndex,whilewidelyutilized,
+exhibits limitations, particularly in its discriminative ability. To address this, we propose the
+development and validation of a novel predictive cardiac risk calculator.
+In contrast to existing risk calculators available online that estimate long-term cardiovascular
+disease (CVD) risk, our focus is on predicting short-term mortality specifically within the cru-
+cial 30-day post-myocardial infarction period. Utilizing machine learning algorithms and deep
+learning neural networks, we aim to create a more precise and personalized predictive model.
+This model takes into account various clinical parameters and potential risk factors, providing
+a nuanced understanding of the patient’s prognosis.
+Through the integration of machine learning and deep learning methodologies, this research
+aims to contribute to more effective risk assessment tools in the context of short-term mortality
+post-first heart attack, ultimately aiding clinicians and patients in making informed decisions
+about management strategies.
+Thisstudyunderscorestheimportanceofadvancingpredictivemodelingtechniquesintherealm
+of cardiovascular care and serves as a stepping stone towards a more refined and patient-centric
+approach to risk assessment.
+Keywords: CardiovascularDisease, MortalityRate, RiskStratification, MachineLearning, Deep
+Learning
 
 
 === Page 4 ===
 Acknowledgments
-I extend my sincere gratitude to Dr. Debarka Sengputa for his invaluable guidance and to my
-mentor, Abhishek Halder, for his continuous support throughout this project. Their expertise
-and encouragement have been crucial.
-Special thanks to my family and friends for their unwavering support. This project would not
-have been possible without the collaborative efforts and encouragement of these individuals,
-and for that, I am truly thankful.
-i
+I would like to express my sincere gratitude to my advisor, Dr. Anubha Gupta, for
+providing me with this opportunity and all her guidance throughout this project. The regular
+meetings, constructive feedback, and constant support were of great help to me in
+accomplishing each task.
+4
 
 
 === Page 5 ===
 Contents
-1 Introduction iv
-1.1 Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . iv
-1.1.1 Technical Implementation . . . . . . . . . . . . . . . . . . . . . . . . . . . iv
-1.1.2 Broader Impact . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . iv
-2 Background and Literature Review vi
-2.1 Previous Work in AMR Detection . . . . . . . . . . . . . . . . . . . . . . . . . . vi
-2.1.1 Phenotypic Testing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . vi
-2.1.2 Molecular Diagnostics . . . . . . . . . . . . . . . . . . . . . . . . . . . . . vi
-2.1.3 Whole Genome Sequencing (WGS) . . . . . . . . . . . . . . . . . . . . . . vi
-2.2 Genomic Approaches and Machine Learning . . . . . . . . . . . . . . . . . . . . . vii
-2.3 Novelty of the Current Approach . . . . . . . . . . . . . . . . . . . . . . . . . . . vii
-3 Technical Descriptions viii
-3.1 Data Preprocessing for AMR Prediction Using FCGR . . . . . . . . . . . . . . . viii
-3.1.1 Understanding FCGR (Frequency Chaos Game Representation). . . . . . viii
-3.1.2 Rationale for Using FCGR . . . . . . . . . . . . . . . . . . . . . . . . . . viii
-3.2 Machine Learning Models for AMR Prediction . . . . . . . . . . . . . . . . . . . ix
-3.2.1 Logistic Regression (LR) . . . . . . . . . . . . . . . . . . . . . . . . . . . . ix
-3.2.2 Support Vector Machine (SVM) . . . . . . . . . . . . . . . . . . . . . . . ix
-3.2.3 Random Forest (RF) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ix
-3.2.4 Convolutional Neural Network (CNN) . . . . . . . . . . . . . . . . . . . . ix
-3.2.5 Cross-Validation and Evaluation Metrics . . . . . . . . . . . . . . . . . . . ix
-3.2.6 Visualization . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ix
-4 Results and Discussion x
-4.1 Overview . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . x
-4.2 Model Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . x
-5 Hardware Implementation Overview xi
-ii
+1 Introduction 6
+1.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+1.2 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2 Related Work 8
+2.1 Literature Review . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+2.1.1 SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLU-
+TIONAL NETWORKS . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+2.1.2 A General Convolution Theorem for Graph Data . . . . . . . . . . . . . . 9
+2.2 Previous Studies . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+2.2.1 Heart attack mortality prediction: an application of machine learning
+methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3 Data Understanding 11
+4 Methodology 13
+4.1 Traditional ML approach . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+4.2 Using GNN and GCN Models . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+4.2.1 1 Hidden layer Method . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+4.2.2 4 Hidden layer Method . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+4.2.3 Other Approaches . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+5 Experiments and Results 18
+5.1 Traditional ML Approach . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+5.2 GNN and GCN Results . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+6 Future Work 27
+7 References 28
+5
 
 
 === Page 6 ===
-6 Entrepreneurial Perspective xii
-6.1 Market Opportunities . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xii
-7 Conclusion xiii
-iii
+Chapter 1
+Introduction
+1.1 Introduction
+In the realm of cardiovascular care, the urgency to enhance risk assessment tools, particularly
+in predicting the 30-day mortality rate post-initial heart attacks, has never been more crucial.
+Current tools, exemplified by the Revised Cardiac Risk Index, exhibit limitations, prompting
+an immediate need for a more precise and discriminating predictive cardiac risk calculator.
+This study is driven by a practical imperative—the pressing importance of refining risk assess-
+ment methodologies to meet the specific demands of short-term mortality within the 30-day
+post-myocardial infarction window. Recognizing this temporal gap, our aim is to leverage ad-
+vanced machine learning and deep learning techniques, creating a sophisticated model that
+factors in a comprehensive array of clinical parameters and potential risk factors.
+The urgency of the matter lies in the immediate applicability of our research. By contributing
+to more effective risk assessment tools, this study endeavors to provide clinicians and patients
+with timely, actionable insights. This introduction sets the stage for a focused exploration,
+emphasizing the practical significance and urgency of advancing predictive modeling techniques
+in the context of short-term mortality post-first heart attack.
+1.2 Motivation
+The motivation behind this study is propelled by the urgent need to significantly enhance the
+accuracy of predicting the 30-day mortality rate in patients following their initial heart attack.
+The prevailing cardiac risk stratification tool, the Revised Cardiac Risk Index, while widely
+utilized,presentsevidentlimitations,particularlyinitsabilitytodiscriminateeffectivelybetween
+varying risk levels. The gravity of the situation demands a novel and highly accurate predictive
+cardiac risk calculator.
+Thecriticalimportanceofthisstudyisunderscoredbytherealizationthatthecurrentriskassess-
+ment landscape primarily revolves around estimating long-term cardiovascular disease (CVD)
+6
 
 
 === Page 7 ===
-Chapter 1
-Introduction
-Antimicrobial resistance (AMR) represents one of the most pressing health challenges of our
-time, posing a significant threat to the effectiveness of antibiotics which are crucial for treating
-bacterial infections. The ability to rapidly and accurately detect AMR can greatly enhance
-medical outcomes by guiding appropriate antibiotic usage, thus preserving their effectiveness
-and preventing further resistance spread. With the advent of advanced computing platforms
-and machine learning technologies, there is an unprecedented opportunity to leverage these
-tools in the fight against AMR.
-This project focuses on the application of a cutting-edge algorithm, previously developed and
-available on GitHub and described in scientific literature, for the detection of antimicrobial
-resistance. Thealgorithmemploysgenomicdatatopredictresistance,utilizingmachinelearning
-techniques refined and tested both on standard computing systems and, specifically for this
-project, on the NVIDIA Jetson Orin Nano. This compact yet powerful device is ideal for
-deploying sophisticated algorithms directly in clinical and field settings, providing a practical
-solution for point-of-care diagnostics.
-1.1 Objectives
-The primary objectives of this project are twofold:
-1.1.1 Technical Implementation
-• To adapt and implement the AMR detection algorithm on the NVIDIA Jetson Orin Nano
-platform. This involves configuring the device, installing necessary software, and optimiz-
-ing the algorithm to run efficiently in a low-power, embedded system environment.
-• To test and evaluate the performance of the algorithm on the Jetson Orin Nano, ensuring
-that it maintains high accuracy and speed, which are crucial for real-time diagnostic
-applications.
-1.1.2 Broader Impact
-• To demonstrate the feasibility of using an embedded system for rapid AMR detection at
-thepointofcare. ThisincludesassessingthepotentialfortheJetsonOrinNanotoprocess
-iv
+risk. However, the immediate and specific concern of short-term mortality within the crucial
+30-day post-myocardial infarction window necessitates a targeted approach. The urgency lies in
+addressing this temporal gap in risk assessment methodologies to better guide clinical interven-
+tions.
+Motivated by the pressing need for more effective risk prediction, this research advocates for the
+application of state-of-the-art machine learning and deep learning techniques. The urgency of
+the matter drives our ambition to develop a sophisticated and highly tailored predictive model,
+one that meticulously considers diverse clinical parameters and potential risk factors. The
+motivation is rooted in the conviction that a more advanced model is imperative for gaining a
+profound understanding of a patient’s prognosis during this critical post-heart attack phase.
+7
 
 
 === Page 8 ===
-genetic data quickly and accurately enough to inform treatment decisions directly at the
-site of patient care.
-• To explore the scalability of this technology for broader adoption in healthcare settings,
-particularly in low-resource environments where laboratory access may be limited. The
-ultimategoalistocontributetoaglobalreductioninthespreadofantimicrobialresistance
-by enabling more targeted use of antibiotics.
-By achieving these objectives, the project aims to bridge the gap between advanced genomic
-research and practical, everyday applications in healthcare, enhancing the capability to combat
-antimicrobial resistance effectively.
-v
+Chapter 2
+Related Work
+2.1 Literature Review
+Out of all major papers available online these are the significant papers for our domain.
+2.1.1 SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVO-
+LUTIONAL NETWORKS
+Research Paper Titled ”Semi-Supervised Classification with Graph Convolutional Networks”[1]
+by Thomas N. Kipf and Max Welling from the University of Amsterdam. gives us the following
+brief information
+TheresearchconductedbyKipfandWellingintroducesaninnovativeapproachtosemi-supervised
+learning through the utilization of Graph Convolutional Networks (GCNs). In contrast to con-
+ventional deep learning methods that heavily depend on large labeled datasets, their method-
+ology addresses the challenge of limited labeled data by proposing a framework that effectively
+incorporates both labeled and unlabeled data within a graph-structured dataset.
+ThepaperfocusesonleveragingGCNs,specializedneuralnetworksdesignedforgraph-structured
+data,tocapturerelationshipsbetweendatapointsinagraph. Thisapproachisparticularlyvalu-
+able for scenarios where obtaining labeled data is resource-intensive or impractical. The authors
+emphasize semi-supervised learning, demonstrating the effectiveness of their methodology in
+scenarios where only a subset of nodes in the graph possesses labeled data.
+A central aspect of their work involves node classification, where the model is trained to predict
+class labels for nodes within the graph. By representing the underlying structure and dependen-
+cies in the data through a graph-based approach, the proposed methodology exhibits promising
+results in enhancing the performance of semi-supervised learning tasks.
+The research is substantiated through extensive experimental validation on diverse datasets,
+showcasing the superiority of their approach over traditional methods. In essence, Kipf and
+Welling’s work presents a valuable contribution to the field, offering a novel perspective on semi-
+8
 
 
 === Page 9 ===
-Chapter 2
-Background and Literature Review
-The problem of antimicrobial resistance (AMR) is not only a pivotal health issue but also
-an evolving challenge in medical science and technology. The ability to detect AMR swiftly
-and accurately is crucial, as it directly influences treatment decisions and outcomes. Tradi-
-tional methods for detecting AMR typically involve culture-based techniques, which can be
-time-consuming and may not always provide the rapid responses required in clinical settings.
-In response, recent advancements have focused on genomic and computational approaches to
-predict AMR, offering the potential for faster, and often more precise, diagnostics.
-2.1 Previous Work in AMR Detection
-Several methods have been developed to detect AMR, each with its advantages and limitations:
-2.1.1 Phenotypic Testing
-The traditional gold standard for AMR detection involves culturing bacteria and testing their
-growth responses to antibiotics. This method is reliable but typically requires 24-48 hours to
-yield results, which can be detrimental in urgent care scenarios.
-2.1.2 Molecular Diagnostics
-Techniques such as PCR (Polymerase Chain Reaction) and real-time PCR have been employed
-todetectspecificresistancegenes. Thesemethodsarefasterthanphenotypictestingbutrequire
-prior knowledge of the resistance mechanisms involved.
-2.1.3 Whole Genome Sequencing (WGS)
-WGS offers comprehensive insights into the genetic material of pathogens, allowing for the
-detection of all known and novel resistance genes. However, the analysis and interpretation of
-WGS data demand significant computational resources and expertise.
-vi
+supervisedlearningthatprovesespeciallybeneficialinreal-worldapplicationswherelabeleddata
+is scarce.
+2.1.2 A General Convolution Theorem for Graph Data
+”The work by Alberto Natali and Geert Leus from the Faculty of Electrical Engineering, Math-
+ematics, and Computer Science at Delft University of Technology introduces a pivotal contri-
+bution titled ’A General Convolution Theorem for Graph Data.’ The primary focus of their
+research is the development of a convolution theorem specifically tailored to the unique charac-
+teristics of graph-structured data.
+In response to the increasing prevalence of graph-based representations in various domains,
+Natali and Leus address the challenge of effectively processing graph data. The proposed con-
+volution theorem not only acknowledges the intricate nature of graph structures but also adapts
+the fundamental operation of convolution to operate meaningfully on graph data.
+Key elements of their work include the formulation of a versatile convolution theorem designed
+toaccommodatethecomplexitiesinherentingraphdatarepresentation. Thiscontributionholds
+promise for applications across diverse fields, including social network analysis, bioinformatics,
+and recommendation systems, where graph-based models are commonly employed.
+While the paper’s comprehensive contributions are expected to significantly advance the field,
+further insights into experimental validations or theoretical comparisons could enhance the un-
+derstanding of the proposed convolution theorem’s efficacy. Nonetheless, Natali and Leus’s
+work stands as a pioneering effort, providing a valuable and versatile tool for the processing and
+analysis of data represented in graph form.”
+2.2 Previous Studies
+2.2.1 Heart attack mortality prediction: an application of machine learning
+methods
+In this research by Issam Salman, the objective is to develop predictive models for hospital
+mortality in patients with acute myocardial infarction (AMI) using machine learning methods.
+The study employs real-world data from a Czech Republic hospital (603 patients) and two
+hospitalsinSyria(184patients)toconductacomparativeanalysisofdifferentpredictivemodels.
+1. Model Evaluation: - The first part of the research involves a comprehensive comparison of
+various predictive models for hospital mortality in AMI patients. The evaluation is based on
+real clinical data, encompassing 603 patients from a Czech Republic hospital and 184 patients
+from two hospitals in Syria.
+2. Generalizability: -Despitethespecificityofthelearnedmodelstotherespectivedatasets, the
+study endeavors to draw general conclusions that may have broader validity and applicability.
+9
 
 
 === Page 10 ===
-2.2 Genomic Approaches and Machine Learning
-The use of genomic data combined with machine learning methods has emerged as a powerful
-approach to predict AMR. This strategy involves several steps, each critical for ensuring the
-accuracy and efficacy of the predictions:
-1. Data Acquisition: Genomic data is acquired, typically through sequencing, and involves
-collecting and preprocessing information to make it suitable for analysis.
-2. VariantCalling: Usingtoolslikebcftools,geneticvariantsareidentifiedagainstareference
-genome, suchasEscherichiacoliK-12strainMG1655. Thisprocesshelpspinpointgenetic
-differences that may confer resistance.
-3. SNP-matrix Construction: Identified single nucleotide polymorphisms (SNPs) are used
-to construct an SNP-matrix, representing the genomic landscape of the bacteria. This
-matrix is crucial for subsequent analysis.
-4. Data Encoding: SNP data is encoded using methods like label encoding and one-hot
-encoding to transform qualitative genetic information into a quantitative format that is
-amenable to machine learning algorithms.
-2.3 Novelty of the Current Approach
-This project builds upon these existing methods by implementing an AMR detection algorithm
-on the NVIDIA Jetson Orin Nano, a compact yet powerful computing platform suitable for
-point-of-care settings. By adapting the algorithm for use on an embedded system, this project
-aims to demonstrate the feasibility of conducting rapid, on-site AMR diagnostics, which could
-significantlyimpactclinicaldecision-makingandpatientoutcomes. Thecombinationofgenomic
-data analysis with advanced machine learning models and edge computing represents a novel
-and potentially transformative approach to combating the global challenge of antimicrobial
-resistance.
-vii
+3. Addressing Data Challenges: - The second part of the paper focuses on addressing challenges
+associatedwithincompleteandimbalanceddata. Specifically,theChow–Liualgorithmandtree-
+augmented naive Bayesian methods are employed to enhance model performance under these
+conditions.
+4. Algorithmic Comparison: - The research includes a comparative analysis of the quality and
+effectivenessoftheChow–Liualgorithmandtree-augmentednaiveBayesianmethodsinhandling
+incomplete and imbalanced data, contrasting their performance with alternative approaches.
+In summary, Issam Salman’s research contributes to the technical understanding of predicting
+heart attack mortality by rigorously evaluating predictive models on real clinical data. The
+study also addresses the challenges of incomplete and imbalanced data sets, employing specific
+algorithmsandcomparingtheirperformancetoalternativemethods. Thefindingsaimtoprovide
+valuableinsightsfortheapplicationofmachinelearninginpredictingmortalityinAMIpatients.
+10
 
 
 === Page 11 ===
 Chapter 3
-Technical Descriptions
-3.1 Data Preprocessing for AMR Prediction Using FCGR
-3.1.1 Understanding FCGR (Frequency Chaos Game Representation)
-Frequency Chaos Game Representation (FCGR) is a bioinformatics technique that transforms
-DNA sequences into a two-dimensional representation. Each nucleotide base (A, C, G, T) is
-assigned to a quadrant in a square, allowing the sequence to be plotted as a continuous path
-withinthissquare. ThismethodcondensescomplexDNAsequencesintoacompactformatthat
-retains essential information, making it particularly useful for machine learning applications
-where patterns in the data need to be clearly identified and analyzed.
-3.1.2 Rationale for Using FCGR
-The genomic sequences associated with AMR contain complex patterns that could indicate
-resistance traits. FCGR converts these patterns into numerical matrices that machine learning
-algorithms can more easily process. The goal is to extract features that significantly enhance
-the ability to predict AMR from genomic data effectively.
-In the preprocessing workflow for AMR prediction using FCGR, several essential steps are
-undertaken to prepare the genomic data for analysis. Initially, necessary libraries such as
-data.tableforefficientdatamanipulationandkaosforperformingFCGRongeneticsequences
-are loaded. The genomic data, stored in “example data.csv,” is then loaded using the fread
-functionfromdata.tableanddecodedbackintonucleotidecharacters(’N’,’A’,’G’,’C’,’T’)for
-further processing. Subsequently, the data is transposed to align the sequences correctly for the
-FCGRprocess. Aftertransposition,thedataisconvertedintocharactervectors,preparingitfor
-theencodingprocess. Finally,eachsequenceisprocessedindividuallytocreateanFCGRmatrix
-witharesolutionof200,andthesematricesaresavedasindividualCSVfiles. Thisstepiscrucial
-for transforming genomic sequences into a format suitable for subsequent machine learning
-models, leveraging a novel approach to capture the essence of the genomic data effectively.
-This streamlined approach ensures that genomic sequences are accurately and efficiently con-
-verted into a format suitable for advanced machine learning analysis.
-viii
+Data Understanding
+We were given two different data sets of two different hospitals comprising 60 and 142 columns
+and 1700 and 2700 rows approximately. We labeled them as data set A and B. while data
+set B had more number of data points, but the outliers and anomalies were quite high in
+number, also this data was less reliable due to such large differences. Firstly we pre-processed
+the data to remove any kind of outliers, anomalies, missing values. Secondly To filter out
+most relevant features from our data set, to reduce dimensionality and help our model work
+effectively we identified the important features, we did this by calculating the p-values using the
+mann-Whitney test and t-test. and we found that following were the significant features.
+Figure 3.1: Numerical Features
+11
+
+[Image page_11_image_0.png]
+Gemini Response:
+Here's a detailed analysis of the image, encompassing its visual elements, text content, and contextual significance within the report:
+
+**Visual Elements:**
+
+*   **Table Format:** The image presents data in a table format, using rows and columns to organize information about various features related to heart attack patients.
+*   **Color Coding:** The table header row uses a yellow background for emphasis.
+*   **Grid Lines:** Black lines are used to delineate cells in the table, enhancing readability.
+
+**Text Content (Based on OCR and context from the surrounding text in the report):**
+
+The table compares the values of different clinical features in cases (patients with mortality) versus controls (patients without mortality).
+
+*   **Columns:**
+    *   **FEATURES:** Lists the clinical features being compared. Examples include Age, Smoking\_Pack\_Year, Ejection Fraction, Baseline Creatinine, HAEMOGLOBIN, HB1Ac, BP\_Systolic, BP\_Diastolic, and Heart\_Rate.
+    *   **Mean value(NORIN(3170))**: Shows the average value of the specified feature in the overall population dataset (NORIN).
+    *   **Cases (Mortality =1(244))**: Shows the average value for the feature within the "Cases" group, specifically those who experienced mortality. (Mortality=1, with 244 patients)
+    *   **Control(Mortality =0(2926))**: Shows the average value for the feature within the "Control" group, which includes those who did not experience mortality. (Mortality=0, with 2926 patients)
+    *   **p-Value (Either mann-Whitney or t test)**: Displays the p-value resulting from either a Mann-Whitney U test or a t-test. This value assesses the statistical significance of the difference in feature values between the "Cases" and "Control" groups. Smaller p-values (e.g., <0.0001) indicate a statistically significant difference.
+
+*   **Rows:** Each row represents a specific clinical feature and its corresponding data.
+
+**Contextual Significance:**
+
+*   **Feature Selection:** The table is presented in the "Data Understanding" chapter of the report. The report mentions that the table reflects features selected through p-value analysis using Mann-Whitney and t-tests.
+*   **Comparative Analysis:** This table helps to understand the relationship between clinical features and patient mortality. Comparing "Cases" and "Control" values highlights features that may be significant risk factors.
+*   **Statistical Significance:** The p-values indicate which features have the most statistically significant differences between the two groups, which are likely the most important for risk prediction modeling.
+*   **Data Set Characteristics:** The table demonstrates the initial analysis of the dataset, showing distributions and potential correlations relevant to the research objectives.
+*   **Figure Reference:** The caption "Figure 3.1: Numerical Features" indicates that this is one of the figures presented in the chapter to illustrate numerical features.
+
+**Overall:**
+
+The image is a critical component of the report, providing a visual representation of the data exploration process and the identification of significant features. It's part of the process to create a model to predict heart attack mortality. It enables the audience (readers of the report) to understand the data's key characteristics and the basis for subsequent modeling steps.
+
+
+OCR Text:
+Age 54.15 60.01 53.62 <0.0001
+Smoking_Pack_Ye | 5.073 5.19 4.93 <0.0001
+ar
+
+Ejection 40.20 35.86 40.64 <0.0001
+Fraction
+
+Baseline 1.06 1.275 1.0 <0.0001
+Creatinine
+
+HAEMOGLOBIN 12.83 12.55 12.864 0.0014
+HB1Ac 6.187 6.449 6.15 0.0016
+BP_Systolic 123.82 114.5 124.58 <0.0001
+BP_Diastoloic | 78.37 71.91 78.88 <0.0001
+Heart_Rate 83.66 85.77 83.35 0.025
+
+
 
 
 === Page 12 ===
-3.2 Machine Learning Models for AMR Prediction
-3.2.1 Logistic Regression (LR)
-Function: Estimates the probability of antibiotic resistance using a logistic function.
-Training: Utilizes LogisticRegression from sklearn.linear model with the ’lbfgs’ solver for
-optimization, allowing up to 1000 iterations.
-3.2.2 Support Vector Machine (SVM)
-Structure: Finds the optimal hyperplane that maximizes the margin between two classes.
-Training: Implemented with SVC from sklearn.svm, using a linear kernel to balance efficiency
-and performance.
-3.2.3 Random Forest (RF)
-Structure: An ensemble method using multiple decision trees to make predictions.
-Training: Uses RandomForestClassifier from sklearn.ensemble with 200 estimators to cre-
-ate a comprehensive model of the data.
-3.2.4 Convolutional Neural Network (CNN)
-Training: Built using Keras’ Sequential model, it features layers designed to process sequence
-data represented as images through FCGR. Includes Conv1D layers, BatchNormalization,
-MaxPooling1D, Flatten, Dense, and Dropout layers.
-Activation: Uses softmax for multi-class classification.
-Loss and Optimization: Employs ’categorical crossentropy’ and ’adam’ optimizer.
-3.2.5 Cross-Validation and Evaluation Metrics
-Models undergo k-fold cross-validation with performance metrics such as Matthews Correlation
-Coefficient (MCC), F1 score, accuracy, precision, and recall evaluated to ensure robustness.
-3.2.6 Visualization
-ROC and Precision-Recall curves are plotted to assess model performance, crucial for under-
-standing the balance between sensitivity and specificity, particularly important in medical di-
-agnostics.
-ix
+Figure 3.2: Categorical Features
+At last we also tried our results on the features given by domain experts, which had 18-20 major
+features. Finally we had total of three different types of features set for the same data set.
+We Trained our ML models on both the data sets, we performed training on data set A and
+testing on data set B and vice-a-versa. We also trained our Models on individual data sets.
+12
+
+[Image page_12_image_0.png]
+Gemini Response:
+Here's a thorough analysis of the image:
+
+**Visual Elements:**
+
+*   **Table Structure:** The image is dominated by a table. The table has a clear grid structure with rows and columns, making it easy to read the data.
+*   **Font and Style:** The text is presented in a simple, sans-serif font. The text within the table appears consistent, making the data uniform.
+*   **Alignment:** Values within the columns are either left-aligned (for text) or right-aligned (for numbers), which helps with readability.
+*   **Color:** No colors are present in the picture, meaning the table is black and white.
+
+**Text Content (based on the OCR output):**
+
+The table presents a feature analysis related to a study (likely medical or related to a diagnosis). The columns are:
+
+*   **FEATURES:** Lists various medical or clinical features (e.g., ACUTE\_MR, Anterior Wall MI, Avg\_Sleep, Cardiac Cardiogenic Shock, etc.).
+*   **N=3170:** Indicates the total number of cases in the study (3170).
+*   **Cases=246:** Indicates the number of cases that exhibit the feature in question (246).
+*   **Control=2926:** Indicates the number of cases that don't exhibit the feature (2926).
+*   **p-value:** Shows the statistical significance of the feature's association.
+
+**Data Interpretation (Examples):**
+
+*   **ACUTE\_MR:** Of the 3170 cases, 10 had Acute Mitral Regurgitation (MR). 1 of them was in the cases category, 9 of them were in the control category. The p-value is 1.0, meaning the feature isn't statistically significant related to the condition.
+*   **Cardiac\_Cardiog** cases have a p-value of &lt;0.0001, implying a strong statistical significance for this factor.
+
+**Contextual Significance:**
+
+*   **Medical Study:** The data suggests a medical study, likely focused on risk factors or diagnostic criteria. The features indicate factors related to heart conditions (anterior wall, cardiac conditions) or general health (diabetes, hypertension, sleep).
+*   **Statistical Analysis:** The p-value column indicates that statistical analysis has been performed to assess the strength of association between each feature and a specific outcome (presumably related to the "Cases" group).  Features with low p-values (e.g., &lt;0.05 or &lt;0.0001) are considered statistically significant.
+*   **Feature Selection:** The table likely represents a subset of features that were considered for inclusion in a predictive model. The p-values are used to select the most relevant features to be included in the model.
+*   **Potential Research:** This data is likely a representation or a table pulled from research done on heart attack patients, showing different features considered relevant, along with some data. The goal of the research could be to improve the prediction of who is at risk of heart attack or some other outcome.
+
+
+OCR Text:
+FEATURES N=3170 Cases=246 | Contro!=2926 | p-value
+ACUTE_MR 10 1 9 1.0
+anterior Wall | 1752 144 1608, 0.246
+MI
+
+avg_Sleep 266 10 256 0.0165
+Cardiac Cardiog | 107 3 64 <0.0001
+enicShock
+
+Cardiac HeartFa | 161 7 14 <0.0001
+ilure
+
+ChestPain_sympt | 3120 238 2882 0.377
+Diabetes 728 86 642 <0.0001
+Melitus
+
+Female 516 a1 435 <0.0001
+Hypertension — | gg2 94 788 0.00013
+LAD_Bool 1476 49 1427 <0.0001
+Lateral wall Mt [71 5 66 1.0
+Medical with no] 4113 181 932 <0.0001
+_PCI
+
+Physical_Activi | 422 13 409 0.0004
+Y
+
+RCA Bool 1000 35 965 <0.0001
+Shortness of | 1942 181 1761 <0.0001
+breath
+
+Syncope 205 39 166 <0.0001
+preACEARB | 196 33 163 <0.0001
+pre Beta blocke | 227 30 197 0.0018,
+PRESENCE OF | 758 54 704 <0.0001
+MITRAL
+
+REGURGITATION (M
+
+
 
 
 === Page 13 ===
 Chapter 4
-Results and Discussion
-4.1 Overview
-In this section, we discuss the results obtained from testing different machine learning models
-designed to predict antimicrobial resistance (AMR). We will compare the performance of Ran-
-dom Forest, Logistic Regression, Support Vector Machine (SVM), and Convolutional Neural
-Network (CNN) models based on several metrics, including accuracy, precision, recall, F1 score,
-andROCAUC.Eachofthesemetricsprovidesinsightsintohowwellthemodelsareperforming
-and their practical implications for detecting AMR in clinical settings.
-4.2 Model Performance
-The performance of each model is summarized in the following table:
-Table 4.1: Performance Metrics for AMR Prediction Models
-Model Accuracy (%) Precision (%) Recall (%) ROC AUC (%)
-Random Forest (RF) 92.78 96.10 88.10 97.28
-Logistic Regression (LR) 91.11 92.50 88.10 92.97
-Support Vector Machine (SVM) 89.44 90.12 86.90 92.45
-Convolutional Neural Network
-96.53 96.53 96.53 -
-(CNN) - Training
-Convolutional Neural Network
-92.36 92.36 92.36 -
-(CNN) - Validation
-The table above provides a concise summary of the key performance metrics for each model
-used in the study. It highlights the strengths and weaknesses of each model in terms of their
-ability to predict AMR.
-x
+Methodology
+4.1 Traditional ML approach
+We performed the following Models on both the data sets A and B.
+1. Random Forest
+2. Extra Tree
+3. Adaboost
+4. SVM
+5. Catboost
+6. Logistic Regression
+and finally we performed the Ensemble method to get the better results.
+We have used Stratified K-Cross Validation Technique. It ensures that every fold has similar
+data distribution as in the entire data set, thus, giving a consistent model performance in every
+iteration. Since, the data set is quite decent, we have used K=5. We tried for other K values
+but the results were not satisfactory. Finally we have trained the models and evaluated their
+performance using multi class metrics like accuracy, precision, recall and F1 Score. Figure 4.1
+4.2 Using GNN and GCN Models
+We worked upon Data set A and features given by domain experts for all the DL approaches in
+our research.
+We started with MLP with Grid search for finding the Hyper parameters and finally found these
+were the best parameters
+hidden layer size =1250, activation function = relu, optimiser = adam
+We then moved to GCN and GNN approach and the following things needs to be defined
+1.Defining Adjacency matrix :- for this we used the Cosine Similarity with 0.95 threshold
+value for similarity.
+13
 
 
 === Page 14 ===
-Chapter 5
-Hardware Implementation Overview
-During my B.Tech project, I focused on implementing and configuring the NVIDIA Jetson
-Orin Nano for our antimicrobial resistance (AMR) detection system. The initial setup required
-installingtheoperatingsystemandnecessarylibraries, whichIcompletedusingNVIDIA’sSDK
-Manager to install JetPack components. This setup proved complex, particularly for someone
-setting it up for the first time. I faced several challenges, such as issues with flashing the Jetson
-with a new operating system and booting from an SSD, often caused by incorrect bootloader
-settings or SSD compatibility issues.
-Once the hardware was ready, I began testing various machine learning models, including Ran-
-domForest(RF),SupportVectorMachine(SVM),LogisticRegression(LR),andConvolutional
-Neural Network (CNN). My goal was to evaluate the Jetson Orin Nano’s capability to handle
-the complex computational tasks these models demand. This involved ensuring that the system
-could efficiently run the necessary software and models for effective AMR detection.
-Looking ahead, I plan to develop a user-friendly external display, likely using an OLED device,
-to show the prediction results clearly. This will allow clinicians to easily determine the presence
-of AMR in patients, enhancing the practical utility of our system in clinical settings.
-xi
+Figure 4.1: Traditional ML Baseline Flow
+2. Number of Hidden layers :- we tried single hidden layer and 4 hidden layer approach
+3. Size of Hidden layers :- it varied from 2 to 64
+4. Learning rate
+5. Weights
+6. Optimizer
+4.2.1 1 Hidden layer Method
+We tried Hyper parameter tuning for this approach and found these were the best hyper param-
+eters Nodes :- Patients Number of features used 16 Learning rate :- 0.01 Epoch :- 100 Sigmoid
+activation function Loss :- Binary cross entropy Initial weight hidden layer:- 0.2
+4.2.2 4 Hidden layer Method
+We performed similar Hyper parameter tuning for this as well and the following Architecture
+was performing better than others.
+14
+
+[Image page_14_image_0.jpeg]
+Gemini Response:
+Here's a thorough analysis of the image:
+
+**Visual Elements:**
+
+*   **Type:** The image is a flowchart, a type of diagram showing a sequential process.
+*   **Shape:** The flowchart consists of rounded rectangle boxes, each containing a step of the process.
+*   **Color:** It is monochromatic, with black text, arrows, and box outlines on a light grey background.
+*   **Arrows:** Arrows are used to indicate the flow and direction of the process between steps.
+
+**Text Content:**
+
+The boxes in the flowchart contain the following text, representing the steps in a machine-learning process:
+
+1.  **Dataset**
+2.  **Data Cleaning**
+3.  **Feature Selection**
+4.  **Training Set**: Data used to train the model
+5.  **Validation Set**: Set used for Model selection and hyperparameter tuning.
+6.  **Outlier Removal**
+7.  **Feature Engineering**: Involves creating or modifying features to help model better.
+8.  **Training**: Actual process of training a Machine Learning Model
+9.  **Model**
+10. **Evaluation**: Process of evaluating the model to test its performance on unseen data.
+
+Additionally, there is a "Testing" arrow that leads from the 'Validation set' to the Model.
+
+**Contextual Significance:**
+
+*   **Process Depiction:** The flowchart illustrates a traditional machine learning workflow. It starts with raw data (Dataset), which then undergoes cleaning and feature selection. The selected features are then used to create a 'Training Set' and a 'Validation Set'. The training set data undergoes Outlier removal and feature engineering and is used to train the model and evaluate its performance.
+*   **Key Stages:** The diagram emphasizes the critical stages of data preparation (cleaning, feature selection, outlier removal, feature engineering), model training, validation, and final evaluation.
+*   **Model Testing:** The inclusion of "Testing" from the "Validation Set" towards the "Model" indicates the validation set is also used for final testing after training.
+
+**Overall:** The image provides a simplified visual representation of the common steps involved in a machine learning pipeline, from data acquisition to model evaluation. This visualization serves to illustrate the process clearly and concisely.
+
+OCR Text:
+Dataset
+
+Data Cleaning
+
+Feature Selection
+
+Training Set Validation Set
+
+Outlier Removal
+
+Feature Testing
+Engineering
+
+Training
+
+Model
+
+Evaluation
+
 
 
 === Page 15 ===
-Chapter 6
-Entrepreneurial Perspective
-6.1 Market Opportunities
-The deployment of the AMR detection system on the NVIDIA Jetson Orin Nano offers signif-
-icant market opportunities, particularly in the field of point-of-care diagnostics. This technol-
-ogy can be particularly transformative for healthcare facilities that lack the infrastructure for
-comprehensivelabtesting. Thedevice’sabilitytorapidlyprocessgenomicdataandprovideim-
-mediate AMR detection results allows for quicker, more accurate treatment decisions, reducing
-the misuse of antibiotics and enhancing patient care.
-xii
+Figure 4.2: Data set Shape
+Figure 4.3: 25 nodes of the graph (subset of main graph)
+Architecture of the Model
+Graph Conv Layers: 2 Graph Conv layers
+Dense Layers: 2 dense layers.
+Final Convolution Layer: The last Graph Conv layer generates the final output, which I use for
+classification.
+Activation Functions: I applied ReLU activation functions after each layer to introduce non-
+linearity.
+Loss Function: I used Binary Cross-Entropy with Logits (BCE With Logits Loss)
+15
+
+[Image page_15_image_0.png]
+Gemini Response:
+Here's a breakdown of the image and its context based on the provided information:
+
+**Visual Elements:**
+
+*   The image displays text output in a dark terminal or code editor style.
+
+**Text Content (from OCR):**
+
+*   **Shape of X\_train: (1343, 18):**  This indicates the shape of the training data's feature matrix (X).  It has 1343 rows (samples/patients) and 18 columns (features/variables).
+*   **Shape of X\_test: (336, 18):**  This indicates the shape of the testing data's feature matrix (X).  It has 336 rows and 18 columns.
+*   **Shape of y\_train: (1343, 1):**  This indicates the shape of the training data's target variable (y).  It has 1343 rows (corresponding to the training samples) and 1 column (representing the binary classification result).
+*   **Shape of y\_test: (336, 1):** This indicates the shape of the testing data's target variable (y). It has 336 rows and 1 column.
+
+**Contextual Significance (Based on Report Content):**
+
+1.  **Heart Attack Risk Calculator:** This information relates to the creation of a model for predicting the 30-day mortality risk after a heart attack.
+
+2.  **Machine Learning/Deep Learning:**  The data shapes suggest that machine learning or deep learning models are being trained and evaluated using the 'X' (features) and 'y' (target variable) datasets.
+     *   The data is split into training and testing sets.
+     *   The 'X' data contains 18 features, while the 'y' data is a binary classification.
+
+3.  **GNN/GCN Exploration:** The report specifically discusses using Graph Neural Networks (GNNs) and Graph Convolutional Networks (GCNs). The shape of the data is a feature matrix before it goes through GNN and GCN modeling.
+
+4.  **Data Preparation and Feature Engineering:**  The report also mentions feature selection and domain expert input, thus it looks like the image shows the dataset after the domain experts have been incorporated.
+
+In essence, the image provides a snapshot of the data's structure *after* initial pre-processing, and shows that the dataset has been split into training and test sets, with 18 features per data point.
+
+OCR Text:
+Shape of X_train: (1343, 18)
+Shape of X_test: (336, 18)
+Shape of y train: (1343, 1)
+Shape of y_ test: (336, 1)
+
+
+
+[Image page_15_image_1.png]
+Gemini Response:
+Here's a detailed analysis of the image:
+
+*   **Visual Elements:** The image depicts a network graph. The graph consists of:
+    *   **Nodes:**  Light blue circular nodes, each labeled with text.
+    *   **Edges:** Black lines connecting the nodes, indicating relationships or connections. The density of the connections makes it a complex network.
+    *   **Layout:** The nodes are arranged in a semi-clustered formation, with many connections crisscrossing the central area.
+
+*   **Text Content:**
+    *   **Title:** "Subset of the Graph Visualization" - indicating that the image shows only a part of a larger graph.
+    *   **Node Labels:** Labels on the nodes seem to follow a naming convention like "DT 100x" (where 'x' is a numerical digit or digits). These labels likely represent identifiers or codes for each node within the dataset.
+
+*   **Contextual Significance:**  Given the context of heart attack risk prediction (from the other text), this graph likely represents relationships between different patients or features in the patient dataset. Nodes could represent individual patients, medical parameters, or risk factors, while edges indicate correlations or dependencies between them. The visualization is a subset, suggesting a larger, more complex network of relationships.
+
+In summary, the image visualizes a network graph, likely extracted from a larger dataset used for heart attack risk prediction. The graph shows connections between potentially significant features or patients.
+
+
+OCR Text:
+Subset of the Graph Visualization
+
+
 
 
 === Page 16 ===
+Figure 4.4: Data set Shape
+4.2.3 Other Approaches
+Some of the other modifications performed were
+1) Addition of Timi and Grace Scores:-
+Quick overview of how Timi score is calculated
+Age: 60 years or older: 1 point
+Risk Factors:History of diabetes: 1 point
+History of hypertension: 1 point
+Cardiac Biomarkers: Elevated cardiac biomarkers (e.g., troponin):
+Elevated but less than upper limit: 1 point
+Elevated more than the upper limit: 2 points
+ST-Segment Changes:ST-segment deviation on ECG: 1 point (on-spot)
+Coronary Artery Disease (CAD) History: History of coronary artery disease or known stenosis:
+1 point
+Use of Aspirin in the Last Seven Days: No aspirin use: 1 point
+Quick overview of how Grace score is calculated
+Age
+Heart rate
+Systolic blood pressure
+Serum creatinine levels
+Killip class (a measure of heart failure severity)
+Cardiac arrest at admission
+ST-segment deviation on the electrocardiogram (ECG) (on-spot)
+Elevated cardiac biomarkers (e.g., troponin)
+Previous myocardial infarction or coronary artery bypass graft surgery (CABG)
+Presence of congestive heart failure or left ventricular dysfunction
+Tried Feature mapping :-
+Total number of features - 170 (Dixit)
+Total number of features - 210 (Norin)
+Number of common features : 142
+Common Features before and on the time of Admission : 90
+16
+
+[Image page_16_image_0.png]
+Gemini Response:
+Here's a thorough analysis of the image:
+
+**Visual Elements:**
+
+*   The image features text displayed against a dark gray or black background. The text appears to be computer-generated or from a coding environment output.
+*   The lines of text are aligned to the left.
+*   The image itself is a close-up capture of text output. No other graphical elements are present.
+
+**Text Content:**
+
+The text provides the dimensions (shape) of four arrays:
+
+*   `Shape of X_train: (1343, 18)`: This indicates that the training data (`X_train`) has 1343 rows and 18 columns.
+*   `Shape of X_test: (336, 18)`: This indicates that the testing data (`X_test`) has 336 rows and 18 columns.
+*   `Shape of y_train: (1343, 1)`: This indicates that the training labels or target variable (`y_train`) has 1343 rows and 1 column.
+*   `Shape of y_test: (336, 1)`: This indicates that the testing labels or target variable (`y_test`) has 336 rows and 1 column.
+
+**Contextual Significance:**
+
+*   **Machine Learning/Data Science:** This type of output is highly typical in machine learning and data science projects. The "X" variables usually represent the feature matrix, and the "y" variables represent the target variables or labels. The "_train" and "_test" suffixes indicate that the data has been split into training and testing sets, which is standard practice for model evaluation.
+*   **Data Dimensions:** The dimensions provided tell us about the size and structure of the dataset being used. Specifically:
+    *   Each row likely represents a single observation or data point.
+    *   In the case of `X_train` and `X_test`, the 18 columns suggest that there are 18 features or variables being used to describe each observation.
+    *   In the case of `y_train` and `y_test`, the single column suggests a single target variable.
+*   **Interpretation:** The image implies that the dataset has been loaded and split into training and testing sets in preparation for training a machine-learning model. The relatively small number of test samples, compared to training samples, is a common scenario.
+*   In a heart attack risk predictor, one could interpret 18 features for each patient and a binary outcome for each patient.
+
+**In summary:**
+
+The image displays the shape of training and testing datasets for features (X) and labels (y). It strongly suggests a machine-learning task, where a model will be trained on the training data (`X_train`, `y_train`) and evaluated on the testing data (`X_test`, `y_test`). The provided shapes inform us about the structure of the underlying dataset and the number of features used.
+
+OCR Text:
+Shape of X_train: (1343, 18)
+Shape of X_test: (336, 18)
+Shape of y train: (1343, 1)
+Shape of y_ test: (336, 1)
+
+
+
+=== Page 17 ===
+Can we use Timi and Grace scores as Features : yes
+Tried Weighted Loss functions
+Tried Minority resampling
+Figure 4.5: DL Baseline Flow
+[?]
+17
+
+[Image page_17_image_0.jpeg]
+Gemini Response:
+Here's a thorough analysis of the image:
+
+**Visual Elements:**
+
+*   **Diagram/Flowchart:** The image is a flowchart illustrating a process, most likely a machine learning workflow.
+*   **Boxes:** Each step in the process is represented by a rectangular box with rounded corners.
+*   **Arrows:** Arrows indicate the sequence and flow of steps.
+*   **Layout:** The flowchart is vertically oriented, starting from the top and moving downwards. There's a split in the flow after "Creating Adjacency Matrix."
+
+**Text Content:**
+
+Here's a breakdown of the text in each box, representing the steps:
+
+1.  **Dataset:** Represents the initial data source.
+2.  **Data Cleaning:** Cleaning the dataset.
+3.  **Feature Selection:** Process of selecting more relevant features from the dataset.
+4.  **Creating Adjacency Matrix:** Building adjacency matrix
+5.  **Training Set:** The dataset used to train the ML model
+6.  **Data Pre-processing:** Preparation of dataset after splitting.
+7.  **Standardization:** Adjusting the scale of features for ML model
+8.  **Training:** Training the ML model.
+9.  **Validation Set:** Validation of the ML model.
+10. **Testing:** Testing the ML model.
+11. **Model:** The trained machine learning model.
+12. **Evaluation:** Assessing the performance of the model.
+
+**Contextual Significance:**
+
+*   **Machine Learning Workflow:** The diagram represents a standard machine learning workflow, from data acquisition and cleaning to model evaluation.
+*   **Data Processing Stages:** It highlights key stages such as feature selection, preprocessing, training, testing, and evaluation.
+*   **Model Creation:** The flow emphasizes the iterative nature of building a machine learning model, as the training and validation loops contribute to the final "Model."
+* **Adjacency Matrix** Used to train model on graph dataset, the training and testing will be done separately.
+
+
+OCR Text:
+Training Set
+
+Data Pre-
+processing
+
+Standardization
+
+Training
+
+Dataset
+
+Data Cleaning
+
+Feature Selection
+
+Creating
+
+Adjacency Matrix
+
+Model
+
+Evaluation
+
+Validation Set
+
+Testing
+
+
+
+=== Page 18 ===
+Chapter 5
+Experiments and Results
+5.1 Traditional ML Approach
+These were the Results for the Traditional ML models.
+We were able to reach the accuracy of 74-75 in the best case scenario. (catboost Model)
+Figure 5.1: Data set A Results on 60 Features (initial common features)
+18
+
+[Image page_18_image_0.png]
+Gemini Response:
+Here's a detailed analysis of the image:
+
+**Visual Elements:**
+
+*   **Table:** The image consists of a well-structured table. The table has clear borders and rows, making the information organized.
+*   **Text-Based Image:** It's purely textual, containing information in a tabular format.
+
+**Text Content:**
+
+The table presents the results of different machine learning models on a dataset, categorized by fold, train/test/validation split, and evaluation metrics. The columns include:
+
+*   **Dataset:** "DT" likely refers to the dataset name.
+*   **FOLD:** Represents the fold number in a cross-validation setup (Fold-0 to Fold-4).
+*   **Train/Test/Val:** Specifies whether the results are for training, testing, or validation data.
+*   **Model:** Lists the machine learning model used (Random Forest, ExtraTree, AdaBoost, SVM, CatBoost, Ensemble).
+*   **Accuracy:** The accuracy score of the model.
+*   **Precision:** The precision score of the model.
+*   **Sensitivity:** The sensitivity (or recall) score of the model.
+*   **F1-score:** The F1-score of the model.
+*   **Specificity:** The specificity score of the model.
+
+The table provides performance metrics for each model across different folds and data splits, allowing for an assessment of model generalization and consistency.
+
+**Contextual Significance:**
+
+*   **Machine Learning Experimentation:** This image represents results from a machine learning experiment, likely related to a classification task.
+*   **Model Evaluation:** The metrics (accuracy, precision, sensitivity, F1-score, specificity) are standard measures used to evaluate the performance of classification models.
+*   **Cross-Validation:** The presence of "Fold-0" to "Fold-4" indicates that a k-fold cross-validation technique was employed.
+*   **Model Comparison:** The table enables comparison of the performance of different models on the same dataset.
+*   **Held-Out Set:** The "Heldout" row suggests the use of a separate dataset (not used during training) to assess the model's ability to generalize to unseen data.
+
+The results show model performance on training, validation, and testing sets. We can infer that the aim is to select the best performing model based on its performance on unseen data (validation and testing). CatBoost appears to have performed well with Training data at 0.86 Accuracy.
+
+In summary, the image is a summary of a machine learning experiment with clear visualization of the results for different models using a cross-validation approach.
+
+OCR Text:
+Dataset FOLD Train/Test/Val_|Model Accuracy _|Precision _| Sensitivity Fi-score Specificity
+oT Fold-0 Training Random Forest 0.79 o.9| 0.81 0.82) 078
+oT Fold-0 Validation Random Forest 0.72 0.91 0.72 0.79 0.72
+oT Fold-0 Testing Random Forest 07| o.9| 0.69 077, 07|
+oT Fold-1 Training ExtraTree 0.76 o.8s| 0.73 os| 0.76
+oT Fold-1 Validation ExtraTree 071 0.91 07| 078 077,
+oT Fold-1 Testing ExtraTree 0.69 o.9| 0.67, 0.76 0.69
+oT Fold-2 Training /AdaBoost 0.73 o.8s| 0.82) 078 071
+oT Fold-2 Validation /AdaBoost 0.69 o.9| 0.67, 0.76 0.69
+oT Fold-2 Testing /AdaBoost 0.68 0.91 0.76 0.76 0.68
+oT Fold-3 Training svM os| 0.91 o.9| 0.84 0.79
+oT Fold-3 Validation svM 0.72 0.92| 0.79 078 071
+oT Fold-3 Testing svM 07| 0.91 0.73 078 07|
+oT Fold-4 Training CatBoost 0.86 0.93] 0.94 0.88 0.85
+oT Fold-4 Validation CatBoost 0.75 0.91 0.72 0.81 0.75
+oT Fold-4 Testing CatBoost 0.76 0.91 071 0.81 0.76
+oT Heldout Testing Ensemble 0.72 0.91 0.73 078 0.72
+oT - Testing Ensemble o7 0.86] O74 075) o7
+
+
+
+
+=== Page 19 ===
+Figure 5.2: Data set B Results on 60 Features (initial common features)
+Figure 5.3: Data set A Results on 26 Features (after feature selection)
+19
+
+[Image page_19_image_0.png]
+Gemini Response:
+Here's a detailed analysis of the image:
+
+**Visual Elements:**
+
+*   The image consists of a table with rows and columns. The table is designed with alternating row shading (light/darker) to improve readability.
+*   Lines delineate the boundaries of each cell in the table, making the data clearly separated.
+*   The overall visual is clean and structured, resembling the typical output of a statistical analysis or machine learning report.
+
+**Text Content and Structure:**
+
+*   **Headers:** The table's headers provide context for the data contained within. They include:
+    *   Dataset
+    *   FOLD
+    *   Train/Test/Val (Training, Validation, Testing)
+    *   Model
+    *   Accuracy
+    *   Precision
+    *   Sensitivity
+    *   F1-score
+    *   Specificity
+
+*   **Data Rows:** The data rows provide results from various machine learning models trained and tested on a dataset called "NORIN". Each row corresponds to a different fold in a cross-validation scheme (Fold-0, Fold-1, Fold-2, Fold-3, Fold-4) and represents training, validation, and testing phases.
+    *   **Models:** Random Forest, ExtraTree, AdaBoost, SVM, and CatBoost are listed as the models used.
+    *   **Performance Metrics:** For each model and fold, performance metrics (Accuracy, Precision, Sensitivity, F1-score, and Specificity) are reported as decimal values between 0 and 1, likely indicating percentages or proportions. An additional row labeled “Ensemble” is tested on a held-out test set.
+
+**Contextual Significance:**
+
+*   **Machine Learning Experiment:** The table clearly represents the results of a machine learning experiment. Specifically, it details the performance of different classification algorithms.
+*   **Cross-Validation:** The use of "Fold-0" through "Fold-4" indicates a K-fold cross-validation strategy, a common technique for evaluating the generalization performance of machine learning models.
+*   **Model Comparison:** The data allows for a direct comparison of the performance of different machine learning models on the "NORIN" dataset.  It also indicates the dataset is balanced for the 5-fold cross validation. CatBoost appears to have the highest accuracy.
+*   **Performance Evaluation:** The performance metrics (Accuracy, Precision, Sensitivity, F1-score, Specificity) are all standard measures for evaluating the performance of classification models, indicating the model’s ability to correctly classify instances in different categories.
+*   **Ensemble Method:** The 'Ensemble' row suggests that a combined model (ensemble method) was used as a final step and tested on a held-out dataset.
+
+
+OCR Text:
+Dataset FOLD Train/Test/Val_|Model Accuracy Precision _| Sensitivity Fi-score Specificity
+NORIN Fold-0 Training Random Forest 0.79 0.9 0.81 0.82 0.78
+NORIN Fold-0 Validation Random Forest 0.72 0.91 0.72 0.79 0.72
+NORIN Fold-0 Testing Random Forest O7 0.9 0.69 0.77 O7
+NORIN Fold-4 Training ExtraTree 0.76 0.89 0.73 08 0.76
+NORIN Fold-4 Validation ExtraTree 0.74 0.91 O7 0.78 0.77
+NORIN Fold-4 Testing ExtraTree 0.69 0.9 0.67 0.76 0.69
+NORIN Fold-2 Training AdaBoost 0.73 0.89 0.82 0.78 0.74
+NORIN Fold-2 Validation AdaBoost 0.69 0.9 0.67 0.76 0.69
+NORIN Fold-2 Testing AdaBoost 0.68 0.91 0.76 0.76 0.68
+NORIN Fold-3 Training svM 08 0.91 0.9 0.84 0.79
+NORIN Fold-3 Validation svM 0.72 0.92 0.79 0.78 0.74
+NORIN Fold-3 Testing svM O7 0.91 0.73 0.78 O7
+NORIN Fold-4 Training CatBoost 0.86 0.93 0.94 0.88 0.85
+NORIN Fold-4 Validation CatBoost 0.75 0.91 0.72 0.81 0.75
+NORIN Fold-4 Testing CatBoost 0.76 0.91 0.74 0.81 0.76
+NORIN Heldout Testing Ensemble 0.72 0.91 0.73 0.78 0.72
+
+
+
+
+[Image page_19_image_1.png]
+Gemini Response:
+Here's a thorough analysis of the image:
+
+**Visual Elements:**
+
+*   **Table:** The primary visual element is a table with clearly defined rows and columns.
+*   **Gridlines:** Dark black horizontal lines seperate each of the rows.
+*   **Text:** The table is filled with text data, including headings and numerical values.
+*   **Font:** The font appears to be a standard, readable sans-serif typeface.
+
+**Text Content (based on OCR output):**
+
+The table presents performance metrics for different machine learning models across multiple folds of cross-validation. The columns are:
+
+*   **Fold:** Indicates the fold number (Fold-0, Fold-1, etc.) in cross-validation.
+*   **Train/test/val:** Specifies whether the results are for the training, validation, or testing set.
+*   **Model:** The name of the machine learning model (RF (Random Forest), ExtraTree, AdaBoost, SVM, CatBoost, Ensemble).
+*   **Accuracy:** Overall accuracy of the model.
+*   **Precision:** The model's ability to avoid false positives.
+*   **Sensitivity:** The model's ability to detect true positives (recall).
+*   **F1-score:** The harmonic mean of precision and sensitivity.
+*   **Specificity:** The model's ability to correctly identify negative cases.
+
+The rows show the performance of each model for each fold and data split (training, validation, testing). There are two "Testing Ensemble" entries at the bottom.
+
+**Contextual Significance:**
+
+*   **Machine Learning Model Evaluation:** This table is a standard way to present the results of machine learning model evaluation using cross-validation. It helps in understanding how well different models generalize to unseen data.
+*   **Performance Comparison:** The table facilitates a comparison of the performance of various models across different metrics. This allows for informed selection of the best model for a given task.
+*   **Cross-Validation:** The use of cross-validation indicates a rigorous approach to model evaluation, reducing the risk of overfitting.
+*   **Data Set:** Based on the document content (provided separately), this could be related to experiments in risk assessment or mortality prediction for heart attack patients, where different models are trained and evaluated using patient data.
+*   **Ensemble Method:** The "Ensemble" rows likely refer to a combination of different models, potentially leading to improved overall performance.
+
+**In summary,** the image is a table summarizing the performance of different machine learning models on a specific dataset, likely in the context of a healthcare or risk assessment project. The table provides a clear overview of model accuracy, precision, sensitivity, F1-score, and specificity across different folds of cross-validation.
+
+OCR Text:
+Fold Train/testival__|Model Accuracy |Precision _|Sensitivity |F1-score | Specificity
+Fold-0 Training RE 0.76 0.85| osi| 0.82 0.78
+Fold-0 Validation RE 0.72 0.82| o72| 079 072
+Fold-0 Testing RE 071 os| oss] 0.7 o7
+Fold-1 Training ExtraTree 0.76 0.87| 073] 08! 0.76
+Fold-1 Validation ExtraTree 071 o.8s| o7| 078 O77
+Fold-1 Testing ExtraTree 0.69 o.9| os7|_ 0.76 0.69
+Fold-2 Training /AdaBoost 0.73 o.8s| os2| 0.78 O74
+Fold-2 Validation /AdaBoost 0.69 o.9| os7|_ 0.76 0.69
+Fold-2 Testing /AdaBoost 0.68 0.91 o7e| 0.76 0.68
+Fold-3 Training svM 0.79 0.91 os| 0.84 0.79
+Fold-3 Validation svM 0.72 0.92| o79| 0.78 O74
+Fold-3 Testing svM 071 0.91 073| 0.78 o7
+Fold-4 Training CatBoost 0.86 0.93] o94| 0.88 0.85
+Fold-4 Validation CatBoost 0.75 0.91 o72| 081 0.75
+Fold-4 Testing CatBoost 0.76 0.91 o7i| 081 0.76
+
+Testing Ensemble 0.72 0.91 073| 0.78 072
+
+Testing Ensemble o7 0.86] o71i] 075) 07
+
+
+
+
+=== Page 20 ===
+Figure 5.4: Data set B Results on 26 Features (after feature selection)
+Figure 5.5: Data set A Results on 20 Features (given by Domain Experts)
+20
+
+[Image page_20_image_0.png]
+Gemini Response:
+Here is a detailed description of the image:
+
+**Visual Elements:**
+
+*   The image is a table or spreadsheet.
+*   The table is structured with rows and columns.
+*   Borders define the cells of the table, creating clear separation.
+*   The text is aligned within the cells, mostly left-aligned.
+
+**Text Content:**
+
+The table displays the performance metrics of different machine learning models on a dataset called "NORIN". It presents results for training, validation, and testing sets across multiple folds (Fold-0 to Fold-4) as part of a cross-validation process, along with a held-out test set. The columns are:
+
+*   **Dataset:** NORIN is the main dataset used
+*   **FOLD:** Indicates the fold number in the cross-validation. "Heldout" indicates the results on a held-out test set.
+*   **Train/Test/Val:** Specifies if the results are for the training, validation, or testing set.
+*   **Model:** Lists the machine learning model used: Random Forest, ExtraTree, AdaBoost, SVM, CatBoost, and Ensemble.
+*   **Accuracy:** Overall accuracy of the model.
+*   **Precision:** Indicates the proportion of positive identifications was actually correct.
+*   **Sensitivity:** Measures the proportion of actual positives that are correctly identified as such
+*   **F1-score:** The harmonic mean of the precision and recall, providing a balanced measure.
+*   **Specificity:** Measures the proportion of actual negatives that are correctly identified as such.
+
+**Contextual Significance:**
+
+*   The image is likely part of a report or research paper on machine learning model evaluation.
+*   The purpose is to compare the performance of different models (Random Forest, ExtraTree, AdaBoost, SVM, CatBoost) for a specific dataset ("NORIN") used in this case.
+*   The inclusion of cross-validation results suggests a robust evaluation methodology to assess the generalizability of the models.
+*   The ensemble model results likely represent an attempt to combine the predictions of multiple models for improved performance.
+*   The variety of metrics (Accuracy, Precision, Sensitivity, F1-score, Specificity) allows for a comprehensive assessment of the model's strengths and weaknesses.
+*   The specific models and metrics indicate a classification task, where the goal is to predict a categorical outcome.
+
+In essence, the table provides a quantitative summary of the performance of different machine learning models on a specific dataset, helping researchers or data scientists to compare and select the most appropriate model for their task.
+
+OCR Text:
+Dataset FOLD Train/Test/Val_| Model Accuracy [Precision _| Sensitivity FA-score Specificity
+NORIN. Fold-0 Training Random Forest 0.79 o.9| 0.81 0.82) 078
+NORIN. Fold-0 Validation Random Forest 0.72 0.91 0.72 0.79 0.72
+NORIN. Fold-0 Testing Random Forest 07| o.9| 0.69 077, 07|
+NORIN. Fold-1 Training ExtraTree 0.76 o.8s| 0.73 os| 0.76
+NORIN. Fold-1 Validation ExtraTree 071 0.91 07| 078 077,
+NORIN. Fold-1 Testing ExtraTree 0.69 o.9| 0.67, 0.76 0.69
+NORIN. Fold-2 Training /AdaBoost 0.73 o.8s| 0.82) 078 071
+NORIN. Fold-2 Validation /AdaBoost 0.69 o.9| 0.67, 0.76 0.69
+NORIN. Fold-2 Testing /AdaBoost 0.68 0.91 0.76 0.76 0.68
+NORIN. Fold-3 Training svM os| 0.91 o.9| 0.84 0.79
+NORIN. Fold-3 Validation svM 0.72 0.92| 0.79 078 071
+NORIN. Fold-3 Testing svM 07| 0.91 0.73 078 07|
+NORIN. Fold-4 Training CatBoost 0.86 0.93] 0.94 0.88 0.85
+NORIN. Fold-4 Validation CatBoost 0.75 0.91 0.72 0.81 0.75
+NORIN. Fold-4 Testing CatBoost 0.76 0.91 071 0.81 0.76
+NORIN. Heldout Testing Ensemble 0.72 0.91 0.73 078 0.72
+
+- Testing Ensemble 07| 0.86| 071 0.75 07|
+
+
+
+
+[Image page_20_image_1.png Error]
+Description failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+}
+, links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, retry_delay {
+  seconds: 15
+}
+]
+
+
+=== Page 21 ===
+5.2 GNN and GCN Results
+While we are still in the middle grounds to identify the best possible use of GCN Architecture,
+We still obtained these results.
+Results for 1 Hidden Layer GCN
+Figure 5.6: Best Training Results on Single layer GCN Architecture
+Figure 5.7: Testing Results for 1 Hidden Layer GCN
+Updated Results for 4 layer GCN Architecture after new hyperparameters
+5 fold Validation results without Grace and Timi scores
+Best accuracies
+Training: 83.48
+Validation : 82.23
+Testing : 80.02
+Precision
+Training: 82.96
+Validation : 82.43
+Testing : 80.26
+F1 Score
+Training: 82.78
+Validation : 81.88
+Testing : 81.12.
+(For 2 dense layers and 2 conv layers)
+[?]
+21
+
+[Image page_21_image_0.png Error]
+Description failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+}
+, links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, retry_delay {
+  seconds: 13
+}
+]
+
+
+[Image page_21_image_1.png]
+Gemini Response:
+Here's a breakdown of the image you sent:
+
+**Visual Elements:**
+
+*   The image displays text output in a dark terminal or code editor window. The text appears to be white or a light color against the dark background.
+*   The appearance suggests that this is a screenshot from a coding environment, likely showing the results of a Python script execution.
+
+**Text Content:**
+
+The text content can be broken down as follows:
+
+*   `[Running] python -u "c:\Users\98765\One` - This line indicates that a Python script is being executed using the Python interpreter.
+    *   `python -u` means the script is being run with unbuffered standard output and standard error streams.
+    *   `"c:\Users\98765\One` - The path suggests it's a Python script located in the user's directory on a Windows system. The full filename is likely cut off.
+*   `Sensitivity (Recall): 74.25` - This line reports the sensitivity or recall score of a machine-learning model. The score is `74.25` (presumably a percentage). Recall measures the ability of the model to correctly identify all relevant instances.
+*   `Specificity: 74.68` - This line reports the specificity score of the model as `74.68` (presumably a percentage). Specificity measures the ability of the model to correctly identify all negative instances.
+*   `Accuracy: 75.46` - This line reports the accuracy of the model as `75.46` (presumably a percentage). Accuracy is the overall proportion of correctly classified instances.
+*   `F1 Score: 73.25` - The line reports the F1 score of the model as `73.25`. The F1 score is the harmonic mean of precision and recall, providing a balanced measure of the model's performance.
+
+**Contextual Significance:**
+
+*   **Machine Learning Evaluation:** The numerical results (sensitivity, specificity, accuracy, and F1 score) indicate that the Python script is likely evaluating the performance of a machine learning model. These metrics are commonly used to assess the effectiveness of classification models.
+*   **Model Performance:** The reported scores are in the mid-70s percentage-wise. While acceptable, it's possible that further model tuning or feature engineering is needed to improve performance depending on the specific application or problem being addressed.
+*   **Experimentation:** The script is likely part of a larger experimentation process where different models, parameters, or datasets are being tested to achieve optimal performance.
+*   **Heart Attack Risk Calculator:** This image comes from a report on a "Risk Calculator For Heart Attack Patients". Therefore, the displayed metrics (sensitivity, specificity, accuracy, and F1-score) likely relate to the performance of machine learning models developed for predicting the 30-day mortality rate among patients following their first heart attack.
+
+
+OCR Text:
+[Running] python -u "c:\Users\98765\One
+Sensitivity (Recall): 74.25
+Specificity: 74.68
+
+Accuracy: 75.46
+
+F1 Score: 73.25
+
+
+
+=== Page 22 ===
+Figure 5.8: Training and Validation Loss Curve 5 Fold
+22
+
+[Image page_22_image_0.png]
+Gemini Response:
+Here's an analysis of the image:
+
+**Visual Elements:**
+
+*   **Line Graph:** The primary visual element is a line graph displaying the relationship between two variables.
+*   **Axes:** The x-axis is labeled "Epochs" and ranges from 0 to 500. The y-axis is labeled "Loss" and ranges from 0 to 10.
+*   **Lines:** Two lines are plotted on the graph:
+    *   One line represents "Average Training Loss."
+    *   The other line represents "Average Validation Loss."
+* The lines start at the same loss level but the validation line shows some fluctuation.
+
+**Text Content:**
+
+*   **Title:** "Average Training and Validation Loss Curves Across Folds"
+*   **Axis Labels:** "Epochs" (x-axis) and "Loss" (y-axis)
+*   **Legend:** A legend identifies which line represents "Average Training Loss" and "Average Validation Loss."
+
+**Contextual Significance:**
+
+*   **Machine Learning:** This image is indicative of a training process in machine learning. The graph plots the loss function, which quantifies the error between predicted and actual values.
+*   **Training and Validation:** The presence of both training and validation loss curves is a common practice to monitor the model's performance on both the data it is learning from (training) and a separate dataset used to evaluate generalization (validation).
+*   **Overfitting:** By comparing the training and validation loss curves, one can diagnose issues like overfitting (where the model performs well on training data but poorly on validation data).
+* **Lower loss:** The loss is reduced across all the Epochs.
+
+OCR Text:
+Loss
+
+Average Training and Validation Loss Curves Across Folds
+
+— Average Training Loss
+— Average Validation Loss
+
+
+
+
+=== Page 23 ===
+Figure 5.9: Results without Timi and Grace
+23
+
+[Image page_23_image_0.png]
+Gemini Response:
+Here's an analysis of the image:
+
+**Visual Elements:**
+
+*   **Table Format:** The image consists of a table with clearly defined rows and columns. The table structure is used to present data in an organized manner.
+
+**Text Content:**
+
+*   **Column Headers:**
+    *   "Folds": Represents different folds in a cross-validation setup. The folds are labeled from "Fold-0" to "Fold-4".
+    *   "Train/Test/Val": Indicates whether the data is used for "Training", "Validation," or "Testing" within each fold.
+    *   "Accuracy": Shows the accuracy score for each fold, split into training, validation, and testing sets.
+    *   "TP": True Positives.
+    *   "FP": False Positives.
+    *   "TN": True Negatives.
+    *   "FN": False Negatives.
+
+*   **Row Entries:**
+    *   Each fold (Fold-0 to Fold-4) has three rows: one for training, one for validation, and one for testing.
+    *   The accuracy, TP, FP, TN and FN values are provided for each of these subsets within each fold.
+
+*   **Total Row:**
+    *   The last row labeled "Total" provides aggregated values for accuracy, TP, FP, TN, and FN across all the folds.
+
+**Contextual Significance:**
+
+*   **Machine Learning Model Evaluation:** The table presents the results of evaluating a machine learning model using k-fold cross-validation. K in the cross-validation appears to be set to 5, based on Fold-0 to Fold-4.
+*   **Cross-Validation:** K-fold cross-validation is a technique used to assess the generalization performance of a model by splitting the data into k different folds, training the model on k-1 folds, and testing on the remaining fold.  This process is repeated k times, each time with a different fold used for testing.
+*   **Performance Metrics:** Accuracy, TP, FP, TN and FN provide a comprehensive understanding of the model's performance. TP, FP, TN and FN allow for the calculation of other metrics, such as precision, recall, and F1-score.
+*   **Model Training, Validation, and Testing:**  Within each fold, the data is further divided into training, validation, and testing sets.
+    *   *Training*: Used to train the model.
+    *   *Validation*: Used to tune the model's hyperparameters during training.
+    *   *Testing*:  Provides an unbiased evaluation of the final trained model's performance.
+*   **Model Assessment:** By analyzing the accuracy scores and TP, FP, TN and FN values across the different folds and sets, one can assess the stability and generalization ability of the machine learning model.
+
+**In summary,** the image presents a table summarizing the k-fold cross-validation results of a machine learning model, providing accuracy metrics and detailed counts of true positives, false positives, true negatives, and false negatives for each fold's training, validation, and testing data, along with total aggregated values.
+
+
+OCR Text:
+Folds
+
+Fold-0
+Fold-0
+Fold-0
+
+Fold-1
+Fold-1
+Fold-1
+
+Fold-2
+Fold-2
+Fold-2
+
+Fold-3
+Fold-3
+Fold-3
+
+Fold-4
+Fold-4
+Fold-4
+
+Train/TestVal
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+
+Testing
+
+Total
+
+Accuracy
+0.8344186047
+0.8215613383
+
+08
+
+0.8381395349
+08029739777
+0.7970149254
+
+0.8390697674
+0.8252788104
+08119402985,
+
+0.8427906977
+0.8252788104
+08
+
+0.8353488372
+0.8066914498
+0.8029850746
+
+0.8273972603
+
+1
+
+82
+32
+34
+
+28
+
+a
+
+70
+
+31
+
+a7
+
+31
+
+BRE
+
+735
+
+FP
+152
+
+36
+
+a7
+
+146
+36
+49,
+
+150
+36
+42
+
+145
+33
+4a
+
+158
+38
+40
+
+1154
+
+TN
+815
+189
+237
+
+816
+188
+240
+
+191
+
+234
+
+819
+
+184
+
+237
+
+814
+
+185
+
+eat
+
+FN
+
+12
+
+7
+19
+
+12
+2
+24
+4
+
+19
+4
+
+205
+
+
+
+=== Page 24 ===
+Figure 5.10: Results with Timi Score
+24
+
+[Image page_24_image_0.png]
+Gemini Response:
+Here's a breakdown of the image analysis:
+
+**Visual Elements:**
+
+*   The image presents a table.
+*   The table is organized in a spreadsheet-like format, with rows and columns.
+*   The image has a blue grid appearance typical of spreadsheet software.
+*   There are headings and data entries within the cells.
+
+**Text Content:**
+
+*   **Columns:** The table has columns labeled "Folds," "Train/Test/Val," "Accuracy," "TP" (True Positives), "FP" (False Positives), "TN" (True Negatives), and "FN" (False Negatives).
+*   **Rows (Folds):** The table displays data for "Fold-0", "Fold-1", "Fold-2", "Fold-3", and "Fold-4". Each fold has data for Training, Validation and Testing.
+*   **Train/Test/Val:** This column indicates whether the data represents training, validation, or testing results for each fold.
+*   **Numerical Data:**  The remaining columns ("Accuracy", "TP", "FP", "TN", "FN") contain numerical values, presumably representing the performance metrics of a model. Accuracy is expressed as a decimal value close to 1.
+*   **Total:** The table also includes a "Total" row summarizing the values from the TP, FP, TN and FN metrics.
+
+**Contextual Significance:**
+
+*   **Machine Learning/Model Evaluation:**  The table is almost certainly displaying the results of a machine learning model evaluation.
+*   **K-Fold Cross-Validation:** The term "Folds" suggests that the model has been evaluated using k-fold cross-validation. In this case, k=5.
+*   **Performance Metrics:** The inclusion of "Accuracy", "TP", "FP", "TN", and "FN" indicates a classification task. These metrics are used to assess the model's ability to correctly classify instances.
+*   **Training, Validation, Testing:** The data is split into three subsets: training (used to train the model), validation (used to fine-tune the model), and testing (used to evaluate the model's final performance on unseen data).
+*   The purpose is to asses the performance of the Model for Heart Attack patients through K fold Cross validation, and the image captures the results for each fold, along with their performance.
+
+In summary, the image shows the results of a machine learning classification model evaluated using 5-fold cross-validation, indicating the model's accuracy, true positives, false positives, true negatives, and false negatives on training, validation, and testing datasets for each fold.
+
+
+OCR Text:
+Folds
+Foid-0
+Fold-0
+Fold-0
+
+Fold-t
+Fold-t
+Fold-1
+
+Fold-2
+Fold-2
+Fold-2
+
+Fold-3
+Fold-3
+Fold-3
+
+Fold-4
+Fold-4
+Fold-4
+
+Train/Test/Val
+Training
+‘Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Total
+
+Accuracy TP
+0,848372093
+
+0.8401486989
+
+08358208955,
+
+0.8613053488
+0.8215613383,
+0.808955223
+
+0.8520930233
+0.8401486089,
+0.8328358200
+
+0.8837209302
+09624535316
+08417910448,
+
+0.84
+0.8215613383,
+0.8089552239
+
+0.8476474092
+
+FP
+90 132
+2 25
+a %
+4 128
+20 18
+7 32
+78 144
+390
+2% 42
+98 93
+“45
+2 38
+85 182
+430
+35__38
+
+787944
+
+N
+
+197
+253
+
+832
+192
+234
+
+187
+253
+
+852
+188
+240
+
+818
+187
+236
+
+6329
+
+FN
+
+Ed
+18
+19
+
+see
+
+15
+2
+4
+
+ats
+
+20
+18
+
+335
+
+
+
+=== Page 25 ===
+Figure 5.11: Results with Grace Score
+25
+
+[Image page_25_image_0.png]
+Gemini Response:
+Here's a detailed analysis of the image you provided:
+
+**Visual Elements:**
+
+*   **Table Format:** The image is a table, organized with rows and columns, presenting numerical data and textual labels. The table uses a light background color and dark text for readability.
+*   **Font and Text:** The text is clear and legible, using a sans-serif font. The headings are slightly larger than the data entries. The values seem left-aligned.
+
+**Text Content (based on OCR):**
+
+The table contains the following information:
+
+*   **Columns:**
+    *   **Folds:** Indicates different folds in a cross-validation process (Fold-0, Fold-1, Fold-2, Fold-3, Fold-4).
+    *   **Train/Test/Val:** Specifies whether the data is used for Training, Validation, or Testing.
+    *   **Accuracy:** The accuracy score of the model for each fold and data split (training, validation, testing). The values are decimals representing the percentage.
+    *   **TP:** True Positives.
+    *   **FP:** False Positives.
+    *   **TN:** True Negatives.
+    *   **FN:** False Negatives.
+*   **Rows:**
+    *   Each fold (0 to 4) has three rows: Training, Validation, and Testing, with corresponding accuracy, TP, FP, TN, and FN values.
+    *   A "Total" row is also present at the end, representing the sum of the counts of TP, FP, TN, and FN.
+    *   The Accuracy Total value shows the accumulated accuracy of all folds.
+
+**Contextual Significance:**
+
+*   **Machine Learning Evaluation:**  The table displays the results of a machine learning model's performance, specifically a model trained and evaluated using K-fold cross-validation.
+*   **Cross-Validation:** K-fold cross-validation is a technique to assess how well a model generalizes to an independent dataset. The data is divided into K "folds," with each fold being used as a validation set once while the remaining folds are used for training. This process is repeated K times, and the average results are reported.
+*   **Performance Metrics:** The table reports common performance metrics for classification models:
+    *   **Accuracy:** Overall correctness.
+    *   **True Positives (TP):** Correctly predicted positive cases.
+    *   **False Positives (FP):** Incorrectly predicted positive cases (Type I error).
+    *   **True Negatives (TN):** Correctly predicted negative cases.
+    *   **False Negatives (FN):** Incorrectly predicted negative cases (Type II error).
+*   **Model Assessment:** By examining the accuracy, TP, FP, TN, and FN values across different folds and data splits (training, validation, testing), you can get insights into:
+    *   **Model Overfitting:** If the training accuracy is significantly higher than the validation or testing accuracy, the model might be overfitting to the training data.
+    *   **Model Generalization:**  The consistency of performance across different folds indicates how well the model generalizes.
+    *   **Class Imbalance:** The TP, FP, TN, and FN values can help identify if the data has imbalanced classes, potentially affecting the model's performance.
+
+**In summary:**  The image shows a table summarizing the evaluation results of a machine learning model that has been trained and tested using k-fold cross-validation. It includes metrics like accuracy, true positives, false positives, true negatives, and false negatives, providing insights into the model's performance, generalization, and potential issues like overfitting or class imbalance.
+
+OCR Text:
+Folds
+
+Fold-0
+Fold-0
+Fold-0
+
+Fold
+Fold-t
+Fold-4
+
+Fold-2
+Fold-2
+Fold-2
+
+Fold-3
+Fold-3
+Fold-3
+
+Fold-4
+Fold-4
+Fold-4
+
+Train/TestiVal_ Accuracy
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Training
+Validation
+Testing
+
+Total
+
+0848372003
+0.8215613383,
+08
+
+0.8613053488
+0.8513011152
+0.8328358209
+
+0.8502325581
+0843866171
+0.8328358209
+
+0.8893023256
+08810408922
+0.8686567164
+
+0.8874418605
+0873605948
+0.8567164179
+
+0.8594401429
+
+92
+30
+25
+
+92
+34
+38
+
+79
+42
+26
+
+105
+49
+46
+
+98
+oT
+48
+
+861
+
+130
+28
+42
+
+132
+20
+
+148
+19
+at
+
+ot
+10
+
+103
+14
+28
+
+TN
+
+820
+191
+243,
+
+834
+195
+241
+
+835
+185
+253
+
+851
+188
+245
+
+856
+178
+230
+
+6354
+
+FN
+
+33
+
+25
+
+ess
+
+23
+15
+
+28
+
+12
+
+88a
+
+316
+
+
+
+=== Page 26 ===
+Figure 5.12: Results with Timi and Grace Score
+26
+
+[Image page_26_image_0.png]
+Gemini Response:
+Here's a breakdown of the image's content and its significance based on the provided information:
+
+**Visual Elements:**
+
+*   **Table/Spreadsheet Layout:** The primary visual element is a table displaying numerical data organized into rows and columns. It resembles output from a spreadsheet program.
+*   **Grid Lines:** The table uses lines to delineate the rows and columns, enhancing readability.
+*   **Text:** The table contains labels for columns and rows, including headings like "Folds," "Train/Test/Val," "Accuracy," "TP," "FP," "TN," and "FN." It also includes numerical results.
+
+**Text Content:**
+
+*   **Table Headers:**
+    *   "Folds": Indicates the different folds used in a cross-validation process (Fold-0, Fold-1, Fold-2, Fold-3, Fold-4).
+    *   "Train/Test/Val": Specifies whether the data relates to the training, validation, or testing set within each fold.
+    *   "Accuracy": The classification accuracy is provided
+    *   "TP": True Positives.
+    *   "FP": False Positives.
+    *   "TN": True Negatives.
+    *   "FN": False Negatives.
+*   **Numerical Data:**
+    *   Numbers in each row correspond to the performance metrics of a model for the specified fold and data split (training, validation, or testing).
+    *   "Total" row contains the overall aggregates of TP, FP, TN, and FN.
+*   **The document text says "Figure 5.12: Results with Timi and Grace Score"**
+
+**Contextual Significance:**
+
+*   **Machine Learning/Deep Learning Results:** The data within the table represents the results of a machine learning model's performance using k-fold cross-validation.
+*   **Cross-Validation:** The use of folds (Fold-0 to Fold-4) indicates that the model was trained and evaluated using k-fold cross-validation. This technique is commonly used to get a more robust estimate of a model's performance and reduce overfitting.
+*   **Performance Metrics:** The reported metrics ("Accuracy," "TP," "FP," "TN," "FN") are standard metrics used to evaluate the performance of classification models.  They provide insight into the model's ability to correctly classify positive and negative instances.
+*   **Performance evaluation of machine learning**: this helps to evaluate the performane of the machine learning model.
+
+In summary, the image presents a table containing the performance metrics of a machine learning model across different folds of a cross-validation experiment. The metrics provide insights into the model's classification accuracy, and other statistics that are necessary to validate the accuracy of the model.
+"Figure 5.12: Results with Timi and Grace Score" also signifies this table contains the final results on training and validation using the data containing timi and grace score.
+
+
+OCR Text:
+Folds Train/Test/Val Accuracy = TP FP TN FN
+
+Fold-0 Training 08688372093 104 «1108303
+Fold-0 Validation 08773234201 511718516
+Fold-0 Testing 0847761194 46 262385
+Fold-4 Training 08613953488 92 132° 83417
+Fold-1 Validation 0.8513011152 34-20 195-20
+Fold-1 Testing 08328358209 3826824130
+Fold-2 Training ogsigso4651 106 98 + 842,29
+Fold-2 Validation 0873605948 40 16 «19518
+Fold-2 Testing 0.8328358209 34362520
+Fold-3 Training 09134883721 142,78 840.18
+Fold-3 Validation 0.8996282528 54 8 188 19
+Fold-3 Testing 08776119403 543124010
+Fold-4 Training 09041860465 134 «8383820
+Fold-4 Validation 08773234201 58 130-178-200
+Fold-4 Testing 08597014925 49 2723920
+
+Total 08771888029 1036 «7216328310
+
+
+
+=== Page 27 ===
+Chapter 6
+Future Work
+We will try to Explore more better results for OTHER Models by
+1. Algorithmic Refinements: - Investigate opportunities to refine and optimize the proposed
+convolution algorithm for improved computational efficiency. - Explore alternative algorithmic
+approaches or modifications that could enhance the theorem’s performance on specific types of
+graph data.
+2. Scalability: - Examine the scalability of the convolution theorem with respect to increasingly
+large and complex graph structures. - Investigate techniques to handle dynamic graphs and
+assess the theorem’s performance in real-time scenarios.
+3. Adaptation to Varied Graph Types: - Extend the study to encompass a broader range
+of graph types, including directed graphs, weighted graphs, or graphs with varying levels of
+connectivity. - Develop adaptations or extensions of the convolution theorem to address the
+nuances of different graph representations.
+4. Integration with Machine Learning Models: - Investigate the potential impact of the convo-
+lution theorem on tasks like node classification, link prediction, and graph classification within
+the context of machine learning.
+5. Theoretical Extensions: - Pursue theoretical extensions of the convolution theorem, consid-
+ering mathematical aspects that might further enhance its applicability and utility. - Explore
+connections between the convolution theorem and other mathematical concepts or theorems,
+potentially leading to novel insights.
+8. Experimental Validation and Benchmarks: - Conduct extensive experimental validations on
+a different possibilities of datasets, considering different graph structures and characteristics.
+- Establish benchmark datasets and metrics to evaluate the performance of the convolution
+theorem and compare it with existing methods.
+By addressing these aspects in future work, the ongoing study could contribute even more
+significantly to the field.
+[?]
+27
+
+
+=== Page 28 ===
 Chapter 7
-Conclusion
-ThisprojecthassuccessfullydemonstratedthefeasibilityofusingtheNVIDIAJetsonOrinNano
-for deploying an advanced AMR detection system, leveraging the power of machine learning to
-offer rapid and accurate diagnostics at the point of care. The successful implementation and
-testing of various predictive models (RF, SVM, LR, and CNN) on this compact platform high-
-light its potential to significantly impact public health by enabling timely and precise antibiotic
-treatment decisions.
-xiii
+References
+1. Kipf, T. N., Welling, M. (2017). ”Semi-Supervised Classification with Graph Convolutional
+Networks.” In 5th International Conference on Learning Representations (ICLR)
+2. Natali, A., Leus, G. (2022). ”A General Convolution Theorem for Graph Data.” In 56th
+Asilomar Conference on Signals, Systems, and Computers, 2022.
+3. Nguyen, P., Tran, T., Wickramasinghe, N., Venkatesh, S. (Year of publication). ”Deepr: A
+Convolutional Net for Medical Records.”
+4. Chen, M., Wei, Z., Huang, Z., Ding, B., Li, Y. (2020). ”Simple and Deep Graph Convo-
+lutional Networks.” In Proceedings of the 37th International Conference on Machine Learning,
+PMLR 119:1725-1735.
+5. Bhatti,U.A.,Tang,H.,Wu,G.,Marjan,S., Hussain,A.(2023,February28). DeepLearning
+with Graph Convolutional Networks: An Overview and Latest Applications in Computational
+Intelligence. InternationalJournalofIntelligentSystems,2023,8342104. https://doi.org/10.1155/2023/8342104
+28
 
 
