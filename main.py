@@ -1,15 +1,17 @@
-# app.py
+# main.py
 import streamlit as st
 import os
 import json
 import config
-from pdf_utils import process_pdf
 from chatbot import initialize_chat, get_questions, generate_answer
 from datetime import datetime
+import asyncio
+from playwright.async_api import async_playwright
+from pdf_utils import process_pdf_with_progress
+import re
 
 
 # Configuration
-GEMINI_API_KEY = config.GOOGLE_API_KEY
 OUTPUT_TEXT_FILE = "extracted_text.txt"
 IMAGES_FOLDER = "extracted_images"
 
@@ -22,22 +24,25 @@ if 'processed' not in st.session_state:
         'questions': get_questions(),
         'answers': {},
         'feedback_history': {},
-        'manual_edits': {}
+        'manual_edits': {},
+        'report_ready': False  # ✅ Added report_ready
     })
 
 st.title("Tech Transfer ChatBot")
 
-# 1. PDF Processing Section (unchanged)
+# 1. PDF Processing Section
 uploaded_file = st.file_uploader("Upload Research PDF", type=["pdf"])
 if uploaded_file and not st.session_state.processed:
     with st.spinner("Processing PDF..."):
         with open("temp.pdf", "wb") as f:
             f.write(uploaded_file.getbuffer())
         
-        process_pdf("temp.pdf", OUTPUT_TEXT_FILE, IMAGES_FOLDER, GEMINI_API_KEY)
+        fresh_api_key = config.get_random_google_api_key()
+        #process_pdf("temp.pdf", OUTPUT_TEXT_FILE, IMAGES_FOLDER, fresh_api_key)
+        process_pdf_with_progress("temp.pdf", OUTPUT_TEXT_FILE, IMAGES_FOLDER, fresh_api_key)
         st.session_state.pdf_text = open(OUTPUT_TEXT_FILE).read()
         st.session_state.processed = True
-        st.session_state.chat = initialize_chat(GEMINI_API_KEY)
+        st.session_state.chat = initialize_chat(fresh_api_key)
         
     st.success("PDF processed successfully!")
     st.download_button(
@@ -47,9 +52,6 @@ if uploaded_file and not st.session_state.processed:
         mime="text/plain"
     )
 
-import asyncio
-from playwright.async_api import async_playwright
-
 async def html_to_pdf(html_content, output_path):
     async with async_playwright() as p:
         browser = await p.chromium.launch()
@@ -58,82 +60,128 @@ async def html_to_pdf(html_content, output_path):
         await page.pdf(path=output_path)
         await browser.close()
 
-# 2. Q&A Section (modified for PDF and form submission)
+# Helper to check all answered
+def all_questions_answered():
+    return all(
+        (q_data["param"] in st.session_state.answers and st.session_state.answers[q_data["param"]]['answer'])
+        for q_data in st.session_state.questions
+    )
+
+# 2. Q&A Section
 if st.session_state.processed:
     st.divider()
     st.header("Your Research Analysis!")
-    
-        # Update the PDF generation section with proper Unicode handling
-    # Replace the existing PDF generation section with this:
 
-    if st.session_state.current_question >= len(st.session_state.questions):
+    if st.session_state.report_ready:
+        # FINAL REPORT PAGE
         st.header("✅ Analysis Complete!")
         st.markdown("### Final Report")
+
+        # Personalized report with Table of Contents
+        uploaded_filename = uploaded_file.name if uploaded_file else "Uploaded_File"
+        uploaded_base = os.path.splitext(uploaded_filename)[0]
         
-        # Generate HTML Report
-        html_content = """
+
+        html_content = f"""
         <!DOCTYPE html>
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>Tech Transfer Research Analysis Report</title>
+            <title>{uploaded_base} - Tech Transfer Report</title>
             <style>
-                body { font-family: Arial, sans-serif; margin: 40px; }
-                .header { text-align: center; border-bottom: 2px solid #333; margin-bottom: 30px; }
-                .section { margin-bottom: 25px; }
-                .question { font-weight: bold; color: #2c3e50; font-size: 1.1em; }
-                .answer { margin: 10px 0 20px 20px; color: #34495e; line-height: 1.6; }
-                .footer { text-align: center; margin-top: 40px; color: #666; }
+                body {{ font-family: Arial, sans-serif; margin: 40px; }}
+                .header {{ text-align: center; border-bottom: 2px solid #333; margin-bottom: 30px; }}
+                .toc {{ margin: 20px 0; }}
+                .toc a {{ display: block; margin: 5px 0; color: #2980b9; text-decoration: none; }}
+                .section {{ margin-bottom: 40px; }}
+                .param {{ font-weight: bold; color: #2c3e50; font-size: 1.1em; }}
+                .question {{ color: #555; font-size: 1em; margin-top: 10px; }}
+                .answer {{ margin: 10px 0 20px 20px; color: #34495e; line-height: 1.6; }}
+                .footer {{ text-align: center; margin-top: 40px; color: #666; }}
+                .box {{
+                    border: 1px solid #ccc;
+                    padding: 20px;
+                    border-radius: 10px;
+                    background-color: #f9f9f9;
+                    margin-top: 20px;
+                }}
+
             </style>
         </head>
         <body>
-            <div class="header">
-                <h1>Tech Transfer Research Analysis Report</h1>
-                <p>Generated by Tech Transfer ChatBot</p>
-            </div>
-            
+
+        <div class="header">
+            <h1>{uploaded_base}</h1>
+            <p><em>Analyzed and compiled by Tech Transfer ChatBot</em></p>
+        </div>
+
+        <div class="toc">
+            <h2>Table of Contents</h2>
         """
 
-        
-        # Add questions and answers
+        # Table of Contents links
+        for idx, q_data in enumerate(st.session_state.questions):
+            param = q_data["param"]
+            html_content += f'<a href="#q{idx+1}">Q{idx+1}: {param}</a>'
+
+        html_content += """
+        </div>
+        """
+
+        # Question and Answer sections
         for idx, q_data in enumerate(st.session_state.questions):
             param = q_data["param"]
             question = q_data["question"]
-            answer = st.session_state.answers[param]['answer']
-            
+            raw_answer = st.session_state.answers[param]['answer']
+            # Convert **text** into <b>text</b> and replace newlines
+            answer_html = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', raw_answer.replace('\n', '<br>'))
+
+
             html_content += f"""
-            <div class="section">
-                <div class="question">Question {idx+1}: {question}</div>
-                <div class="answer">{answer.replace('\n', '<br>')}</div>
-                <div class="history">Edits: {len(st.session_state.answers[param]['versions'])} versions</div>
+            <div class="section" id="q{idx+1}">
+                <div class="box">
+                    <div class="param">{param}</div>
+                    <div class="question">Q{idx+1}: {question}</div>
+                    <div class="answer">{answer_html}</div>
+                </div>
             </div>
             """
-        
-        # Add footer
-        html_content += """
-            <div class="footer">
-                <p>Report generated on {datetime}</p>
-            </div>
+
+        # Footer
+        html_content += f"""
+        <div class="footer">
+            <p>Report generated on {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+        </div>
+
         </body>
         </html>
-        """.format(datetime=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        
-        # Save HTML file
-        html_file = "research_analysis.html"
+        """
+
+
+
+        # Clean filename parts (remove spaces, special chars)
+        def sanitize_filename(name):
+            return "".join(c if c.isalnum() else "_" for c in name)[:50]  # Max 50 chars to be safe
+
+        safe_title = sanitize_filename(uploaded_base)
+       
+
+        # Build file names
+        html_file = f"Analyzed_{safe_title}.html"
+        pdf_file = f"Analyzed_{safe_title}.pdf"
+
+        # Write HTML file
         with open(html_file, "w", encoding="utf-8") as f:
             f.write(html_content)
-        
+
+        # Generate PDF
         try:
-            
-            pdf_file = "research_analysis.pdf"
-            # You can use pdfkit.from_string(html_content, pdf_file) as an alternative.
-            #HTML(string=html_content).write_pdf(pdf_file)
             asyncio.run(html_to_pdf(html_content, pdf_file))
         except Exception as e:
             st.error("PDF conversion failed.")
             pdf_file = None
 
-        # Download buttons
+
         col1, col2, col3 = st.columns(3)
         with col1:
             with open(html_file, "rb") as f:
@@ -157,18 +205,16 @@ if st.session_state.processed:
                 st.write("PDF not available.")
         with col3:
             if st.button("Upload Another PDF"):
-                # Clear session state
                 for key in list(st.session_state.keys()):
                     del st.session_state[key]
                 st.rerun()
 
-
     else:
-        questions_per_page = 3  # You can make this 4 if you prefer
+        # QUESTIONS PAGE
+        questions_per_page = 3
         total_questions = len(st.session_state.questions)
         total_pages = (total_questions + questions_per_page - 1) // questions_per_page
 
-        # Initialize current page
         if 'current_page' not in st.session_state:
             st.session_state.current_page = 0
 
@@ -187,20 +233,22 @@ if st.session_state.processed:
                 st.session_state.feedback_history[param] = []
 
             if not st.session_state.answers[param]['versions']:
-                with st.spinner(f"Generating answer for Q{i+1}..."):
+                with st.spinner(f"Generating answer for Q{start_idx + i + 1}..."):
+                    fresh_api_key = config.get_random_google_api_key()
+                    fresh_chat = initialize_chat(fresh_api_key)
+
                     response = generate_answer(
-                        st.session_state.chat,
+                        fresh_chat,
                         question,
                         st.session_state.pdf_text
                     )
                     st.session_state.answers[param]['versions'].append(response)
                     st.session_state.answers[param]['answer'] = response
 
-            st.markdown(f"---\n### Question {start_idx + i + 1}")
+            st.markdown(f"### Q{start_idx + i + 1}")
             st.markdown(f"**Parameter:** `{param}`")
             st.markdown(f"**Q:** {question}")
 
-            # Editable Answer
             edited_answer = st.text_area(
                 f"Answer for {param}",
                 value=st.session_state.answers[param]['answer'],
@@ -214,7 +262,6 @@ if st.session_state.processed:
                 st.success(f"Saved answer for {param}")
                 st.rerun()
 
-            # Feedback Expander
             with st.expander(f"💬 Refine Answer for `{param}`"):
                 feedback = st.text_area("Enter feedback", key=f"feedback_input_{param}")
                 if st.button(f"🔁 Refine Answer for {param}", key=f"refine_{param}"):
@@ -222,8 +269,12 @@ if st.session_state.processed:
                         st.session_state.feedback_history[param].append(feedback)
                         with st.spinner("Refining..."):
                             prompt = f"{question}\n\nPrevious answer: {edited_answer}\nFeedback: {feedback}"
+
+                            fresh_api_key = config.get_random_google_api_key()
+                            fresh_chat = initialize_chat(fresh_api_key)
+
                             refined_answer = generate_answer(
-                                st.session_state.chat,
+                                fresh_chat,
                                 prompt,
                                 st.session_state.pdf_text
                             )
@@ -234,12 +285,11 @@ if st.session_state.processed:
                     else:
                         st.warning("Please provide feedback.")
 
-            # Optional history
             with st.expander("🕘 Edit History"):
                 for ver_i, version in enumerate(st.session_state.answers[param]['versions'][::-1], 1):
                     st.markdown(f"**Version {ver_i}:** {version}")
 
-        # Navigation
+        # NAVIGATION
         st.divider()
         col1, col2 = st.columns(2)
         with col1:
@@ -251,3 +301,9 @@ if st.session_state.processed:
                 st.session_state.current_page += 1
                 st.rerun()
 
+        # ✅ FINAL Download Button after last page
+        if all_questions_answered() and not st.session_state.report_ready:
+            st.success("🎉 All questions answered!")
+            if st.button("📥 Download Final Report"):
+                st.session_state.report_ready = True
+                st.rerun()

@@ -1,1776 +1,962 @@
 === Page 1 ===
-Risk Calculator For Heart Attack Patients
-Student Name: MOHIT
-Roll Number: 2021542
-BTP report submitted in partial fulfillment of the requirements
-for the Degree of B.Tech. in Computer Science & Engineering
-on 28-04-2023
-BTP Track: Research BTP Track
-BTP Advisor
-Dr. Anubha Gupta
-Indraprastha Institute of Information Technology
-New Delhi
+Sustainability Framework for Computing Element
+Design
+Abstract—The semiconductor industry has revolutionized in- and so on. So, there is an obvious and very strong influence
+formation and communication technologies by enabling un- of ICT to take human society towards more sustainable ways
+precedented advancements in computing, communication, and
+of living. However, each of these devices that allows us to
+automation. However, alongside this rapid progress, the esca-
+adoptamoresustainablelifestylehasitsowncarbonfootprint
+lating power consumption and resource demands of integrated
+circuits have raised critical sustainability concerns. Traditional [1], [3].
+evaluation figures of merit, such as Power, Performance, and Aselectronicsbecomemoreprevalent,theirnegativeimpact
+Area (PPA), no longer appear to be sufficient enough to address on the environment also becomes prominent. While, on one
+the environmental impact of these designs. Hence, there is a
+hand, each replacement of a mechanical component with an
+need for an evaluation paradigm that can assess a design based
+electronic part results in more electricity consumption (for
+on Power, Performance, Area and Sustainability (PPAS). This
+research proposes a novel Sustainability Framework to allow the additional intelligence), manufacturing these parts also
+designerstoassess,benchmarkandchoosethemostefficientand consumes energy. So, the total environmental cost of these
+environment-friendlyarchitecturefortheirproductdevelopment devices is not negligible.
+at the early design phase (i.e. ‘schematic’ and ‘layout’). The
+In 2022, Bloomberg reported that TSMC consumes more
+proposed framework is applied on a wide variety of foundation
+powerthantheentireislandcountryofSriLanka[4].In2023,
+cellstodemonstrateit’swideapplicabilityandagility.Foundation
+cells have been benchmarked and the impact of design choices TSMC’s electricity demand was 250GW [5]. In 2024, India
+onsustainabilityispresentedbasedondifferentapplicationslike claimed to have met the maximum demand of 250GW for the
+IoT, Automotive, High-Performance Computing, and Portable firsttime[6].Putdifferently,theworld’slargestsemiconductor
+Electronics.
+manufacturer consumes more electricity than large countries.
+IndexTerms—Sustainability,Embodiedfootprint,Operational
+It is also evident from the present trends that semiconductor
+footprint, Foundation cell, ICT
+manufacturing is bound to become more energy intensive
+progressively[5].Therefore,itisveryimportantthatconcerted
+I. INTRODUCTION
+efforts are made to tame this impact.
+Advancement in Information and Communication Technol- Leading product and IC manufacturers such as STMicro-
+ogy(ICT)overthepastfewdecadeshastransformedtheworld electronics, Apple, Google, TSMC, Meta, and Intel have
+as we experience it. From the wake-up alarm in the morning declared carbon neutrality targets in their recent sustainability
+to the shoes of the morning walk, to the ticketing in public reports [7]–[12]. Many studies have characterized the sources
+transit, to the entry into the office premises, to the social of emissions during the manufacturing process and explored
+life in the evening, the dinner bookings, and even bedtime methods to reduce them [13], [14]. Despite focused efforts,
+routines - everything has changed. ICT has brought about TSMC stated in its report [10] that with the current surge in
+these transformations. In turn, ICT has been enabled by the semiconductor demand and the increasing energy intensity of
+advancement in semiconductor technologies [1]. advanced process technology, it finds it difficult to achieve
+Semiconductor manufacturing technology involves multiple net zero targets for another 50 years. So, it is evident that the
+processing steps [2] has evolved multi-fold over the past presentfocusonreducingthemanufacturingfootprintmaynot
+decades. A combination of advancements in optics, chemi- be sufficient. It requires making conscious choices at every
+cals, materials, instrumentation, mathematics, and computing step of the product development life cycle (PDLC) [15].
+(positive feedback) has enabled the scaling of technology to In the context of System on Chip (SoC) design, every
+a level where today we have 3D transistors that are designed stageinthechipdesignprocessinvolvesdecision-making,and
+to the precision of an atom. This has led to unprecedented therefore, sustainable choices have to be made at each step.
+integration [1]. Traditionally, designs are optimized on the axes of power,
+A modern mobile phone has practically replaced landline performance, and area (PPA). Despite considerable progress
+telephony,mediaplayers,still(evenvideo)cameras,andalarm in optimizing circuits for these figures of merit (FoMs), the
+clocks. Additionally, with the help of high-speed internet environmental impact of these designs is neither estimated
+(again, enabled significantly by semiconductors), app-based nor improved. To a large extent, as the PPA of a design
+ecosystem, and increased functionality, it has significantly is improved, its cost is reduced, or profitability improves. It
+reduced the need for more cash vending machines (through is assumed that this also results in a reduced environmental
+digital payments); avoided a lot of travel (through meeting impact. Current approaches to circuit design and architecture
+apps); saved innumerable trees from being felled for paper, selectionprioritizePPAmetricswithoutadequatelyaddressing
 
 
 === Page 2 ===
-Student’s Declaration
-I hereby declare that the work presented in the report entitled “Risk Calculators for Heart
-Attack Patients” submitted by me for the partial fulfillment of the requirements for the
-degree of Bachelor of Technology in Computer Science & Artificial Intelligence at Indraprastha
-Institute of Information Technology, Delhi, is an authentic record of my work carried out under
-guidance of Dr. Anubha Gupta. Due acknowledgements have been given in the report to
-all material used. This work has not been submitted anywhere else for the reward of any other
-degree.
-MOHIT Place & Date: IIIT-Delhi, 28-04-2023
-Certificate
-This is to certify that the above statement made by the candidate is correct to the best of my
-knowledge.
-Dr. Anubha Gupta Place & Date: IIIT-Delhi, 28-04-2023
-2
+TABLEI who generates them. The scopes are broadly presented in
+GHGPROTOCOLCLASSIFICATION Table I.
+One of the initial works to assess the sustainability of
+Scope Level Emission types
+the semiconductor manufacturing process appeared in 2000
+Scope1 DirectEmissionsfromcompanyresources:
+[18]. It was the time when the regulations to phase out toxic
+• Fuelcombustioninfacilities,refrigerantuse
+• Transportationandchemicalemissions materials like lead from the semiconductor supply chain were
+coming into force. EE-Toolbox presented in [18] evaluates
+Scope2 IndirectEmissionsfrompurchasedenergy: the sustainability of a SoC on material-related parameters. It
+• Runningfabs,facilities,anddatacenters evaluates the products on a range of metrics like the Toxic
+• Energyconsumedduringoperation PotentialIndicator,RecyclingPotentialIndicator,Energycon-
+• Carbonemissionreleasedperunitenergycon- sumption(CombinationofRawMaterialsEnergyandProduct
+sumed
+UsageEnergy),ProcessToxicityScreening,etc.Thesemetrics
+are entirely focused on material-related data, and while they
+Scope3 OtherIndirectEmissions:
+arerelatedtosustainability,theydon’trelatetoGHGprotocol.
+• LogisticsandBusiness
+In2012,amultiple-criteriadecisionapproachwaspresented
+• Rawmaterialproduction
+that emphasized the concept of ‘Eco-reliability’ to enhance
+• Supplychain
+the design optimization process [19]. The authors discuss
+factors like product lifetime and life-cycle optimization from
+the perspectives of reliability, cost, and environmental impact.
+sustainability. Theyusemulti-criteriaLCA-basedevaluationstoestimatethe
+In this work, we introduce a method for assessing the envi- environmental impact. This was amongst the first works to
+ronmental efficiency of circuit architectures. It is formulated highlight the complexity of carbon footprint (CFP) estimation
+to evaluate sustainability from a designer-centric perspective for electronic products. The paper presents a qualitative view
+in the early stages of PDLC. Designers utilize foundation of the LCA-based CFP assessment. It does not provide quan-
+cell libraries either developed in-house or by the foundry to titative measures or FOMs for evaluating emissions.
+implement SoCs. These foundation cell libraries include a A2017research[20]explorestheincreasingenvironmental
+range of combinational, sequential, storage, analog, digital, impact of IC fabrication, which is becoming comparable to
+andinterfacecellsthatareusedascomputingbuildingblocks/ operational energy consumption, particularly in low-power
+elementsforSoCs.Thisworkprimarilyprovidesaframework computing applications. To address this challenge, the au-
+formakingsustainability-awaredesignchoicesatthisstageof thors introduce a scalable parameterized model for evaluat-
+design, which runs before SoC design implementation begins. ing fabrication-related environmental costs across technology
+The remaining part of this paper is organized as follows. nodes ranging from 130nm to 32nm. Through the proposed
+In Section II, we present previous work that has been done to framework, the authors highlight the impact of changing the
+integrate chip design and sustainability. We also present the metal stack in a VLSI chip design, showcasing that reducing
+tenetsoftheGreenHouseGas(GHG)emissionsprotocol[16]. the highest metal routing layer allowed for designing the chip
+InSectionIII,weoutlinethekeyfeaturesofaneffectivedesign decreases the manufacturing energy consumption by nearly
+metric for wide acceptability. In Section IV, the proposed 13.8%inspecificnodes.Thesefindingssignifytheimportance
+framework is presented. We demonstrate the effectiveness of balancing fabrication and operational energy to design a
+of the framework in Section V, by applying it on a wide sustainable IC. This work focuses on a chip or product-level
+range of foundation cells like Flipflops, Level Shifters, and analysis only.
+Approximate Adders. Then we conclude by showing that In 2022, a comprehensive research study that investigated
+the proposed framework can enable designers to make well- the CFP of computing systems was published [16]. The study
+informeddecisionsearlyinthedesignprocesstooptimizeboth reveals that, despite improvement in the energy efficiency
+performance and long-term sustainability. of products, primarily due to advancements in algorithms,
+software, and hardware, the overall environmental impact
+II. SUSTAINABILITYRELATEDWORKINVLSI
+remains substantial. In recent years, a major source of these
+Sustainability as a broad concept originated in 1987 in the emissions has been hardware production and infrastructure,
+Brundtland Report [17] and has varying interpretations. In the and not energy use during lifetime operation. This highlights
+context of this work, we consider it as Designing reliable the importance of focusing on sustainable design practices to
+products in such a way that it does not have a drastic impact reduce the environmental impact of computing systems. The
+on the environment in the long term. Today, sustainability is workeffectivelyfocusesontherecognitionofGHGemissions
+analyzed using conventional life cycle analysis (LCA) and related to products along the entire PDLC. It provides a sig-
+the GHG emission protocol. GHG, established in 1998, is nificanttheoreticalandstatisticalanalysisofcarbonemissions
+a standard protocol for quantifying organization-level carbon and sharpens the pitch for call-for-action.
+emissions in which the emissions are classified into 3 scopes Moore’s law, which has been driving the VLSI industry,
+[16] depending on which stage of the PDLC they occur and has been slowing down [21] and the industry is looking at
 
 
 === Page 3 ===
-Abstract
-This study aims to enhance the accuracy of predicting the 30-day mortality rate among patients
-following their first heart attack by leveraging machine learning and deep learning techniques.
-Thecurrentcardiacriskstratificationtool,theRevisedCardiacRiskIndex,whilewidelyutilized,
-exhibits limitations, particularly in its discriminative ability. To address this, we propose the
-development and validation of a novel predictive cardiac risk calculator.
-In contrast to existing risk calculators available online that estimate long-term cardiovascular
-disease (CVD) risk, our focus is on predicting short-term mortality specifically within the cru-
-cial 30-day post-myocardial infarction period. Utilizing machine learning algorithms and deep
-learning neural networks, we aim to create a more precise and personalized predictive model.
-This model takes into account various clinical parameters and potential risk factors, providing
-a nuanced understanding of the patient’s prognosis.
-Through the integration of machine learning and deep learning methodologies, this research
-aims to contribute to more effective risk assessment tools in the context of short-term mortality
-post-first heart attack, ultimately aiding clinicians and patients in making informed decisions
-about management strategies.
-Thisstudyunderscorestheimportanceofadvancingpredictivemodelingtechniquesintherealm
-of cardiovascular care and serves as a stepping stone towards a more refined and patient-centric
-approach to risk assessment.
-Keywords: CardiovascularDisease, MortalityRate, RiskStratification, MachineLearning, Deep
-Learning
+TABLEII
+PREVIOUSCONTRIBUTIONSINTHESUSTAINABILITYEVALUATION
+Work Year PDLC ProposalsandKeyContribution Limitation
+Stage
+EE-Toolbox[18] 2000 Material • EE-Toolbox driven sustainability as- • Focusonlyonmaterialselectionprocess
+Selection sessmentmethodology • Lacks integration with carbon footprint-
+• Evaluation based on Material-based basedGHGmetrics
+metrics:
+-ToxicPotentialIndicator
+-RecyclingPotentialIndicator
+-ProcessToxicityetc.
+Multi-criteria 2012 Allstagesof • Concept of ’Eco-reliability’ for design • Lacksquantitativemetricandassessment
+Eco-reliability PDLC optimization
+[19] • Multi-criteria LCA-based evaluation
+approach
+• QualitativeCFPassessment
+SustainableIC 2017 Allstagesof • Scalable parameterized sustainability • Focusesonachiporproduct-leveldesign
+Design[20] PDLC evaluationframeworkfor130to32nm. andisnotcell-specific
+• Showcase impact of changing metal
+stackinaVLSIchipdesign
+ChasingCarbon 2022 Complete • Provided insights into the lifetime car- • Enables product CFP analysis de facto.
+[16] Product bonfootprintofcommonproducts. Nosupportduringthedevelopmentphase
+LifeCycle • Categorized product carbon footprints • Lacksmetric-basedanalysis
+Analysis usingtheindustryGHGprotocol. • Limitedtohigherabstraction-levelprod-
+• Highlighted the significance of manu- uctdata,withoutcell-levelspecificity
+facturingandoperationalfootprints
+ECO-CHIP[23] 2024 System/ • Open-source framework to • Applicable at higher chiplet-based ab-
+Product estimate sustainability benefits of stractionlevelandnotcell-specific
+Architecture heterogeneously integrated chiplet-
+baseddesigns
+Eco-reliability 2024 System • Eco-reliable metric for circuit sustain- • Lacks designer-focused, decision-driven
+Metric[24] Analysis ability analysis at the fundamental computing
+• Integrate reliability and environmental logicblocklevelforsustainability
+impact associated with manufacturing
+overhead
+• Enablessystemandcircuit-leveldesign
+footprintcomparisons
+alternative routes to maintain the rate of integration [22]. One It is embedded into the IC design flow, expanding the eval-
+of the methods to maintain the pace of ongoing integration is uation framework beyond power, performance, and area to
+theuseofchiplets[22].In2024,aframeworkwaspresentedto facilitate efficient system- and circuit-level comparisons. It is
+estimatetheefficacyofchiplet-baseddesign[23].Theauthors definedbycombiningcircuit-specificparameterssuchasMean
+developed an open-source carbon footprint evaluation tool/ Time to Failure (MTTF) and Mean Time Between Failures
+framework to assess the potential of heterogenous integrated (MTBF) with environmental factors, including System Earth
+chiplet-basedsystemsovertraditionalmonolithicsystemswith equivalent Time, life cycle assessment (LCA)-based carbon
+theaimofsustainablecomputing.Theydiscusstheadvantages footprint (CFP), and available biocapacity (Earth’s resource
+of chiplet-based systems in terms of yield, area, reusability, availability). While this metric introduces a novel approach to
+design complexity, and design overheads. They analyzed and sustainability assessment for electronic circuit designs, it does
+reportedCFPofafewdesignstoestablishtheveracityoftheir not incorporate an independent analysis at the fundamental
+framework. This framework is specifically suited to chiplet- computing logic cell level, which is crucial for selecting a
+based designs and is very handy at the time of product more sustainable circuit architecture.
+specification and requirement analysis.
+Table II presents a summary of recent contributions in
+Another significant work was presented in 2024 [24], the domain. It is evident that the sustainability frameworks
+where a new eco-reliable metric was proposed to evaluate proposed until now, even though they operate at different
+the sustainability of VLSI circuits by considering the aspect stages of PDLC are used primarily at product/ system level
+of both reliability and environmental cost of manufacturing. abstraction. This leaves a big gap for designers who build the
 
 
 === Page 4 ===
-Acknowledgments
-I would like to express my sincere gratitude to my advisor, Dr. Anubha Gupta, for
-providing me with this opportunity and all her guidance throughout this project. The regular
-meetings, constructive feedback, and constant support were of great help to me in
-accomplishing each task.
-4
+foundation blocks that go into making the SoC/ product. To TABLEIII
+our knowledge, there is no existing framework or metric that IMPACTOFTRADITIONALFOMSONCFP
+enables designersto makedecisions inthe early designstages
+FoM Embodied Footprint Operational Footprint
+of PDLC. The designer-oriented framework proposed in this Performance Secondary impact Primary impact
+work aims to fill this gap. Power No Impact Primary impact
+Area Primary Impact Limited impact
+III. STANDARDFIGURESOFMERITANDSUSTAINABILITY
+Lifecycle Analysis (LCA) involves the assessment of GHG
+emissions linked to manufacturing and then operating a prod- increased cost and complexity of packaging to dissipate heat.
+uct through life. It is a necessary step to classify GHG This has an impact on the embodied footprint too. However,
+emissions into different scopes as presented in Table I. from the perspective of a circuit designer, such impact on
+GHG emissions or carbon footprint (CFP) of a product can embodied footprint is too downstream in PDLC. Therefore,
+be broadly estimated by utilizing two components [16]: for the purpose of this work, we ignore this impact.
+It is clear that the standard figures of merit of power,
+• Embodied footprint – CFP that is built into the product
+performance, and area influence the CFP of a design. The
+before the product even reaches the point of use. This
+summary of the impact of traditional FoMs on CFP is pre-
+includes the emissions in the entire design and manufac-
+sented in Table III. Typically, designers have to make trade-
+turing process, including design, prototyping, materials,
+offsbetweendifferentFoMstomeettheproductspecifications.
+processing, testing, validation, etc. This also includes
+Usually, there could be many ways to optimize the design.
+emissions associated with marketing, shipping, etc.
+When there are apparently two equivalent ways to meet the
+• Operational footprint – CFP that is caused when the
+requirements, then the PPA framework does not enable a
+product is used over its entire life. This includes the
+designer to make sustainable choices. Hence, a framework for
+energy consumed by the product during its operation in
+estimating sustainability is additionally required.
+all possible modes.
+This broad classification is important from the perspective IV. PROPOSEDSUSTAINABILITYFRAMEWORK
+of a designer because the key FOMs that a designer considers
+In this section, we present the proposed framework for
+atthetimeofmakingdesignchoicesimpactoneoftheabove.
+evaluating the sustainability of a circuit/ design/ architecture
+The area has a direct bearing on the embodied footprint.
+based on LCA. As discussed in Section III, the sustainability
+In semiconductor manufacturing, multiple SoCs are arranged
+of a VLSI design is evaluated in terms of embodied and
+in an array on a wafer and manufactured in parallel. Energy
+operational footprints.
+and material used in processing a wafer are amortized over
+Estimating the CFP of any product is a very data-intensive
+the number of copies of the SoC that can successfully fit
+exercise. Usually, this data may not be available in the early
+on a wafer. A larger area results in fewer copies per wafer,
+stagesofPDLCwhenadesignerisexpectedtomakechoices.
+and each SoC shares a larger portion of GHG emissions in
+Therefore, the proposed framework has the flexibility to fall
+waferprocessing.ThelargerareaalsoresultsinalowerYield
+back on historical trends/ data to still be able to compare
+[25]. This further reduces the number of SoCs on which the
+between alternatives.
+manufacturing emissions need to be amortized and increases VLSI circuit and system designers do not have an op-
+the CFP of the SoC. portunity to choose the materials (or their source) used in
+Performancehasadirectimpactontheoperationalfootprint.
+the manufacturing process, the type of energy (renewable/
+Most advanced SoCs implement a power-saving technique
+non-renewable) used, where the chips are fabricated or sold
+called pulse width modulation. In this, the system is powered
+(transport), and so on. The choices they have to make are
+up to a high voltage level when it is operated. At other times,
+independent of these details. The level of abstraction is far
+thesupplyiseitherswitchedoffortakentoamuchlowerlevel.
+different. Consequently, the output of this framework is not
+This helps reduce power consumption. A high-performance
+intended to give the accurate CFP of a design, but intelligent
+system with high throughput can do the desired activity in a
+pointers to support the designer in decision-making. We have
+shorterperiodoftimeandcanthenbeturnedoff.Thisreduces
+kept the units of the metric as energy units, which can be
+overall power consumption.
+converted to their CO2 equivalent.
+When a system is expected to deliver a threshold level
+A. Embodied Carbon Footprint (eCFP) metric
+of performance, multiple copies of a low-performing circuit
+may be used to increase throughput. This results in a larger As discussed in Section III, the embodied carbon footprint
+areaand,consequently,alargerembodiedfootprint.Therefore, (eCFP) includes the emissions in the entire design and man-
+performance also has a secondary impact on the embodied ufacturing process. Eq. (1) represents the eCFP which is a
+footprint. product of ‘Base energy per µm2’ (BE), ’Cell Area’, ‘Extra
+Power consumption - dynamic, static, and leakage - has Metal Impact’ (EMI), and ‘Additional Process Step Impact’
+a direct bearing on the energy consumed during operation. (APSI) in the designed cell layout.
+Therefore, it has a direct impact on the operational footprint.
+Attheproductlevel,ahigherpowerconsumptionmayresultin eCFP=BE×Cell Area×EMI×APSI (1)
 
 
 === Page 5 ===
-Contents
-1 Introduction 6
-1.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
-1.2 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
-2 Related Work 8
-2.1 Literature Review . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
-2.1.1 SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVOLU-
-TIONAL NETWORKS . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
-2.1.2 A General Convolution Theorem for Graph Data . . . . . . . . . . . . . . 9
-2.2 Previous Studies . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
-2.2.1 Heart attack mortality prediction: an application of machine learning
-methods . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
-3 Data Understanding 11
-4 Methodology 13
-4.1 Traditional ML approach . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
-4.2 Using GNN and GCN Models . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
-4.2.1 1 Hidden layer Method . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
-4.2.2 4 Hidden layer Method . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
-4.2.3 Other Approaches . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
-5 Experiments and Results 18
-5.1 Traditional ML Approach . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
-5.2 GNN and GCN Results . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
-6 Future Work 27
-7 References 28
-5
+1) Base energy per µm2 (BE): BE is calculated by amor- TABLEIV
+tizing the total energy consumed per wafer that is processed APPLICATION-BASEDOPERATINGTIMERATIOS
+in a base/ standard/ reference process, over per unit area as
+Application-based operating
+shown in Eq. (2). Operating modes
+time ratios %
+Energy consumed per standard wafer IoT HPC Auto PE
+BE= (2)
+Wafer area(µm2) Operational Lifetime 20000 25000 10000 35000
+(in hrs)
+In this work, we consider the energy consumed in process-
+ing a wafer of diameter 300mm with a 6-metal layer stack in Active (ATR) 5 40 15 10
+a standard 65nm process to be 4204 kWh per wafer [20]. Stand-by (STR) 25 40 45 30
+2) Cell Area: Embodied CFP of a design is directly pro- Switched-off (SOTR) 70 20 40 60
+portional to its area. It is considered in µm2 unit.
+3) Extra Metal Impact (EMI): A designer may need to
+compare two different layout implementations of a circuit. value of the Mask Factor is 0.045. This is based on the data
+Here, a layout could be denser because it utilizes more metal published in [20]. Depending on the actual additional energy
+layers. A denser layout can result in reducing its eCFP. consumed in the additional process steps, this value can be
+However, when designs use extra metal layers, fewer routing updated.
+resources are left for SoC-level routing. This can lead to
+more congestion and, hence, more area utilization at the SoC B. Operational Carbon footprint metric (oCFP)
+(system)level.So,whiletherecouldbegainsatthecelllevel, The operational carbon footprint (oCFP) is a measure of
+itmayleadtoanoveralllossatthesystemlevel.EMIaccounts CFP linked to the energy consumed by hardware during
+for the impact of reduced availability of routing resources its operation over life. Hence, the proposed oCFP estimates
+on system-level eCFP. Eq. (3) defines the Track Ratio as the energy consumed across all operational modes of the device.
+proportionoftotaltracksavailableinanadditionalmetallayer In Eq. (6), oCFP is estimated by adding dynamic power, and
+to the remaining tracks allocated for SoC-level routing after leakage power during the total operational period over life,
+accounting for those used in intra-cell layout design. which varies according to application-specific requirements
+and usage conditions.
+Total tracks available in the metal layer
+TR =
+Tracks available for routing in the metal layer
+(3) oCFP=T ×(Dynamic power+Leakage power) (6)
+total
+Theextrametalimpactonfabricationenergyconsumptionis
+shown in Eq. (4). Here, the congestion factor (CF) serves as a 1) Application specific operation profile: Electronics has
+multiplierthattranslatestheextrametaltrackusagetechnique foundaplaceinavarietyofapplications.Eachapplicationhas
+intoaproportionalimpactinthecellarea,therebyinfluencing different operational conditions, performance requirements,
+the eCFP metric. and usage profiles. Circuits designed in foundation libraries
+may be targeted to specific applications. Depending on the
+(cid:16) (cid:17)
+EMI=1+ TR−1 ×CF (4) application, the operational profile of a design - the duration
+for which it is expected to operate in high-performance,
+In this work, the value of CF is kept as 0.3, to reflect the
+regular, low-power, or stand-by mode - changes. This directly
+impact of increased congestion on the eCFP of a design.
+impacts oCFP.
+4) Additional Process Step Impact (APSI): While the BE
+In this work, we consider four applications, namely the In-
+factor above represents the energy consumed in processing
+ternet of Things (IoT), High-Performance Computing (HPC),
+a standard wafer, process variants - like with extra device
+Portable Electronics (PE), and Automotive (Auto). Together,
+types (transistors with different threshold voltage) or different
+theseapplicationprofilesrepresentupto90%ofusagepatterns
+capacitor types or extra metal layers - may consume more
+in electronics. Based on the application for which the chip is
+energy due to additional steps in the processing of the wafer.
+beingdeveloped,theoperatinglifetimeoftheproductchanges.
+APSI is calculated by using Eq. (5).
+In our work, we have assumed representative operational life-
+times for different applications as below. These are notional,
+APSI=((Total masks−Reference masks)×Mask Factor)+1 anddifferentchipsineachoftheseapplicationsmayalsohave
+(5) different profiles. The purpose of considering these profiles
+In this work, we have considered that a wafer processed in is to ensure and demonstrate that the proposed framework is
+thestandardprocessrequires36masks(andrelatedprocessing versatile for estimating sustainability metric for a very wide
+steps). range of applications.
+Although different additional steps may add a different • Internet of Things (IoT): We assume total operational
+level of emissions, in this work we have assumed that every lifetime of 20000 hours (24 hrs for 2.5 - 3 yrs). Battery
+additionalprocesssteprequires4.5%additionalenergy.So,the powered IoT devices usually keep a large part of the
 
 
 === Page 6 ===
-Chapter 1
-Introduction
-1.1 Introduction
-In the realm of cardiovascular care, the urgency to enhance risk assessment tools, particularly
-in predicting the 30-day mortality rate post-initial heart attacks, has never been more crucial.
-Current tools, exemplified by the Revised Cardiac Risk Index, exhibit limitations, prompting
-an immediate need for a more precise and discriminating predictive cardiac risk calculator.
-This study is driven by a practical imperative—the pressing importance of refining risk assess-
-ment methodologies to meet the specific demands of short-term mortality within the 30-day
-post-myocardial infarction window. Recognizing this temporal gap, our aim is to leverage ad-
-vanced machine learning and deep learning techniques, creating a sophisticated model that
-factors in a comprehensive array of clinical parameters and potential risk factors.
-The urgency of the matter lies in the immediate applicability of our research. By contributing
-to more effective risk assessment tools, this study endeavors to provide clinicians and patients
-with timely, actionable insights. This introduction sets the stage for a focused exploration,
-emphasizing the practical significance and urgency of advancing predictive modeling techniques
-in the context of short-term mortality post-first heart attack.
-1.2 Motivation
-The motivation behind this study is propelled by the urgent need to significantly enhance the
-accuracy of predicting the 30-day mortality rate in patients following their initial heart attack.
-The prevailing cardiac risk stratification tool, the Revised Cardiac Risk Index, while widely
-utilized,presentsevidentlimitations,particularlyinitsabilitytodiscriminateeffectivelybetween
-varying risk levels. The gravity of the situation demands a novel and highly accurate predictive
-cardiac risk calculator.
-Thecriticalimportanceofthisstudyisunderscoredbytherealizationthatthecurrentriskassess-
-ment landscape primarily revolves around estimating long-term cardiovascular disease (CVD)
-6
+deviceinstand-byorswitched-offmode,andonlyasmall operates in low leakage stand-by mode for a longer duration
+part is active. of time and saves power. Circuit implementations that operate
+• High-Performance Computing (HPC): We consider a faster enter into such stand-by mode faster. In Eq. (8), PWM
+life of about 3 years where it remains active for a large is a Boolean variable that is set to 1 when the design uses
+part of life and is in switched-off mode for a short pulse width modulation.
+duration. Here, we also introduce a performance factor, PF, to esti-
+• Automotive (Auto): We consider the total mileage of a mate the extra duration when a design will operate in stand-
+car to be 3,00,000 km before a car is discarded. We have by. PF is the ratio of the time required for a given design
+assumed that it runs this distance at an average speed of to complete an operation to the time taken by the reference
+30 km/ hr. So, an operational lifetime of 10000 hours. design for the same operation.
+• Portable Electronics (PE): We consider a portable elec- The second term in Eq. (8) represents the leakage power
+tronic item like a mobile phone to have a life of 5 consumed in stand-by mode and takes into account the extra
+years where it remains in stand-by or switched-off mode time a high performing system will operate at V by
+standby
+for a large part of its life. Therefore, 35000 hours of utilizing PF.
+operational life.
+For estimating oCFP, the operational lifetime of a foun- V. VALIDATINGSUSTAINABILITYFRAMEWORKFOR
+dation cell is categorized into three phases: Active, Standby, FOUNDATIONCELLDESIGNS
+and Switched-off. These phases are quantified as ratios of
+A good assessment framework has to be robust, adaptable,
+the total operating time (T ), defined as Active Time Ratio
+total verifiable, coherent, fair, repeatable, scalable, and relevant
+(ATR), Standby Time Ratio (STR), and Switched-off Time
+[26].Inthissectionwedemonstratetheagilityandrobustness
+Ratio (SOTR). These ratios are presented in Table IV.
+oftheframeworkbyusingittocomparedifferentarchitectures
+2) DynamicPower: Dynamicpoweristhepowerconsumed
+orimplementationsofdesiredfunctionalityinfoundationcells.
+byafoundationcellduringthatpartofitsoperationallifewhen
+In particular, we compare a variety of Flipflops, Level
+it is active. Therefore, the Dynamic Power component in Eq.
+Shifters,andApproximateAdders,ontheaxesofPPAandalso
+(7) is normalized for the ratio of total operating time when
+Sustainability. The designs have been implemented in 65nm
+the cell is powered up and expected to drive output.
+Low Standby Power technology from STMicroelectronics.
+Herethedynamicchargeconsumedduringoperation(Q ),
+dyn
+ismultipliedwiththeswitchingactivity(α),whichistheratio
+A. Embodied Carbon Footprint (eCFP) metric
+of times/ cycles in which the inputs/ outputs of the circuit
+change. This is then multiplied with the operational voltage Wefirstevaluatetheversatilityoftheframeworktoconsider
+of active mode V active, and operating frequency f. the impact of layout efficiency, additional process steps, and
+extra metal on sustainability.
+ATR 1) ImpactofAreaandExtraMetalLayer: Foundationcells
+Dynamic power=Q ×α×V ×f × (7)
+dyn active 100 like buffers, combinational gates, latches, and flipflops are
+For the sake of simplicity, we have considered only 1 kind designedwiththelowestmetallayer(Metal-1orM1)only.For
+of active states of a system. Advanced SoCs usually operate complex cells like flipflops, this results in congestion within
+at different supply levels and operational frequency according the cell, and the area of the cell increases. We implemented
+to the performance requirements of the system. In such cases, one of the simplest and most commonly used flipflop -
+ATR is split into components to represent different voltage- Transmission Gate Flipflop (TGFF) [27], which has a master-
+frequency combinations in which the system operates. slave latch configuration as shown in Fig. 1. Its layouts were
+3) Leakage Power: For the context of this framework, designed by sporadically using the next metal layer (Metal-2
+powerconsumedbythesysteminstand-bystatesisconsidered or M2) along with M1. Using M2 results in a denser layout
+as leakage power. It is estimated as in Eq. (8). incomparisontoM1-onlyimplementationasshowninFig.2.
+(cid:34) (cid:35)
+(cid:16)ATR (cid:17)
+Leakage power= I ×V × ×PFPWM
+active active 100
+(cid:34) (cid:32) (cid:33)(cid:35)
+(cid:16) (cid:17)
++ I ×V × STR+ PWM×ATR×(1−PF)
+standby standby 100 100
+(8)
+The first term in Eq. (8) represents the leakage power con-
+sumedinactivemode(I ).Designstargetedforlow-power
+active
+applications frequently implement pulse width modulation, a
+technique in which the supply level is lowered as soon as
+the desired computation is completed. Therefore, the system Fig.1. TransmissionGateFlipflop(TGFF)circuit
+
+[Image page_6_image_0.jpeg]
+Gemini Response:
+Here's a detailed analysis of the image:
+
+**Visual Elements:**
+
+*   **Circuit Diagram:** The main visual element is a circuit diagram representing a "Transmission Gate Flipflop (TGFF)" or similar type of D flip-flop (based on the document where the image is used). It uses CMOS transistors.
+*   **Latches:** The circuit consists of two latches enclosed in dashed rectangles, labeled "Master Latch" and "Slave Latch."
+*   **Transistors:** The circuit contains PMOS and NMOS transistors.
+
+*   **Transmission Gates:** There are four transmission gates comprised of PMOS and NMOS transistors.
+*   **Labels:** The diagram includes labels for key signals and voltage sources, such as "CLK" (clock signal), "CLKB" (inverted clock signal), "CLKI" (clock signal), "Vdd" (supply voltage), "D" (data input), and "Q" (data output).
+
+**Text Content (from image and OCR):**
+
+*   **CLK, CLKB, CLKI:** Clock signal and its inverted version.
+*   **Vdd:** Power supply voltage.
+*   **Master Latch, Slave Latch:** The two components of the circuit.
+*   **D:** The input.
+*   **Q:** The output.
+
+**Contextual Significance (based on surrounding text in document):**
+
+*   **Foundation Cell Design:** The circuit is part of a "foundation cell," a fundamental building block in VLSI (Very Large Scale Integration) design. These are basic circuit elements used to construct larger, more complex systems-on-chips (SoCs).
+*   **Sustainability Framework:** The image is presented in the context of a research paper focused on a "Sustainability Framework" for evaluating the environmental impact of computing element designs, beyond just Power, Performance, and Area (PPA). The paper focuses on embodied and operational footprint.
+*   **Layout Efficiency:** The accompanying text and the experiment setup discuss how the layout of this TGFF can be optimized to reduce area, potentially by using multiple metal layers (M1, M2) during the design phase. However the use of multiple layers may impact the SoC level performance because of congestion.
+*   **Tradeoffs:** The broader discussion suggests that there are tradeoffs between performance, area, power, and sustainability, and this framework is intended to help designers make more environmentally conscious decisions early in the design process.
+*   **Impact of Area:** The document highlights how the area of these foundation cells impacts embodied carbon footprint, as a larger cell means fewer can be fabricated per wafer.
+
+In summary, the image shows a circuit diagram of a commonly used type of flip-flop, and it is part of a discussion in a sustainability-focused electronics design document. The image helps illustrate how low-level design choices (like layout and transistor configuration) affect both performance and the environmental impact of the overall system.
+
+
+OCR Text:
+CLKI
+
+CLK
+
+Vdd
+
+Slave Latch
+
+CLKB
+
+CLKI
+Master Latch
+
 
 
 === Page 7 ===
-risk. However, the immediate and specific concern of short-term mortality within the crucial
-30-day post-myocardial infarction window necessitates a targeted approach. The urgency lies in
-addressing this temporal gap in risk assessment methodologies to better guide clinical interven-
-tions.
-Motivated by the pressing need for more effective risk prediction, this research advocates for the
-application of state-of-the-art machine learning and deep learning techniques. The urgency of
-the matter drives our ambition to develop a sophisticated and highly tailored predictive model,
-one that meticulously considers diverse clinical parameters and potential risk factors. The
-motivation is rooted in the conviction that a more advanced model is imperative for gaining a
-profound understanding of a patient’s prognosis during this critical post-heart attack phase.
-7
+(a) (b)
+Fig.2. (a)TGFF(M1)(b)TGFF(M1+1M2).TGFFlayoutisimplementedin Fig. 4. For CSFF, layouts with 1 or 2 M2 routing tracks have same area.
+2ways-TGFF(M1)usesonlyM1andTGFF(M1+1M2)usesonly1trackof UsingthirdM2trackresultedinadenserimplementation.eCFPincreasesin
+M2inadditiontoM1 M1+1M2toM1+2M2transitionduetoincreasedcongestionatsystemlevel.
+Arearecoveryin3M2versionreducedeCFP.
+DifferentnumbersofM2routingtrackswereusedinsidethe
+The use of 1 track of M2 in the layout results in increased
+cell while designing its layout variations. These are named
+congestionattheSoCleveland,thereforeEMI,relatedimpact
+CSFF(M1+1M2), CSFF(M1+2M2), and CSFF(M1+3M2).
+sets in. However, as shown in Fig. 3, eCFP estimated using
+Hence,inadditiontoM1,theselayoutversionsuse1,2,and3
+Eq. (1) is lower in M1+1M2 implementation than M1 only
+additional M2 tracks, respectively. Our findings are presented
+implementation. Adding only 1 track of M2 reduces flipflop
+in Fig. 4.
+area from 22.9 µm2 to 21.8 µm2, and hence, despite the
+Here,CSFF(M1+1M2)andCSFF(M1+2M2)havethesame
+impactonsystem-levelrouting,eCFPreducesfrom1.36mWh
+area. The CSFF(M1+2M2) version has a larger embodied
+to 1.3 mWh.
+footprint due to increased congestion at the SoC level. In
+Intheaboveexample,wenoticethateCFPreducedbecause contrast, CSFF(M1+3M2) could be drawn denser, and despite
+of using one track of M2. However, utilizing higher metal the higher congestion-related impact, eCFP is smaller.
+layers (M2 in this case) within a cell may not always reduce
+2) Impact of using additional processing step (mask):
+area. It only increases SoC-level congestion. The framework
+Incorporating specialized devices such as different threshold
+should then show an increase in eCFP.
+voltageflavorsofdevicesandtrenchorMetal-in-Metal(MIM)
+capacitors results in additional processing of the wafer. This
+To study this impact, we designed a Change Sensing
+includes more lithography steps and also additional use of
+Flipflop(CSFF)[27]whichisalow-powerflipfloparchitecture
+materials and thermal cycles. This increases manufacturing
+used in IoT applications.
+complexity and results in a larger eCFP.
+The following example illustrates the impact of using addi-
+tional devices in another set of flipflop variants - a radiation-
+hardened flipflop (RAV FF) [28] where a trench capacitor is
+used, and an error-tolerant flipflop (SETU FF) [29] where no
+additional device is required. Using a trench capacitor results
+in increased processing steps for RAV FF.
+We compare the design area and eCFP for SETU FF and
+RAVFFinFig.5.RAVFFisdenserthanSETUFFbecauseit
+usestrenchcapacitance.However,duetoadditionalprocessing
+steps required to manufacture a chip with RAV FF, its eCFP
+is larger than that of SETU FF.
+From [14], it is evident that different process steps have
+different energy consumption. So, depending on which extra
+process steps are added, a different impact will be observed.
+Since detailed data for the technology in which we performed
+this analysis are not available [20], in this analysis, we have
+Fig.3. Impactonareaandembodiedfootprintonusinganadditionalupper
+metalroutinglayerM2fordesigningTGFF.AstheTGFFdesignwithM1+ notdifferentiatedbetweentheCFPimpactofdifferentprocess
+M2requireslessarea,itsembodiedfootprintisless. steps, although the framework allows it.
 
-
-=== Page 8 ===
-Chapter 2
-Related Work
-2.1 Literature Review
-Out of all major papers available online these are the significant papers for our domain.
-2.1.1 SEMI-SUPERVISED CLASSIFICATION WITH GRAPH CONVO-
-LUTIONAL NETWORKS
-Research Paper Titled ”Semi-Supervised Classification with Graph Convolutional Networks”[1]
-by Thomas N. Kipf and Max Welling from the University of Amsterdam. gives us the following
-brief information
-TheresearchconductedbyKipfandWellingintroducesaninnovativeapproachtosemi-supervised
-learning through the utilization of Graph Convolutional Networks (GCNs). In contrast to con-
-ventional deep learning methods that heavily depend on large labeled datasets, their method-
-ology addresses the challenge of limited labeled data by proposing a framework that effectively
-incorporates both labeled and unlabeled data within a graph-structured dataset.
-ThepaperfocusesonleveragingGCNs,specializedneuralnetworksdesignedforgraph-structured
-data,tocapturerelationshipsbetweendatapointsinagraph. Thisapproachisparticularlyvalu-
-able for scenarios where obtaining labeled data is resource-intensive or impractical. The authors
-emphasize semi-supervised learning, demonstrating the effectiveness of their methodology in
-scenarios where only a subset of nodes in the graph possesses labeled data.
-A central aspect of their work involves node classification, where the model is trained to predict
-class labels for nodes within the graph. By representing the underlying structure and dependen-
-cies in the data through a graph-based approach, the proposed methodology exhibits promising
-results in enhancing the performance of semi-supervised learning tasks.
-The research is substantiated through extensive experimental validation on diverse datasets,
-showcasing the superiority of their approach over traditional methods. In essence, Kipf and
-Welling’s work presents a valuable contribution to the field, offering a novel perspective on semi-
-8
-
-
-=== Page 9 ===
-supervisedlearningthatprovesespeciallybeneficialinreal-worldapplicationswherelabeleddata
-is scarce.
-2.1.2 A General Convolution Theorem for Graph Data
-”The work by Alberto Natali and Geert Leus from the Faculty of Electrical Engineering, Math-
-ematics, and Computer Science at Delft University of Technology introduces a pivotal contri-
-bution titled ’A General Convolution Theorem for Graph Data.’ The primary focus of their
-research is the development of a convolution theorem specifically tailored to the unique charac-
-teristics of graph-structured data.
-In response to the increasing prevalence of graph-based representations in various domains,
-Natali and Leus address the challenge of effectively processing graph data. The proposed con-
-volution theorem not only acknowledges the intricate nature of graph structures but also adapts
-the fundamental operation of convolution to operate meaningfully on graph data.
-Key elements of their work include the formulation of a versatile convolution theorem designed
-toaccommodatethecomplexitiesinherentingraphdatarepresentation. Thiscontributionholds
-promise for applications across diverse fields, including social network analysis, bioinformatics,
-and recommendation systems, where graph-based models are commonly employed.
-While the paper’s comprehensive contributions are expected to significantly advance the field,
-further insights into experimental validations or theoretical comparisons could enhance the un-
-derstanding of the proposed convolution theorem’s efficacy. Nonetheless, Natali and Leus’s
-work stands as a pioneering effort, providing a valuable and versatile tool for the processing and
-analysis of data represented in graph form.”
-2.2 Previous Studies
-2.2.1 Heart attack mortality prediction: an application of machine learning
-methods
-In this research by Issam Salman, the objective is to develop predictive models for hospital
-mortality in patients with acute myocardial infarction (AMI) using machine learning methods.
-The study employs real-world data from a Czech Republic hospital (603 patients) and two
-hospitalsinSyria(184patients)toconductacomparativeanalysisofdifferentpredictivemodels.
-1. Model Evaluation: - The first part of the research involves a comprehensive comparison of
-various predictive models for hospital mortality in AMI patients. The evaluation is based on
-real clinical data, encompassing 603 patients from a Czech Republic hospital and 184 patients
-from two hospitals in Syria.
-2. Generalizability: -Despitethespecificityofthelearnedmodelstotherespectivedatasets, the
-study endeavors to draw general conclusions that may have broader validity and applicability.
-9
-
-
-=== Page 10 ===
-3. Addressing Data Challenges: - The second part of the paper focuses on addressing challenges
-associatedwithincompleteandimbalanceddata. Specifically,theChow–Liualgorithmandtree-
-augmented naive Bayesian methods are employed to enhance model performance under these
-conditions.
-4. Algorithmic Comparison: - The research includes a comparative analysis of the quality and
-effectivenessoftheChow–Liualgorithmandtree-augmentednaiveBayesianmethodsinhandling
-incomplete and imbalanced data, contrasting their performance with alternative approaches.
-In summary, Issam Salman’s research contributes to the technical understanding of predicting
-heart attack mortality by rigorously evaluating predictive models on real clinical data. The
-study also addresses the challenges of incomplete and imbalanced data sets, employing specific
-algorithmsandcomparingtheirperformancetoalternativemethods. Thefindingsaimtoprovide
-valuableinsightsfortheapplicationofmachinelearninginpredictingmortalityinAMIpatients.
-10
-
-
-=== Page 11 ===
-Chapter 3
-Data Understanding
-We were given two different data sets of two different hospitals comprising 60 and 142 columns
-and 1700 and 2700 rows approximately. We labeled them as data set A and B. while data
-set B had more number of data points, but the outliers and anomalies were quite high in
-number, also this data was less reliable due to such large differences. Firstly we pre-processed
-the data to remove any kind of outliers, anomalies, missing values. Secondly To filter out
-most relevant features from our data set, to reduce dimensionality and help our model work
-effectively we identified the important features, we did this by calculating the p-values using the
-mann-Whitney test and t-test. and we found that following were the significant features.
-Figure 3.1: Numerical Features
-11
-
-[Image page_11_image_0.png]
+[Image page_7_image_0.png]
 Gemini Response:
-Here's a detailed analysis of the image, encompassing its visual elements, text content, and contextual significance within the report:
+Here's a detailed and concise analysis of the image:
 
 **Visual Elements:**
 
-*   **Table Format:** The image presents data in a table format, using rows and columns to organize information about various features related to heart attack patients.
-*   **Color Coding:** The table header row uses a yellow background for emphasis.
-*   **Grid Lines:** Black lines are used to delineate cells in the table, enhancing readability.
-
-**Text Content (Based on OCR and context from the surrounding text in the report):**
-
-The table compares the values of different clinical features in cases (patients with mortality) versus controls (patients without mortality).
-
-*   **Columns:**
-    *   **FEATURES:** Lists the clinical features being compared. Examples include Age, Smoking\_Pack\_Year, Ejection Fraction, Baseline Creatinine, HAEMOGLOBIN, HB1Ac, BP\_Systolic, BP\_Diastolic, and Heart\_Rate.
-    *   **Mean value(NORIN(3170))**: Shows the average value of the specified feature in the overall population dataset (NORIN).
-    *   **Cases (Mortality =1(244))**: Shows the average value for the feature within the "Cases" group, specifically those who experienced mortality. (Mortality=1, with 244 patients)
-    *   **Control(Mortality =0(2926))**: Shows the average value for the feature within the "Control" group, which includes those who did not experience mortality. (Mortality=0, with 2926 patients)
-    *   **p-Value (Either mann-Whitney or t test)**: Displays the p-value resulting from either a Mann-Whitney U test or a t-test. This value assesses the statistical significance of the difference in feature values between the "Cases" and "Control" groups. Smaller p-values (e.g., <0.0001) indicate a statistically significant difference.
-
-*   **Rows:** Each row represents a specific clinical feature and its corresponding data.
-
-**Contextual Significance:**
-
-*   **Feature Selection:** The table is presented in the "Data Understanding" chapter of the report. The report mentions that the table reflects features selected through p-value analysis using Mann-Whitney and t-tests.
-*   **Comparative Analysis:** This table helps to understand the relationship between clinical features and patient mortality. Comparing "Cases" and "Control" values highlights features that may be significant risk factors.
-*   **Statistical Significance:** The p-values indicate which features have the most statistically significant differences between the two groups, which are likely the most important for risk prediction modeling.
-*   **Data Set Characteristics:** The table demonstrates the initial analysis of the dataset, showing distributions and potential correlations relevant to the research objectives.
-*   **Figure Reference:** The caption "Figure 3.1: Numerical Features" indicates that this is one of the figures presented in the chapter to illustrate numerical features.
-
-**Overall:**
-
-The image is a critical component of the report, providing a visual representation of the data exploration process and the identification of significant features. It's part of the process to create a model to predict heart attack mortality. It enables the audience (readers of the report) to understand the data's key characteristics and the basis for subsequent modeling steps.
-
-
-OCR Text:
-Age 54.15 60.01 53.62 <0.0001
-Smoking_Pack_Ye | 5.073 5.19 4.93 <0.0001
-ar
-
-Ejection 40.20 35.86 40.64 <0.0001
-Fraction
-
-Baseline 1.06 1.275 1.0 <0.0001
-Creatinine
-
-HAEMOGLOBIN 12.83 12.55 12.864 0.0014
-HB1Ac 6.187 6.449 6.15 0.0016
-BP_Systolic 123.82 114.5 124.58 <0.0001
-BP_Diastoloic | 78.37 71.91 78.88 <0.0001
-Heart_Rate 83.66 85.77 83.35 0.025
-
-
-
-
-=== Page 12 ===
-Figure 3.2: Categorical Features
-At last we also tried our results on the features given by domain experts, which had 18-20 major
-features. Finally we had total of three different types of features set for the same data set.
-We Trained our ML models on both the data sets, we performed training on data set A and
-testing on data set B and vice-a-versa. We also trained our Models on individual data sets.
-12
-
-[Image page_12_image_0.png]
-Gemini Response:
-Here's a thorough analysis of the image:
-
-**Visual Elements:**
-
-*   **Table Structure:** The image is dominated by a table. The table has a clear grid structure with rows and columns, making it easy to read the data.
-*   **Font and Style:** The text is presented in a simple, sans-serif font. The text within the table appears consistent, making the data uniform.
-*   **Alignment:** Values within the columns are either left-aligned (for text) or right-aligned (for numbers), which helps with readability.
-*   **Color:** No colors are present in the picture, meaning the table is black and white.
-
-**Text Content (based on the OCR output):**
-
-The table presents a feature analysis related to a study (likely medical or related to a diagnosis). The columns are:
-
-*   **FEATURES:** Lists various medical or clinical features (e.g., ACUTE\_MR, Anterior Wall MI, Avg\_Sleep, Cardiac Cardiogenic Shock, etc.).
-*   **N=3170:** Indicates the total number of cases in the study (3170).
-*   **Cases=246:** Indicates the number of cases that exhibit the feature in question (246).
-*   **Control=2926:** Indicates the number of cases that don't exhibit the feature (2926).
-*   **p-value:** Shows the statistical significance of the feature's association.
-
-**Data Interpretation (Examples):**
-
-*   **ACUTE\_MR:** Of the 3170 cases, 10 had Acute Mitral Regurgitation (MR). 1 of them was in the cases category, 9 of them were in the control category. The p-value is 1.0, meaning the feature isn't statistically significant related to the condition.
-*   **Cardiac\_Cardiog** cases have a p-value of &lt;0.0001, implying a strong statistical significance for this factor.
-
-**Contextual Significance:**
-
-*   **Medical Study:** The data suggests a medical study, likely focused on risk factors or diagnostic criteria. The features indicate factors related to heart conditions (anterior wall, cardiac conditions) or general health (diabetes, hypertension, sleep).
-*   **Statistical Analysis:** The p-value column indicates that statistical analysis has been performed to assess the strength of association between each feature and a specific outcome (presumably related to the "Cases" group).  Features with low p-values (e.g., &lt;0.05 or &lt;0.0001) are considered statistically significant.
-*   **Feature Selection:** The table likely represents a subset of features that were considered for inclusion in a predictive model. The p-values are used to select the most relevant features to be included in the model.
-*   **Potential Research:** This data is likely a representation or a table pulled from research done on heart attack patients, showing different features considered relevant, along with some data. The goal of the research could be to improve the prediction of who is at risk of heart attack or some other outcome.
-
-
-OCR Text:
-FEATURES N=3170 Cases=246 | Contro!=2926 | p-value
-ACUTE_MR 10 1 9 1.0
-anterior Wall | 1752 144 1608, 0.246
-MI
-
-avg_Sleep 266 10 256 0.0165
-Cardiac Cardiog | 107 3 64 <0.0001
-enicShock
-
-Cardiac HeartFa | 161 7 14 <0.0001
-ilure
-
-ChestPain_sympt | 3120 238 2882 0.377
-Diabetes 728 86 642 <0.0001
-Melitus
-
-Female 516 a1 435 <0.0001
-Hypertension — | gg2 94 788 0.00013
-LAD_Bool 1476 49 1427 <0.0001
-Lateral wall Mt [71 5 66 1.0
-Medical with no] 4113 181 932 <0.0001
-_PCI
-
-Physical_Activi | 422 13 409 0.0004
-Y
-
-RCA Bool 1000 35 965 <0.0001
-Shortness of | 1942 181 1761 <0.0001
-breath
-
-Syncope 205 39 166 <0.0001
-preACEARB | 196 33 163 <0.0001
-pre Beta blocke | 227 30 197 0.0018,
-PRESENCE OF | 758 54 704 <0.0001
-MITRAL
-
-REGURGITATION (M
-
-
-
-
-=== Page 13 ===
-Chapter 4
-Methodology
-4.1 Traditional ML approach
-We performed the following Models on both the data sets A and B.
-1. Random Forest
-2. Extra Tree
-3. Adaboost
-4. SVM
-5. Catboost
-6. Logistic Regression
-and finally we performed the Ensemble method to get the better results.
-We have used Stratified K-Cross Validation Technique. It ensures that every fold has similar
-data distribution as in the entire data set, thus, giving a consistent model performance in every
-iteration. Since, the data set is quite decent, we have used K=5. We tried for other K values
-but the results were not satisfactory. Finally we have trained the models and evaluated their
-performance using multi class metrics like accuracy, precision, recall and F1 Score. Figure 4.1
-4.2 Using GNN and GCN Models
-We worked upon Data set A and features given by domain experts for all the DL approaches in
-our research.
-We started with MLP with Grid search for finding the Hyper parameters and finally found these
-were the best parameters
-hidden layer size =1250, activation function = relu, optimiser = adam
-We then moved to GCN and GNN approach and the following things needs to be defined
-1.Defining Adjacency matrix :- for this we used the Cosine Similarity with 0.95 threshold
-value for similarity.
-13
-
-
-=== Page 14 ===
-Figure 4.1: Traditional ML Baseline Flow
-2. Number of Hidden layers :- we tried single hidden layer and 4 hidden layer approach
-3. Size of Hidden layers :- it varied from 2 to 64
-4. Learning rate
-5. Weights
-6. Optimizer
-4.2.1 1 Hidden layer Method
-We tried Hyper parameter tuning for this approach and found these were the best hyper param-
-eters Nodes :- Patients Number of features used 16 Learning rate :- 0.01 Epoch :- 100 Sigmoid
-activation function Loss :- Binary cross entropy Initial weight hidden layer:- 0.2
-4.2.2 4 Hidden layer Method
-We performed similar Hyper parameter tuning for this as well and the following Architecture
-was performing better than others.
-14
-
-[Image page_14_image_0.jpeg]
-Gemini Response:
-Here's a thorough analysis of the image:
-
-**Visual Elements:**
-
-*   **Type:** The image is a flowchart, a type of diagram showing a sequential process.
-*   **Shape:** The flowchart consists of rounded rectangle boxes, each containing a step of the process.
-*   **Color:** It is monochromatic, with black text, arrows, and box outlines on a light grey background.
-*   **Arrows:** Arrows are used to indicate the flow and direction of the process between steps.
-
-**Text Content:**
-
-The boxes in the flowchart contain the following text, representing the steps in a machine-learning process:
-
-1.  **Dataset**
-2.  **Data Cleaning**
-3.  **Feature Selection**
-4.  **Training Set**: Data used to train the model
-5.  **Validation Set**: Set used for Model selection and hyperparameter tuning.
-6.  **Outlier Removal**
-7.  **Feature Engineering**: Involves creating or modifying features to help model better.
-8.  **Training**: Actual process of training a Machine Learning Model
-9.  **Model**
-10. **Evaluation**: Process of evaluating the model to test its performance on unseen data.
-
-Additionally, there is a "Testing" arrow that leads from the 'Validation set' to the Model.
-
-**Contextual Significance:**
-
-*   **Process Depiction:** The flowchart illustrates a traditional machine learning workflow. It starts with raw data (Dataset), which then undergoes cleaning and feature selection. The selected features are then used to create a 'Training Set' and a 'Validation Set'. The training set data undergoes Outlier removal and feature engineering and is used to train the model and evaluate its performance.
-*   **Key Stages:** The diagram emphasizes the critical stages of data preparation (cleaning, feature selection, outlier removal, feature engineering), model training, validation, and final evaluation.
-*   **Model Testing:** The inclusion of "Testing" from the "Validation Set" towards the "Model" indicates the validation set is also used for final testing after training.
-
-**Overall:** The image provides a simplified visual representation of the common steps involved in a machine learning pipeline, from data acquisition to model evaluation. This visualization serves to illustrate the process clearly and concisely.
-
-OCR Text:
-Dataset
-
-Data Cleaning
-
-Feature Selection
-
-Training Set Validation Set
-
-Outlier Removal
-
-Feature Testing
-Engineering
-
-Training
-
-Model
-
-Evaluation
-
-
-
-=== Page 15 ===
-Figure 4.2: Data set Shape
-Figure 4.3: 25 nodes of the graph (subset of main graph)
-Architecture of the Model
-Graph Conv Layers: 2 Graph Conv layers
-Dense Layers: 2 dense layers.
-Final Convolution Layer: The last Graph Conv layer generates the final output, which I use for
-classification.
-Activation Functions: I applied ReLU activation functions after each layer to introduce non-
-linearity.
-Loss Function: I used Binary Cross-Entropy with Logits (BCE With Logits Loss)
-15
-
-[Image page_15_image_0.png]
-Gemini Response:
-Here's a breakdown of the image and its context based on the provided information:
-
-**Visual Elements:**
-
-*   The image displays text output in a dark terminal or code editor style.
+*   The image is a circuit layout diagram, likely generated by a CAD tool.
+*   It shows a detailed plan of a circuit, illustrating the arrangement of different layers and components.
+*   The diagram depicts circuit elements with two materials,Metal 1 (shown as hatched purple lines) and Poly (shown as solid Red Lines).
+*   Specific components are labeled like "gnd," and "vdd".
+*   It illustrates the size of the circuit in both the 22 track and 26 track dimensions.
 
 **Text Content (from OCR):**
 
-*   **Shape of X\_train: (1343, 18):**  This indicates the shape of the training data's feature matrix (X).  It has 1343 rows (samples/patients) and 18 columns (features/variables).
-*   **Shape of X\_test: (336, 18):**  This indicates the shape of the testing data's feature matrix (X).  It has 336 rows and 18 columns.
-*   **Shape of y\_train: (1343, 1):**  This indicates the shape of the training data's target variable (y).  It has 1343 rows (corresponding to the training samples) and 1 column (representing the binary classification result).
-*   **Shape of y\_test: (336, 1):** This indicates the shape of the testing data's target variable (y). It has 336 rows and 1 column.
-
-**Contextual Significance (Based on Report Content):**
-
-1.  **Heart Attack Risk Calculator:** This information relates to the creation of a model for predicting the 30-day mortality risk after a heart attack.
-
-2.  **Machine Learning/Deep Learning:**  The data shapes suggest that machine learning or deep learning models are being trained and evaluated using the 'X' (features) and 'y' (target variable) datasets.
-     *   The data is split into training and testing sets.
-     *   The 'X' data contains 18 features, while the 'y' data is a binary classification.
-
-3.  **GNN/GCN Exploration:** The report specifically discusses using Graph Neural Networks (GNNs) and Graph Convolutional Networks (GCNs). The shape of the data is a feature matrix before it goes through GNN and GCN modeling.
-
-4.  **Data Preparation and Feature Engineering:**  The report also mentions feature selection and domain expert input, thus it looks like the image shows the dataset after the domain experts have been incorporated.
-
-In essence, the image provides a snapshot of the data's structure *after* initial pre-processing, and shows that the dataset has been split into training and test sets, with 18 features per data point.
-
-OCR Text:
-Shape of X_train: (1343, 18)
-Shape of X_test: (336, 18)
-Shape of y train: (1343, 1)
-Shape of y_ test: (336, 1)
-
-
-
-[Image page_15_image_1.png]
-Gemini Response:
-Here's a detailed analysis of the image:
-
-*   **Visual Elements:** The image depicts a network graph. The graph consists of:
-    *   **Nodes:**  Light blue circular nodes, each labeled with text.
-    *   **Edges:** Black lines connecting the nodes, indicating relationships or connections. The density of the connections makes it a complex network.
-    *   **Layout:** The nodes are arranged in a semi-clustered formation, with many connections crisscrossing the central area.
-
-*   **Text Content:**
-    *   **Title:** "Subset of the Graph Visualization" - indicating that the image shows only a part of a larger graph.
-    *   **Node Labels:** Labels on the nodes seem to follow a naming convention like "DT 100x" (where 'x' is a numerical digit or digits). These labels likely represent identifiers or codes for each node within the dataset.
-
-*   **Contextual Significance:**  Given the context of heart attack risk prediction (from the other text), this graph likely represents relationships between different patients or features in the patient dataset. Nodes could represent individual patients, medical parameters, or risk factors, while edges indicate correlations or dependencies between them. The visualization is a subset, suggesting a larger, more complex network of relationships.
-
-In summary, the image visualizes a network graph, likely extracted from a larger dataset used for heart attack risk prediction. The graph shows connections between potentially significant features or patients.
-
-
-OCR Text:
-Subset of the Graph Visualization
-
-
-
-
-=== Page 16 ===
-Figure 4.4: Data set Shape
-4.2.3 Other Approaches
-Some of the other modifications performed were
-1) Addition of Timi and Grace Scores:-
-Quick overview of how Timi score is calculated
-Age: 60 years or older: 1 point
-Risk Factors:History of diabetes: 1 point
-History of hypertension: 1 point
-Cardiac Biomarkers: Elevated cardiac biomarkers (e.g., troponin):
-Elevated but less than upper limit: 1 point
-Elevated more than the upper limit: 2 points
-ST-Segment Changes:ST-segment deviation on ECG: 1 point (on-spot)
-Coronary Artery Disease (CAD) History: History of coronary artery disease or known stenosis:
-1 point
-Use of Aspirin in the Last Seven Days: No aspirin use: 1 point
-Quick overview of how Grace score is calculated
-Age
-Heart rate
-Systolic blood pressure
-Serum creatinine levels
-Killip class (a measure of heart failure severity)
-Cardiac arrest at admission
-ST-segment deviation on the electrocardiogram (ECG) (on-spot)
-Elevated cardiac biomarkers (e.g., troponin)
-Previous myocardial infarction or coronary artery bypass graft surgery (CABG)
-Presence of congestive heart failure or left ventricular dysfunction
-Tried Feature mapping :-
-Total number of features - 170 (Dixit)
-Total number of features - 210 (Norin)
-Number of common features : 142
-Common Features before and on the time of Admission : 90
-16
-
-[Image page_16_image_0.png]
-Gemini Response:
-Here's a thorough analysis of the image:
-
-**Visual Elements:**
-
-*   The image features text displayed against a dark gray or black background. The text appears to be computer-generated or from a coding environment output.
-*   The lines of text are aligned to the left.
-*   The image itself is a close-up capture of text output. No other graphical elements are present.
-
-**Text Content:**
-
-The text provides the dimensions (shape) of four arrays:
-
-*   `Shape of X_train: (1343, 18)`: This indicates that the training data (`X_train`) has 1343 rows and 18 columns.
-*   `Shape of X_test: (336, 18)`: This indicates that the testing data (`X_test`) has 336 rows and 18 columns.
-*   `Shape of y_train: (1343, 1)`: This indicates that the training labels or target variable (`y_train`) has 1343 rows and 1 column.
-*   `Shape of y_test: (336, 1)`: This indicates that the testing labels or target variable (`y_test`) has 336 rows and 1 column.
+*   "Metal 1": Indicates the metal layer and the hatch-marked purple-colored layer.
+*   "Poly": Indicates the Polysilicon layer.
+*   "22 Track" and "26 Track": Indicates the dimensions of the circuit using metal track units.
+*   Labels, "vdd", "gnd" and "PP" label the nodes of the circuit diagram.
+*   Numeric labels, such as "0.041545" and "0.1952," probably represent dimensions of the circuit.
+*   There are alphanumeric labels such as "155" and "PPA".
 
 **Contextual Significance:**
 
-*   **Machine Learning/Data Science:** This type of output is highly typical in machine learning and data science projects. The "X" variables usually represent the feature matrix, and the "y" variables represent the target variables or labels. The "_train" and "_test" suffixes indicate that the data has been split into training and testing sets, which is standard practice for model evaluation.
-*   **Data Dimensions:** The dimensions provided tell us about the size and structure of the dataset being used. Specifically:
-    *   Each row likely represents a single observation or data point.
-    *   In the case of `X_train` and `X_test`, the 18 columns suggest that there are 18 features or variables being used to describe each observation.
-    *   In the case of `y_train` and `y_test`, the single column suggests a single target variable.
-*   **Interpretation:** The image implies that the dataset has been loaded and split into training and testing sets in preparation for training a machine-learning model. The relatively small number of test samples, compared to training samples, is a common scenario.
-*   In a heart attack risk predictor, one could interpret 18 features for each patient and a binary outcome for each patient.
-
-**In summary:**
-
-The image displays the shape of training and testing datasets for features (X) and labels (y). It strongly suggests a machine-learning task, where a model will be trained on the training data (`X_train`, `y_train`) and evaluated on the testing data (`X_test`, `y_test`). The provided shapes inform us about the structure of the underlying dataset and the number of features used.
+*   This circuit layout diagram would likely be associated with a research publication, technical document, or project report related to VLSI design, electronic circuit design.
+*   Understanding this diagram requires basic knowledge of electronic circuit design.
+*   The layout helps visualize how a particular design is implemented at the physical level, showcasing how components are connected.
 
 OCR Text:
-Shape of X_train: (1343, 18)
-Shape of X_test: (336, 18)
-Shape of y train: (1343, 1)
-Shape of y_ test: (336, 1)
-
-
-
-=== Page 17 ===
-Can we use Timi and Grace scores as Features : yes
-Tried Weighted Loss functions
-Tried Minority resampling
-Figure 4.5: DL Baseline Flow
-[?]
-17
-
-[Image page_17_image_0.jpeg]
-Gemini Response:
-Here's a thorough analysis of the image:
-
-**Visual Elements:**
-
-*   **Diagram/Flowchart:** The image is a flowchart illustrating a process, most likely a machine learning workflow.
-*   **Boxes:** Each step in the process is represented by a rectangular box with rounded corners.
-*   **Arrows:** Arrows indicate the sequence and flow of steps.
-*   **Layout:** The flowchart is vertically oriented, starting from the top and moving downwards. There's a split in the flow after "Creating Adjacency Matrix."
-
-**Text Content:**
-
-Here's a breakdown of the text in each box, representing the steps:
-
-1.  **Dataset:** Represents the initial data source.
-2.  **Data Cleaning:** Cleaning the dataset.
-3.  **Feature Selection:** Process of selecting more relevant features from the dataset.
-4.  **Creating Adjacency Matrix:** Building adjacency matrix
-5.  **Training Set:** The dataset used to train the ML model
-6.  **Data Pre-processing:** Preparation of dataset after splitting.
-7.  **Standardization:** Adjusting the scale of features for ML model
-8.  **Training:** Training the ML model.
-9.  **Validation Set:** Validation of the ML model.
-10. **Testing:** Testing the ML model.
-11. **Model:** The trained machine learning model.
-12. **Evaluation:** Assessing the performance of the model.
-
-**Contextual Significance:**
-
-*   **Machine Learning Workflow:** The diagram represents a standard machine learning workflow, from data acquisition and cleaning to model evaluation.
-*   **Data Processing Stages:** It highlights key stages such as feature selection, preprocessing, training, testing, and evaluation.
-*   **Model Creation:** The flow emphasizes the iterative nature of building a machine learning model, as the training and validation loops contribute to the final "Model."
-* **Adjacency Matrix** Used to train model on graph dataset, the training and testing will be done separately.
-
-
-OCR Text:
-Training Set
-
-Data Pre-
-processing
-
-Standardization
-
-Training
-
-Dataset
-
-Data Cleaning
-
-Feature Selection
-
-Creating
-
-Adjacency Matrix
-
-Model
-
-Evaluation
-
-Validation Set
-
-Testing
-
-
-
-=== Page 18 ===
-Chapter 5
-Experiments and Results
-5.1 Traditional ML Approach
-These were the Results for the Traditional ML models.
-We were able to reach the accuracy of 74-75 in the best case scenario. (catboost Model)
-Figure 5.1: Data set A Results on 60 Features (initial common features)
-18
-
-[Image page_18_image_0.png]
-Gemini Response:
-Here's a detailed analysis of the image:
-
-**Visual Elements:**
-
-*   **Table:** The image consists of a well-structured table. The table has clear borders and rows, making the information organized.
-*   **Text-Based Image:** It's purely textual, containing information in a tabular format.
-
-**Text Content:**
-
-The table presents the results of different machine learning models on a dataset, categorized by fold, train/test/validation split, and evaluation metrics. The columns include:
-
-*   **Dataset:** "DT" likely refers to the dataset name.
-*   **FOLD:** Represents the fold number in a cross-validation setup (Fold-0 to Fold-4).
-*   **Train/Test/Val:** Specifies whether the results are for training, testing, or validation data.
-*   **Model:** Lists the machine learning model used (Random Forest, ExtraTree, AdaBoost, SVM, CatBoost, Ensemble).
-*   **Accuracy:** The accuracy score of the model.
-*   **Precision:** The precision score of the model.
-*   **Sensitivity:** The sensitivity (or recall) score of the model.
-*   **F1-score:** The F1-score of the model.
-*   **Specificity:** The specificity score of the model.
-
-The table provides performance metrics for each model across different folds and data splits, allowing for an assessment of model generalization and consistency.
-
-**Contextual Significance:**
-
-*   **Machine Learning Experimentation:** This image represents results from a machine learning experiment, likely related to a classification task.
-*   **Model Evaluation:** The metrics (accuracy, precision, sensitivity, F1-score, specificity) are standard measures used to evaluate the performance of classification models.
-*   **Cross-Validation:** The presence of "Fold-0" to "Fold-4" indicates that a k-fold cross-validation technique was employed.
-*   **Model Comparison:** The table enables comparison of the performance of different models on the same dataset.
-*   **Held-Out Set:** The "Heldout" row suggests the use of a separate dataset (not used during training) to assess the model's ability to generalize to unseen data.
-
-The results show model performance on training, validation, and testing sets. We can infer that the aim is to select the best performing model based on its performance on unseen data (validation and testing). CatBoost appears to have performed well with Training data at 0.86 Accuracy.
-
-In summary, the image is a summary of a machine learning experiment with clear visualization of the results for different models using a cross-validation approach.
-
-OCR Text:
-Dataset FOLD Train/Test/Val_|Model Accuracy _|Precision _| Sensitivity Fi-score Specificity
-oT Fold-0 Training Random Forest 0.79 o.9| 0.81 0.82) 078
-oT Fold-0 Validation Random Forest 0.72 0.91 0.72 0.79 0.72
-oT Fold-0 Testing Random Forest 07| o.9| 0.69 077, 07|
-oT Fold-1 Training ExtraTree 0.76 o.8s| 0.73 os| 0.76
-oT Fold-1 Validation ExtraTree 071 0.91 07| 078 077,
-oT Fold-1 Testing ExtraTree 0.69 o.9| 0.67, 0.76 0.69
-oT Fold-2 Training /AdaBoost 0.73 o.8s| 0.82) 078 071
-oT Fold-2 Validation /AdaBoost 0.69 o.9| 0.67, 0.76 0.69
-oT Fold-2 Testing /AdaBoost 0.68 0.91 0.76 0.76 0.68
-oT Fold-3 Training svM os| 0.91 o.9| 0.84 0.79
-oT Fold-3 Validation svM 0.72 0.92| 0.79 078 071
-oT Fold-3 Testing svM 07| 0.91 0.73 078 07|
-oT Fold-4 Training CatBoost 0.86 0.93] 0.94 0.88 0.85
-oT Fold-4 Validation CatBoost 0.75 0.91 0.72 0.81 0.75
-oT Fold-4 Testing CatBoost 0.76 0.91 071 0.81 0.76
-oT Heldout Testing Ensemble 0.72 0.91 0.73 078 0.72
-oT - Testing Ensemble o7 0.86] O74 075) o7
-
-
-
-
-=== Page 19 ===
-Figure 5.2: Data set B Results on 60 Features (initial common features)
-Figure 5.3: Data set A Results on 26 Features (after feature selection)
-19
-
-[Image page_19_image_0.png]
-Gemini Response:
-Here's a detailed analysis of the image:
-
-**Visual Elements:**
-
-*   The image consists of a table with rows and columns. The table is designed with alternating row shading (light/darker) to improve readability.
-*   Lines delineate the boundaries of each cell in the table, making the data clearly separated.
-*   The overall visual is clean and structured, resembling the typical output of a statistical analysis or machine learning report.
-
-**Text Content and Structure:**
-
-*   **Headers:** The table's headers provide context for the data contained within. They include:
-    *   Dataset
-    *   FOLD
-    *   Train/Test/Val (Training, Validation, Testing)
-    *   Model
-    *   Accuracy
-    *   Precision
-    *   Sensitivity
-    *   F1-score
-    *   Specificity
-
-*   **Data Rows:** The data rows provide results from various machine learning models trained and tested on a dataset called "NORIN". Each row corresponds to a different fold in a cross-validation scheme (Fold-0, Fold-1, Fold-2, Fold-3, Fold-4) and represents training, validation, and testing phases.
-    *   **Models:** Random Forest, ExtraTree, AdaBoost, SVM, and CatBoost are listed as the models used.
-    *   **Performance Metrics:** For each model and fold, performance metrics (Accuracy, Precision, Sensitivity, F1-score, and Specificity) are reported as decimal values between 0 and 1, likely indicating percentages or proportions. An additional row labeled “Ensemble” is tested on a held-out test set.
-
-**Contextual Significance:**
-
-*   **Machine Learning Experiment:** The table clearly represents the results of a machine learning experiment. Specifically, it details the performance of different classification algorithms.
-*   **Cross-Validation:** The use of "Fold-0" through "Fold-4" indicates a K-fold cross-validation strategy, a common technique for evaluating the generalization performance of machine learning models.
-*   **Model Comparison:** The data allows for a direct comparison of the performance of different machine learning models on the "NORIN" dataset.  It also indicates the dataset is balanced for the 5-fold cross validation. CatBoost appears to have the highest accuracy.
-*   **Performance Evaluation:** The performance metrics (Accuracy, Precision, Sensitivity, F1-score, Specificity) are all standard measures for evaluating the performance of classification models, indicating the model’s ability to correctly classify instances in different categories.
-*   **Ensemble Method:** The 'Ensemble' row suggests that a combined model (ensemble method) was used as a final step and tested on a held-out dataset.
-
-
-OCR Text:
-Dataset FOLD Train/Test/Val_|Model Accuracy Precision _| Sensitivity Fi-score Specificity
-NORIN Fold-0 Training Random Forest 0.79 0.9 0.81 0.82 0.78
-NORIN Fold-0 Validation Random Forest 0.72 0.91 0.72 0.79 0.72
-NORIN Fold-0 Testing Random Forest O7 0.9 0.69 0.77 O7
-NORIN Fold-4 Training ExtraTree 0.76 0.89 0.73 08 0.76
-NORIN Fold-4 Validation ExtraTree 0.74 0.91 O7 0.78 0.77
-NORIN Fold-4 Testing ExtraTree 0.69 0.9 0.67 0.76 0.69
-NORIN Fold-2 Training AdaBoost 0.73 0.89 0.82 0.78 0.74
-NORIN Fold-2 Validation AdaBoost 0.69 0.9 0.67 0.76 0.69
-NORIN Fold-2 Testing AdaBoost 0.68 0.91 0.76 0.76 0.68
-NORIN Fold-3 Training svM 08 0.91 0.9 0.84 0.79
-NORIN Fold-3 Validation svM 0.72 0.92 0.79 0.78 0.74
-NORIN Fold-3 Testing svM O7 0.91 0.73 0.78 O7
-NORIN Fold-4 Training CatBoost 0.86 0.93 0.94 0.88 0.85
-NORIN Fold-4 Validation CatBoost 0.75 0.91 0.72 0.81 0.75
-NORIN Fold-4 Testing CatBoost 0.76 0.91 0.74 0.81 0.76
-NORIN Heldout Testing Ensemble 0.72 0.91 0.73 0.78 0.72
-
-
-
-
-[Image page_19_image_1.png]
-Gemini Response:
-Here's a thorough analysis of the image:
-
-**Visual Elements:**
-
-*   **Table:** The primary visual element is a table with clearly defined rows and columns.
-*   **Gridlines:** Dark black horizontal lines seperate each of the rows.
-*   **Text:** The table is filled with text data, including headings and numerical values.
-*   **Font:** The font appears to be a standard, readable sans-serif typeface.
-
-**Text Content (based on OCR output):**
-
-The table presents performance metrics for different machine learning models across multiple folds of cross-validation. The columns are:
-
-*   **Fold:** Indicates the fold number (Fold-0, Fold-1, etc.) in cross-validation.
-*   **Train/test/val:** Specifies whether the results are for the training, validation, or testing set.
-*   **Model:** The name of the machine learning model (RF (Random Forest), ExtraTree, AdaBoost, SVM, CatBoost, Ensemble).
-*   **Accuracy:** Overall accuracy of the model.
-*   **Precision:** The model's ability to avoid false positives.
-*   **Sensitivity:** The model's ability to detect true positives (recall).
-*   **F1-score:** The harmonic mean of precision and sensitivity.
-*   **Specificity:** The model's ability to correctly identify negative cases.
-
-The rows show the performance of each model for each fold and data split (training, validation, testing). There are two "Testing Ensemble" entries at the bottom.
-
-**Contextual Significance:**
-
-*   **Machine Learning Model Evaluation:** This table is a standard way to present the results of machine learning model evaluation using cross-validation. It helps in understanding how well different models generalize to unseen data.
-*   **Performance Comparison:** The table facilitates a comparison of the performance of various models across different metrics. This allows for informed selection of the best model for a given task.
-*   **Cross-Validation:** The use of cross-validation indicates a rigorous approach to model evaluation, reducing the risk of overfitting.
-*   **Data Set:** Based on the document content (provided separately), this could be related to experiments in risk assessment or mortality prediction for heart attack patients, where different models are trained and evaluated using patient data.
-*   **Ensemble Method:** The "Ensemble" rows likely refer to a combination of different models, potentially leading to improved overall performance.
-
-**In summary,** the image is a table summarizing the performance of different machine learning models on a specific dataset, likely in the context of a healthcare or risk assessment project. The table provides a clear overview of model accuracy, precision, sensitivity, F1-score, and specificity across different folds of cross-validation.
-
-OCR Text:
-Fold Train/testival__|Model Accuracy |Precision _|Sensitivity |F1-score | Specificity
-Fold-0 Training RE 0.76 0.85| osi| 0.82 0.78
-Fold-0 Validation RE 0.72 0.82| o72| 079 072
-Fold-0 Testing RE 071 os| oss] 0.7 o7
-Fold-1 Training ExtraTree 0.76 0.87| 073] 08! 0.76
-Fold-1 Validation ExtraTree 071 o.8s| o7| 078 O77
-Fold-1 Testing ExtraTree 0.69 o.9| os7|_ 0.76 0.69
-Fold-2 Training /AdaBoost 0.73 o.8s| os2| 0.78 O74
-Fold-2 Validation /AdaBoost 0.69 o.9| os7|_ 0.76 0.69
-Fold-2 Testing /AdaBoost 0.68 0.91 o7e| 0.76 0.68
-Fold-3 Training svM 0.79 0.91 os| 0.84 0.79
-Fold-3 Validation svM 0.72 0.92| o79| 0.78 O74
-Fold-3 Testing svM 071 0.91 073| 0.78 o7
-Fold-4 Training CatBoost 0.86 0.93] o94| 0.88 0.85
-Fold-4 Validation CatBoost 0.75 0.91 o72| 081 0.75
-Fold-4 Testing CatBoost 0.76 0.91 o7i| 081 0.76
-
-Testing Ensemble 0.72 0.91 073| 0.78 072
-
-Testing Ensemble o7 0.86] o71i] 075) 07
-
-
-
-
-=== Page 20 ===
-Figure 5.4: Data set B Results on 26 Features (after feature selection)
-Figure 5.5: Data set A Results on 20 Features (given by Domain Experts)
-20
-
-[Image page_20_image_0.png]
-Gemini Response:
-Here is a detailed description of the image:
-
-**Visual Elements:**
-
-*   The image is a table or spreadsheet.
-*   The table is structured with rows and columns.
-*   Borders define the cells of the table, creating clear separation.
-*   The text is aligned within the cells, mostly left-aligned.
-
-**Text Content:**
-
-The table displays the performance metrics of different machine learning models on a dataset called "NORIN". It presents results for training, validation, and testing sets across multiple folds (Fold-0 to Fold-4) as part of a cross-validation process, along with a held-out test set. The columns are:
-
-*   **Dataset:** NORIN is the main dataset used
-*   **FOLD:** Indicates the fold number in the cross-validation. "Heldout" indicates the results on a held-out test set.
-*   **Train/Test/Val:** Specifies if the results are for the training, validation, or testing set.
-*   **Model:** Lists the machine learning model used: Random Forest, ExtraTree, AdaBoost, SVM, CatBoost, and Ensemble.
-*   **Accuracy:** Overall accuracy of the model.
-*   **Precision:** Indicates the proportion of positive identifications was actually correct.
-*   **Sensitivity:** Measures the proportion of actual positives that are correctly identified as such
-*   **F1-score:** The harmonic mean of the precision and recall, providing a balanced measure.
-*   **Specificity:** Measures the proportion of actual negatives that are correctly identified as such.
-
-**Contextual Significance:**
-
-*   The image is likely part of a report or research paper on machine learning model evaluation.
-*   The purpose is to compare the performance of different models (Random Forest, ExtraTree, AdaBoost, SVM, CatBoost) for a specific dataset ("NORIN") used in this case.
-*   The inclusion of cross-validation results suggests a robust evaluation methodology to assess the generalizability of the models.
-*   The ensemble model results likely represent an attempt to combine the predictions of multiple models for improved performance.
-*   The variety of metrics (Accuracy, Precision, Sensitivity, F1-score, Specificity) allows for a comprehensive assessment of the model's strengths and weaknesses.
-*   The specific models and metrics indicate a classification task, where the goal is to predict a categorical outcome.
-
-In essence, the table provides a quantitative summary of the performance of different machine learning models on a specific dataset, helping researchers or data scientists to compare and select the most appropriate model for their task.
-
-OCR Text:
-Dataset FOLD Train/Test/Val_| Model Accuracy [Precision _| Sensitivity FA-score Specificity
-NORIN. Fold-0 Training Random Forest 0.79 o.9| 0.81 0.82) 078
-NORIN. Fold-0 Validation Random Forest 0.72 0.91 0.72 0.79 0.72
-NORIN. Fold-0 Testing Random Forest 07| o.9| 0.69 077, 07|
-NORIN. Fold-1 Training ExtraTree 0.76 o.8s| 0.73 os| 0.76
-NORIN. Fold-1 Validation ExtraTree 071 0.91 07| 078 077,
-NORIN. Fold-1 Testing ExtraTree 0.69 o.9| 0.67, 0.76 0.69
-NORIN. Fold-2 Training /AdaBoost 0.73 o.8s| 0.82) 078 071
-NORIN. Fold-2 Validation /AdaBoost 0.69 o.9| 0.67, 0.76 0.69
-NORIN. Fold-2 Testing /AdaBoost 0.68 0.91 0.76 0.76 0.68
-NORIN. Fold-3 Training svM os| 0.91 o.9| 0.84 0.79
-NORIN. Fold-3 Validation svM 0.72 0.92| 0.79 078 071
-NORIN. Fold-3 Testing svM 07| 0.91 0.73 078 07|
-NORIN. Fold-4 Training CatBoost 0.86 0.93] 0.94 0.88 0.85
-NORIN. Fold-4 Validation CatBoost 0.75 0.91 0.72 0.81 0.75
-NORIN. Fold-4 Testing CatBoost 0.76 0.91 071 0.81 0.76
-NORIN. Heldout Testing Ensemble 0.72 0.91 0.73 078 0.72
-
-- Testing Ensemble 07| 0.86| 071 0.75 07|
-
-
-
-
-[Image page_20_image_1.png Error]
-Description failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
-}
-, links {
-  description: "Learn more about Gemini API quotas"
-  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
-}
-, retry_delay {
-  seconds: 15
-}
-]
-
-
-=== Page 21 ===
-5.2 GNN and GCN Results
-While we are still in the middle grounds to identify the best possible use of GCN Architecture,
-We still obtained these results.
-Results for 1 Hidden Layer GCN
-Figure 5.6: Best Training Results on Single layer GCN Architecture
-Figure 5.7: Testing Results for 1 Hidden Layer GCN
-Updated Results for 4 layer GCN Architecture after new hyperparameters
-5 fold Validation results without Grace and Timi scores
-Best accuracies
-Training: 83.48
-Validation : 82.23
-Testing : 80.02
-Precision
-Training: 82.96
-Validation : 82.43
-Testing : 80.26
-F1 Score
-Training: 82.78
-Validation : 81.88
-Testing : 81.12.
-(For 2 dense layers and 2 conv layers)
-[?]
-21
-
-[Image page_21_image_0.png Error]
-Description failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
-}
-, links {
-  description: "Learn more about Gemini API quotas"
-  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
-}
-, retry_delay {
-  seconds: 13
-}
-]
-
-
-[Image page_21_image_1.png]
-Gemini Response:
-Here's a breakdown of the image you sent:
-
-**Visual Elements:**
-
-*   The image displays text output in a dark terminal or code editor window. The text appears to be white or a light color against the dark background.
-*   The appearance suggests that this is a screenshot from a coding environment, likely showing the results of a Python script execution.
-
-**Text Content:**
-
-The text content can be broken down as follows:
-
-*   `[Running] python -u "c:\Users\98765\One` - This line indicates that a Python script is being executed using the Python interpreter.
-    *   `python -u` means the script is being run with unbuffered standard output and standard error streams.
-    *   `"c:\Users\98765\One` - The path suggests it's a Python script located in the user's directory on a Windows system. The full filename is likely cut off.
-*   `Sensitivity (Recall): 74.25` - This line reports the sensitivity or recall score of a machine-learning model. The score is `74.25` (presumably a percentage). Recall measures the ability of the model to correctly identify all relevant instances.
-*   `Specificity: 74.68` - This line reports the specificity score of the model as `74.68` (presumably a percentage). Specificity measures the ability of the model to correctly identify all negative instances.
-*   `Accuracy: 75.46` - This line reports the accuracy of the model as `75.46` (presumably a percentage). Accuracy is the overall proportion of correctly classified instances.
-*   `F1 Score: 73.25` - The line reports the F1 score of the model as `73.25`. The F1 score is the harmonic mean of precision and recall, providing a balanced measure of the model's performance.
-
-**Contextual Significance:**
-
-*   **Machine Learning Evaluation:** The numerical results (sensitivity, specificity, accuracy, and F1 score) indicate that the Python script is likely evaluating the performance of a machine learning model. These metrics are commonly used to assess the effectiveness of classification models.
-*   **Model Performance:** The reported scores are in the mid-70s percentage-wise. While acceptable, it's possible that further model tuning or feature engineering is needed to improve performance depending on the specific application or problem being addressed.
-*   **Experimentation:** The script is likely part of a larger experimentation process where different models, parameters, or datasets are being tested to achieve optimal performance.
-*   **Heart Attack Risk Calculator:** This image comes from a report on a "Risk Calculator For Heart Attack Patients". Therefore, the displayed metrics (sensitivity, specificity, accuracy, and F1-score) likely relate to the performance of machine learning models developed for predicting the 30-day mortality rate among patients following their first heart attack.
-
-
-OCR Text:
-[Running] python -u "c:\Users\98765\One
-Sensitivity (Recall): 74.25
-Specificity: 74.68
-
-Accuracy: 75.46
-
-F1 Score: 73.25
-
-
-
-=== Page 22 ===
-Figure 5.8: Training and Validation Loss Curve 5 Fold
-22
-
-[Image page_22_image_0.png]
-Gemini Response:
-Here's an analysis of the image:
-
-**Visual Elements:**
-
-*   **Line Graph:** The primary visual element is a line graph displaying the relationship between two variables.
-*   **Axes:** The x-axis is labeled "Epochs" and ranges from 0 to 500. The y-axis is labeled "Loss" and ranges from 0 to 10.
-*   **Lines:** Two lines are plotted on the graph:
-    *   One line represents "Average Training Loss."
-    *   The other line represents "Average Validation Loss."
-* The lines start at the same loss level but the validation line shows some fluctuation.
-
-**Text Content:**
-
-*   **Title:** "Average Training and Validation Loss Curves Across Folds"
-*   **Axis Labels:** "Epochs" (x-axis) and "Loss" (y-axis)
-*   **Legend:** A legend identifies which line represents "Average Training Loss" and "Average Validation Loss."
-
-**Contextual Significance:**
-
-*   **Machine Learning:** This image is indicative of a training process in machine learning. The graph plots the loss function, which quantifies the error between predicted and actual values.
-*   **Training and Validation:** The presence of both training and validation loss curves is a common practice to monitor the model's performance on both the data it is learning from (training) and a separate dataset used to evaluate generalization (validation).
-*   **Overfitting:** By comparing the training and validation loss curves, one can diagnose issues like overfitting (where the model performs well on training data but poorly on validation data).
-* **Lower loss:** The loss is reduced across all the Epochs.
-
-OCR Text:
-Loss
-
-Average Training and Validation Loss Curves Across Folds
-
-— Average Training Loss
-— Average Validation Loss
-
-
-
-
-=== Page 23 ===
-Figure 5.9: Results without Timi and Grace
-23
-
-[Image page_23_image_0.png]
-Gemini Response:
-Here's an analysis of the image:
-
-**Visual Elements:**
-
-*   **Table Format:** The image consists of a table with clearly defined rows and columns. The table structure is used to present data in an organized manner.
-
-**Text Content:**
-
-*   **Column Headers:**
-    *   "Folds": Represents different folds in a cross-validation setup. The folds are labeled from "Fold-0" to "Fold-4".
-    *   "Train/Test/Val": Indicates whether the data is used for "Training", "Validation," or "Testing" within each fold.
-    *   "Accuracy": Shows the accuracy score for each fold, split into training, validation, and testing sets.
-    *   "TP": True Positives.
-    *   "FP": False Positives.
-    *   "TN": True Negatives.
-    *   "FN": False Negatives.
-
-*   **Row Entries:**
-    *   Each fold (Fold-0 to Fold-4) has three rows: one for training, one for validation, and one for testing.
-    *   The accuracy, TP, FP, TN and FN values are provided for each of these subsets within each fold.
-
-*   **Total Row:**
-    *   The last row labeled "Total" provides aggregated values for accuracy, TP, FP, TN, and FN across all the folds.
-
-**Contextual Significance:**
-
-*   **Machine Learning Model Evaluation:** The table presents the results of evaluating a machine learning model using k-fold cross-validation. K in the cross-validation appears to be set to 5, based on Fold-0 to Fold-4.
-*   **Cross-Validation:** K-fold cross-validation is a technique used to assess the generalization performance of a model by splitting the data into k different folds, training the model on k-1 folds, and testing on the remaining fold.  This process is repeated k times, each time with a different fold used for testing.
-*   **Performance Metrics:** Accuracy, TP, FP, TN and FN provide a comprehensive understanding of the model's performance. TP, FP, TN and FN allow for the calculation of other metrics, such as precision, recall, and F1-score.
-*   **Model Training, Validation, and Testing:**  Within each fold, the data is further divided into training, validation, and testing sets.
-    *   *Training*: Used to train the model.
-    *   *Validation*: Used to tune the model's hyperparameters during training.
-    *   *Testing*:  Provides an unbiased evaluation of the final trained model's performance.
-*   **Model Assessment:** By analyzing the accuracy scores and TP, FP, TN and FN values across the different folds and sets, one can assess the stability and generalization ability of the machine learning model.
-
-**In summary,** the image presents a table summarizing the k-fold cross-validation results of a machine learning model, providing accuracy metrics and detailed counts of true positives, false positives, true negatives, and false negatives for each fold's training, validation, and testing data, along with total aggregated values.
-
-
-OCR Text:
-Folds
-
-Fold-0
-Fold-0
-Fold-0
-
-Fold-1
-Fold-1
-Fold-1
-
-Fold-2
-Fold-2
-Fold-2
-
-Fold-3
-Fold-3
-Fold-3
-
-Fold-4
-Fold-4
-Fold-4
-
-Train/TestVal
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Training
-Validation
-
-Testing
-
-Total
-
-Accuracy
-0.8344186047
-0.8215613383
-
-08
-
-0.8381395349
-08029739777
-0.7970149254
-
-0.8390697674
-0.8252788104
-08119402985,
-
-0.8427906977
-0.8252788104
-08
-
-0.8353488372
-0.8066914498
-0.8029850746
-
-0.8273972603
-
-1
-
-82
-32
-34
-
-28
-
+3
+Z,
+
+aa
+PI
+z
+=
 a
+>)
 
-70
-
-31
-
-a7
-
-31
-
-BRE
-
-735
-
-FP
-152
-
-36
-
-a7
-
-146
-36
-49,
-
-150
-36
-42
-
-145
-33
-4a
-
-158
-38
-40
-
-1154
-
-TN
-815
-189
-237
-
-816
-188
-240
-
-191
-
-234
-
-819
-
-184
-
-237
-
-814
-
-185
-
-eat
-
-FN
-
-12
-
-7
-19
-
-12
-2
-24
-4
-
-19
-4
-
-205
+YIBAL 97
 
 
 
-=== Page 24 ===
-Figure 5.10: Results with Timi Score
-24
 
-[Image page_24_image_0.png]
+[Image page_7_image_1.png]
 Gemini Response:
-Here's a breakdown of the image analysis:
+Here's a breakdown of the image and its context:
 
 **Visual Elements:**
 
-*   The image presents a table.
-*   The table is organized in a spreadsheet-like format, with rows and columns.
-*   The image has a blue grid appearance typical of spreadsheet software.
-*   There are headings and data entries within the cells.
+*   **Diagram:** A layout diagram of an integrated circuit, likely representing a "Transmission Gate Flipflop (TGFF)".  It shows the arrangement of different layers used to construct the circuit.
+*   **Layers:** Key layers are highlighted with distinct colors:
+    *   Metal 1 (patterned in violet).
+    *   Metal 2 (patterned in light blue/cyan).
+    *   Poly (patterned in red).
+*   **Dimensions:** There are vertical and horizontal arrows indicating height and width of the circuit in terms of "tracks" (likely referring to routing tracks). Height - 26 track and width - 21 track.
+
+**Text Content and Contextual Significance**
+
+*   **"26 Track"**,**"21 Track"**: These labels indicate the dimensions of the circuit layout. The number of "tracks" likely represents the number of available routing tracks or a standard unit of measurement in the given technology node.
+*   **"Metal 1"** & **"Metal 2"**: These indicate the materials the violet and light blue patterned regions are composed of.
+*   **"77Poly"**: This is probably another material label.
+
+**Contextual Significance**
+
+The figure illustrates the impact of using a second metal layer (Metal 2) in designing the TGFF layout.
+
+*   **Layout Comparison:** The text describes two layout approaches: (a) TGFF(M1) using only Metal 1 and (b) TGFF(M1+1M2) using Metal 1 and one track of Metal 2. The image corresponds to TGFF(M1+1M2).
+*   **Area & Congestion:** The text states that using Metal 2 can initially lead to a denser layout (smaller area). However, it also mentions that this can increase congestion at the SoC (System-on-Chip) level because fewer routing resources are available for the system as a whole.
+
+In essence, the image represents a specific layout configuration of a circuit (TGFF) and is used to illustrate the trade-offs between area optimization and potential system-level congestion when incorporating a higher metal layer during the layout design phase. The text uses it as an example to demonstrate a sustainability framework.
+
+OCR Text:
+26 Track
+
+Metal 1
+
+21 Track
+
+SMetal 2 77Poly
+
+
+
+
+[Image page_7_image_2.png Error]
+Description failed: 500 Internal error encountered.
+
+
+[Image page_7_image_3.png]
+Gemini Response:
+Here's an analysis of the image you provided:
+
+**Visual Elements:**
+
+*   **Type:** It is a bar graph.
+*   **Color Scheme:** Primarily uses orange and light blue for the bars, with black outlines and patterns.
+*   **Patterns:** Different patterns are used within the bars (diagonal lines, circles, stars) to distinguish different categories.
+*   **Labels and Annotations:** Clear labels are present for the axes, categories, and specific data values above the bars. A legend in the upper right describes what each bar pattern corresponds to.
 
 **Text Content:**
 
-*   **Columns:** The table has columns labeled "Folds," "Train/Test/Val," "Accuracy," "TP" (True Positives), "FP" (False Positives), "TN" (True Negatives), and "FN" (False Negatives).
-*   **Rows (Folds):** The table displays data for "Fold-0", "Fold-1", "Fold-2", "Fold-3", and "Fold-4". Each fold has data for Training, Validation and Testing.
-*   **Train/Test/Val:** This column indicates whether the data represents training, validation, or testing results for each fold.
-*   **Numerical Data:**  The remaining columns ("Accuracy", "TP", "FP", "TN", "FN") contain numerical values, presumably representing the performance metrics of a model. Accuracy is expressed as a decimal value close to 1.
-*   **Total:** The table also includes a "Total" row summarizing the values from the TP, FP, TN and FN metrics.
+*   **Title Elements:**
+    *   *Area (µm²)*:  y-axis title.
+    *   *Embodied Footprint (mWh)*:  Secondary Y-axis title
+    *   *Metric*: x-axis title
+*   **Category Labels:**
+    *   *Area*:  Label for the left cluster of bars on the x-axis.
+    *   *Embodied Footprint*:  Label for the right cluster of bars on the x-axis.
+*   **Legend:**
+    *   CSFF(M1+1M2)
+    *   CSFF(M1+2M2)
+    *   CSFF(M1+3M2)
+*   **Data Values:** Specific numerical values are written above each bar (e.g., "16.6", "1.01").
 
 **Contextual Significance:**
 
-*   **Machine Learning/Model Evaluation:**  The table is almost certainly displaying the results of a machine learning model evaluation.
-*   **K-Fold Cross-Validation:** The term "Folds" suggests that the model has been evaluated using k-fold cross-validation. In this case, k=5.
-*   **Performance Metrics:** The inclusion of "Accuracy", "TP", "FP", "TN", and "FN" indicates a classification task. These metrics are used to assess the model's ability to correctly classify instances.
-*   **Training, Validation, Testing:** The data is split into three subsets: training (used to train the model), validation (used to fine-tune the model), and testing (used to evaluate the model's final performance on unseen data).
-*   The purpose is to asses the performance of the Model for Heart Attack patients through K fold Cross validation, and the image captures the results for each fold, along with their performance.
+*   **Purpose:** This graph compares different configurations (CSFF with varying metal routing tracks) with respect to their area and embodied footprint, aiming to illustrate design tradeoffs.
+*   **Key Metrics:**
+    *   *Area (µm²)*: Represents the physical size of a circuit layout.
+    *   *Embodied Footprint (mWh)*: Quantifies the energy associated with the fabrication of the circuit.
+*   **Design Parameters:** The notations "M1", "M2" likely refer to different metal layers used in the fabrication process, with the numbers indicating how many tracks are used.
+*   **Insights:** The graph suggests that while the area remains the same for two different tracks, the embodied footprint decrease with higher routing congestion.
 
-In summary, the image shows the results of a machine learning classification model evaluated using 5-fold cross-validation, indicating the model's accuracy, true positives, false positives, true negatives, and false negatives on training, validation, and testing datasets for each fold.
-
+In summary, the image is a data visualization (specifically a bar graph) comparing the area and embodied footprint of different circuit configurations. The goal appears to be illustrating the trade-offs between different design choices and the impact on sustainability-related metrics.
 
 OCR Text:
-Folds
-Foid-0
-Fold-0
-Fold-0
+Area (um?)
 
-Fold-t
-Fold-t
-Fold-1
+17.5
 
-Fold-2
-Fold-2
-Fold-2
+16.6
 
-Fold-3
-Fold-3
-Fold-3
+(ZZQ CSFF(M1+1M2)
+fo) CSFF(M1+2M2)
+(a) CSFF(M1+3M2)
 
-Fold-4
-Fold-4
-Fold-4
+00000 Reka KH
+rerararara|
 
-Train/Test/Val
-Training
-‘Validation
-Testing
+Embodied Footprint
 
-Training
-Validation
-Testing
+8 OE
+Embodied Footprint (mWh)
 
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Total
-
-Accuracy TP
-0,848372093
-
-0.8401486989
-
-08358208955,
-
-0.8613053488
-0.8215613383,
-0.808955223
-
-0.8520930233
-0.8401486089,
-0.8328358200
-
-0.8837209302
-09624535316
-08417910448,
-
-0.84
-0.8215613383,
-0.8089552239
-
-0.8476474092
-
-FP
-90 132
-2 25
-a %
-4 128
-20 18
-7 32
-78 144
-390
-2% 42
-98 93
-“45
-2 38
-85 182
-430
-35__38
-
-787944
-
-N
-
-197
-253
-
-832
-192
-234
-
-187
-253
-
-852
-188
-240
-
-818
-187
-236
-
-6329
-
-FN
-
-Ed
-18
-19
-
-see
-
-15
 2
-4
-
-ats
-
-20
-18
-
-335
-
-
-
-=== Page 25 ===
-Figure 5.11: Results with Grace Score
-25
-
-[Image page_25_image_0.png]
-Gemini Response:
-Here's a detailed analysis of the image you provided:
-
-**Visual Elements:**
-
-*   **Table Format:** The image is a table, organized with rows and columns, presenting numerical data and textual labels. The table uses a light background color and dark text for readability.
-*   **Font and Text:** The text is clear and legible, using a sans-serif font. The headings are slightly larger than the data entries. The values seem left-aligned.
-
-**Text Content (based on OCR):**
-
-The table contains the following information:
-
-*   **Columns:**
-    *   **Folds:** Indicates different folds in a cross-validation process (Fold-0, Fold-1, Fold-2, Fold-3, Fold-4).
-    *   **Train/Test/Val:** Specifies whether the data is used for Training, Validation, or Testing.
-    *   **Accuracy:** The accuracy score of the model for each fold and data split (training, validation, testing). The values are decimals representing the percentage.
-    *   **TP:** True Positives.
-    *   **FP:** False Positives.
-    *   **TN:** True Negatives.
-    *   **FN:** False Negatives.
-*   **Rows:**
-    *   Each fold (0 to 4) has three rows: Training, Validation, and Testing, with corresponding accuracy, TP, FP, TN, and FN values.
-    *   A "Total" row is also present at the end, representing the sum of the counts of TP, FP, TN, and FN.
-    *   The Accuracy Total value shows the accumulated accuracy of all folds.
-
-**Contextual Significance:**
-
-*   **Machine Learning Evaluation:**  The table displays the results of a machine learning model's performance, specifically a model trained and evaluated using K-fold cross-validation.
-*   **Cross-Validation:** K-fold cross-validation is a technique to assess how well a model generalizes to an independent dataset. The data is divided into K "folds," with each fold being used as a validation set once while the remaining folds are used for training. This process is repeated K times, and the average results are reported.
-*   **Performance Metrics:** The table reports common performance metrics for classification models:
-    *   **Accuracy:** Overall correctness.
-    *   **True Positives (TP):** Correctly predicted positive cases.
-    *   **False Positives (FP):** Incorrectly predicted positive cases (Type I error).
-    *   **True Negatives (TN):** Correctly predicted negative cases.
-    *   **False Negatives (FN):** Incorrectly predicted negative cases (Type II error).
-*   **Model Assessment:** By examining the accuracy, TP, FP, TN, and FN values across different folds and data splits (training, validation, testing), you can get insights into:
-    *   **Model Overfitting:** If the training accuracy is significantly higher than the validation or testing accuracy, the model might be overfitting to the training data.
-    *   **Model Generalization:**  The consistency of performance across different folds indicates how well the model generalizes.
-    *   **Class Imbalance:** The TP, FP, TN, and FN values can help identify if the data has imbalanced classes, potentially affecting the model's performance.
-
-**In summary:**  The image shows a table summarizing the evaluation results of a machine learning model that has been trained and tested using k-fold cross-validation. It includes metrics like accuracy, true positives, false positives, true negatives, and false negatives, providing insights into the model's performance, generalization, and potential issues like overfitting or class imbalance.
-
-OCR Text:
-Folds
-
-Fold-0
-Fold-0
-Fold-0
-
-Fold
-Fold-t
-Fold-4
-
-Fold-2
-Fold-2
-Fold-2
-
-Fold-3
-Fold-3
-Fold-3
-
-Fold-4
-Fold-4
-Fold-4
-
-Train/TestiVal_ Accuracy
-
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Training
-Validation
-Testing
-
-Total
-
-0848372003
-0.8215613383,
-08
-
-0.8613053488
-0.8513011152
-0.8328358209
-
-0.8502325581
-0843866171
-0.8328358209
-
-0.8893023256
-08810408922
-0.8686567164
-
-0.8874418605
-0873605948
-0.8567164179
-
-0.8594401429
-
-92
-30
-25
-
-92
-34
-38
-
-79
-42
-26
-
-105
-49
-46
-
-98
-oT
-48
-
-861
-
-130
-28
-42
-
-132
-20
-
-148
-19
-at
-
-ot
-10
-
-103
-14
-28
-
-TN
-
-820
-191
-243,
-
-834
-195
-241
-
-835
-185
-253
-
-851
-188
-245
-
-856
-178
-230
-
-6354
-
-FN
-
-33
-
-25
-
-ess
-
-23
-15
-
-28
-
-12
-
-88a
-
-316
-
-
-
-=== Page 26 ===
-Figure 5.12: Results with Timi and Grace Score
-26
-
-[Image page_26_image_0.png]
-Gemini Response:
-Here's a breakdown of the image's content and its significance based on the provided information:
-
-**Visual Elements:**
-
-*   **Table/Spreadsheet Layout:** The primary visual element is a table displaying numerical data organized into rows and columns. It resembles output from a spreadsheet program.
-*   **Grid Lines:** The table uses lines to delineate the rows and columns, enhancing readability.
-*   **Text:** The table contains labels for columns and rows, including headings like "Folds," "Train/Test/Val," "Accuracy," "TP," "FP," "TN," and "FN." It also includes numerical results.
-
-**Text Content:**
-
-*   **Table Headers:**
-    *   "Folds": Indicates the different folds used in a cross-validation process (Fold-0, Fold-1, Fold-2, Fold-3, Fold-4).
-    *   "Train/Test/Val": Specifies whether the data relates to the training, validation, or testing set within each fold.
-    *   "Accuracy": The classification accuracy is provided
-    *   "TP": True Positives.
-    *   "FP": False Positives.
-    *   "TN": True Negatives.
-    *   "FN": False Negatives.
-*   **Numerical Data:**
-    *   Numbers in each row correspond to the performance metrics of a model for the specified fold and data split (training, validation, or testing).
-    *   "Total" row contains the overall aggregates of TP, FP, TN, and FN.
-*   **The document text says "Figure 5.12: Results with Timi and Grace Score"**
-
-**Contextual Significance:**
-
-*   **Machine Learning/Deep Learning Results:** The data within the table represents the results of a machine learning model's performance using k-fold cross-validation.
-*   **Cross-Validation:** The use of folds (Fold-0 to Fold-4) indicates that the model was trained and evaluated using k-fold cross-validation. This technique is commonly used to get a more robust estimate of a model's performance and reduce overfitting.
-*   **Performance Metrics:** The reported metrics ("Accuracy," "TP," "FP," "TN," "FN") are standard metrics used to evaluate the performance of classification models.  They provide insight into the model's ability to correctly classify positive and negative instances.
-*   **Performance evaluation of machine learning**: this helps to evaluate the performane of the machine learning model.
-
-In summary, the image presents a table containing the performance metrics of a machine learning model across different folds of a cross-validation experiment. The metrics provide insights into the model's classification accuracy, and other statistics that are necessary to validate the accuracy of the model.
-"Figure 5.12: Results with Timi and Grace Score" also signifies this table contains the final results on training and validation using the data containing timi and grace score.
-
-
-OCR Text:
-Folds Train/Test/Val Accuracy = TP FP TN FN
-
-Fold-0 Training 08688372093 104 «1108303
-Fold-0 Validation 08773234201 511718516
-Fold-0 Testing 0847761194 46 262385
-Fold-4 Training 08613953488 92 132° 83417
-Fold-1 Validation 0.8513011152 34-20 195-20
-Fold-1 Testing 08328358209 3826824130
-Fold-2 Training ogsigso4651 106 98 + 842,29
-Fold-2 Validation 0873605948 40 16 «19518
-Fold-2 Testing 0.8328358209 34362520
-Fold-3 Training 09134883721 142,78 840.18
-Fold-3 Validation 0.8996282528 54 8 188 19
-Fold-3 Testing 08776119403 543124010
-Fold-4 Training 09041860465 134 «8383820
-Fold-4 Validation 08773234201 58 130-178-200
-Fold-4 Testing 08597014925 49 2723920
-
-Total 08771888029 1036 «7216328310
-
-
-
-=== Page 27 ===
-Chapter 6
-Future Work
-We will try to Explore more better results for OTHER Models by
-1. Algorithmic Refinements: - Investigate opportunities to refine and optimize the proposed
-convolution algorithm for improved computational efficiency. - Explore alternative algorithmic
-approaches or modifications that could enhance the theorem’s performance on specific types of
-graph data.
-2. Scalability: - Examine the scalability of the convolution theorem with respect to increasingly
-large and complex graph structures. - Investigate techniques to handle dynamic graphs and
-assess the theorem’s performance in real-time scenarios.
-3. Adaptation to Varied Graph Types: - Extend the study to encompass a broader range
-of graph types, including directed graphs, weighted graphs, or graphs with varying levels of
-connectivity. - Develop adaptations or extensions of the convolution theorem to address the
-nuances of different graph representations.
-4. Integration with Machine Learning Models: - Investigate the potential impact of the convo-
-lution theorem on tasks like node classification, link prediction, and graph classification within
-the context of machine learning.
-5. Theoretical Extensions: - Pursue theoretical extensions of the convolution theorem, consid-
-ering mathematical aspects that might further enhance its applicability and utility. - Explore
-connections between the convolution theorem and other mathematical concepts or theorems,
-potentially leading to novel insights.
-8. Experimental Validation and Benchmarks: - Conduct extensive experimental validations on
-a different possibilities of datasets, considering different graph structures and characteristics.
-- Establish benchmark datasets and metrics to evaluate the performance of the convolution
-theorem and compare it with existing methods.
-By addressing these aspects in future work, the ongoing study could contribute even more
-significantly to the field.
-[?]
-27
-
-
-=== Page 28 ===
-Chapter 7
-References
-1. Kipf, T. N., Welling, M. (2017). ”Semi-Supervised Classification with Graph Convolutional
-Networks.” In 5th International Conference on Learning Representations (ICLR)
-2. Natali, A., Leus, G. (2022). ”A General Convolution Theorem for Graph Data.” In 56th
-Asilomar Conference on Signals, Systems, and Computers, 2022.
-3. Nguyen, P., Tran, T., Wickramasinghe, N., Venkatesh, S. (Year of publication). ”Deepr: A
-Convolutional Net for Medical Records.”
-4. Chen, M., Wei, Z., Huang, Z., Ding, B., Li, Y. (2020). ”Simple and Deep Graph Convo-
-lutional Networks.” In Proceedings of the 37th International Conference on Machine Learning,
-PMLR 119:1725-1735.
-5. Bhatti,U.A.,Tang,H.,Wu,G.,Marjan,S., Hussain,A.(2023,February28). DeepLearning
-with Graph Convolutional Networks: An Overview and Latest Applications in Computational
-Intelligence. InternationalJournalofIntelligentSystems,2023,8342104. https://doi.org/10.1155/2023/8342104
-28
+ES
+
+©
+
+0.0
+
+
+
+=== Page 8 ===
+In this work, we implemented and analyzed two Ap-
+proximate Adder architectures - Approximate Mirror Adder
+1 (AMA1) [30] and Low-Cost Approximate Full Adder 3
+(LCAFA3) [31]. To compare their oCFP, we ran experiments
+for all four chosen application profiles as described in Sec-
+tion IV-B - IoT, HPC, Auto, and PE - to support a designer
+in making a correct choice.
+AMA1isalow-leakagedesign.Ontheotherhand,LCAFA3
+consumes less power per computation. From Fig. 6, it can
+be observed that for use in IoT applications, the oCFP
+of AMA1 is smaller than that of LCAFA3. However, for
+other applications (HPC, PE, and Auto), the lower oCFP for
+LCAFA3makesitamoresuitablechoicefromasustainability
+perspective.
+Fig. 5. Area and eCFP of robust flipflop designs. SETU FF has a larger b) Level Shifter: Level Shifters are foundation cells that
+area. However, RAV FF uses trench capacitors and, therefore, has higher are used to interface communication between multi-voltage
+manufacturingemissions.Theframeworkconsidersthisandassessesthatthe
+operating domains in a system. In this work, two state-of-
+eCFPofRAVFFislarger.
+the-artLevelShifterarchitectures,DeepSub-thresholdEnergy
+EfficientLevelShifter(DSELS)[32]andRobustSubthreshold
+B. Operational Carbon Footprint (oCFP) metric Level Shifter with Wide Conversion Range (RSWCRLS) [33]
+are implemented, simulated, and evaluated for sustainability.
+In this section, we study the capability of the framework to
+Both architectures are optimized for IoT use. oCFP is esti-
+considerdifferentusecasesanddesignprofilestocompareand
+mated for all four application profiles as shown in Fig. 7.
+benchmark competing designs for their operational footprint.
+It is observed that for the IoT application profile, DSELS
+1) Impact of Application Profile: oCFP of designs is es-
+hasasmalleroCFP.However,RSWCRLSisapreferredchoice
+timated by using Eq. (6), which indicates dependence on
+for other application profiles. Since both architectures are
+operatingtimeratiosandtheoperationallifetimeofaproduct,
+targeted to extremely low-power IoT applications, DSELS is
+which vary depending on the target application, as shown in
+a better design. However, if the product may be used, even
+TableIV.Adesignmaybeoptimizedforlowerdynamicpower
+if sporadically, in other profiles, RSWCRLS may be a more
+orforlowerleakageorforboth.Theseoptimizationsmayhave
+sustainable choice.
+different costs in terms of area. However, in terms of oCFP,
+2) Impact of Operating Frequency (f): As defined in Eq.
+these optimizations may result in very different outcomes.
+(7), dynamic power is influenced by f and α - both of
+We compare variants of two computing blocks - Approximate
+which vary depending on the target application and result in
+Adders and Level Shifters - for the sensitivity of their oCFP
+significant differences in dynamic power consumption.
+to the application profile.
+Weoperatedtheapproximateadders-AMA1andLCAFA3
+a) Approximate Adder: Adders are fundamental compu-
+-atdifferentf,toobservetheimpactofchangesinf onoCFP.
+tational units in hardware chips across various applications.
+From Fig. 8, it is evident that for low-frequency applications
+In digital image processing, Approximate Adders are used to
+(e.g., 500 MHz), AMA1 is the preferred choice but for
+optimize PPA by strategically trading off accuracy.
+Fig. 6. Comparison of operational carbon footprint (oCFP) of approximate Fig. 7. oCFP of DSELS and RSWCRLS Level Shifters across application
+adders for different application profiles. AMA1 has smallest oCFP for IoT profiles.DSELShasthesmallestoCFPforIoTprofile,whileRSWCRLSis
+application,whileLCAFA3ismoresuitableforotherapplications. moresuitableforotherapplications.
+
+[Image page_8_image_0.png Error]
+Description failed: 500 Internal error encountered.
+
+
+[Image page_8_image_1.png Error]
+Description failed: 500 Internal error encountered.
+
+
+[Image page_8_image_2.png Error]
+Description failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+}
+, links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, retry_delay {
+  seconds: 39
+}
+]
+
+
+=== Page 9 ===
+Fig.8. oCFPofApproximateAdders-LCAFA3andAMA1at500Mhzand
+3000Mhztoobservetheimpactoffrequencyofoperation.
+high-frequency applications (e.g., 3000 MHz), LCAFA3 is a
+Fig.10. ConsolidatedtotalCFPfor3pairsoffoundationalcells-TGFF(M1)
+more sustainable choice. Thus, the optimal selection of an &TGFF(M1+1M2),DSELS&RSWCRLS,andCSFF&C2SFF
+Approximate Adder also depends on its targeted f.
+3) Impact of Leakage Power: As defined in Eq. (8), the
+leakage power depends on leakage in both active and standby C. Total carbon footprint metric
+modes. A design with a higher leakage can have a larger
+oCFP even if its active dynamic power is lower. In low-power Until now, we have looked at the effectiveness of the
+applications,whereαandf areless,leakagepowerdominates proposed framework to account for different parameters for
+oCFP of the design. a wide range of designs. We implemented a wide range of
+We compared oCFP of Change Sensing Flipflop (CSFF) foundation cells to illustrate the strength of the proposed
+[27] of Section V-A and Contention free Change Sensing frameworkforevaluatingfoundationcelllibrariesandmaking
+Flipflop(C2SFF)[34].AsshowninFig.9,theywereanalyzed sustainability-aware decisions. In this part, we consolidate the
+with two combinations of alpha and frequencies: (a) 10% and eCFP and oCFP assessments to build and analyze the total
+100Mhz and (b) 50% and 400Mhz. carbon footprint. Here, we present the overall footprint for 3
+Itwasobservedthatwhenswitchingactivity(α)andoperat- pairs of designs.
+ingfrequency(f)arelow,CSFFhaslowerleakagepowerthan In Fig. 10, the first cluster represents the simple TGFF in
+C2SFF. So, for an application like IoT, CSFF may be a more bothM1andM1+M2layoutimplementations.Itisinteresting
+sustainable choice. However, in scenarios where switching tonotethatthetotalfootprintofTGFF(M1)issmallerthanthat
+activity (α) and operating frequency (f) are high, dynamic ofTGFF(M1+1M2).Whenwehadstudiedthispairofcellsin
+power becomes the dominant factor influencing sustainability. SectionV-A,wehadfavoredTGFF(M1+M2)becauseoflower
+Since C2SFF architecture has lower dynamic power, it is a eCFP (Fig. 3). However, when oCFP was evaluated for the
+more sustainable design option. IoT profile, and the results combined with eCFP, TGFF(M1)
+emerged as a more sustainable option. This demonstrates the
+value of the proposed framework in combining two standard
+FoMs - area and power - in a meaningful way.
+ThesecondclusterinFig.10representsthetotalfootprintof
+the level shifters - DSELS and RSWCRLS - for which oCFP
+trends were presented in Fig. 7. We discussed that for the
+target application - IoT - DSELS is clearly the better option.
+However,whenweconsolidateoCFPwiththeeCFPofthetwo
+designsinFig.10,itemergesthatdespitealmostdoubleoCFP,
+RSWCRLS is the more sustainable option. This reemphasizes
+that looking only at the standard FoMs of PPA can lead to
+less sustainable choices.
+In the third cluster, the eCFP of both designs is the
+same. However, when the oCFP of the two designs (for 10%
+switchingactivityand100MHzfrequencyusage)isalsotaken
+Fig.9. oCFPofCSFFandC2SFFFlipflopsfordifferentswitchingactivity,
+αandfrequency,f.Forlowactivitysettings,CSFFisapreferredchoice,but into account (as shown in Fig. 9), CSFF emerges as a more
+asswitchingactivityandfrequencyincrease,C2SFFarchitectureisbetter. sustainable choice.
+
+[Image page_9_image_0.png Error]
+Description failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+}
+, links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, retry_delay {
+  seconds: 37
+}
+]
+
+
+[Image page_9_image_1.png Error]
+Description failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+}
+, links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, retry_delay {
+  seconds: 36
+}
+]
+
+
+[Image page_9_image_2.png Error]
+Description failed: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. [violations {
+}
+, links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, retry_delay {
+  seconds: 35
+}
+]
+
+
+=== Page 10 ===
+CONCLUSION [11] “Meta2024SustainabilityReport,”Meta,2024edition,2024.Available:
+https://sustainability.atmeta.com/wp-content/uploads/2024/08/Meta-
+Traditionally, a semiconductor IC has been analyzed based
+2024-Sustainability-Report.pdf
+onthePower,Performance,andArea(PPA)Metrics.However, [12] “2023-24 Intel Corporate Responsibility Report,” Intel, 2024 edition,
+with the exponential increase in the number of ICT devices, 2024. Available: https://csrreportbuilder.intel.com/pdfbuilder/pdfs/CSR-
+2023-24-Full-Report.pdf
+there has been a steep increase in manufacturing and operat-
+[13] C.-F.Chien,J.-T.Peng,andH.-C.Yu,“Buildingenergysavingperfor-
+ing energy demand. Consequently, in the past two decades, manceindicesforcleanersemiconductormanufacturingandanempir-
+many novel contributions have been proposed to analyze the icalstudy,”Computers&IndustrialEngineering,vol.99,pp.448–457,
+Sep.2016,doi:https://doi.org/10.1016/j.cie.2015.11.004.
+sustainabilityofelectronicdevices.However,allofthemhave
+[14] I. . -Y. Liu, L. V. Winckel, L. Boakes, M. G. Bardon, C. Rolin
+either been focused on manufacturing-level improvements or and L. . -A˚. Ragnarsson, ”Modeling the Energy Consumption of
+have been limited to higher abstraction of an IC. They have Integrated Circuit Fab Infrastructure,” in IEEE Transactions on Semi-
+conductorManufacturing,vol.37,no.4,pp.422-427,Nov.2024,doi:
+not enabled designers of foundation libraries to contribute
+10.1109/TSM.2024.3408926.
+to the drive towards sustainability. In this work, we have [15] M.Czerniak,D.HackerandH.Schneider,”Reducingtheenvironmental
+proposed a sustainability framework that equips a designer impact of semiconductor manufacture,” 2016 China Semiconductor
+TechnologyInternationalConference(CSTIC),Shanghai,China,2016,
+with methods to analyze sustainability in the early stages of
+pp.1-3,doi:10.1109/CSTIC.2016.7464026.
+design implementation. [16] U.Guptaetal.,“ChasingCarbon:TheElusiveEnvironmentalFootprint
+The proposed framework is validated across many imple- of Computing,” IEEE Micro, vol. 42, no. 4, pp. 1–1, 2022, doi:
+https://doi.org/10.1109/MM.2022.3163226.
+mentations and architectures of sequential and combinatorial
+[17] ”Report of the world commission on environ-
+logic cells, such as Flipflops, Approximate Adders, and Level ment and development: Our common future,” 1987,
+Shifters. Here, the wide-scale applicability of this framework https://sustainabledevelopment.un.org/content/documents/5987our-
+common-future.pdf,(accessedMarch1,2025).
+was demonstrated across various application profiles. We also
+[18] A. Meddendorf et al., “EE-Toolbox-a modular assessment system
+show that the proposed framework offers new insights to for the environmental optimization of electronics,” Jan. 2000, doi:
+designers which the standard FoMs did not offer. Thus, the https://doi.org/10.1109/isee.2000.857643.
+[19] A. Middendorf, N. F. Nissen, L. Stobbe, O. Wittler and K. -D. Lang,
+framework equips them to make sustainability-aware deci-
+”Eco-reliabilityasanewapproachofmulti-criteriaoptimisation,”2012
+sions. ElectronicsGoesGreen2012+,Berlin,Germany,2012,pp.1-6.
+The framework can be easily extended and customized [20] D. Kline et al., ”Sustainable IC design and fabrication,” 2017 Eighth
+International Green and Sustainable Computing Conference (IGSC),
+according to the needs of the designer’s organization and
+Orlando,FL,USA,2017,pp.1-8,doi:10.1109/IGCC.2017.8323572.
+enable them in the journey of the VLSI industry towards net [21] M. S. Lundstrom, M. A. Alam,“Moore’s law: The journey ahead,”
+zero emissions. Science378,722-723,2022,DOI:10.1126/science.ade2191.
+[22] S.K.Moore,”KeepingMoore’slawgoingisgettingcomplicated,”IEEE
+REFERENCES Spectrum,May2023.
+[23] C. C. Sudarshan, N. Matkar, S. Vrudhula, S. S. Sapatnekar and
+[1] S.Hsieh,P.-Y.Lin,I-Hui.Lin,D.E.Beck,andC.-H.Lin,“Assessing V. A. Chhabria, ”ECO-CHIP: Estimation of Carbon Footprint of
+thecontributionofsemiconductorstothesustainabledevelopmentgoals Chiplet-based Architectures for Sustainable VLSI,” 2024 IEEE In-
+(SDGs) from 2017 to 2022,” Heliyon, vol. 9, no. 11, p. e21306, Nov. ternational Symposium on High-Performance Computer Architec-
+2023,doi:https://doi.org/10.1016/j.heliyon.2023.e21306. ture (HPCA), Edinburgh, United Kingdom, 2024, pp. 671-685, doi:
+[2] A.Hopfetal.,”EnergyEfficientSemiconductorManufacturing:Estab- 10.1109/HPCA57654.2024.00058.
+lishinganEcologicalOperatingCurve”,Proceedingsofthe2022Winter [24] C. Sandionigi, ”Eco-reliability: A new metric for the eco-design of
+SimulationConference,doi:10.1109/WSC57314.2022.10015333. electronic systems,” 2024 IEEE Conference on Technologies for Sus-
+[3] J. C. Hess, “Chip production’s ecological footprint: Mapping climate tainability (SusTech), Portland, OR, USA, 2024, pp. 230-236, doi:
+and environmental impact,” Interface, 2024 edition, 2024. Available: 10.1109/SusTech60925.2024.10553607.
+https://www.interface-eu.org/publications/chip-productions-ecological- [25] B. T. Murphy, ”Cost-size optima of monolithic integrated circuits,”,
+footprint(accessedFebruary25,2025). IEEE,vol.52,pp.1537-1545,1964,doi:10.1109/PROC.1964.3442.
+[4] ”Chipmaking’s next big thing guzzles as much power as entire [26] P. P. Ray, “Benchmarking, ethical alignment, and evaluation frame-
+countries,” https://www.tbsnews.net/bloomberg-special/chipmakings- work for conversational AI: Advancing responsible development
+next-big-thing-guzzles-much-power-entire-countries-484338, (accessed of ChatGPT,” BenchCouncil Transactions on Benchmarks, Stan-
+March1,2025). dards and Evaluations, vol. 3, no. 3, p. 100136, Sep. 2023, doi:
+[5] ”TSMCCouldAccountForNearly24%OfTaiwan’sElectricityUseBy https://doi.org/10.1016/j.tbench.2023.100136.
+2030 Points Out S&P,” https://wccftech.com/tsmcs-growing-electricity- [27] V. L. Le, J. Li, A. Chang and T. T. -H. Kim, ”A 0.4-V, 0.138-
+demand-could-stress-credit-in-2030-warns-sp/(accessedMarch1,2025) fJ/Cycle Single-Phase-Clocking Redundant-Transition-Free 24T Flip-
+[6] ”Year End Review 2024”, https://pib.gov.in/PressReleasePage.aspx? FlopWithChange-SensingSchemein40-nmCMOS,”inIEEEJournal
+PRID=2089243(accessedMarch1,2025) ofSolid-StateCircuits,vol.53,no.10,pp.2806-2817,Oct.2018,doi:
+[7] “ST Sustainability report 2024, 2023 performance” 10.1109/JSSC.2018.2863946.
+STMicroelectronics, 2024 edition, 2024. Available: [28] R. E. . -H. Yee, N. Y. . -J. Su, L. P. . -T. Wang, C. H. . -P.
+https://www.st.com/content/dam/aboutus/sustainability/pdf/st- WenandH.Chiueh,”Temperature-InsensitiveSoft-Error-TolerantFlip-
+sustainability-report-2024-en.pdf Flop Design For Automotive Electronics,” 2024 IEEE 42nd VLSI
+[8] “2024 Environmental Progress Report,” Test Symposium (VTS), Tempe, AZ, USA, 2024, pp. 1-7, doi:
+Apple, 2024 edition, 2024. Available: 10.1109/VTS60656.2024.10538664.
+https://www.apple.com/in/environment/pdf/Apple Environmental [29] J.Li,L.Xiao,L.Li,H.Li,H.LiuandC.Wang,”ALow-CostError-
+Progress Report 2024.pdf TolerantFlip-FlopAgainstSETandSEUforDependableDesigns,”in
+[9] “Google 2024 Environmental Report - Google Sus- IEEETransactionsonCircuitsandSystemsI:RegularPapers,vol.69,
+tainability,” Google, 2024 edition, 2024. Available: no.7,pp.2721-2729,July2022,doi:10.1109/TCSI.2022.3168082.
+https://www.gstatic.com/gumdrop/sustainability/google-2024- [30] A. Yan et al., ”Design of Low-Cost Approximate CMOS Full
+environmental-report.pdf Adders,” 2023 IEEE International Symposium on Circuits and Sys-
+[10] “TSMC2023SustainabilityReport,”TSMC,2023edition,2023.Avail- tems (ISCAS), Monterey, CA, USA, 2023, pp. 1-5, doi: 10.1109/IS-
+able:https://esg.tsmc.com/en-US/file/public/e-all 2023.pdf CAS46773.2023.10181531.
+
+
+=== Page 11 ===
+[31] M. Acharya, S. Basu, Biranchi Narayan Behera, and A. Chakrabarti,
+“ApproximateComputingBasedAdderDesignforDWTApplication,”
+Communicationsincomputerandinformationscience,pp.150–163,Jan.
+2019,doi:https://doi.org/10.1007/978-981-32-9767-8 13.
+[32] R.Balaji,R.K.Siddharth,S.Naik,Y.B.N.Kumar,M.H.Vasanthaand
+E. Bonizzoni, ”A 11-ns, 3.85-fJ, Deep Sub-threshold, Energy Efficient
+Level Shifter in 65-nm CMOS,” 2023 IEEE International Symposium
+onCircuitsandSystems(ISCAS),Monterey,CA,USA,2023,pp.1-5,
+doi:10.1109/ISCAS46773.2023.10181677.
+[33] W. Zhao, A. B. Alvarez and Y. Ha, ”A 65-nm 25.1-ns 30.7-fJ Robust
+Subthreshold Level Shifter With Wide Conversion Range,” in IEEE
+Transactions on Circuits and Systems II: Express Briefs, vol. 62, no.
+7,pp.671-675,July2015,doi:10.1109/TCSII.2015.2406354.
+[34] K. Kang and W. Jung, ”A Redundant-Transition-Free and Contention-
+FreeChange-SensingFlip-Flop,”inIEEETransactionsonCircuitsand
+Systems II: Express Briefs, vol. 71, no. 5, pp. 2559-2563, May 2024,
+doi:10.1109/TCSII.2024.3377714.
 
 

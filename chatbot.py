@@ -1,8 +1,10 @@
 # chatbot.py
 import json
 import google.generativeai as genai
+import config
 
 def initialize_chat(api_key):
+    genai.configure(api_key=api_key)
     return genai.GenerativeModel('gemini-2.0-flash-exp').start_chat()
 
 def get_questions():
@@ -39,6 +41,42 @@ def get_questions():
     ]
 
 
-def generate_answer(chat, prompt, thesis_text):
-    response = chat.send_message(f"{prompt}\n\nThesis Text:\n{thesis_text[:3000]}...")
-    return response.text.strip()
+# def generate_answer(chat, prompt, thesis_text):
+#     try:
+#         response = chat.send_message(f"{prompt}\n\nThesis Text:\n{thesis_text[:3000]}...")
+#         #response = chat.send_message(prompt)
+#         return response.text.strip()
+#     except Exception as e:
+#         print(f"Initial API key failed. Retrying with another key. Error: {str(e)}")
+        
+#         # Retry with another key
+#         new_key = config.get_random_google_api_key()
+#         new_chat = initialize_chat(new_key)
+        
+#         try:
+#             response = new_chat.send_message(f"{prompt}\n\nThesis Text:\n{thesis_text[:3000]}...")
+#             return response.text.strip()
+#         except Exception as e2:
+#             print(f"Retry also failed: {str(e2)}")
+#             raise e2  # raise final error
+
+def generate_answer(chat, prompt, thesis_text, max_retries=5):
+    """Generate answer using Gemini API with auto-retry on invalid API keys."""
+    attempt = 0
+
+    while attempt < max_retries:
+        try:
+            # Try sending the message
+            response = chat.send_message(f"{prompt}\n\nThesis Text:\n{thesis_text[:3000]}...")
+            return response.text.strip()
+        
+        except Exception as e:
+            print(f"[Attempt {attempt+1}] API key failed. Retrying with another key... Error: {str(e)}")
+            attempt += 1
+
+            # Get a new key and new chat session
+            new_key = config.get_random_google_api_key()
+            chat = initialize_chat(new_key)
+
+    # If all retries fail
+    raise RuntimeError(f"❌ Failed to generate answer after {max_retries} retries.")

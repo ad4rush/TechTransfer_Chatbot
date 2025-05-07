@@ -80,3 +80,56 @@ def process_pdf(pdf_path, output_text_file, images_folder, api_key):
             output_file.write(f"=== Page {page_num+1} ===\n{page_content}\n\n")
     
     return pdf_text
+
+def process_pdf_with_progress(pdf_path, output_text_file, images_folder, api_key):
+    """Processing with frontend progress updates"""
+    import streamlit as st  # Import inside function so no issues if used in backend
+
+    os.makedirs(images_folder, exist_ok=True)
+    model = configure_gemini(api_key)
+    pdf_text = extract_text_from_pdf(pdf_path)
+    
+    with pdfplumber.open(pdf_path) as pdf, fitz.open(pdf_path) as fitz_doc, \
+         open(output_text_file, "w", encoding="utf-8") as output_file:
+
+        total_pages = len(fitz_doc)
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+
+        for page_num in range(total_pages):
+            pdf_page = pdf.pages[page_num]
+            text_content = pdf_page.extract_text() or ""
+            fitz_page = fitz_doc.load_page(page_num)
+            images = fitz_page.get_images(full=True)
+            image_descriptions = []
+
+            status_text.info(f"Processing Page {page_num+1} of {total_pages}... Found {len(images)} images.")
+
+            for img_idx, img_info in enumerate(images):
+                xref = img_info[0]
+                base_image = fitz_doc.extract_image(xref)
+                description = process_image(
+                    base_image["image"],
+                    base_image["ext"],
+                    page_num,
+                    img_idx,
+                    text_content,
+                    text_content,
+                    pdf_text,
+                    model,
+                    images_folder
+                )
+                image_descriptions.append(description)
+            
+            page_content = text_content + "\n" + "\n".join(image_descriptions)
+            output_file.write(f"=== Page {page_num+1} ===\n{page_content}\n\n")
+            
+            # Update progress
+            progress_bar.progress((page_num + 1) / total_pages)
+
+        status_text.success("✅ PDF processing completed!")
+        progress_bar.empty()
+
+    return pdf_text
+
+
