@@ -1,776 +1,655 @@
 === Page 1 ===
-Design of different topologies of Ring
-Oscillators for PVT Sensor application
-Submitted to -
-Dr. Anuj Grover
-Submitted by-
-Akshay Soni ( MT22153 )
-Abhishek Kumar Singh ( MT22135 )
-Submitted in partial fulfillment of the requirements for the
-degree of Master of Technology to
-Indraprastha Institute of Information Technology Delhi
-December, 2023
-1
-
-[Image page_1_image_0.png]
-Gemini Response:
-Here's a breakdown of the image's content, combining visual analysis and the extracted text:
-
-**Visual Elements:**
-
-*   **Logo:** The image displays a logo, likely of Indraprastha Institute of Information Technology Delhi (IIITD). The logo features geometric shapes: vertical bars in varying shades of gray, followed by a shape resembling a rotated "II" and then a teal arc.
-*   **Layout:** The image appears to be a title page or cover page of a report or thesis.
-*   **Formatting:** The text is formatted with different font sizes and styles to highlight important information.
-
-**Text Content:**
-
-*   **Title:** "Design of different topologies of Ring Oscillators for PVT Sensor application" (PVT likely stands for Process, Voltage, and Temperature)
-*   **Submission Information:**
-    *   Submitted to: Dr. Anuj Grover
-    *   Submitted by: Akshay Soni (MT22153), Abhishek Kumar Singh (MT22135)
-*   **Academic Context:** The text indicates the submission is "in partial fulfillment of the requirements for the degree of Master of Technology."
-*   **Institution:** Indraprastha Institute of Information Technology Delhi.
-*   **Date:** December 2023
-*   **Page Number** "1"
-
-**Contextual Significance:**
-
-*   **Academic Work:** This is a formal document, likely a capstone project, thesis, or report submitted for a Master's degree.
-*   **Engineering Focus:** The topic clearly indicates a focus on electrical engineering or computer engineering, specifically in the area of analog circuit design.
-*   **Technical Area:** The research is related to ring oscillators, which are fundamental building blocks in many electronic circuits, and their use in PVT sensors. PVT sensors are essential for monitoring environmental changes and fluctuations that can affect circuit performance.
-*   **Institutional Context:** The submission is to IIIT Delhi, indicating a project completed at that institution.
-
-In summary, the image is the title page of a technical report or thesis by Akshay Soni and Abhishek Kumar Singh, submitted to Dr. Anuj Grover at IIIT Delhi in partial fulfillment of the requirements for their Master of Technology degree. The subject is the design and analysis of ring oscillators for PVT sensor applications.
-
-OCR Text:
-
+SecurityVision: Real-Time Video Anomaly Detection using WatchTower and I3D
+Features
+KeshavChhabra AdarshJha KartikeyaMalik
+IIITDelhi IIITDelhi IIITDelhi
+keshav22247@iiitd.ac.in adarsh22024@iiitd.ac.in kartikeya22243@iiitd.ac.in
+AkshatKothari
+IIITDelhi
+askhat22053@iiitd.ac.in
+Abstract 2.RelatedWork
+Automated surveillance systems are increasingly vi- Videoanomalydetection(VAD)researchhasexploredvar-
+tal for public safety, requiring robust methods for de- ious approaches. Early methods often relied on trajectory
+tecting anomalous events in real-time video feeds. This analysis or handcrafted features. Deep learning methods
+project,”SecurityVision,”presentsasystemleveragingad- haveshownsignificantpromise.
+vanced deep learning techniques for video anomaly de-
+• FeatureModeling: ApproacheslikeSlowFastNetworks
+tection. We utilize I3D features combined with a modi-
+[6] analyze motion and appearance features at differ-
+fied Self-Supervised Sparse Representation (WatchTower)
+ent temporal speeds for action recognition, adaptable to
+model, based on S3R. The system processes video input,
+anomalydetection. I3D(Inflated3DConvNet)[1]effec-
+identifies anomalous segments based on deviations from
+tivelycapturesspatiotemporalinformationusing3Dcon-
+learnednormalpatterns,andpresentsalertsandvisualiza-
+volutionsandisacommonbackboneforVAD.
+tions through a web-based dashboard. This report details
+• Weakly-supervised VAD: Methods like the one pro-
+theproblem,methodology,implementation,evaluation,and
+posedbySultanietal. [2]utilizemultipleinstancelearn-
+futuredirectionsoftheSecurityVisionsystem.
+ing (MIL) to train models using only video-level labels
+(normal/anomaly).
+• Dictionary Learning for VAD: Recent works explore
+1.ProblemStatement dictionary learning to model normality. S3R (Self-
+Supervised Sparse Representation) [4], the basis for our
+Overview: TheproliferationofCCTVsurveillanceneces- WatchTower model, learns a task-specific dictionary for
+sitates automated systems capable of detecting unusual or normaleventsandusessparsityinreconstructiontoiden-
+threateningactivities,suchasfights,assaults,orothersecu- tifyanomalies.ItemploysenNormalanddeNormalmod-
+ritybreaches,whichoftengounnoticedinmanualmonitor- ules to separate and analyze normal/anomalous compo-
+ing. AI-driven solutions are crucial for analyzing the vast nents. Linformer[3]providesamethodforefficientself-
+amountofvideodatageneratedandprovidingtimelyalerts. attention with linear complexity, applicable for optimiz-
+ingTransformer-basedcomponents.
+ScopeoftheProblem:
+• Input: Video feeds from CCTV cameras or uploaded Our work builds upon the strengths of feature modeling
+videofiles. (I3D) and dictionary learning (S3R/WatchTower), poten-
+• Output: Real-time or near-real-time identification of tiallyincorporatingLinformerforcomputationalefficiency.
+anomalousvideosegments,anomalyscores,andalerts.
+• User:Securitypersonnel,systemadministratorsmonitor-
+ingsurveillancefeeds. 3.Methodology
+• User Interface: A web-based dashboard for monitoring
+feeds, visualizing detected anomalies, reviewing events, Oursystememploysapipelineapproachcombiningfeature
+andmanagingalerts. extractionandaspecializedanomalydetectionmodel.
 
 
 === Page 2 ===
-©Indraprastha Institute of Information Technology (IIITD),
-New Delhi, 2023
-2
+3.1.FeatureExtraction
+We utilize pre-trained Inflated 3D ConvNet (I3D) models
+[1], specifically variants with ResNet-50 backbones (e.g.,
+‘i3d r50 kinetics.pth’),toextractrobustspatiotemporalfea-
+tures(2048dimensions)frominputvideosegments. These
+featurescaptureappearanceandmotioninformationcrucial
+fordistinguishingnormalactivitiesfromanomalies.
+3.2.AnomalyDetectionModel: WatchTower
+WeadapttheSelf-SupervisedSparseRepresentation(S3R)
+framework[4],whichwerefertoasWatchTowerinourim-
+plementation, for anomaly detection. The core idea is to
+learn a dictionary representing normal event patterns from
+training data (UCF-Crime normal videos). Anomalies are
+detectedasdeviationsthatcannotbesparselyreconstructed
+usingthisdictionary.
+KeyWatchTower(basedonS3R)componentsadaptedin
+oursystem: Figure 1. Detailed architecture of the WatchTower anomaly de-
+• Task-Specific Dictionary: A dictionary learned tection model. The layer-by-layer structure is based on the S3R
+from normal video features (I3D) of the UCF- implementation.
+Crime dataset using Orthogonal Matching Pur-
+suit (OMP). The dictionary file used is ‘ucf-
+crime dictionaries.taskaware.omp.100iters.50pct.npy‘. • AnomalyScoring: Frame-wiseROC-AUC(AreaUnder
+• enNormalModule(potentiallywithLinformer): This theReceiverOperatingCharacteristicCurve)scoreisthe
+module reconstructs the normal component of an input primary metric for evaluating anomaly detection perfor-
+feature snippet using the learned dictionary. Efficiency manceondatasetslikeUCF-Crime.
+improvementslikeLinformer-basedattentionmaybein-
+corporated. 5.Implementation&UserInterface
+• deNormal Module: This module aims to filter out the
+ImplementationDetails:
+normalcomponents,potentiallyhighlightingtheresidual
+• Backend: PythonwithFlaskframework.
+anomalousparts.
+• MachineLearning: PyTorchformodelimplementation
+• Anomaly Scoring: Features are passed through embed-
+and inference (‘torch‘ 1.6.0, ‘torchvision‘). OpenCV
+dinglayers(Aggregate, Dropout)andclassifiers. Thefi-
+(‘opencv-python‘)forvideoprocessing. Keytrainingpa-
+nalanomalyscoreforavideosegmentindicatesthelike-
+rametersincludealearningrateof0.001anddropoutrate
+lihoodofitbeinganomalous.
+of0.7.
+Themodelcheckpointusedis‘ucf-crime s3r i3d best.pth‘
+• Models/Checkpoints: Uses pre-trained
+(referredtoasWatchTowercheckpoint),trainedspecifically
+I3D models (e.g.,‘i3d r50 kinetics.pth‘) and
+forUCF-CrimeusingI3Dfeatures.
+the WatchTower/S3R checkpoint (‘ucf-
+The system processes video, extracts I3D features for
+crime s3r i3d best.pth‘). A task-aware dictionary (‘ucf-
+temporal segments, feeds features to the WatchTower
+crime dictionaries.taskaware.omp.100iters.50pct.npy‘)is
+model,calculatesanomalyscores,andpresentsresultsviaa
+loaded.
+webinterface.
+• Dependencies: Key libraries include ‘numpy‘ (1.19.2),
+‘PyYAML‘, ‘einops‘, ‘sqlalchemy‘. The training envi-
+4.Datasets&EvaluationMetrics
+ronmentutilizedCUDA10.1.
+Dataset: UserInterfaceDesign:
+• UCF-Crime [2]: A large-scale dataset containing long, • Web-basedDashboard:BuiltusingHTML,CSS(Boot-
+untrimmed surveillance videos featuring 13 real-world strap), and JavaScript. Displays live feed (if camera ac-
+anomalies (e.g., Fighting, Assault, Burglary, Explosion) cessisenabled),systemstatus,uptime,andrecentanoma-
+andnormalactivities.Weusethestandardtraining/testing lies.
+splits and I3D features provided alongside the S3R • Anomaly Visualization: When an anomaly is detected
+methodologyfortrainingourWatchTowermodel. aboveathreshold(e.g.,0.6in‘ml model.py‘),visualand
+EvaluationMetrics: audioalertsaretriggered.Areplayfeatureshowstheseg-
+
+[Image page_2_image_0.png]
+Gemini Response:
+Certainly, let's analyze the provided image.
+
+**Visual Elements:**
+
+*   **Diagram Type:** The image is a flowchart-style diagram illustrating the architecture of the WatchTower anomaly detection model.
+*   **Structure:** The diagram follows a hierarchical, top-down structure. It starts with input features and branches into processing modules.
+*   **Shapes and Colors:** Boxes represent different layers or modules within the model. Colors differentiate module types, specified in a legend.
+    *   Green represents a "Video Branch."
+    *   Cyan represents a "Macro Branch."
+    *   Yellow and orange represent "en/deNormal" blocks.
+    *   Purple represents "Classifier" blocks.
+    *   Pink represents "Dropout" layers.
+*   **Arrows:** Arrows indicate the flow of data between modules.
+*   **Layout:** The layout is generally symmetrical, with a split into "Video" and "Macro" branches early on, which later converge for classification.
+
+**Textual Content:**
+
+*   **Title:** "WatchTower Model Architecture" indicates the main subject.
+*   **Input Features:** The process begins with "Input Features (2048)," suggesting a 2048-dimensional feature vector.
+*   **Embedding Layers:**  "Video Embedding" and "Macro Embedding" include "Aggregate" modules described as combinations of 1D convolutions (Conv1d), Group Normalization (GN), and Rectified Linear Unit (ReLU) activation functions, along with non-local blocks.
+*   **Dropout:**  "Dropout(p=0.7)" blocks indicating a regularization technique to prevent overfitting (with a dropout probability of 0.7).
+*   **enNormal/deNormal Modules:** These appear to be central to the model:
+    *   "enNormal" performs "Query, Cache, Value Embeddings (Linear Transformations)," referencing attention mechanisms.
+    *   "deNormal" applies "Channel Attention (MLP: 2048->128->2048)," indicating a multi-layer perceptron (MLP) with specific layer sizes.
+*   **Projection Layers:** "Video Projection" and "Macro Projection" are simple Conv1d + GN + ReLU blocks.
+*   **Classification Layers:**  "Video Classifier" and "Macro Classifier" are linear layers followed by a Sigmoid or GlobalStatistics functions. The numbers indicate the layer dimensions (e.g., 2048 -> 512 -> 128 -> 1).
+*   **Legend:** Clarifies the color-coding of the diagram elements.
+
+**Contextual Significance:**
+
+*   **Anomaly Detection:** The "WatchTower" name and module structure suggest an architecture designed for anomaly detection in video data.
+*   **Feature Representation:** The model leverages video features (likely pre-extracted) for analysis. The I3D model is used for feature extraction and anomaly detection
+*   **Macro/Video Branches:** The split into "Video" and "Macro" branches could represent separate processing paths for local and global video context, respectively.
+*   **Attention Mechanisms:**  The "enNormal/deNormal" modules and the use of "Query, Cache, Value Embeddings" point to attention mechanisms to focus on relevant parts of the video for anomaly detection.
+*   **Dictionary Learning :** The WatchTower Model is based on the S3R Framework which leverages task specific dictionary which is learned on the training data that consists of only normal videos
+*   **Sparse Reconstruction:** The model detects anomalies as deviations that cannot be sparsely reconstructed using this dictionary.
+
+In summary, the image provides a visual representation of the WatchTower anomaly detection model architecture, highlighting its key components, data flow, and design choices. The model uses a combination of convolutional layers, attention mechanisms, and classification layers to identify anomalies based on video features.
+
+
+OCR Text:
+WatchTower Model Architecture
+
+Input Features (2048)
+Video Embedding
+
+Aggregate
+cony_1-4: Convid + GN + ReLU
+
+Legend
+a Viteo Branch
+Macro Branch
+
+Macro Embedding enldeNornat
+
+- Cassifors
+
+oad
+
+Aggregate
+cony_1-4: Convid + GN + ReLU
+
+Dropout
+
+Gonv_S: Convid + GN+ReLU Gonv_S: Convid +GN+ReLU
+
+rnon_local: NonLocalBlock1D rnon_local: NonLocalBlock1D
+
+Dropout(p=0.7) Dropout(p=0.7)
+
+enNormal
+
+‘Query, Cache, Value Embeddings (Linear Transformations)
+
+deNormal
+
+Channel Attention (MLP: 2048-+128-+2048)
+
+Video Projection Macro Projection
+Convid + GN +ReLU Convid +GN+ReLU
+
+Video Classifier Macro Classifier
+
+Linear(2048-+512-+128-1) GlobalStatistics
+‘Sigmoid Linear(2048-+512-+128-1)
+
+
 
 
 === Page 3 ===
-CERTIFICATE
-This is to certify that the Capstone Project titled “Design of different topologies of Ring
-Oscillators for PVT Sensor application,” being submitted by Akshay Soni, Abhishek
-Singh to the Indraprastha Institute of Information Technology Delhi for the award of the
-Master of Technology, is an original research work carried out by them under my
-supervision. In my opinion, the Capstone Project has reached the standards of fulfilling
-the requirements of the regulations relating to the degree.
-The results of this capstone project have not been submitted in part or full to any other
-university or institute for the award of any degree/diploma.
-December, 2023
-Dr Anuj Grover
-Department of Electronics &
-Communications Engineering
-Indraprastha Institute of Information
-Technology Delhi
-New Delhi
-110020
-3
+mentleadinguptothealert. Table1.ReportedS3RPerformanceonUCF-Crime
+• Controls: Userscanpause/resumesurveillance.
+Dataset Method Feature AUC(%)
+*Result
+UCF-Crime S3R I3D 85.99
+basedontheWatchTowerimplementationdetails[4].
+Figure 4. Training loss curve for the WatchTower model on the
+UCF-Crimedataset.
+distinguishanomalousframesfromnormalframesinthe
+Figure2.SecurityVisionWebInterface(DashboardView).
+challengingUCF-Crimedataset.
+• Theuseofdictionarylearningallowsthemodeltoeffec-
+tivelycapturethemanifoldofnormalevents.
+• Real-time performance depends on feature extraction
+speed,modelinferencetime,andtheprocessingstrategy
+(e.g., processingeveryNthframe). Furtheroptimization
+might be needed for true real-time deployment on con-
+strainedhardware.
+7.ComputeRequirements
+Training and deploying deep learning models for video
+analysisrequiressignificantcomputationalresources.
+• Training: Training the WatchTower model and po-
+tentially the I3D feature extractor requires GPUs (e.g.,
+NVIDIARTXseries)withsufficientmemory(e.g.,RTX
+2080Tiusedinexperiments),especiallyforlargedatasets
+Figure3.SecurityVisionWebInterface(AnomalyAlert). like UCF-Crime. Dictionary learning itself can also be
+computationallyintensive.
+• Inference: Real-time inference benefits greatly from
+6.ResultsandAnalysis GPUacceleration. OurcurrentsystemchecksforCUDA
+availability(testedwithCUDA10.1)andusesitifpossi-
+TheS3Rmodel,uponwhichourWatchTowerimplementa- ble. CPUinferenceispossiblebutsignificantlyslower.
+tionisbased,achievesstate-of-the-artorcompetitiveperfor- • Edge Computing: For deployment on edge devices,
+manceonstandardvideoanomalydetectionbenchmarks. model optimization techniques like quantization and
+Performance on UCF-Crime: The S3R methodology hardware acceleration are crucial but need careful eval-
+usingI3Dfeaturesreportsaframe-levelAUCof85.99%on uation.
+the UCF-Crime dataset [4]. Our WatchTower model aims • Memory/Storage: Handling video streams and fea-
+toreplicateorbuilduponthisperformance. turesrequiresadequateRAMandpotentiallyfaststorage
+Observations: (SSDs).
+• The reported AUC of ∼86% indicates a strong capabil- • Software Environment: The system relies on Python
+ity of the S3R/WatchTower model with I3D features to (3.6tested),PyTorch(1.6.0tested),Flask,andassociated
+
+[Image page_3_image_0.png]
+Gemini Response:
+Here's a thorough analysis of the image:
+
+**Visual Elements:**
+
+*   **Color Scheme:** The image uses a dark, predominantly purple and blue color scheme, creating a modern and security-oriented aesthetic.
+*   **Iconography:** A large camera icon in a purple tone is the central visual element, emphasizing the system's video surveillance purpose. Small icons are used to represent different sections (anomalies, activity, status, information).
+*   **Layout:** The layout is clean and organized, with clear sections and visual hierarchies. Information is presented in cards or tiles for easy readability. A "Start" button is prominently placed.
+*   **Fonts:** The image uses clean, sans-serif fonts, contributing to the modern design.
+*   **Emphasis/Hierarchy:** Larger font sizes and bolder text are used to highlight key information (e.g., "Security," "31", the status "Ready", the date).
+
+**Text Content:**
+
+*   **Header:** "Video Surveillance" is the top-level branding or application name.
+*   **Navigation:** "Dashboard" and "Surveillance" act as navigation links.
+*   **Central Title:** "Security," followed by "Advanced anomaly detection," clearly states the system's function.
+*   **Button:** "Start" indicates the action to initiate the surveillance process.
+*   **Anomalies Detected:** "31" is displayed as the total number of anomalies.
+*   **Last Activity:** Displays the date and time of the most recent anomaly: "2025-04-22 23:02:05."
+*   **Status:** "Ready" indicates the system's operational state.
+*   **Information:**
+    *   **AI Model:** "Using WatchTower model for anomaly detection."  "Based on UCF-Crime dataset pretraining with advanced feature extraction capabilities." Describes the underlying AI algorithm.
+    *   **System Capabilities:** A bulleted list details the system's features:
+        *   Real-time video analysis
+        *   Sparse representation for anomaly detection
+        *   Automatic alarm system on detection
+        *   Backward-timer for anomaly review
+*   **Footer:** "Video Surveillance System © 2025" indicates copyright information and system ownership.
+
+**Contextual Significance:**
+
+*   **Surveillance System Interface:** The image is a screenshot of a user interface (UI) for a video surveillance system that uses AI to detect anomalies.
+*   **Anomaly Detection:** The emphasis on "Advanced anomaly detection" and the display of the number of detected anomalies highlight the core functionality of the system.
+*   **Real-time Monitoring:** The "Ready" status and the system capabilities suggest real-time or near real-time monitoring.
+*   **WatchTower Model:** The mention of the "WatchTower model" indicates a specific algorithm or AI model used for anomaly detection.
+*   **UCF-Crime Dataset:** The reference to the "UCF-Crime dataset" points to a specific dataset used for training and validating the AI model, implying its focus on detecting criminal activities.
+
+**In summary:** The image presents a clean, modern UI for a video surveillance system. Its key features include real-time anomaly detection using the WatchTower model, pre-trained on the UCF-Crime dataset.  The UI aims for ease of use and provides clear visual indicators of system status and detected anomalies.
+
+
+OCR Text:
+= Ser fe Dashboard Me Surveillance
+
+OnE Bons
+2025-04-2223:02:05 © Ready
+31 ves ent ancray we
+“taaomaes
+@ Information
+acters ‘%q System Capabilities
+sng stowed for nol etecton Oe
+eased on UCF-Crime dataset retaining wth advanced feature extraction nee a
+1 Sackardsimefronomaly row
+
+wae Sunetaes Stan ©2025
+
+
+
+[Image page_3_image_1.png]
+Gemini Response:
+Here's a breakdown of the image, based on your provided OCR and visual analysis:
+
+**Visual Elements:**
+
+*   **Color Scheme:** The interface has a dark color scheme, likely to be easy on the eyes and to ensure the most important content is the most visible.
+
+*   **Layout:** The UI appears to be divided into sections or panes, arranged in a grid.
+
+*   **Icons:** The design incorporates icons to represent different statuses and functions (e.g., status, uptime, live feed, recent anomalies).
+*   **Graphical Indicators:** The monitoring status utilizes a green checkmark to denote that no anomalies have been detected, visually confirming the system's state.
+
+*   **"Camera Not Available" Overlay:**  A large icon (camera crossed out) indicates that the live feed isn't currently active or accessible.
+
+**Text Content:**
+
+*   **Title:** "Video Surveillance" and "Surveillance Mode" indicate that this is a display for monitoring surveillance systems.
+
+*   **Status Indicators:**
+
+    *   "Frames Processed: 2" -  Shows the number of frames processed by the surveillance system.
+
+    *   "Uptime: 00:00:10" - Indicates the system's running time, in hours, minutes, and seconds.
+
+    *   "Monitoring Status: No anomalies detected" -  Confirms that the system isn't currently flagging any events as anomalous.
+
+*   **Live Feed:** "Live Feed" indicates where a camera feed should be displayed. "Camera not available" message and "Start Camera" button suggest that the camera is offline or needs to be activated.
+*   **Anomalies:** "Recent Anomalies: No anomalies recorded yet" -  Indicates no unusual events have been detected and recorded in the system.
+
+*   **Control Buttons:** "Resume Surveillance" and "Dashboard" are buttons that offer user interaction. Surveillance Paused text shows that the surveillance is paused, suggesting that these functionalities are available to control the system.
+
+**Contextual Significance:**
+
+*   **Surveillance System Dashboard:** This is a web interface designed for real-time monitoring and control of a video surveillance system.
+*   **Anomaly Detection:** The UI indicates a focus on anomaly detection within the video feeds. The "No anomalies detected" and "Recent Anomalies" sections are crucial for this functionality.
+*   **System Status:** The "Status," "Uptime," and "Monitoring Status" sections provide essential information about the health and operational state of the surveillance system.
+*   **User Interaction:** The "Start Camera" and "Resume Surveillance" buttons provide the user with the ability to control the surveillance process.
+*   **Paused State:** The UI's state appears to be in a paused or inactive mode, given the "Surveillance Paused" indicator and the "Camera Not Available" message. The "Resume Surveillance" button is visible, prompting the user to re-enable the live feed and anomaly detection.
+
+
+OCR Text:
+“® Video Surveillance f¥ Dashboard me Surveillance
+
+Surveillance Mode © set roe
+
+© status © Uptime © Monitoring Status
+2 00:00:10 i)
+Frames Processed ‘System running time
+‘No anomalies detected
+@ Live Feed 'D Recent Anomalies
+
+No anomalies recorded yet
+
+Camera not available
+
+‘Start Camera
+
+
+
+[Image page_3_image_2.png]
+Gemini Response:
+Here's a detailed but concise analysis of the image:
+
+**Visual Elements:**
+
+*   **Chart Type:** Line graph (scatter plot with lines)
+*   **Line Color:** Blue
+*   **Background:** White with a light gray grid for easier reading of values.
+*   **Markers:** Blue circles indicating data points along the line.
+
+**Text Content:**
+
+*   **Title:** "Training Loss vs. Step" indicating the relationship being visualized.
+*   **X-Axis Label:** "Step" - Represents the iteration or step number in the training process. Values are 0, 500, 1000, 1500, 2000, 2500, and 3000.
+*   **Y-Axis Label:** "Training Loss" - Represents the loss value during training. Values are shown from 0.4 to 1.8 with increments of 0.2.
+
+**Contextual Significance:**
+
+*   **Purpose:** The graph illustrates the training performance of a machine learning model over time (steps). Specifically, it shows how the training loss decreases as the model learns.
+*   **Interpretation:**
+    *   The loss decreases rapidly in the initial steps, indicating fast learning.
+    *   The loss continues to decrease, with some fluctuations, and then it flattens out, indicating that the model is gradually learning less with each step.
+    *   The near-flatness in later steps suggests that the model might be approaching convergence or reaching a point where further training yields diminishing returns.
+
+OCR Text:
+1.8
+
+1.6
+
+1.4
+
+1.2
+
+Training Loss
+
+0.8
+
+0.6
+
+0.4
+
+Training Loss vs. Step
+
+500
+
+1000
+
+1500
+Step
+
+2000
+
+2500
+
+3000
+
 
 
 === Page 4 ===
-ACKNOWLEDGEMENTS
-We would like to thank our mentor Dr. Anuj Grover (Associate Professor, IIIT Delhi)
-for giving us this opportunity to take up the project. We thank him for his immense
-guidance, patience, and encouragement. Special thanks to Tanisha Gupta for
-personally guiding us and facilitating the project's flow; it was a fantastic experience
-working alongside her. Additionally, we would also thanks to our friends and group
-members of Design of different topologies of Ring Oscillators for PVT Sensor
-application who generously shared valuable insights about the PVT Sensor application
-they developed during their course project and allowed us to use it in our project.
-4
+libraries. 10.CodeRepository
+While initial development might be feasible on moder-
+The source code for this project is available
+ate hardware, scaling up for robust real-time deployment
+on GitHub: https : / / github . com / kv -
+across multiple streams likely necessitates more powerful
+248/SecurityVision
+resources.
+References
+8.IndividualTasks
+[1] Joao Carreira and Andrew Zisserman. Quo vadis, action
+recognition? anewmodelandthekineticsdataset. InPro-
+ceedings of the IEEE Conference on Computer Vision and
+Table2.TeamMemberResponsibilities
+PatternRecognition(CVPR),pages6299–6308,2017. 2,3
+[2] WaqasSultani,ChenChen,andMubarakShah. Real-world
+TeamMember AssignedTasks
+anomaly detection in surveillance videos. In Proceedings
+KeshavChhabra Data preprocessing, model of the IEEE Conference on Computer Vision and Pattern
+training (WatchTower/S3R Recognition(CVPR),pages6479–6488,2018. 2,3
+adaptation),evaluation. [3] SinongWang,BelindaZ.Li,MadianKhabsa,HanFang,and
+KartikeyaMalik User interface design HaoMa. Linformer: Self-attentionwithlinearcomplexity.
+arXivpreprintarXiv:2006.04768,2020. 2
+(Flask/HTML/JS), API in-
+[4] Jhih-CiangWu,He-YenHsieh,Ding-JieChen,Chiou-Shann
+tegration,deploymentsetup.
+Fuh,andTyng-LuhLiu.Self-SupervisedSparseRepresenta-
+AdarshJha Model training (Watch-
+tionforVideoAnomalyDetection. InEuropeanConference
+Tower/S3R adaptation),
+onComputerVision(ECCV),pages105–121,2022. 2,3,4
+Linformer integration anal-
+[5] Mahmudul Hasan, Jonghyun Choi, Jan Neumann, Amit K.
+ysis,evaluation.
+Roy-Chowdhury,andLarryS.Davis.Learningtemporalreg-
+AkshatKothari Dataset handling (UCF-Crime
+ularityinvideosequences. InProceedingsoftheIEEEcon-
+features), documentation, per- ferenceoncomputervisionandpatternrecognition(CVPR),
+formance analysis, results re- pages733–742,2016.
+porting. [6] Christoph Feichtenhofer, Haoqi Fan, Jitendra Malik, and
+Kaiming He. Slowfast networks for video recognition. In
+Proceedings of the IEEE/CVF international conference on
+computervision(ICCV),pages6202–6211,2019. 2
+9.FutureWork [7] SachinMehtaandMohammadRastegari. Mobilevit: light-
+weight, general-purpose, and mobile-friendly vision trans-
+Building upon the current SecurityVision system utilizing former. arXivpreprintarXiv:2110.02178,2021. 5
+WatchTower with I3D features, future work can focus on [8] WenjuCai, MichaelB.Zaremba, AshtonB.Thickstun, Ja-
+severalareas: son Kuen, Richard T. Chen, Kuan-Hui Lee, Ga´bor Barto´k,
+Duncan T. Howcroft, Ashok Ravichandran, and Stephan
+1. Explore more efficient feature extractors: I3D hap- Mandt. Lifelong anomaly detection via rehearsal-aided
+pens to be a computationally heavy model. Exploring pseudo-residuallearning. arXivpreprintarXiv:2306.04195,
+alternativeslikeMobileViT[7]couldofferbetterperfor- 2023. 5
+mance/cost trade-offs, potentially enabling edge-device [9] ZilongZhang,ZhongdaoLiu,ChenChangeLoy,andDahua
+inference. Lin. Cross-viewactionrecognitionviaviewpointdecompo-
+2. Onlinelearning: Sincethedictionaryrepresentingnor- sitionandrecovery.InProceedingsoftheIEEE/CVFConfer-
+enceonComputerVisionandPatternRecognition(CVPR),
+malityisbuiltoffline,implementingonlineorcontinual
+pages7084–7093,2019. 5
+learning approaches [8] could allow the model to adapt
+to specific deployment environments and evolving nor-
+malpatternsovertime.
+3. Multiple Cameras: Utilizing synchronized feeds from
+multiplecamerasviamulti-viewlearningtechniques[9]
+could provide richer context, handle occlusions better,
+andpotentiallyincreasedetectionrobustness.
+Byaddressingthesepoints,weaimtoenhanceSecurityVi-
+sion into a more robust, efficient, and versatile real-time
+anomalydetectionsystemsuitableforpracticalsurveillance
+applications.
 
 
 === Page 5 ===
-ABSTRACT
-This paper presents a comprehensive analysis of diverse 5-stage ring oscillator topologies in a
-65nm technology node supplied at 1.2 volts, considering various figures of merits, including
-leakage, power, performance, area, and PVT characteristics. The study emphasizes the pivotal
-role of topology selection in integrated circuit design, particularly in optimizing these critical
-metrics. The analysis encompasses a range of topologies, such as the Basic Ring Oscillator,
-Current Starved Ring Oscillator and Current Starved Skewed PMOS Ring Oscillator. By
-evaluating how various topologies impact each figure of merit, the research highlights their
-respective strengths and vulnerabilities. The review culminates by identifying superior
-topologies based on a comparative analysis tailored to specific application requirements. This
-approach aligns each topology's strengths with distinct application needs, ensuring an optimal
-matchbetween topology attributes andperformance objectives.
-5
+A.TimingAnalysisScreenshots
+(a)Beforeoptimization (b)Afteroptimization
+Figure 5. Component-wise timing analysis of our inference
+pipeline.
+B.Systemarchitecture
+Figure6.Systemarchitecture
 
-
-=== Page 6 ===
-TABLE OF CONTENTS
-I. INTRODUCTION 7
-II. DIFFERENT TOPOLOGIES OF RING OSCILLATORS 8
-A. Basic Ring Oscillator 8
-B. Current Starved Ring Oscillator 9
-C. Current Starved Skewed PMOS Ring Oscillator 10
-III. RESULTS AND DISCUSSION 11
-IV. CONCLUSION 15
-V. FUTURE WORK 16
-VI. REFERENCES 17
-6
-
-
-=== Page 7 ===
-I. INTRODUCTION
-Analog ICs and SOCsrequire clock signalgeneratorsthat arebothenergy-efficientand compact.
-While quartz crystals, RC, or LC components are commonly used in oscillator circuits,they are
-not optimal for on-chip applications. The Voltage Controlled Oscillator (VCO) can be realized
-using either a ring oscillator or an LC resonator within the CMOS process. While the LC
-resonator offers improved noise characteristics and higher operating frequencies, it occupies
-more layout area due to the on-chip spiral inductor and has a limited tuning range. Conversely,
-the ring oscillator design eliminates the need for inductance and can achieve a broad tuning
-range,though attheexpenseof poorernoise performance andlower operatingfrequencies.
-The Ring Oscillator (RO) is well-suited for on-chip applications because of its simple design,
-low cost, and expanded functionality. Additionally, ROs have a wide tuning range.CMOSRing
-Oscillators are an excellent alternative for energy-efficient applications due to their low power
-consumption. A Ring Oscillator (RO) circuit istypically built byinterconnectinganoddnumber
-of inverter cells. These inverters form a sequential chain in which the output of the last step is
-fed back to the first stage. Phase noise, consumption of power,frequency tuningrange,andchip
-space are all key concerns in RO design. Ring Oscillators are used to benchmark new Process
-Design Kits (PDK) for performance and power, providing valuable insights into the capabilities
-of new technologies. Their simple design and implementation make ring oscillators a
-budget-friendly yethighly functional choice.
-A PVT insensitive ring oscillator is designed to operate over a range of process variations,
-supply voltage fluctuations and temperature changes. We can use this type of ring oscillator in
-integrated circuit design to ensure that thecircuit works correctlyevenif environmentalchanges
-and manufacturing changes happen. In order to preserve frequency stability, a PVT-insensitive
-ring oscillator ismade tobe lesssensitive totheseprocessfluctuations. Reducingdesign margins
-when creating a PVT-insensitive ring oscillator can result in higher performance, moreeffective
-resource management, and lower power usage. By guaranteeing that a higher proportion of
-manufactured circuits fulfill the specified performance standards, a PVT-insensitive design can
-improve chip yield, leading to higher production yields and more dependable goods. Ring
-Oscillator provides precise timing for digital circuits, ensuring synchronization across
-components. They are also used as Voltage-Controlled Oscillators in PLLs, ring oscillators help
-in frequency synchronization, vital for communication systems. Through Built-in Self-Test
-(BIST), they help in measuring performance and detecting faults, ensuring reliability. By
-observing frequency changes, ring oscillators enable temperature monitoring, and their use in
-power management circuitsoptimizes distribution. Their inherentinstabilitycan beharnessed for
-cryptographic applications, enhancing security. In time-based ADCs, ring oscillators bridge the
-gap between analog signals and digital interpretation. As Local Oscillators in RF Circuits, they
-playa keyrolein frequencysynthesis for wirelesstechnology.
-7
-
-
-=== Page 8 ===
-II. DIFFERENT TOPOLOGIES OF RING OSCILLATORS
-A. Basic Ring Oscillator
-Fig. 1.Design ofBasic RingOscillator
-The basic Ring Oscillator (RO) is built by joining inverter cells in a cascade arrangement. To
-attain the specified oscillation frequency range, a five-stage design is used. The Barkhausen
-conditions, which require unity voltage gain and a phase shift of 2π, must be met by the RO
-circuit to assure persistent oscillations. The feedback network provides a phase shift of π, while
-the extra phase shift of π is accomplished by connecting the stages of the RO circuit. This
-permits the oscillating signal to travelthrough each stepand achievetheremaining phase shiftin
-Ntdtime,td refersto thepropagation delay introducedbyeach individualstage.
-8
-
-[Image page_8_image_0.png]
+[Image page_5_image_0.png]
 Gemini Response:
-Certainly, let's analyze the image you provided.
+Here's a breakdown of the image's content, visual elements, and context within the surrounding text:
 
 **Visual Elements:**
 
-*   **Circuit Diagram:** The image depicts a schematic diagram of a ring oscillator circuit.
-*   **Inverters:**  The core building blocks are five inverter stages. Each inverter consists of a PMOS and an NMOS transistor.
-*   **Connections:** The output of each inverter stage is connected to the input of the next stage, forming a ring.
-*   **Feedback:** The output of the last stage is fed back to the input of the first stage, creating the feedback loop necessary for oscillation.
-*   **Power Supply:** Vdd indicates the supply voltage connection.
-*   **Ground:**  A ground symbol signifies the reference voltage.
-*   **Output:** An output, denoted as 'clk', is taken from the final inverter stage, presumably representing the clock signal generated by the oscillator.
+*   The image shows text displayed in a code-like or terminal-like format. The background is dark, and the text is in a monospaced font.
+*   The presentation resembles output from a program, likely capturing timing metrics.
 
 **Text Content:**
 
-*   `clk` Text displayed on the right side of the figure.
+The image contains the following text:
 
-**Contextual Significance:**
+*   `--- Timing Analysis (seconds) ---` This line indicates that the subsequent information is a breakdown of the time spent in different parts of a process, measured in seconds.
+*   `enNormal: 0.962678` This likely refers to the time taken by the "enNormal" module, which the surrounding document describes as reconstructing the normal component of the input feature snippet.
+*   `video_embedding: 0.053841`  This likely measures the time it takes to generate the video embedding.
+*   `macro_embedding: 0.027548` This is the timing for generating macro embeddings.
+*   `deNormal: 0.001727` This refers to the time taken by the "deNormal" module, which aims to filter out the normal components of the video data.
+*   `classifier: 0.009585` This measures the time the classification model takes.
+*   `total_inference: 1.085437`  This represents the total time spent on the entire inference process.
 
-*   **Ring Oscillator:** This image illustrates a basic implementation of a ring oscillator, a type of electronic oscillator that uses an odd number of inverters in a ring to create an oscillating signal.
-*   **Clock Signal:** The 'clk' output suggests this circuit is designed to generate a clock signal, essential for timing and synchronization in digital circuits.
-*   **Basic Topology:** Given the standard arrangement of inverters, this likely represents the most fundamental ring oscillator design.
-*   **Odd Number of Stages:** The presence of five inverters ensures the required 180-degree phase shift in the loop to satisfy the Barkhausen criterion for oscillation.
+**Contextual Significance (within the surrounding text):**
 
-In Summary:
+*   The image is referenced in Figure 5 of the document, titled "Component-wise timing analysis of our inference pipeline."
+*   The image and its surrounding description are found in Section A, titled "Timing Analysis Screenshots." This section likely presents screenshots comparing timing data before and after optimizations.
+*   The `enNormal` and `deNormal` components are related to the "WatchTower" anomaly detection model, which the document describes as an adaptation of the S3R (Self-Supervised Sparse Representation) framework. WatchTower uses dictionary learning to model normal event patterns.
+*   The document discusses optimizing the pipeline, potentially using techniques like Linformer for efficiency. The image likely represents the timings *before* optimization, since there is a mention of (a) Before Optimization in A.TimingAnalysisScreenshots
 
-The image shows a fundamental five-stage ring oscillator built from inverters. It represents a basic circuit design for generating a clock signal in electronic systems. The text "clk" and the circuit diagram suggest it is the fundamental clock signal for ring oscillator.
+In summary, the image visualizes the timing performance of various modules within the anomaly detection inference pipeline. The surrounding document analyzes and presents the performance of the "SecurityVision" system, which uses deep learning techniques for video anomaly detection.
+
 
 OCR Text:
-clk
+--- Timing Analysis (seconds) ---
+enNormal: @.962678
+
+video embedding: 9.053841
+macro_embedding: 0.027548
+deNormal: @.001727
+
+classifier: 0.009585
+
+total inference: 1.085437
 
 
 
-=== Page 9 ===
-B. Current Starved Ring Oscillator
-Fig. 2 Current Starved Ring Oscillator
-This Topology Current Starved Stacked Ring Oscillator is where we are now. Out of all the
-topologies wehavediscussedin thisstudy, thistopology producedthesecond best results.
-9
 
-[Image page_9_image_0.png]
+[Image page_5_image_1.png]
 Gemini Response:
-Here's a breakdown of the image:
+Here's a detailed analysis of the image based on the provided context and OCR output:
 
 **Visual Elements:**
 
-*   **Circuit Diagram:** The image shows a detailed circuit diagram, likely an electronic schematic. The diagram consists of multiple components connected by lines.
-*   **MOSFET Transistors:** The primary component of this circuit is a MOSFET transistor. Several MOSFET symbols are clearly visible.
-*   **Power Supply:** The top of the diagram has a voltage supply node labeled as "Vdd".
-*   **Ground:** At the bottom of the diagram is a connection to ground.
-*   **Current Source:** A current source is labeled "Icontrol" that likely provides a current for the circuit to operate.
-*   **Inverter:** At the right side of the schematic is an inverter, a standard logic gate component.
-*   **Clock Signal Output:** The circuit's output is labeled as "clk," which suggests it's a clock signal.
+*   The image appears to be a screenshot of text output, likely from a terminal or console window.
+*   The background is a dark color, typical of code editors or terminal interfaces.
+*   The text is displayed in a light color, providing contrast.
+*   There is a dashed line at the top and bottom of the text block, possibly indicating the start and end of a log or analysis section.
 
 **Text Content:**
 
-*   **Vdd:** Labeling the power supply voltage
-*   **Icontrol:** Labeling the control current
-*   **clk:** Labeling the clock output
+The OCR output reveals the following information:
+
+*   `--- Timing Analysis (seconds) ---`: This indicates the data presented is related to the timing performance of a system, measured in seconds.
+*   `enNormal: 0.814171`: The 'enNormal' module or process took 0.814171 seconds. This might refer to the "enNormal" module which reconstructs the normal component of a video according to the research paper described in the whole context.
+*   `video_embedding: 0.067756`: The 'video embedding' process (likely extracting video features) took 0.067756 seconds.
+*   `macro_embedding: 0.019474`: The `macro_embedding` process took 0.019474 seconds.
+*   `deNormal: 0.001290`: The 'deNormal' module or process took 0.001290 seconds. This might refer to the "deNormal" module which filters out the normal components according to the research paper described in the whole context.
+*   `classifier: 0.001736`: The classification step took 0.001736 seconds.
+*   `total_inference: 0.905373`: The total inference time for the entire process was 0.905373 seconds.
 
 **Contextual Significance:**
 
-*   **Ring Oscillator:** Based on the arrangement of components, especially the transistors and inverters, this circuit is most likely a current-starved ring oscillator. Ring oscillators are circuits that produce a periodic clock signal.
-*   **Clock Generation:** This is likely an on-chip clock generator. These oscillators are used to produce clock signals for use within integrated circuits.
-*   **Current-Starved Ring Oscillator:** Based on the structure, the circuit is a current-starved topology. The current source "Icontrol" controls the amount of current available to the transistors, and thus the frequency of the oscillator.
-*   **CMOS Technology:** Given the MOSFET transistors, it's almost assuredly designed using CMOS (Complementary Metal-Oxide-Semiconductor) technology. CMOS is the dominant technology in digital integrated circuits.
+*   **Part of Anomaly Detection System:** Based on the broader document ("SecurityVision: Real-Time Video Anomaly Detection..."), this image shows a timing analysis of the inference pipeline for the system.
+*   **Performance Analysis:** This data likely comes from Figure 5 ("Component-wise timing analysis of our inference pipeline.") mentioned in the document. This figure shows timing performance of the anomaly detection model before and after optimization.
+*   **Profiling:** The timing analysis data provides insights into the performance bottlenecks of the system. For example, 'enNormal' takes the most time, which is important when the authors want to analyze how to optimize their model in the next step.
+*   **Optimization Comparison:**  The image is probably paired with another screenshot in Figure 5 showing the timing after optimization to demonstrate the effectiveness of any optimizations implemented.
 
-**Summary:**
+In summary, the image shows the timing analysis of the components within an anomaly detection system for videos. This timing data is crucial for identifying performance bottlenecks and evaluating optimization efforts.
 
-The image illustrates a current-starved ring oscillator, a common circuit used for generating clock signals in integrated circuits. This particular implementation uses MOSFET transistors and a current source to control the output frequency of the clock signal.
 
 OCR Text:
-<
-i=
-=
+--- Timing Analysis (seconds) ---
+enNormal: @.814171
 
-| eed MLL
+video embedding: 0.067756
+macro_embedding: 0.019474
+deNormal: @.001290
 
-rE el AL OAL
-
-Icontrol (+) Mio HO OE
-(ache H
-
-SE HS
-
-ioeo5 Gs
-
-G HG GG
-
-> clk
+classifier: 0.001736
+total_inference: 9.905373
 
 
 
-=== Page 10 ===
-C. Current Starved Skewed PMOS Ring Oscillator
-Fig.3 Current Starved Skewed PMOS Ring Oscillator
-In this circuit, the MOSFETs Mbp and Mbn serve as current sources while the MOSFETs Mip
-and Min serve as an inverter. By mirroringoperation (and maintainingthe sameaspectratios for
-all biasing PMOS and NMOS transistors), Mbp and Mbn generate biasing current. Low power
-consumption is possible in this setup because the bias current, which is in the order of
-microamperes, keeps the transistors operating in the vicinity of the sub-threshold region. The
-negative delay elements are connectedtothe PMOS'sinput.Asa result,the PMOS'sinputsignal
-arrives before the NMOS's. The skewed delay cell accelerates the low-to-high output transition
-by turning the PMOS on early, in contrast to the standard inverter cell. Hence, the cell delay is
-minimized and results in improved frequency of operation. Negativelyskewed PMOSdelay RO
-with a 7-stage current starvation (PMOS skewedCS). TheCSand PMOSskewed techniquesare
-combined as the operating concept. Under same operating conditions, this circuitexhibits better
-power consumption in PMOS skewed as compared to NMOS skewed CS.Since NMOS is
-quicker than PMOS, frequency is higher inNMOSskewed thanin PMOSskewed withthesame
-inverter arrangement. In a similar vein, NMOS skewing consumes more power than PMOS
-skewing.
-10
 
-[Image page_10_image_0.png]
+[Image page_5_image_2.jpeg]
 Gemini Response:
-Here's a breakdown of the image, covering the visual elements and contextual significance:
+Here's a concise analysis of the image, combining visual and textual elements:
 
 **Visual Elements:**
 
-*   **Circuit Diagram:** The image primarily shows a schematic diagram of an electronic circuit.
-*   **Transistors:**  Several PMOS and NMOS transistors are depicted. Each transistor is labeled for identification (e.g., Mbp1, Mbn2, Mip3, Min4). Transistor symbols are standard with source, drain, and gate terminals.
-*   **Power Supply (Vdd):**  Labeled "Vdd," this indicates the positive power supply voltage for the circuit.
-*   **Ground:** A ground symbol indicates the reference point for the circuit's voltage.
-*   **Current Source (Ib):** Shown as a circle with an arrow labeled "Ib," representing a current source.
-*   **Interconnections:** Lines represent electrical connections between circuit components.
-*   **Output (vout, clk):** An inverter symbol generates an output signal identified as "clk," likely denoting a clock signal, which is then derived from "vout."
+*   **Diagram:** The image is a flowchart representing a video processing pipeline for anomaly detection.
+*   **Shapes:** Rectangles, diamonds, and arrows illustrate the sequence of operations.
+*   **Color Coding:** Colors are used to categorize different stages of processing, e.g., initial video input (blue), frame processing (green and yellow), feature extraction and anomaly detection (purple), alert actions (red) and the final step of Dashboard Review (blue).
+*   **Arrows:** Arrows indicate the flow and direction of the video stream and data processing.
 
-**Text Content (Labels):**
+**Text Content and Flow:**
 
-*   **Vdd:**  Voltage Drain Drain, the power supply voltage.
-*   **Ib:** Bias Current
-*   **Mbp1, Mbp2,... Mbp8:**  PMOS Transistors
-*   **Mbn1, Mbn2,... Mbn9:** NMOS Transistors
-*   **Mip1, Mip2,... Mip7:** PMOS Transistors (Inverter)
-*   **Min1, Min2,... Min7:** NMOS Transistors (Inverter)
-*   **vout:**  Voltage output.
-*   **clk:** clock signal
+The flowchart outlines the following steps:
+
+1.  **CCTV Camera Video Stream:** Input from a surveillance camera.
+2.  **Video Input Layer:** Indicates the input processing layer.
+3.  **Frame Extraction with Canvas:** Frames are extracted from the video using a canvas, implying potential image manipulation or processing at this stage.
+4.  **Send Frame to Backend via HTTP POST:** Frames are transmitted to a backend server.
+5.  **Frame Buffering:** Frames are stored temporarily.
+6.  **Preprocessing Resize and Normalize:** Frames are resized and normalized to prepare them for feature extraction.
+7.  **Feature Extraction using I3D or others:** Spatial-temporal features are extracted using a method like I3D.
+8.  **Anomaly Detection:** Anomalies are detected based on the extracted features.
+9.  **Anomaly Detected?:** A conditional check determines if an anomaly is present.
+    *   **Yes:** If an anomaly is detected, actions are taken:
+        *   "Trigger Alert in UI" - A notification is displayed in the user interface.
+        *   "Store Snippet and Save to DB" - The video segment and related data are saved to a database.
+    *   **No:** If no anomaly is detected, "Process Next Frame".
+10. **Dashboard for Review:** All these streams converge to the review dashboard.
 
 **Contextual Significance:**
 
-*   **Ring Oscillator:** The schematic suggests a Ring Oscillator (RO) circuit. The feedback connection (the output of the last inverter stage connected back to the input of the first) is a characteristic feature of a ring oscillator.
-
-*   **Current Starvation:** The use of a current source (Ib) likely indicates a current-starved design. Current starvation is a technique used to control the current flowing through the transistors, which is useful for managing power consumption and tuning the oscillation frequency.
-
-*   **Skewed Design:** The connection of PMOS and NMOS transistors to create inverters suggests that this is a design implementing skewed inverter topology.
-
-In essence, the image represents a schematic diagram of a "Current Starved Skewed PMOS Ring Oscillator" or a closely related circuit architecture. These oscillators are fundamental building blocks in various electronic systems, especially where low power consumption or tunable oscillation frequencies are important.
+*   The diagram illustrates a real-time video anomaly detection system.
+*   It leverages deep learning (I3D) to extract features, suggesting a data-driven approach.
+*   The architecture shows a separation between the front-end (UI, alerts) and back-end (processing, database).
+*   The process allows for automated monitoring and alert generation for potential security breaches.
+*   The flow is structured to enable timely responses to identified anomalous events, enhancing surveillance capabilities.
 
 
 OCR Text:
-5 ts
-LI LI
-3 3
-L L
-3
-ud ud
-3 3
-l ]
-3H_Ye TE
-Tg g Tg
-at 1
-of i Te
-W— |
-‘ 2 sts
-Le uy
-2 (A *
-Zz (>) A
-> eT
+CCTV Camera Video Stream
 
+Feature Extraction using 3D or
+others
 
+Process Next Frame
 
-
-=== Page 11 ===
-III. RESULTS AND DISCUSSION
-The proposed circuit configuration is implemented in standard 65nm technology node and
-simulated withcadence tools.
-Fig.4 At constant Voltage 1.2V, Variation of Frequency at TT corner with temperature ranges
-from -40°Cto 125°C
-For the purpose of comparison, we implemented a number of topologies at constant voltagesof
-1.2V and process corner TT while varying the temperatures from -40C to 125C. As shown in
-Fig. 4, the Current Starved RingOscillatorand SkewedPMOSRing Oscillatorexhibitsthe least
-percentagevariation infrequency of9.85% and14.791%, whencomparedtoall othertopologies.
-11
-
-[Image page_11_image_0.png]
-Gemini Response:
-Here's a breakdown of the image's visual elements, text, and contextual significance:
-
-**Visual Elements:**
-
-*   **Type:** Bar Graph
-*   **Bars:** Three vertical bars colored in a dark red or brown. Each bar represents a different ring oscillator topology.
-*   **Axes:**
-    *   X-axis (horizontal): Labeled "Topologies," indicating the type of ring oscillator being compared. The labels beneath each bar are: "Basic," "Current Starved," and "SPMOS."
-    *   Y-axis (vertical): Labeled "Frequency Variation in %," showing the percentage of frequency variation. The y-axis scale ranges from 0 to 40, with marked increments of 10.
-*   **Gridlines:** Horizontal gridlines are present at intervals of 10 along the Y-axis, providing visual reference for the values.
-
-**Text Content (From Image):**
-
-*   "Frequency Variation in %"
-*   "Topologies"
-*   "Basic"
-*   "Current Starved"
-*   "SPMOS"
-*   "40"
-*   "30"
-*   "20"
-*   "10"
-*   "0"
-
-**Contextual Significance:**
-
-The graph visualizes a comparison of the frequency variation of three ring oscillator topologies: Basic, Current Starved, and SPMOS (likely an abbreviation for "Skewed PMOS"). The Y-axis represents the percentage of frequency variation, which likely indicates the sensitivity of the oscillator's frequency to changes in process, voltage, and temperature (PVT) conditions. Lower percentage of variation is preferable.
-
-Based on the bar heights, the "Basic" topology exhibits the highest frequency variation, while the "Current Starved" topology shows the least. "SPMOS" falls in between. This suggests the "Current Starved" topology is more stable and less susceptible to PVT variations compared to the "Basic" topology.
-
-**Analysis within Document:**
-
-From the surrounding text, this graph appears to be from a report on "Design of different topologies of Ring Oscillators for PVT Sensor application." The accompanying text describes the simulation conditions (65nm technology, 1.2V, TT corner, -40°C to 125°C) and highlights that the Current Starved Ring Oscillator and Skewed PMOS Ring Oscillator have the least frequency variation. These findings align with the graph's representation.
-
-OCR Text:
-Frequency Variation in %
-
-40
-
-30
-
-20
-
-10
-
-Basic
-
-Current Starved
-
-Topologies
-
-SPMOS
-
-
-
-
-=== Page 12 ===
-Fig.5 At constant temperature 27°C, Variation of Frequency at TT corner with Voltage ranges
-from 1.08Vto 1.32V.
-For the purpose of comparison, we implemented a number of topologiesat constanttemperature
-27C and process corner TT while varying the Voltage ranges from 1.08V to 1.32V.As shownin
-Fig. 8, the 7-Stage Current Starved Skewed PMOS Ring Oscillator (SPMOS) exhibits the least
-percentagevariation infrequency of4.472%, whencomparedto allothertopologies.
-Fig.6 Frequencyat differentprocesscorners
-12
-
-[Image page_12_image_0.png]
-Gemini Response:
-Here's a breakdown of the image:
-
-**Visual Elements:**
-
-*   **Type:** Bar Chart/Graph
-*   **Bars:** Three rectangular bars colored dark red with black outlines.
-*   **Axes:** Labeled x and y axes.
-*   **Gridlines:** Horizontal grey gridlines help in estimating the value of each bar.
-
-**Text Content (after OCR):**
-
-*   **Title:** "Frequency Variation in %"
-*   **Y-axis label:** "Frequency Variation in %" with values from 0 to 30.
-*   **X-axis label:** "Topologies"
-*   **X-axis categories (from left to right):** "Basic", "Current Starved", "SPMOS"
-
-**Contextual Significance:**
-
-The image shows the frequency variation percentage for three different ring oscillator topologies: Basic, Current Starved, and SPMOS (Skewed PMOS).
-
-*   The Basic and Current Starved topologies show frequency variations between 20-30%.
-*   The SPMOS topology exhibits a significantly lower frequency variation, under 10%.
-
-**Overall Interpretation:**
-
-The chart compares the frequency stability of the three ring oscillator topologies. The results indicate that the SPMOS topology has significantly lower frequency variation and is therefore the most stable among the three topologies compared in the image.
-
-OCR Text:
-Frequency Variation in %
-
-30
-
-20
-
-10
-
-Basic
-
-Current Starved
-
-Topologies
-
-SPMOS
-
-
-
-
-[Image page_12_image_1.png]
-Gemini Response:
-Here's an analysis of the image:
-
-**Visual Elements:**
-
-*   **Bar Chart:** The image is a bar chart comparing frequency variation (in percentage) for different ring oscillator topologies.
-*   **Bars:** There are three bars, each representing a different topology. The bars are dark red.
-*   **Axes:**
-    *   **Y-axis:** Represents "Frequency Variation in %," with values ranging from 0 to 40. It has horizontal gridlines.
-    *   **X-axis:** Represents "Topologies."
-*   **Labels:** Each bar is labeled with the name of the corresponding topology.
-
-**Text Content:**
-
-*   **Y-axis Title:** "Frequency Variation in %"
-*   **X-axis Title:** "Topologies"
-*   **Bar Labels (from left to right):**
-    *   "Basic"
-    *   "Current Starved"
-    *   "SPMOS"
-
-**Contextual Significance (based on the surrounding text from the report):**
-
-*   **Comparison of Topologies:** The chart visually compares the frequency variation among "Basic Ring Oscillator," "Current Starved Ring Oscillator," and "SPMOS" (likely "Current Starved Skewed PMOS Ring Oscillator") topologies.
-*   **PVT Sensitivity:** The graph likely depicts how sensitive the frequencies of these ring oscillator designs are to process, voltage, and temperature (PVT) variations.
-*   **SPMOS Inconsistency:** The related document states that the Current Starved Skewed PMOS Ring Oscillator (SPMOS) exhibits the *least* percentage variation in frequency.  This contradicts the chart in the image, where SPMOS has the *highest* frequency variation. This suggests a possible error in the graph itself.
-
-OCR Text:
-Frequency Variation in %
-
-40
-
-30
-
-20
-
-10
-
-Basic
-
-Current Starved
-
-Topologies
-
-SPMOS
-
-
-
-
-=== Page 13 ===
-Basic Ring Oscillator has minimum frequency variation from one corners to various corners at
-1.2V and27°C is19.85%
-Table 1.PowerDissipation for differenttopologiesat 1.2V,TT cornerand Temperatureof 27C.
-Topology Power Dissipation(µW)
-BasicRing Oscillator 121
-CurrentStarvedRing Oscillator 4.95
-7-StageCurrentStarvedSkewedPMOS 7.96
-Ring Oscillator
-Table 1.PowerDissipation ofdifferenttopologies.
-As it can be seen that Current Starved Ring Oscillator with 4.95µW is giving less power
-dissipation without much compensation with frequency.The best performance in terms of
-frequency of operation and power consumption this topology is good among all the other
-topologies.
-\
-Table 2. Percentage Frequency Variations across Process Corners with temperature
-rangingfrom -40Cto 125C
-13
-
-[Image page_13_image_0.png]
-Gemini Response:
-Here's a breakdown of the image, combining visual and textual elements with contextual analysis:
-
-**I. Visual Elements:**
-
-*   **Tables:** There are three tables.
-    *   Table 1: Power dissipation for different topologies
-    *   Table 2: Percentage frequency variations across process corners with temperature ranging from -40 to 125 C
-    *   Table 3: Percentage frequency variations across process corners with voltage range from 1.08 to 1.32V
-
-*   **Graphs:** There are two graphs. One is variation of frequency at TT Corner with temperature ranges and another is with voltage ranges.
-
-**II. Textual Content (from OCR and surrounding text):**
-
-*   **Title:** The report is titled "Design of different topologies of Ring Oscillators for PVT Sensor application."
-*   **Authors:** Akshay Soni (MT22153) and Abhishek Kumar Singh (MT22135).
-*   **Submission Details:** Submitted to Dr. Anuj Grover at Indraprastha Institute of Information Technology Delhi (IIITD) in December 2023, for a Master of Technology degree.
-*   **Certification:** The document includes a certification of originality and supervision by Dr. Anuj Grover.
-*   **Acknowledgements:** Thanks Dr. Anuj Grover and Tanisha Gupta. Also thanked their friends.
-*   **Abstract:**
-*   **Table of Contents:** Introduction, Different Topologies of Ring Oscillators, Results and Discussion, Conclusion, Future Work, References
-*   **Introduction:** Discusses analog ICs and SOCs, Voltage Controlled Oscillator (VCO), and ring oscillator.
-*   **Different Topologies of Ring Oscillators:**
-    *   Basic Ring Oscillator
-    *   Current Starved Ring Oscillator
-    *   Current Starved Skewed PMOS Ring Oscillator
-*   **Results and Discussion:** Discusses results with various corners.
-*   **Tables and Figures:**
-    *  Various tables are present (mentioned above).
-    *  Basic Ring Oscillator has minimum frequency variation from one corners to various corners at 1.2V and 27°C is 19.85%.
-
-**III. Contextual Significance:**
-
-*   **Research Focus:** The document is a research report focusing on the design and analysis of different ring oscillator topologies, specifically for PVT (Process, Voltage, Temperature) sensor applications.  PVT variations are critical concerns in integrated circuit design, and ring oscillators are used to measure these.
-*   **Methodology:** The research involves simulations using Cadence tools with a 65nm technology node. The focus is on evaluating performance metrics like power dissipation and frequency variation across different process corners and temperature ranges.
-*   **Topological Comparison:** The study compares the performance of basic, current-starved, and skewed PMOS ring oscillator topologies, highlighting their advantages and disadvantages.
-*   **Application:** The research aims to identify suitable ring oscillator topologies for PVT sensor applications, emphasizing the need for stability and low-power consumption.
-*   **Structure:** The document follows a typical academic research report structure, including an introduction, literature review of different topologies, results and discussion, conclusion, and future work.
-*   **Educational Context:** The document is submitted as a Capstone Project for a Master of Technology degree, suggesting that the work is intended to demonstrate the students' understanding of the subject matter and their ability to conduct independent research.
-
-**In Summary:**
-
-The image represents a portion of a well-structured research report on the design and analysis of ring oscillator topologies for PVT sensor applications. The report aims to provide a comparative analysis of different topologies and identify suitable options based on performance metrics. The report is significant in the context of integrated circuit design and highlights the importance of PVT-insensitive circuits for reliable operation.
-
-
-OCR Text:
-BRAAS
-
-2
-
-5B
-4B
-456
-‘454
-
-985
-969
-100
-947
-964
-
-14791
-1.378
-9.0124
-19.135
-19.135
-
-
-
-=== Page 14 ===
-Table 3.Percentage FrequencyVariationsacrossProcessCornerswith voltagerangefrom
-1.08V to1.32V
-14
-
-[Image page_14_image_0.png]
-Gemini Response:
-Here's a detailed analysis of the image you sent:
-
-**Visual Elements:**
-
-*   **Table Format:** The dominant visual element is a table.  It's structured with column headers and rows of data.
-*   **Color Scheme:**  The table utilizes a color scheme with shades of blue and white/light grey. The headers have a darker blue fill.
-*   **Font:** The text is a clean, sans-serif font, making it easy to read.
-*   **Organization:**  The table is well-organized, with clear column separation and alignment of numerical data.
-
-**Text Content (From OCR):**
-
-*   **Headers:** The columns are labeled as follows:
-    *   `corners`
-    *   `Basic RO`
-    *   `Current Starved RO`
-    *   `CS Skewed PMOS RO (7stage)`
-*   **Row Labels:** The rows are labeled with process corner abbreviations:
-    *   `SS`
-    *   `TT`
-    *   `FF`
-    *   `SF`
-    *   `FS`
-*   **Data:** The cells contain numerical data likely representing a percentage or frequency (given surrounding text of 14)
-    *   (SS): 26.38, 28.32, 5.49
-    *   (TT): 25.18, 28, 4.72
-    *   (FF): 24, 27.31, 7.031
-    *   (SF): 24.95, 27.18, 32.27
-    *   (FS): 25.59, 28.31, 8.86
-
-**Contextual Significance (Based on provided document):**
-
-*   **Ring Oscillator Analysis:** The table presents comparative data related to different Ring Oscillator (RO) topologies.
-*   **Process Corners:** The "corners" (SS, TT, FF, SF, FS) represent different combinations of process variations during semiconductor manufacturing. These variations affect transistor behavior.
-    *   **SS:** Slow NMOS, Slow PMOS
-    *   **TT:** Typical NMOS, Typical PMOS
-    *   **FF:** Fast NMOS, Fast PMOS
-    *   **SF:** Slow NMOS, Fast PMOS
-    *   **FS:** Fast NMOS, Slow PMOS
-*   **Performance Metric:** The numbers within the table likely represent the percentage of Frequency Variations across these Process Corners with a voltage range from 1.08V to 1.32V (as mentioned in the nearby text of the image)
-*   **Design Evaluation:**  The purpose of this table is to compare the performance (specifically frequency stability) of the different RO topologies under various manufacturing process variations. The goal is to identify a design that is robust and relatively insensitive to these variations. The Skewed PMOS one seems to have issues on SF corner.
-
-**In summary:** The image is a data table showing performance characteristics of different Ring Oscillator designs under different manufacturing conditions. It's a crucial part of the research for understanding the robustness and stability of the designs.
-
-OCR Text:
-ss
-
-F
-F
-is}
-
-4B
-B18
-a
-
-4s
-559
-
-BR
-B
-
-aH
-Pa)
-BH
-
-54
-4n
-7081
-27
-i)
-
-
-
-=== Page 15 ===
-IV. CONCLUSION
-The study and analysis of various topologies of 5-stage and 7-stage ring oscillators have
-provided valuable insights into their performance characteristics and trade-offs. Each topology
-exhibits distinct advantages and limitations that cater to specific design requirements. The
-standard 5-stage ring oscillator topology offers simplicity and ease of implementation. Its
-balanced designensuressymmetricalpropagation delaysandapredictable oscillationfrequency.
-However, its susceptibilityto processvariationsandtemperature effectsmight limitits frequency
-stability and overall performance in demanding applications. The current starved ring oscillator
-topology addressespowerconsumptionconcerns byutilizingcurrent-starved inverters,leadingto
-reduced energy consumption. This makes it a favorable choice for low-power applications.
-However, the trade-off is often reflected in a compromise on operational frequency and a
-potential increase in delay variability.ThenegativePMOSskewed delay ringoscillator topology
-optimizes performance by adjusting PMOS behavior to mitigate PMOS-NMOS speed
-imbalances. This results in improved frequency of operation. Ultimately, the choice of ring
-oscillator topology shouldbe guidedbyathorough understanding ofthe application’soperational
-profile, power constraints, frequency requirements and tolerance for design complexity. By
-leveraging the strengths of these different topologies, designers can make informed decisionsto
-achieve optimalperformanceand efficiencyfor theirspecific.
-15
-
-
-=== Page 16 ===
-V. FUTURE WORK
-Exploring thefuture prospects ofthis projectinvolvesconsidering variousaspects:
-1. Technological Advancements: Thisprojectallows for further in-depthresearch andanalysisof
-new and improved ring oscillator topologies. Discovering new and more effective technical
-solutions canhelptheprojectadvanceand becomemoreadvanced.
-2. Energy Efficiency: Additionally, concentrating on energy efficiency is critical.Astechnology
-advances, there may be chances to improvethe energyefficiency ofring oscillatorseven further.
-This could include investigating novel techniques to reduce power consumption while
-maintaining or boostingperformance.
-3. Applications in Emerging Technologies: The project's insights and improved topologies may
-have applications in emerging technology. For example, low-power circuits are in high demand
-in avarietyof industries,including Internet ofThings(IoT) andwearabletechnologies. Adapting
-theproject'soutcomes totheseareas couldlead tonewopportunities.
-4. Integration with Other Systems: Consider how the project can interact with or enhance
-existing systems and technologies. This interdisciplinary approach may result in collaborative
-projects that leverage the capabilities of many components to provide more comprehensive
-solutions.
-5. Further Optimization: Continuous efforts toimprovethe performanceof ring oscillatorsbased
-on real-world input and increasing technology standards willbe critical.Thisiterativeprocedure
-canhelptheprojectstay relevant andeffectiveover time.
-Finally, the future of this project seems promising in terms of technological developments,
-energy efficiency gains, applications in emerging industries, integration opportunities, and
-continued optimization efforts. By remaining focused on these factors, the project can continue
-to progressand contributetothe ever-changingfieldof electronicdesign.
-16
-
-
-=== Page 17 ===
-VI. REFERENCES
-[1] C. Jayaram and P. S. Rao, "A 10-MHz CMOS-based Ring Oscillator with Low Power
-consumption For On-chip IC Applications," 2022 IEEE International Symposium on Smart
-Electronic Systems (iSES), Warangal, India, 2022, pp. 53-56, doi:
-10.1109/iSES54909.2022.00022.
-[2] V. Kalenteridis, K. P. Pagkalos, O. Panetas-Felouris and S. Vlassis, "A CMOS VCO ring
-oscillator suitable for wide supply range applications," 2023 12th International Conference on
-Modern Circuits and Systems Technologies (MOCAST), Athens, Greece, 2023, pp. 1-4, doi:
-10.1109/MOCAST57943.2023.10176444.
-[3] H. H. Hammam, K. M. Hassan and S. A. Ibrahim, "An Ultra Low-Power
-Process-andTemperature Compensated Ring Oscillator," 2022 9th International Conference on
-Electrical and Electronics Engineering (ICEEE), Alanya, Turkey, 2022, pp. 1-5, doi:
-10.1109/ICEEE55327.2022.9772521.
-[4] Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, “Electron spectroscopy studies on
-magneto-optical media and plastic substrate interface,” IEEE Transl. J. Magn. Japan, vol. 2,pp.
-740–741,August 1987[Digests 9thAnnualConf.Magnetics Japan, p.301,1982].
-[5] Wadhwa, N., Bahubalindruni, P.G., Deb, S. (2019). A PVT Insensitive Low-Power
-Differential Ring Oscillator. In: Rajaram, S., Balamurugan, N., Gracia Nirmala Rani, D., Singh,
-V. (eds)VLSIDesignand Test. VDAT2018.Communicationsin Computerand Information
-Science,vol 892.Springer,Singapore.https://doi.org/10.1007/978-981-13-5950-7_7
-[6] W. Elgharbawy and M. Bayoumi, "A novel ultra-low-energy bulk dynamicthreshold PMOS
-scheme," 2003 46th Midwest Symposium on Circuits and Systems, Cairo, Egypt, 2003, pp.
-1388-1391 Vol. 3,doi: 10.1109/MWSCAS.2003.1562554.
-[7] S. K. Dash, S. N. Mishra, A. Bakshi and J. R. Panda, "Design of a Ring Oscillator for IoT
-Applications," 2023 International Conference on Intelligent Data Communication Technologies
-and Internet of Things (IDCIoT), Bengaluru, India, 2023, pp. 101-104,
-doi:10.1109/IDCIoT56793.2023.10053537.
-[8] Rajalingam, P., Jayakumar, S. & Routray, S. Design and Analysis of Low Power and High
-Frequency Current Starved Sleep Voltage Controlled Oscillator for Phase Locked Loop
-Application. Silicon13,2715–2726(2021). https://doi.org/10.1007/s12633-020-00619-7
-17
 
 
