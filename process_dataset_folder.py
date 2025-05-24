@@ -25,7 +25,7 @@ if not logging.getLogger().hasHandlers():
                         handlers=[logging.FileHandler(log_file_name, mode='w'),
                                   logging.StreamHandler(sys.stdout)])
 
-CONTEXT_OUTPUT_DIR_NAME = "processed_pdf" # Renamed for clarity
+CONTEXT_OUTPUT_DIR_NAME = "processed_context" # Renamed for clarity
 PAUSE_BETWEEN_PAPERS = 10  # Reduced pause as API calls are less frequent per paper now
 
 def process_folder(input_folder_path, target_output_answers_dir):
