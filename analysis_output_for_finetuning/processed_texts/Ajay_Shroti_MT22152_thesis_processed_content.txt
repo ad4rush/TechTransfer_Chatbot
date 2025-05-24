@@ -1,0 +1,1408 @@
+=== Page 1 ===
+Asymmetric SRAM Cells
+AProjectReport
+submittedby
+AJAY SHROTI
+inpartialfulfilmentoftherequirements
+fortheawardofthedegreeof
+MASTEROFTECHNOLOGY
+ELECTRONICSANDCOMMUNICATIONENGINEERING
+INDRAPRASTHAINSTITUTEOFINFORMATIONTECHNOLOGYDELHI
+NEWDELHI-110020
+Date of Thesis Completion
+
+[Image page_1_image_0.png Analysis (by Gemini)]
+Here's an analysis of the image within the context of the provided research paper information:
+
+**Visual Analysis**
+
+*   **Type:** The image is a stylized logo.
+*   **Elements:** The logo consists of four rectangular bars of increasing darkness (light gray to dark gray). Adjacent to these bars is a partial rectangle in dark gray and a crescent shape in teal.
+*   **Structure:** The elements are arranged horizontally. The rectangular bars are parallel and form the left side of the logo. The dark gray rectangle and crescent form the right side.
+*   **Significance:** The logo could represent an abstraction of integrated circuits or memory cells, which would be highly relevant to the field of electronics and communication engineering and the research area of SRAM cells.
+
+**Text Analysis**
+
+There is no discernible text within the image itself.
+
+**Contextual Analysis and Importance**
+
+*   **Overall Context:** The provided text indicates that this is the title page of a Master's thesis by Ajay Shroti on "Asymmetric SRAM Cells" at the Indraprastha Institute of Information Technology Delhi (IIIT Delhi).
+*   **Image Placement and Importance:** Given its placement on the title page, the logo is likely the official logo of IIIT Delhi. As the university's identifying mark, it adds credibility and branding to the thesis. The visual style and structure could relate to the technical focus of the research (SRAM cells).
+*   **Relationship to Thesis Topic:** The thesis focuses on "Asymmetric SRAM Cells". The logo, while stylized, includes different shades and a modified rectangular form. This *might* be subtly alluding to the asymmetry or varied structures being explored in the thesis, but it is difficult to know for sure without more information. It is more likely the logo of the university.
+
+
+
+=== Page 2 ===
+THESIS CERTIFICATE
+This is to certify that the thesis titled ”Asymmetric SRAM cells”, submitted by Ajay
+Shroti,totheIndraprasthaInstituteofInformationTechnology,Delhi,fortheawardof
+thedegreeofMasterofTechnology,isabonafiderecordoftheresearchworkdoneby
+himunderoursupervision. Thecontentsofthisthesis,infullorinparts,havenotbeen
+submittedtoanyotherInstituteorUniversityfortheawardofanydegreeordiploma.
+Dr. AnujGrover
+ThesisSupervisor
+AssociateProfessor
+DepartmentofElectronicsandCommunication
+IIIT Delhi,110020
+Place: NewDelhi
+Date: 10thMay2024
+
+=== Page 3 ===
+ACKNOWLEDGEMENTS
+I express my deepest gratitude to my thesis advisor, Dr. Anuj Grover, for offering
+advice and encouragement with a perfect blend of insight and humor. I would also like
+to thank Belal Iqbal, sir, for clarifying my doubts and helping me through the different
+challenging stages of the project. Most importantly, I am grateful to my parents and
+friendsfortheirsupportandlove.
+i
+
+=== Page 4 ===
+ABSTRACT
+Embedded memories occupy up to 70% of the area and account for 30-50% power
+consumption in advanced digital SoCs. A large part of this power is leakage power.
+Therefore,high-density,low-leakageSRAMcellsaredesirable. Weproposetwoasym-
+metrical SRAM cells and benchmark with conventional 6T, 5T, and 4T SRAM cells.
+The first SRAM cell is a 4TA asymmetrical SRAM cell. We designed it under iso-
+stable constraints. We show that in a 130nm CMOS technology, the proposed 4TA cell
+is denser by up to 7% than 6T SRAM cells and has about 4X lower leakage than 6T
+SRAM cells. However, the performance is lower in 4TA as compared to 6T SRAM.
+The second SRAM is a 5TA asymmetrical SRAM cell. We designed 5TA under iso-
+area constraints. Our analysis shows that the proposed 5TA cell has about 10X and
+6.23X lower leakage than the conventional SRAM cell in 130nm and 65nm CMOS
+technology,respectivelyatasimilar performancepoint.
+KEYWORDS: 6TSRAM,5TSRAM,4TSRAM,FiguresofMerit,
+Write Margin, Static Noise Margin, Performance,
+Asymmetric4TASRAM,Asymmetric5TASRAM
+ii
+
+=== Page 5 ===
+TABLE OF CONTENTS
+ACKNOWLEDGEMENTS i
+ABSTRACT ii
+LISTOF TABLES v
+LISTOF FIGURES vi
+ABBREVIATIONS vii
+NOTATION viii
+1 INTRODUCTION 1
+1.1 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+1.2 SRAMArchitecture . . . . . . . . . . . . . . . . . . . . . . . . . 1
+2 LiteratureReview 3
+2.1 6TSRAM . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2.2 5TSRAM . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4
+2.3 4TSRAM . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.4 OtherExistingSRAMCells . . . . . . . . . . . . . . . . . . . . . 7
+3 ProposedMemorySRAMcells 9
+3.1 Proposed4TASRAMCell . . . . . . . . . . . . . . . . . . . . . 9
+3.1.1 Writeoperation . . . . . . . . . . . . . . . . . . . . . . . 10
+3.1.2 Readoperation . . . . . . . . . . . . . . . . . . . . . . . 12
+3.1.3 StandbyOperation . . . . . . . . . . . . . . . . . . . . . 12
+3.1.4 ResultandComparativeAnalysis . . . . . . . . . . . . . 14
+3.2 Proposed5TASRAMCell . . . . . . . . . . . . . . . . . . . . . 20
+3.2.1 Writeoperation . . . . . . . . . . . . . . . . . . . . . . . 22
+3.2.2 Readoperation . . . . . . . . . . . . . . . . . . . . . . . 22
+iii
+
+=== Page 6 ===
+3.2.3 StandbyOperation . . . . . . . . . . . . . . . . . . . . . 23
+3.2.4 ResultandComparativeAnalysis . . . . . . . . . . . . . 23
+4 Conclusion 31
+
+=== Page 7 ===
+LIST OF TABLES
+3.1 VoltageLevelofSignalsin4TASRAMCell . . . . . . . . . . . . . 11
+3.2 Size of Transistors in 6T,5T,4T, and 4TA SRAM cells and Assist Cir-
+cuitry . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+3.3 ComparisonofFOMsFor6T,5T,4T,and4TASRAMCells . . . . . 13
+3.4 VoltageLevelofsignalsin5TASRAMCell . . . . . . . . . . . . . 23
+3.5 Size of Transistors in 6T,5T,4T, and 5TA SRAM cells and Assist Cir-
+cuitryin130nm . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+3.6 Comparison of FOMs For 6T,5T,4T, and 5TA SRAM Cells in 130nm
+Technology . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+3.7 Size of Transistors in 6T,5T,4T, and 5TA SRAM cells and Assist Cir-
+cuitryin65nm . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+3.8 Comparison of FOMs For 6T,5T,4T, and 5TA SRAM Cells in 65nm
+Technology . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+v
+
+=== Page 8 ===
+LIST OF FIGURES
+1.1 SRAMArchitecture . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+2.1 6TSRAM . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2.2 6TSRAMwaveform . . . . . . . . . . . . . . . . . . . . . . . . . 4
+2.3 5TSRAM . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2.4 5TSRAMwaveform . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.5 4TSRAM . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.6 4TSRAMWaveform . . . . . . . . . . . . . . . . . . . . . . . . . 7
+3.1 4TASRAMCell . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.2 4TASRAMarraywithAssistcircuitryindifferentmodesofoperation. 10
+3.3 4TASRAMReadandWriteOperation . . . . . . . . . . . . . . . . 11
+3.4 4X46TSRAMLayouthighlighting singlecell(130nm) . . . . . . . 14
+3.5 4X45TSRAMLayouthighlighting singlecell(130nm) . . . . . . . 15
+3.6 4X44TSRAMLayouthighlighting singlecell(130nm) . . . . . . . 15
+3.7 4X44TASRAMhighlighting singlecellandassistcircuit(130nm) . 16
+3.8 32X324TAmemoryarrayleakage . . . . . . . . . . . . . . . . . . 17
+3.9 Comparisionof6T,5T,4Tand4TASRAMcellsacrossvariousFOMs 19
+3.10 5TASRAMcell . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+3.11 5TASRAMarraywithAssistcircuitryindifferentmodesofoperation. 21
+3.12 5TASRAMReadandWriteOperation . . . . . . . . . . . . . . . . 21
+3.13 4X4 Proposed 5TA SRAM highlighting single cell and assist circuit
+(130nm) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+3.14 4X46TSRAMhighlighting singlecellandassistcircuit(65nm) . . 29
+3.15 4X45TSRAMhighlighting singlecellandassistcircuit(65nm) . . 29
+3.16 4X44TSRAMhighlighting singlecellandassistcircuit(65nm) . . 30
+3.17 4X4Proposed5TASRAMhighlighting singlecell(65nm) . . . . . 30
+3.18 Comparision of 6T,5T,4T, and 5TA SRAM cells across various FOMs
+in(a)130nm (b)65nm . . . . . . . . . . . . . . . . . . . . . . . . . 30
+vi
+
+=== Page 9 ===
+ABBREVIATIONS
+IIITD IndraprasthaInstituteofInformation Technology,Delhi
+SRAM StaticRandomAccessMemory
+SoCs SystemonChips
+6T SixTransistor
+5T FiveTransistor
+4T FourTransistor
+FOMs FiguresOfMerit
+SNM StaticNoiseMargin
+PVT Process,VoltageandTemperature
+vii
+
+=== Page 10 ===
+NOTATION
+µ Mean
+σ Sigma
+viii
+
+=== Page 11 ===
+CHAPTER 1
+INTRODUCTION
+1.1 Motivation
+SRAM, or static random-access memory, is a type of nonvolatile memory that main-
+tainsinformationaslongaspowerisapplied. SRAMisusedinSOCsascachememory
+becauseSRAMhasafasterwrite/readaccesstimethanothertypesofmemory,increas-
+ing the SOCs’s speed and performance. The performance of SOCs increases with the
+expansion of SRAM capacity. However, both leakage and overall area increase. Con-
+ventional six-transistor (6T) SRAM is the most commonly used SRAM and accounts
+for up to 70% of the die area in modern SOCs [1], consumes a major share of leakage
+duringstandbyperiods[2]andscalingof6TSRAMisnotpossiblebecausethestability
+and performance of 6T SRAM reduces. These are the limitations of using 6T SRAM
+in SOCs. This highlights the need for an SRAM design to minimize leakage and area
+footprint andprovide highperformance.
+1.2 SRAM Architecture
+A memory array is made up of a 2-dimensional 2Mx2N array of memory cells, where
+M and N represent the column and row address widths, respectively. Each cell stores a
+single bit of data. To access the contents of the array, you need to assert the word lines
+(WLs) of a particular row, which is referred to as the address. The data required by the
+userisstoredinthebitcellsofthatrow.
+AnSRAMarrayconsistsofmultiplecircuitsthatworksequentiallytoreadandstore
+data. Figure 1.1 provides an overview of all the sub-circuits of the SRAM memory.
+Hereisabriefexplanationofeachsub-circuit:
+A bit-cell is used to store a single bit of data. A word line enables multiple words
+of memory. Column decoders are used to select the addressed memory word. Column
+1
+
+=== Page 12 ===
+multiplexers connect the BL and BLB of the selected columns to the sense amplifiers
+to read the cell value. Write drivers are used to write into the memory cells. Row
+decoders decode the address given to the memory and activate the corresponding row
+ofthememoryarray.
+Figure1.1: SRAMArchitecture
+2
+
+[Image page_12_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, based on the provided text and the image itself:
+
+**Visual Elements and Their Structure:**
+
+The image is a block diagram illustrating the architecture of a Static Random-Access Memory (SRAM). The key components shown and their arrangement are:
+
+*   **SRAM Memory Array:** This is the central block. It represents the core of the memory, where data is stored.  It is visualized as a grid of "BitCell" blocks, arranged in a 2Mx2N array.  "BitCell" is written inside each memory block. The dashed lines connecting the bit cells signify the continuity of the array. The dimension labels "2N" (width) and "2M" (height) on top and left represent the number of columns and rows, respectively.
+*   **Row Decoder:** Located to the left of the memory array. It selects a specific row (word line) in the array based on an address. It connects to the array via lines representing the word lines.
+*   **Column Decoder:** Positioned below the row decoder.  Its function is to further refine which part of the memory the row decoder addresses by way of a MUX which is described next.
+*   **Column MUX (Multiplexer):** This sits below the memory array. It selects specific columns to connect to the sense amplifiers, effectively choosing which bits from the selected row will be read. The mux switches are visually represented as transistor symbols.
+*   **Sense Amplifiers:** Situated below the column MUX.  These amplify the weak signals from the memory cells during a read operation to provide a clear data output.
+*   **Write Drivers:** Located below the sense amplifiers.  These provide the signal to write data into the selected memory cells during a write operation.
+*   **Read-Write Control:** This block takes "Read Enable" as input and outputs "Sense En" and "Write En" signals, which control the read and write operations of the memory.
+
+**Text within the Image:**
+
+*   **"Row Decoder"**
+*   **"Column Decoder"**
+*   **"BitCell"** (repeated multiple times)
+*   **"word-line"**
+*   **"bit-line"**
+*   **"SRAM Memory Array"**
+*   **"Column MUX"**
+*   **"Sense Amplifiers"**
+*   **"Write Drivers"**
+*   **"Read Enable"**
+*   **"Sense En"**
+*   **"Write En"**
+*   **"Read-Write Control"**
+*   **"Data In"**
+*   **"Data Out"**
+*   **"2M"**
+*   **"2N"**
+
+**Context and Importance:**
+
+The image (Figure 1.1) is presented within the "SRAM Architecture" section (1.2) of the introduction to a research paper on SRAM. The preceding text establishes the motivation for the research:  SRAM is crucial for SOC performance but conventional 6T SRAM has limitations in terms of area, leakage, and scalability.  The figure provides a high-level overview of how an SRAM works. It shows the interplay of different components: the memory array, row and column decoders for addressing, multiplexers for column selection, sense amplifiers for reading, and write drivers for writing.
+
+The text surrounding the image (from pages 11 and 12) explicitly describes the function of each sub-circuit: bit-cells store data, word lines enable memory words, column decoders select memory words, column multiplexers connect to sense amplifiers, write drivers write data, and row decoders activate rows.
+
+The image's importance lies in:
+
+*   **Providing a visual representation of the text description:**  It allows the reader to grasp the relationships between different SRAM components more easily than reading a purely textual description.
+*   **Serving as a reference point for subsequent discussions:**  The figure likely forms the basis for further analysis and optimization of specific SRAM components in later chapters of the research paper. Subsequent chapters likely delve into the components shown in Figure 1.1 in greater detail. For instance, the following page (page 13) introduces the conventional 6T SRAM cell.
+
+
+
+=== Page 13 ===
+CHAPTER 2
+Literature Review
+2.1 6T SRAM
+The conventional 6T SRAM cell is shown in Fig. 2.1. It consists of two CMOS cross-
+coupledinverters,PU1-PD1andPU2-PD2,whichisresponsibleforstoringasinglebit
+of data. Where (PU1 and PU2) load transistors, driver transistors (PD1 and PD2), and
+two access transistors, PG1 and PG2, control access to the cross-coupled inverters for
+readandwriteoperations.
+Figure2.1: 6TSRAM
+Read Operation As shown in Fig 2.2. The word line (WL) is activated to initiate
+a read operation by turning ON the access transistor and pre-charging the bit lines (BL
+and BLB). If ‘0’ is stored at Q then BL discharges through PG1 and PD1 then the bit
+lines act as outputs, and a sense amplifier detects voltage changes on BL or BLB to
+determinethestoreddatavalueat‘Q’.
+WriteOperationAsshowninFig2.2. Anewdatavalueissuppliedonthebitlines
+(BLandBLB)forawriteoperation. Thewordlineisactivated,enablingPG1andPG2,
+andthenewdatawillbestoredat‘Q’intheSRAMcell,dependingonthebitlinevalue.
+3
+
+[Image page_13_image_0.png Analysis (by Gemini)]
+Here's a comprehensive analysis of the provided image, based on the text and surrounding context:
+
+**Visual Elements and Structure:**
+
+The image is a circuit diagram depicting a conventional 6T SRAM (Static Random-Access Memory) cell. It's composed of the following key elements:
+
+*   **Two Cross-Coupled CMOS Inverters:** These form the core of the memory cell and are responsible for storing the data bit. Each inverter consists of a pull-up (PU) transistor and a pull-down (PD) transistor. Specifically, there are PU1, PD1, PU2, and PD2 transistors.
+*   **Access Transistors:** Two access transistors (PG1 and PG2) are used to control access to the inverters for read and write operations.
+*   **Bit Lines (BL and BLB):** Two bit lines, BL and BLB (BL bar), are used for reading and writing data to the cell. BLB is the complement of BL.
+*   **Word Line (WL):** A single word line (WL) is used to activate the access transistors (PG1 and PG2) and enable the cell for read or write operations.
+*   **Power Supply (Vdd) and Ground:** The diagram includes symbols for the power supply (Vdd) and ground, indicating the cell's power connections.
+
+The inverters are cross-coupled, meaning the output of one inverter is connected to the input of the other. This creates a feedback loop that maintains the stored data. The access transistors connect the inverters to the bit lines when the word line is activated.
+
+**Text Within the Image:**
+
+*   **Vdd:** Indicates the positive power supply voltage.
+*   **BL:** Bit Line
+*   **BLB:** Bit Line Bar (complement of BL)
+*   **WL:** Word Line
+*   **PU1, PU2:** Labels for the Pull-Up transistors in the inverters.
+*   **PD1, PD2:** Labels for the Pull-Down transistors in the inverters.
+*   **PG1, PG2:** Labels for the Pass Gate (access) transistors.
+*   **Q:** Denotes the output of one inverter, representing the stored data value.
+*   **QB:** Denotes the output of the other inverter, representing the complement of the stored data value.
+
+**Context and Importance:**
+
+The image's context is within a literature review of SRAM technology, specifically the 6T SRAM cell. From the surrounding text:
+
+*   The text introduces the 6T SRAM cell as a fundamental building block for memory.
+*   The figure illustrates the architecture of this cell, which is responsible for storing a single bit of data.
+*   The description of read and write operations in the text directly references the elements in the image, explaining how the transistors and bit lines are used to access and modify the stored data.
+*   The text emphasizes the importance of proper sizing and stability for correct operation, hinting at the critical parameters that influence the cell's performance.
+
+The figure is essential because it provides a visual representation of the abstract descriptions in the text. By examining the circuit diagram, the reader can understand the structure of the 6T SRAM cell, the role of each transistor, and how the bit lines and word line are used to interact with the memory cell. It is foundational for understanding the discussion of alternative SRAM designs like the 5T SRAM discussed later in the surrounding text, which are proposed due to the limitations of scaling down the 6T design.
+
+
+
+=== Page 14 ===
+Duringstandbymode,thewordlinesareinactive,turningoffPG1andPG2,andthe
+SRAMcellretainsitsstoreddatawithout anychanges.
+Sizingshouldbedoneaccordingtothecellandpull-upratiostoensurecorrectread
+and write operation and maintain high cell stability. Where the cell ratio (CR) and the
+pull-up ratio(PR)[18]-[19] aredefinedas
+CR =
+W(PD2)
+/
+W(PG1)
+(cid:16)L(PD2)(cid:17) (cid:16)L(PG1)(cid:17)
+PR =
+W(PU1)
+/
+W(PG1)
+(cid:16)L(PU1)(cid:17) (cid:16)L(PG1)(cid:17)
+Figure2.2: 6TSRAMwaveform
+Scaling of 6T SRAM is not possible because by reducing the size of 6T SRAM
+thestabilityandperformancereducessoconventional5TSRAMisproposedtofurther
+scalingofmemories.
+2.2 5T SRAM
+The conventional 5T SRAM cell is shown in Fig. 2.4. It consists of two CMOS cross-
+coupledinverters,PU1-PD1andPU2-PD2,whichisresponsibleforstoringasinglebit
+of data. Where (PU1 and PU2) load transistors, driver transistors (PD1 and PD2), and
+one access transistor, PG1 control access to the cross-coupled inverters for read and
+writeoperations.
+Read operation As shown in Fig 2.4. The word line (WL) is activated to initiate
+a read operation by turning ON the access transistor and pre-charging the bit lines BL.
+4
+
+[Image page_14_image_0.jpeg Analysis (by Gemini)]
+Here's a detailed analysis of the image based on your request:
+
+**Visual Elements and Structure:**
+
+The image is a waveform diagram. Waveform diagrams are commonly used in electrical engineering and computer science to illustrate the changes in signal values over time. This diagram shows the signal behavior of a 6T SRAM (Static Random Access Memory) cell during different operations.
+
+*   **Axes:** The horizontal axis represents time, segmented into different operating phases: "Reset," "Read," "Precharge," "Write," and "Precharge." The vertical axis represents signal amplitude, implicitly represented by high/low states or numerical values.
+*   **Waveforms:** The diagram contains several waveforms, each representing a different signal within the SRAM cell:
+    *   **WL (Word Line):** A pulse waveform that goes high during "Read" and "Write" operations.
+    *   **BL (Bit Line):** Shows changes in voltage depending on the operation and data stored.
+    *   **BLB (Bit Line Bar):** Complementary to BL, changes in the opposite direction during read and write.
+    *   **Q:** Represents the data stored in the SRAM cell (the stored bit).
+    *   **QB (Q Bar):** Represents the inverse of the data stored in the SRAM cell.
+
+**Text Within the Image:**
+
+*   **Labels (Horizontal Axis):**
+    *   Reset
+    *   Read
+    *   Precharge
+    *   Write
+    *   Precharge
+*   **Labels (Vertical Axis):**
+    *   WL
+    *   BL
+    *   BLB
+    *   Q
+    *   QB
+*   **Signal Values:**
+    *   BL=1, BL=0
+    *   BLB=1, BLB=0
+    *   Q>0, Q=0, Q=1
+    *   QB=1, QB=0
+
+**Significance of Waveforms:**
+
+*   **WL:** The word line is activated (goes high) during read and write operations to allow access to the SRAM cell.
+*   **BL and BLB:** These bit lines are used to read data from and write data to the SRAM cell. During the "Read" operation, one bit line discharges (goes low) depending on the stored value at 'Q'. During the "Write" operation, the bit lines are driven to specific values (BL to the new data value, BLB to the complement), which then forces 'Q' to store the new value.
+*   **Q and QB:** These represent the stored data and its complement. They change state during the write operation to reflect the new stored value. During the reset phase, Q starts with a value greater than 0 (Q>0) before stabilizing, indicating an initial state.
+
+**Image Context and Importance:**
+
+The image is labeled "Figure 2.2: 6TSRAM waveform". The surrounding text describes the operation of a 6T SRAM cell.
+
+*   **Overall Context:** The image illustrates the behavior of a standard 6T SRAM cell during read and write operations. The waveforms show how the word line, bit lines, and internal nodes (Q and QB) change their states to perform read and write functions.
+*   **Importance:** The figure is crucial for understanding how data is accessed and stored in a 6T SRAM cell. It visually represents the signal timing and voltage levels required for correct operation. The accompanying text explains how these signals interact during different operating modes, and is used by the authors as a baseline to build their work. The text and figure together help explain the limitations of the 6T SRAM and justify the introduction of the 5T SRAM for better scaling, even though the text also describes the limitations of the 5T SRAM cell and mentions write assist schemes.
+
+**Summary:**
+
+This figure provides a visual explanation of the operation of a 6T SRAM cell, covering the states of bitlines, wordlines, and internal nodes during read, write, reset, and precharge operations. The diagram is critical for understanding the functionality of the 6T SRAM cell, its limitations and why alternate SRAM designs are of interest to the authors of this paper.
+
+
+
+=== Page 15 ===
+Figure2.3: 5TSRAM
+If ‘0’ is stored at Q then BL discharges through PG1 and PD1 then the bit lines act as
+outputs, and a sense amplifier detects voltage changes on BL or BLB to determine the
+storeddatavalueat‘Q’.
+Write Operation As shown in Fig 2.4. During a write operation, a new data value
+is supplied on the bit line BL. The word line is activated, enabling PG1, and the new
+data will be stored at ‘Q’ in the SRAM cell, depending on the bit line value. However,
+writing ‘1’ is not possible in 5T SRAM because, in 5T, there is no PG2, so during
+writing ’1’ BL is set to VDD, the Q is initially at ’0’, and PD1 strength is more than
+PG1,andQBisat’1’soPD1isalwaysonsoPD1dischargesthenodeQtotheground
+and not allow the storing of ’1’, Write ’1’ is possible with a write assist scheme like
+boosting wordlinevoltageorreducing thesupply voltageVDD.However,asshownin
+Table 3.3, these techniques may result in reduced speed, increased memory area, and
+increased write time and overall power. In this work, we use VDD lowering of 0.6V
+and WL boosting of 0.3V to write ‘1’ in 5T SRAM at 130nm, and in 65nm a droop of
+0.25V,andaWLboostof0.2Visused.
+Foraniso-stablereadoperation,thiscellis3%denserthana6TSRAMcell,andits
+leakage is about the same as 6T SRAM. For Iso-Area, the leakage is also the same as
+6T,butin5T,writing’1’isnotpossiblewithoutawriteassistscheme. Then4TSRAM
+isproposedforfurtherscalingmemoriesandsolve5TSRAMwriteproblem
+5
+
+[Image page_15_image_0.png Analysis (by Gemini)]
+Here's an analysis of the image based on the provided context:
+
+**Image Analysis**
+
+*   **Visual Elements:** The image is a circuit diagram depicting a 5T SRAM (Static Random-Access Memory) cell. The diagram shows the arrangement of transistors and their connections. Key elements include:
+    *   **Transistors:** The diagram shows five transistors arranged in a specific configuration: two pull-up transistors (PU1 and PU2), two pull-down transistors (PD1 and PD2), and one pass gate (PG1). The Pull up transistors PU1 and PU2 have a circle on their gate, indicating that they are PMOS transistors. The pull down transistors PD1, PD2 and PG1 are NMOS transistors.
+    *   **Inverters:** The pull-up and pull-down transistors are connected to form two cross-coupled inverters.
+    *   **Bit Line (BL):** A vertical line labeled "BL" represents the bit line, which is used to read and write data to the cell.
+    *   **Word Line (WL):** A vertical line labeled "WL" represents the word line, which controls access to the cell.
+    *   **Nodes:** The diagram shows nodes labeled "Q" and "QB." Q represents the stored data value, and QB represents the complement of Q.
+    *   **Voltage Sources:** The diagram includes connections to the supply voltage VDD and ground.
+
+*   **Structure:** The 5T SRAM cell is structured around the two cross-coupled inverters (PU1-PD1 and PU2-PD2). The pass transistor PG1 provides access to the left-hand inverter (PU1-PD1) via the bit line BL when the word line WL is activated.
+
+*   **Text/Labels:** The following text is present in the image:
+    *   WL (Word Line)
+    *   BL (Bit Line)
+    *   PG1 (Pass Gate 1)
+    *   PU1 (Pull-Up 1)
+    *   PU2 (Pull-Up 2)
+    *   PD1 (Pull-Down 1)
+    *   PD2 (Pull-Down 2)
+    *   Q (Data Output)
+    *   QB (Inverted Data Output)
+    *   Vdd (Supply Voltage)
+
+**Context and Importance**
+
+The image is labeled as "Figure 2.3: 5TSRAM" and appears on page 5 of the research paper. This image serves as a visual representation of a conventional 5T SRAM cell, and is used to explain its operation. The text surrounding the image and in its caption describes how the cell stores data and how read and write operations are performed.
+
+The surrounding text clarifies that the 5T SRAM cell is an alternative to the 6T SRAM cell, especially as technology scales down. Scaling 6T SRAM is difficult, while the 5T SRAM offers better density but has limitations in writing '1' without write-assist techniques. The text explains the need for write-assist schemes (like VDD lowering or WL boosting) to enable writing '1' in 5T SRAM, and the trade-offs associated with these techniques (reduced speed, increased area, and increased power). The text mentions that the 4T SRAM is proposed for future scaling of memories and to solve the 5T SRAM write problem.
+
+Therefore, the image is important because it illustrates the fundamental structure of a 5T SRAM cell, which is a key component in memory design. The surrounding text describes the advantages and disadvantages of 5T SRAM compared to 6T SRAM, and the challenges associated with writing data to the cell. The image serves to explain this design alternative.
+
+
+=== Page 16 ===
+Figure2.4: 5TSRAMwaveform
+2.3 4T SRAM
+The conventional 4T SRAM cell is shown in Fig. 2.5. It consists of two CMOS cross-
+coupled NMOS, PD1, and PD2, which are responsible for storing a single bit of data.
+Where PD1 and PD2 are driver transistors, and two access transistors, PG1 and PG2,
+controlaccesstothecross-coupledinvertersforreadandwriteoperations.
+Figure2.5: 4TSRAM
+Read Operation As shown in Fig 2.6. The word line (WL) is activated to initiate
+a read operation by turning ON the access transistor and pre-charging the bit lines (BL
+and BLB). If ‘0’ is stored at Q then BL discharges through PG1 and PD1 then the bit
+lines act as outputs, and a sense amplifier detects voltage changes on BL or BLB to
+determinethestoreddatavalueat‘Q’.
+Write Operation As shown in Fig 2.6. A new data value is supplied on the bit
+lines(BLandBLB)forawriteoperation. Thewordlineisactivated,enablingPG1and
+6
+
+[Image page_16_image_0.jpeg Analysis (by Gemini)]
+Here's a comprehensive analysis of the provided image and its context within the research paper:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a timing diagram or waveform. It illustrates the voltage levels of different signals in an SRAM cell over time during read and write operations.
+*   **Axes:** The horizontal axis represents time, showing the sequence of operations like "Precharge," "Read1," "Write0," and "Write1."  The vertical axis implicitly represents voltage levels (high or low, represented by 1 or 0).
+*   **Waveforms:** There are five waveforms, each representing a different signal within the SRAM cell:
+    *   **WL (Word Line):** A control signal that activates the memory cell for read/write. The waveform shows pulses indicating when the cell is being accessed.
+    *   **BL (Bit Line):** Carries the data during read and write operations. 'BL=1' indicates a high voltage (representing a '1'), and 'BL=0' indicates a low voltage (representing a '0').
+    *   **Q:**  Represents the stored data at one of the storage nodes in the SRAM cell. 'Q=1' means the cell is storing a '1,' and 'Q=0' means it's storing a '0.'
+    *   **QB:** Represents the complement of the stored data (the inverse of Q).
+*   **Annotations:** The diagram includes labels above each operation phase (e.g., "Precharge," "Read1"). An important annotation is "Write 1 failure" with an arrow pointing to the Q waveform during the "Write1" operation.
+
+**Text within the Image (OCR Extraction):**
+
+*   **Labels (Above Waveforms):**
+    *   Precharge
+    *   Read1
+    *   Write0
+    *   Read0
+    *   Write1
+*   **Signal Values (Within Waveforms):**
+    *   WL
+    *   BL=1
+    *   BL=0
+    *   BL<1
+    *   Q=1
+    *   Q=0
+    *   Q>0
+    *   Q<1
+    *   QB=0
+    *   QB=1
+*   **Annotation:**
+    *   Write 1 failure (with an arrow)
+
+**Significance of Visual Elements:**
+
+*   The waveforms show the expected behavior during read and write operations for storing a '0' and a '1'.
+*   The key observation is the "Write 1 failure." The waveform for Q during the "Write1" operation doesn't reach a full '1' level (it's labeled as "Q<1"). This indicates that the SRAM cell cannot reliably store a '1' using a standard write operation.
+*   The diagram visually demonstrates the issue of writing '1' to a 5T SRAM cell.
+
+**Context and Importance:**
+
+*   **Image Label:** The image is labeled as "Figure 2.4: 5TSRAMwaveform".
+*   **5T SRAM Issue:** The surrounding text describes the challenges of writing a '1' to a 5T SRAM cell.  Unlike a 6T SRAM cell, a 5T SRAM cell lacks a dedicated access transistor for one side of the bit cell. This asymmetry makes it difficult to reliably force the cell to store a '1' during a write operation. The waveform in Figure 2.4 provides a visual representation of this limitation.
+*   **Write Assist Techniques:** The surrounding text also mentions "write assist" techniques (like boosting the word line voltage or reducing the supply voltage) to overcome the "Write 1 failure."
+
+**Overall Importance:**
+
+The image is crucial because:
+
+1.  **Illustrates the Problem:** It provides a clear visual representation of the write '1' failure in 5T SRAM, a key limitation.
+2.  **Contextualizes Research:** It justifies the need for the write assist techniques and/or alternative SRAM cell designs that the research paper may be exploring or proposing.
+3.  **Links Theory and Practice:** It bridges the theoretical explanation of the 5T SRAM write issue with a simulated or measured waveform, making the problem more concrete.
+
+
+
+[Image page_16_image_1.jpeg Analysis (by Gemini)]
+Here's a thorough analysis of the image, based on the provided context:
+
+**Image Analysis**
+
+*   **Type:** The image is a circuit diagram, specifically representing a 4T SRAM (Static Random-Access Memory) cell.
+*   **Elements and Structure:**
+    *   **Transistors:** It shows four transistors arranged in a specific configuration: two pull-down transistors (PD1 and PD2) and two pass gate transistors (PG1 and PG2). All transistors appear to be MOSFETs (Metal-Oxide-Semiconductor Field-Effect Transistors). PG1 and PG2 are PMOS transistors, while PD1 and PD2 are NMOS transistors.
+    *   **Cross-Coupled Inverters:** PD1 and PD2 are connected to form two CMOS cross-coupled inverters.
+    *   **Bit Lines (BL and BLB):** Two vertical lines labeled "BL" and "BLB" represent the bit lines.
+    *   **Word Line (WL):** A vertical line labeled "WL" represents the word line.
+    *   **Nodes:** The nodes connecting the transistors are labeled Q and QB
+    *   **Ground:** A ground symbol is present, indicating the ground connection for the circuit.
+*   **Text within the Image:**
+    *   `WL`: Word Line
+    *   `BL`: Bit Line
+    *   `BLB`: Bit Line Bar (complementary bit line)
+    *   `PD1`: Pull-Down transistor 1 (NMOS)
+    *   `PD2`: Pull-Down transistor 2 (NMOS)
+    *   `PG1`: Pass-Gate transistor 1 (PMOS)
+    *   `PG2`: Pass-Gate transistor 2 (PMOS)
+    *   `Q`: Node Q
+    *   `QB`: Node QB
+
+**Context and Importance**
+
+*   **Overall Context:** The image is part of a research paper investigating SRAM cell designs, likely comparing the performance characteristics of different SRAM architectures (e.g., 4T, 5T, and 6T). The 4T SRAM cell is being presented as one possible design for memory applications, especially in the context of scaling down memory sizes and addressing issues related to leakage, power, speed, and area. The image serves as a visual representation of the circuit being discussed.
+*   **Significance:**
+    *   The surrounding text indicates that 4T SRAM is being investigated as a potential solution to some of the limitations of other SRAM cells (like 6T) at smaller technology nodes (e.g., 130nm, 65nm).
+    *   The text emphasizes the importance of the driver transistors (PD1 and PD2) for maintaining stability during the read operation.
+    *   The document is attempting to improve on the 5T SRAM design, which can not store '1', and also attempting to improve on the 6T SRAM cell design, which can have high leakage and area. The 4T SRAM cell aims to solve these shortcomings.
+*   **Relationship to Surrounding Text:** The figure is explicitly referred to in the text as "Fig. 2.5: 4TSRAM". The text then describes the basic structure of the 4T SRAM cell, referencing PD1, PD2, PG1, and PG2, directly corresponding to the labels in the image.
+*   **Overall Purpose of Image:**
+    *   To provide a clear visual understanding of the 4T SRAM cell structure.
+    *   To facilitate the discussion of its operation (read and write operations) by providing a visual reference for the components being described.
+    *   To serve as a basis for comparison with other SRAM cell designs discussed in the paper (e.g., 5T, 6T).
+
+
+=== Page 17 ===
+PG2,andthenewdatawillbestoredat‘Q’intheSRAMcell,dependingonthebitline
+values.
+Duringstandbymode,thewordlinesareinactive,turningoffPG1andPG2,andthe
+SRAMcellretainsitsstoreddatawithout anychanges.
+Figure2.6: 4TSRAMWaveform
+In a 130nm to maintain the iso stable read, the size of the driver transistors PD1
+and PD2 must be larger than that of the 6T SRAM. As a result, there is up to an 11%
+increaseinareaandupto2.5Xincreaseinleakagecomparedtothe6TSRAM.
+For the Iso area, 4T has a lower static read noise margin than 6T SRAM and up
+to 2.5X and 1.58X higher leakage compared to the 6T SRAM in 130nm and 65nm
+respectively. Therefore,thereisaneedforanefficientSRAMcellthathaslowerleakage
+without degradation of performance. Then researchers have proposed a range of Static
+Random-Access Memory (SRAM) cells to address various issues related to leakage,
+power,speed,andarea.
+2.4 Other Existing SRAM Cells
+Someapproaches,describedin[3]-[7],useamorenumberoftransistorsperbit-celland
+different threshold voltage (Vt) transistors to reduce leakage and improve performance
+However, this approach does not reduce area and faces challenges during fabrication
+because the transistor requires different diffusion type to change the threshold voltage,
+resultinginhighercosts.
+7
+
+[Image page_17_image_0.jpeg Analysis (by Gemini)]
+Here's an analysis of the image based on your provided text and the surrounding context:
+
+**Image Analysis**
+
+*   **Visual Elements:** The image is a waveform diagram. It shows the voltage levels of different signals within the 4T SRAM cell over time during various operations. There are six plots horizontally aligned and showing the variation of a few parameters as function of the time.
+
+*   **Structure:** The diagram has a horizontal time axis implicitly divided into stages: "Reset", "Read", "Precharge", "Write", and "Precharge". Vertically, it displays the voltage levels of the following signals, arranged from top to bottom:
+    *   WL (Word Line): Controls access to the SRAM cell.
+    *   BL (Bit Line): One of the two bit lines used for reading and writing.
+    *   BLB (Bit Line Bar): The complement of the Bit Line (BL).
+    *   Q: The data stored in the SRAM cell.
+    *   QB: The complement of the data stored in the SRAM cell.
+
+*   **Text within the Image:**
+    *   Labels above the time axis sections: "Reset", "Read", "Precharge", "Write", "Precharge"
+    *   Signal labels on the left: "WL", "BL", "BLB", "Q", "QB"
+    *   Voltage levels/Data values at various points:
+        *   BL=1, BL=0, BLB=1, BLB=0, Q>0, Q=0, Q=1, QB=1, QB=0
+
+*   **Signal behavior:** The image shows how the signals change their state over time. It shows the various operations of the 4T SRAM cell.
+    *   The reset operation starts with setting WL to be high, bitlines (BL, BLB) to be 1, Q>0, and QB to be 1.
+    *   During read, WL is high, BL goes to 0, BLB stays at 1, Q is 0, and QB is 1.
+    *   During write, WL is high, BL is 1, BLB goes to 0, Q is 1, and QB is 0.
+    *   The bit lines and the data values are pre-charged between read and write.
+
+**Context and Importance**
+
+*   **Overall Context:** The image, labeled as "Figure 2.6: 4TSRAMWaveform", illustrates the read and write operations of a 4T SRAM (Static Random-Access Memory) cell. This is a type of memory cell that uses four transistors to store a bit of data. The preceding figures (2.4 and 2.5) likely depict the 5T SRAM and the 4T SRAM cell structure respectively.
+
+*   **Importance:** The waveform is crucial for understanding how the 4T SRAM cell functions. It visualizes the changes in voltage levels on the word line (WL), bit lines (BL, BLB), and the stored data (Q and QB) during read and write operations. By showing the timing and state transitions of these signals, the waveform enables researchers to analyze the cell's behavior, performance, and potential limitations.
+
+*   **Significance Based on Text:** The surrounding text highlights the trade-offs of using a 4T SRAM cell compared to the more common 6T SRAM cell. While the 4T SRAM can be simpler, it has disadvantages like larger area, higher leakage current, and lower static read noise margin. The need for an efficient SRAM cell with lower leakage and maintained performance motivates the research presented in the paper. The waveform helps visualize these performance characteristics and provides a baseline for evaluating new SRAM cell designs. The waveform also helps understanding how the 4T SRAM's operations work. The description of the write and read operations in the text describe the functionality depicted in the figure.
+
+
+
+=== Page 18 ===
+Another approach, as proposed in [8], utilizes an asymmetric inverter pair to create
+acellwithonewriteportwithasingleBitLine(BL)andonereadportwithdifferential
+BL.Thecellusesthecomplementofinputdatatoperformthewriteoperation,prevent-
+ing the single write BL from discharging if the written value is ’0’. Thus, the write ’0’
+powerissignificantlylessthanthewrite’1’power. However,thisapproachrequiresan
+additionaltransistor perbit-cell,resulting inincreasedmemoryarea.
+In [9], another approach is proposed that uses one extra transistor per bit cell com-
+paredtoaconventional6TSRAMcelltoreducepowerandsofterror. Itreducespower
+consumption butincreasesthearea.
+In[10],the5TSRAMcellisproposedbyeliminatingoneaccesstransistorfromthe
+conventional6TSRAMcell. Theproposedcellhasreducedareaandleakage,butwrit-
+ing ’1’ is only possible in 5T SRAM with a write assist scheme. Hence, the approach
+uses VDD lowering and a word line boosting scheme for writing ’1’. However, this
+approachrequiresanadditionalpowersupplyinthememoryarray,leadingtoincreased
+memorycostandmorecomplexcircuitry inthememorycelltoproducethesupply.
+In[11]-[12],anotherapproachisproposeda5TSRAM,thewriting’1’donewithout
+anyconventionalwrite-assistmechanism. Thisapproachutilizesadditionalcircuitryper
+columntowrite’1’inthememorycell. However,theproposedcircuitrycontainsmany
+transistors,andtheareapenaltyismoresignificant.
+In[14]-[17], theyusedifferent voltagesuppliesforwriting andreadinginSRAM
+Therefore, these proposed approaches have varying drawbacks. Thus, SRAM cells
+are needed that have lower leakage and higher density. We proposed two different
+SRAMcellsthatprovidelowerleakage,highdensity,andsimilarperformance.
+8
+
+=== Page 19 ===
+CHAPTER 3
+Proposed Memory SRAM cells
+3.1 Proposed 4TA SRAM Cell
+Figure3.1: 4TASRAMCell
+The proposed 4TA SRAM cell is shown in Fig. 3.1. It consists of PMOS access
+transistor PG1, NMOS driver transistors PD1 and PD2, and load transistor PU2. The
+bitlineintheproposedcellisconnectedtoabitlinesuppressioncircuit,whichisshared
+across the column and used to connect a BL to a signal PR by using M3 and M4 tran-
+sistors, and an RW/H signal controls these transistors. The bit line suppression circuit
+helps in the reduction of the voltage of the bit line (VDD-V ) in the standby mode
+TM3
+to reduce the drain-source voltage V of transistor PG1, reduces leakage through
+DSPG1
+access transistor PG1 when PG1 is OFF. Here, V is the threshold voltage of the
+TM3
+transistorM3.
+The write assist circuit is also shared across the column. It consists of a diode-
+connected transistor M2 parallel to an M1 NMOS transistor controlled by signal A.
+The write assist circuit sets the node P voltage to V during a write ‘1’ operation
+GSM2
+9
+
+[Image page_19_image_0.jpeg Analysis (by Gemini)]
+Here's a detailed analysis of the image provided, based on the surrounding text and its visual elements:
+
+**Overall Context and Importance:**
+
+The image (Figure 3.1) is a schematic diagram of a proposed 4TA (4 Transistor Assist) SRAM cell, presented in Chapter 3 of a research paper focusing on memory SRAM cell design.  The surrounding text highlights the need for SRAM cells that offer lower leakage and higher density, a need driven by the drawbacks of existing SRAM cell designs (5T, 6T, etc.). The proposed 4TA SRAM cell aims to address these limitations. This image is crucial because it visually represents the architecture of the proposed solution, enabling readers to understand its key components and how they interact. The image, together with table 3.1 (mentioned in the text), and figures 3.2 and 3.3, is key to understanding this novel approach.
+
+**Visual Elements and Structure:**
+
+The image is a circuit diagram. It consists of the following key elements:
+
+*   **Transistors:** The diagram shows several transistors represented using standard circuit symbols. NMOS transistors are represented by a line connected to a line with an arrow on it. PMOS transistors are shown with a circle connected to the gate of a transistor.
+
+*   **Lines and Connections:** Lines represent electrical connections. Nodes within the circuit are clearly marked.
+
+*   **Labels:** Labels are used to identify the key components and signals in the circuit.
+
+*   **Enclosures**: The "Bit line suppression circuit" and "Write Assist circuit" are enclosed in a dashed line area for easy identification.
+
+**Text within the Image:**
+
+The following text is visible within the image (this is more precise than the original OCR):
+
+*   **VDD:** Supply voltage.
+*   **BL:** Bit Line.
+*   **WL:** Word Line.
+*   **Q, QB:** Output nodes of the SRAM cell (QB is Q bar - the inverse of Q).
+*   **P:** Internal node within the write assist circuit.
+*   **PG1:** PMOS Access Transistor 1.
+*   **PD1, PD2:** NMOS Driver Transistors 1 and 2.
+*   **PU2:** PMOS Load Transistor 2.
+*   **M1, M2, M3, M4:** Transistors within the bit line suppression and write assist circuits.
+*   **A:** Control signal for the write assist circuit.
+*   **PR:** Signal related to the bit line suppression circuit.
+*   **RW/H:** Read/Write-Hold signal for the bit line suppression circuit.
+*   **Bit line suppression circuit:** Label for the bit line suppression section.
+*   **Write Assist circuit:** Label for the write assist section.
+*   **I/O region:** Label to signify where the bit line suppression and write assist circuits are.
+
+**Significance of the Components and Circuits:**
+
+*   **4TA SRAM Cell Core (PG1, PD1, PD2, PU2):** This is the core memory storage element. The arrangement of these transistors forms a latch that stores a single bit of information. The PMOS transistor PU2 acts as a load resistor to maintain a high voltage level when the transistor is in an OFF state. The access transistor PG1 controls access to the cell during read/write operations.
+
+*   **Bit Line Suppression Circuit (M3, M4, PR, RW/H):** According to the text on page 9, this circuit reduces the voltage of the bit line (BL) in standby mode (VDD - VTM3) to lower the drain-source voltage (VDS) of PG1. This reduces leakage current through the access transistor when it is OFF.
+
+*   **Write Assist Circuit (M1, M2, A):**  The write assist circuit is used to facilitate writing '1' to the cell.  As mentioned in the text, when writing '1', signal A is low, turning off M1 and enabling the diode-connected transistor M2 to set the node P voltage to VGSM2. This reduces the drain-source voltage (VDS) of PD1, weakening it, allowing PG1 to effectively write a '1' to the node Q.
+
+**Overall Image Analysis:**
+
+The image provides a clear schematic of the proposed 4TA SRAM cell, highlighting the core memory element, the bit line suppression circuit, and the write assist circuit. These two supporting circuits are crucial innovations to address the shortcomings of current SRAM cell designs. Understanding this schematic is paramount to grasping the proposed improvements of the 4TA cell (lower leakage and higher density), and for interpreting the results presented later in the paper.
+
+
+
+=== Page 20 ===
+Figure3.2: 4TASRAMarraywithAssistcircuitryindifferentmodesofoperation.
+to reduce the drain-source voltage V of Driver transistor PD1. This reduces the
+DSPD1
+strength of the Driver transistor PD1 and enables writing ‘1’ through access transistor
+PG1atnodeQ.Here,V isthegate-sourcevoltageofthetransistorM2. Duringread,
+GSM2
+write‘0’, and standby mode, signal A is set to VDD, causing node P to be connected to
+theground.
+ThevoltagelevelsofthesignalsA,PR,RW/H,BL,andWLdependonthedifferent
+modesofoperation,asshowninTable3.1.
+3.1.1 Write operation
+Write ‘1’- During the write ‘1’ operation, as shown in Fig. 3.3, the signal A is set to
+logic low, which turns OFF the transistor M1. This causes node P to be connected to a
+diode-connected transistor M2, as shown in Fig.3.2. As a result, the node P voltage is
+set to V , causing a reduction in the drain-source voltage V of PD1, increases its
+GSM2 DS
+resistance, thereby reducing its strength, enabling the writing of ‘1’ through PG1. The
+10
+
+[Image page_20_image_0.png Error]
+No API key available for start.
+
+
+=== Page 21 ===
+Figure3.3: 4TASRAMReadandWriteOperation
+Table3.1: VoltageLevelofSignalsin4TASRAMCell
+Operation A PR RW/H BL WL
+Read VDD VDD 0V VDD 0V
+Write0 VDD 0V VDD 0V 0V
+Write1 0V VDD 0V VDD 0V
+Hold VDD VDD VDD VDD-V VDD
+TM3
+signalPRissettologichigh,andthesignalRW/Hissettologiclow,whichcausesthe
+BL voltage to be at logic high. The word line (WL) is set to logic low, and transistor
+PG1isturnedON.
+Assuming that ‘1’ is stored previously, the node Q voltage remains at logic high.
+However, if a logical ‘0’ is stored previously, In this case, node Q will be charged to
+VDDthrough PG1.
+Write ‘0’- During the write ‘0’ operation, as shown in Fig. 3.2, the signal A is set
+to logic high, which turns on the transistor M1. As a result, the node P voltage is set to
+ground voltage, as shown in Fig.3.3. The signal PR is set to logic low, and the signal
+RW/H is set to logic high, which causes the BL voltage to be at ground voltage. The
+wordlineissettologiclow,andtransistorPG1isturnedON.
+Assumingthat‘0’isstoredatnodeQpreviously,thenodeQvoltageremainsatthe
+ground voltage. However, if ‘1’ is stored at node Q previously, Q will be discharged to
+groundvoltageviaPG1andPD1.
+11
+
+[Image page_21_image_0.png Error]
+No API key available for start.
+
+
+=== Page 22 ===
+3.1.2 Read operation
+During the read operation, as shown in Fig. 3.2, the signal A is at logic high, which
+turnsONthetransistorM1. Asaresult,thenodePvoltageissettothegroundvoltage,
+as shown in Fig. 3.3. The signal PR is set to logic high, and the signal RW/H is set to
+logiclow,whichcausestheBLvoltagetobeatlogichigh.
+If ‘0’ is stored at node Q. When the signal WL becomes logic low, transistor PG1
+is turned ON, and BL discharges through PG1 and PD1. When ‘1’ is stored at node
+Q, the voltage of BL remains at a high logic level, and the BL acts as an output. The
+sense amplifier detects voltage fluctuations on BL to determine the stored data value at
+Q,representingtheSRAMcelldata.
+3.1.3 Standby Operation
+During the standby operation, as shown in Fig. 3.3, the signal A is set to logic high,
+which turns ON the transistor M1. As a result, the node P voltage is set to the ground
+voltage. The signals PR and RW/H are set to logic high, which causes the voltage of
+BL to be at (VDD-V ), as shown in Fig.3.2. Where V is the threshold voltage
+TM3 TM3
+of transistor M3. This reduces the drain-source voltage of the access transistor, which
+helps reduce the bit line leakage through the access transistor when WL is logic high.
+However, the ON resistance of the transistors M1 and M2 reduces the strength of the
+drivertransistorPD1,which,inturn,causesareduction instandbyefficiency.
+Duringawriteoperationinabitcell,theothercellsinthesamecolumnareputinto
+hold mode and share the write circuitry in write mode, causing the node P voltage to
+V , which significantly reduces the strength of the driver transistor by decreasing
+GSM2
+the drain-source voltage of PD1. Therefore, if ‘0’ is stored on node Q and any noise
+changesthevoltageofnodeQ,PD1maynotbeabletodischargenodeQtotheground
+because node P is not at the ground voltage, reducing the standby efficiency of the
+standbycellinacolumnduring write,whichispresentedinTable3.3.
+12
+
+=== Page 23 ===
+Table3.2: SizeofTransistorsin6T,5T,4T,and4TASRAMcellsandAssistCircuitry
+Transistors 6T 5T 4T 4TA
+PG1(W/L) 0.60/0.15 0.60/0.15 0.60/0.15 0.60/0.15
+PG2(W/L) 0.60/0.15 NA 0.60/0.15 NA
+PD1(W/L) 0.90/0.15 0.90/0.15 1.60/0.15 1.40/0.15
+PD2(W/L) 0.90/0.15 0.90/0.15 1.60/0.15 0.45/0.15
+PU1(W/L) 0.45/0.15 0.45/0.15 NA NA
+PU2(W/L) 0.45/0.15 0.45/0.15 NA 0.45/0.15
+M1,M2(W/L) NA NA NA 2.00/0.15
+M3,M4(W/L) NA NA NA 1.00/0.15
+Table3.3: ComparisonofFOMsFor6T,5T,4T,and4TASRAMCells
+FOMs 6T 5T 4T 4TA
+ReadSNM(µ/σ) 30.81 30.81 30.80 30.81
+FS/1.62V/125◦C
+HoldSNM(Q=‘0’)(µ/σ) 55.25 55.25 28.29 59.53
+FS/1.62V/125◦C
+HoldSNM(Q=‘1’)(µ/σ) 55.25 55.25 28.29 28.09
+FS/1.62V/125◦C
+HSNMofneighboring cellsincolumn 55.25 55.25 28.29 15.18
+duringwriteinabitcell(µ/σ)
+WriteMargin(write ‘1’)(µ/σ) 50.89 17.31 10.40 17.57
+SF/1.62V/-40◦C
+WriteMargin(write ‘0’)(µ/σ) 50.89 41.05 10.40 10.57
+SF/1.62V/-40◦C
+WriteTime(nsec) 0.110 3.000 0.600 0.560
+SF/1.62V/-40◦C
+CellCurrent(µA) 135.0 135.0 67.30 66.50
+SS/1.62V/125◦C
+BLdischargerate(mV/psec) 8.05 8.05 3.00 2.500
+SS/1.62V/125◦C
+Leakage(pA)(Q=‘0’) 36.20 35.20 90.00 9.000
+TT/1.8V/25◦C
+Leakage(pA)(Q=‘1’) 36.20 33.10 90.00 33.40
+TT/1.8V/25◦C
+Area(32X32array)(um2) 7004 6850 7794 6519
+13
+
+=== Page 24 ===
+3.1.4 Result and Comparative Analysis
+SRAM cells are benchmarked along various Figures of Merit (FOMs), such as Read
+StaticNoiseMargin(RSNM),HoldStaticNoiseMargin(HSNM),WriteMargin,Leak-
+age,Cellcurrent,WriteTime,Bitlinedischargerate,andArea[18]-[19]. Tobenchmark
+the proposed 4TA SRAM, we designed the 32X32 SRAM array that can be configured
+asSRAM.
+We characterized all the Figures of Merit (FOMs) of cells using 130 nm CMOS
+technology. We ran Monte Carlo simulations (1,000 samples) to estimate FOMs and
+computed all the FOMs on their Worst Process, Voltage, and Temperature (PVT). We
+ensurethatalltheFOMsare6-sigmaqualifiedtoensuregoodyield.
+Area
+Thelayoutofa4x4arrayisacomponentofa32X32arrayof6TSRAM,5TSRAM,4T
+SRAM,and4TASRAMcellsin130nmCMOStechnologywiththeiso-stablereadsize
+is shown in Figs. 3.4-3.7, respectively. TABLE 3.2 shows the device sizes for SRAM
+cells and assist circuitry. The layouts show the share diffusion regions, n-wells, polys,
+contacts, and vias in an SRAM architecture by flipping adjacent cells horizontally and
+vertically. Table II shows the total area of all SRAM cells. For a 32X32 SRAM array,
+the 4TA SRAM with assist circuitry has a 7% higher density than the 6T SRAM, 5%
+higherdensitythanthe5T,and16%higherdensitythanthe4TSRAM.
+Figure3.4: 4X46TSRAMLayouthighlighting singlecell(130nm)
+14
+
+[Image page_24_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 25 ===
+Figure3.5: 4X45TSRAMLayouthighlighting singlecell(130nm)
+Figure3.6: 4X44TSRAMLayouthighlighting singlecell(130nm)
+15
+
+[Image page_25_image_0.jpeg Error]
+No API key available for start.
+
+
+[Image page_25_image_1.jpeg Error]
+No API key available for start.
+
+
+=== Page 26 ===
+Figure3.7: 4X44TASRAMhighlighting singlecellandassistcircuit(130nm)
+FiguresOfMerit
+StaticNoiseMargin
+SNM is a measure of cell stability and ensures that memory content is not corrupted
+during the memory operation. RSNM represents the maximum noise voltage that the
+cross-coupled nodes can endure without causing the cell’s data to flip during a read
+operation. Since all the cells were designed for iso-stable read, all cells have the same
+RSNM,
+HSNMisameasureofnoisevoltagethatcanbetoleratedatthecross-couplednodes
+without flipping the cell data during standby mode. The HSNM of 4TA also degraded
+becausethe4TAdoesnothavealoadtransistor(PU1)like6T.If‘1’isstoredatnodeQ,
+thenifthenoisechangesthevoltageofnodeQ,thereisnoloadtransistor(PU1)in4TA
+to support node Q voltage, thus degrading the HSNM. We observed that the HSNM of
+4TAisdegradedby49%comparedto6T.
+16
+
+[Image page_26_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 27 ===
+Figure3.8: 32X324TAmemory arrayleakage
+Leakage
+Leakage is the current that flows when the cell is in hold mode. In our analysis, we
+used battery life as the inverse of leakage. It is important to note that the leakage of
+the 4TA SRAM is data-dependent, as shown in Fig. 3.8. When ‘0’ is stored at node Q,
+then access transistor PG1 leaks lower because the bit line suppression circuit reduces
+its drain-source voltage, and PD1 also leaks lower, but when ‘1’ is stored at Q, then
+drivertransistorPD1leaksmorebecause,it’ssizein4TASRAMcellislargerthanthat
+of6T,whichleadstomoreleakagebutsupplyleakageislowerin4TASRAMcellthan
+6T due to fewer transistors. Therefore, When ‘0’ is stored at node Q, the leakage is
+reduced up to 75%, 74%, and 90%, respectively, compared to conventional 6T, 5T, and
+4TSRAMcells. However,when‘1’isstoredatnodeQ,theleakageinthe4TASRAM
+cell is equivalent to that of the conventional 6T and 5T SRAM cell but 63% lower than
+theconventional 4TSRAMcell.
+WriteMargin
+Thewritemarginforthe4TAand4TSRAMcellsisdefinedasthethemaximumvoltage
+of WL at which new data can be written into the cell when bit-lines are precharged to
+VDD. For 6T and 5T SRAM cells, the write margin is defined as the minimum voltage
+of WL at which new data can be written into the cell when bit-lines are at 0V. In the
+4TASRAMcell,theprocessofwriting‘0’isdonethroughthedrivertransistorPD1as
+17
+
+[Image page_27_image_0.png Error]
+No API key available for start.
+
+
+=== Page 28 ===
+theaccesstransistorPG1isPMOSanddoesnotpassfullzero. Ontheotherhand,in6T
+SRAM,boththeaccesstransistoranddrivertransistorareNMOS,whichdischargesthe
+node Q to write ‘0’. This leads to a 79% degradation in the Write Margin for writing
+‘0’ in the 4TA SRAM cell compared to the 6T SRAM. Write ‘1’ is done through BL
+via PG1 in the 4TA SRAM cell, while in the 6T SRAM, both PG1 and PU1 are used
+for writing ‘1’. This results in a 65% degradation in Write Margin for write ‘1’ in the
+4TASRAMcellcomparedtothe6TSRAM
+CellCurrent
+Cell current is the current that flows through the read transistor during the read opera-
+tion. To measure it, the BL is precharged to the VDD, while the WL is set to 0V. The
+current passing through the read transistor PG1 is then measured and presented as the
+readcurrent. Duringthereadoperationinthe4TASRAMcell,theONresistanceofthe
+writeassistcircuittransistorM1reducesthestrengthofthePulldownTransistor(PD1),
+thereby reducing the cell current through the access transistor (PG1). As a result, the
+cellcurrentofthe4TASRAMcellisdegradedby2Xcomparedtothe6TSRAM.
+Performance
+Performanceisdirectlyproportional totheBLdischargerate. TheBLdischargerateis
+computedasthesingle-endedvoltagecreationrateontheBLduringthereadoperation
+for 4TA. It is effectively the ratio of the BL discharge value to the time it takes to
+dischargetheBLbythatvalue. TheBLcapacitanceisextractedfor32rowstocalculate
+the discharge rate. However, the 4TA SRAM cell’s performance is degraded by 3X
+compared to 6T. Hence, The proposed 4TA SRAM is a good fit for lower leakage and
+high-density applicationsbutoperatesatlowerfrequencies.
+WriteTime
+WriteTimeisthetimetowritea0and1inabitcell. In4TASRAM,wefoundthatthe
+writetimedegradesduetotheassistcircuitry. In4TASRAM,thewritesloweddownto
+6.62X and 1.03X compared to 6T and 4T SRAM, respectively, but improved to 3.83X
+18
+
+=== Page 29 ===
+then 5T SRAM because in 5T SRAM, write is done by VDD lowering and word line
+boosting,whichincreasesthewritetimefor5TSRAM.
+Fig. 3.9 shows the benchmarking of the various FOMs in the form of a radar chart
+forallcells. Thelargerthefootprint, thebetterthecellFOM.
+Figure3.9: Comparision of6T,5T,4Tand4TASRAMcellsacrossvariousFOMs
+Hence the 4TA SRAM cell has 7%, 5%, and 16%, respectively, higher density than
+conventional6T,5T,and4TSRAMcells. Ithasupto75%,74%,and90%,respectively,
+lowerleakagethantheconventional6T,5T,and4TSRAMcellforaniso-stable32X32
+memory array. but the performance of 4TA is degraded by 3X compared to 6T, so we
+movetoanotherSRAM,whichisafive-transistorSRAMknownas5TA.
+19
+
+[Image page_29_image_0.png Error]
+No API key available for start.
+
+
+=== Page 30 ===
+3.2 Proposed 5TA SRAM Cell
+Figure3.10: 5TASRAMcell
+The proposed 5TA SRAM cell is shown in Fig. 3.10. It consists of two PMOS
+access transistors, PG1 and PG2, two NMOS driver transistors, PD1 and PD2, and one
+read transistor, PR1. A write-assist circuit is shared across the column in memory and
+consistsoffourNMOStransistors,M1,M2,M3,andM3. Thedatabitsarestoredinthe
+back-to-backNMOSpair,i.e.,PD1andPD2. ThesourcesofPG1andPG2arecoupled
+and connected to the BL (bit line), and both PG1 and PG2 are driven by the WL (word
+line). The read operation uses transistor PR1, which is controlled by the node QB. The
+drain of PR1 is connected to the RBL (Read bit line), and the source is connected to
+anRWL(Readwordline)ThePD1sourceisconnectedtoadiode-connectedtransistor
+M2 and M1 transistor controlled by signal W1, and the PD2 source is connected to a
+diode-connectedtransistorM3andM4transistorcontrolledbysignalW0.
+The voltage levels of the signals W0, W1, WL, BL, RBL, and RWL in different
+modesofSRAMoperation,asshowninTable3.3.
+In this SRAM, data is maintained either through direct connection to the ground
+or through leakage current. When Q=1 and QB=0, the data at node Q is maintained
+throughleakagecurrentflowthroughPG1,andatnodeQB,dataismaintainedthrough
+directconnectiontogroundviaPD2.
+20
+
+[Image page_30_image_0.png Error]
+No API key available for start.
+
+
+=== Page 31 ===
+Figure3.11: 5TASRAMarraywithAssistcircuitryindifferentmodesofoperation.
+Figure3.12: 5TASRAMReadandWriteOperation
+21
+
+[Image page_31_image_0.jpeg Error]
+No API key available for start.
+
+
+[Image page_31_image_1.jpeg Error]
+No API key available for start.
+
+
+=== Page 32 ===
+3.2.1 Write operation
+Write ‘1’- During the write ‘1’ operation, as shown in Fig. 3.12, The WL is set to 0V,
+causing transistor PG1 to be turned ON. BL voltage is set to VDD. W0 is set to VDD,
+whichturnsONM4,causingnodeGND2tobeconnectedtoa0V.ThesignalW1isset
+to 0V, which turns OFF the transistor M1. This causes node GND1 to be connected to
+a diode-connected transistor M2, as shown in Fig. 3.11. As a result, the node GND1
+voltagerises,causingareductioninthedrain-sourcevoltageV ofPD1,increasingits
+DS
+resistance, and thereby reducing its strength, enabling the writing of ‘1’ through PG1.
+Ifa‘0’isstoredatnodeQpreviously,nodeQwillbechargedtoVDDthroughPG1.
+Write ‘0’- During the write ‘0’ operation, as shown in Fig. 3.12, The WL is set
+to 0V, causing transistor PG1 to be turned ON. BL voltage is set to VDD. W1 is set to
+VDD, which turns ON M1, causing node GND1 to be connected to a 0V. The signal
+W0 is set to 0V, which turns OFF the transistor M3. This causes node GND2 to be
+connected to a diode-connected transistor M3, as shown in Fig. 3.11. As a result,
+the node GND2 voltage rises, causing a reduction in the drain-source voltage V of
+DS
+PD2,increasingitsresistance,therebyreducingitsstrength,enablingthewritingof‘1’
+through PG2 at node QB. If ‘1’ is stored at node Q previously, Q will be discharged to
+groundvoltageviaPG1andPD1.
+3.2.2 Read operation
+The5TASRAMhasdecoupledread-throughtransistorPR1. Duringthereadoperation,
+theRWLissetto0V,RBLissettoVDD,andAssistcircuitryduringthereadoperation
+is shown in Fig. 3.11. The signals W1 and W0 are at VDD, which turns ON the
+transistors M1 and M3. As a result, the node GND1 and GND2 voltages are set to the
+0V. During the read operation, as shown in Fig. 3.12, If ‘1’ is stored at node QB, then
+transistor PR1 is ON causing RBL discharges through PR1, If ‘1’ is stored at QB then
+transistorPR1isoff,andRBLdoesnotdischarge. Thensenseamplifierdetectsvoltage
+changes on RBL to determine the stored data value at Q, representing the SRAM cell
+data.
+22
+
+=== Page 33 ===
+Table3.4: VoltageLevelofsignalsin5TASRAMCell
+Operation W0 W1 WL BL RBL RWL
+Read VDD VDD VDD VDD VDD 0
+Write0 VDD 0 0 VDD VDD VDD
+Write1 0 VDD 0 VDD VDD VDD
+Hold VDD VDD VDD VDD VDD VDD
+Table3.5: SizeofTransistorsin6T,5T,4T,and5TASRAMcellsandAssistCircuitryin
+130nm
+Transistors 6T 5T 4T 5TA
+PG1(W/L) 0.60/0.15 0.60/0.15 0.6/0.15 0.45/0.18
+PG2(W/L) 0.60/0.15 NA 0.60/0.15 0.45/0.18
+PD1/PD2(W/L) 0.90/0.15 0.90/0.15 1.0/0.15 0.8/0.15
+PU1/PU2(W/L) 0.45/0.15 0.45/0.15 NA NA
+PR1(W/L) NA NA NA 0.7/0.15
+M1,M2(W/L) NA NA NA 20.00/0.15
+M3,M4(W/L) NA NA NA 20.00/0.15
+3.2.3 Standby Operation
+During the standby operation, as shown in Fig. 3.12, the signals W1 and W0 are at
+VDD, which turns ON the transistors M1 and M3. As a result, the node GND1 and
+GND2 voltages are set to the 0V. The BL is set to VDD, and WL is set to 0V, causing
+transistorsPG1andPG2tobeturnedOFF.Assistcircuitryduringthestandbyoperation
+isshowninFig. 3.11.
+3.2.4 Result and Comparative Analysis
+SRAM cells are benchmarked along various Figures of Merit (FOMs), such as Read
+StaticNoiseMargin(RSNM),HoldStaticNoiseMargin(HSNM),WriteMargin,Leak-
+age,Cellcurrent,WriteTime,Bitlinedischargerate,andArea[18]-[19]. Tobenchmark
+the proposed 5TA SRAM, we designed the 64X64 SRAM array that can be configured
+asSRAM.
+We characterized all the Figures of Merit (FOMs) of cells using 130 nm and 65nm
+CMOStechnology. WeranMonteCarlosimulations(1,000samples)toestimateFOMs
+and computed all the FOMs on their Worst Process, Voltage, and Temperature (PVT).
+We ensure that all the FOMs are 6-sigma qualified to ensure good yield. TABLES 3.6
+and3.8presentthebenchmarkof6TSRAM,5TSRAM,4TSRAM,andproposed5TA
+23
+
+=== Page 34 ===
+Table3.6: Comparison of FOMs For 6T,5T,4T, and 5TA SRAM Cells in 130nm Tech-
+nology
+FOMs 6T 5T 4T 5TA
+ReadSNM(mV) 430.6 435.6 270.3 -
+FS/1.62V/125◦C
+ReadSNM(µ/σ) 35.81 36.51 17.08 -
+FS/1.62V/125◦C
+HoldSNM(mV) 631.8 635.9 463.6 470.0
+FS/1.62V/125◦C
+HoldSNM(µ/σ) 55.25 56.1 23.76 17.03
+FS/1.62V/125◦C
+HSNMofcellsincolumn 631.8 635.9 463.6 210
+duringwriteinabitcell(mV)
+HSNMofcellsincolumn 55.25 56.1 23.76 8.033
+duringwriteinabitcell(µ/σ)
+HSNMofcellsinrow 430.6 435.6 270.6 270
+duringwriteinabitcell(mV)
+HSNMofcellsinrow 35.81 36.51 17.08 13.33
+duringwriteinabitcell(µ/σ)
+WriteMargin(mV) 850.2 633.7 393.8 950.0
+SF/1.62V/-40◦C
+WriteMargin(µ/σ) 50.89 17.31 10.40 37.55
+SF/1.62V/-40◦C
+WriteTime(nsec) 0.10 3.000 0.600 0.580
+SS/1.62V/125◦C
+CellCurrent(µA) 135.0 135.0 67.30 181.2
+SS/1.62V/125◦C
+RBLdischargerate(mV/psec) 3.020 3.030 1.500 3.300
+SS/1.62V/125◦C
+Leakage(pA) 36.20 35.90 90.0 3.600
+TT/1.8V/25◦C
+Area(64X64array)(um2) 28016 27996 27624 27924
+Table3.7: SizeofTransistorsin6T,5T,4T,and5TASRAMcellsandAssistCircuitryin
+65nm
+Transistors 6T 5T 4T 5TA
+DeviceUsed PG,PD-NSVTLP PG,PD-NSVTLP PD-NSVTLP PD-NHVTLP
+PU-PSVTLP PU-PSVTLP PG-PSVTLP PG-PSVTLP
+PR-NSVTLP
+PG1/PG2(W/L) 0.18/0.06 0.18/0.06 0.25/0.06 0.28/0.07
+PD1/PD2(W/L) 0.27/0.06 0.30/0.06 0.5/0.15 0.38/0.125
+PU1/PU2(W/L) 0.135/0.06 0.135/0.06 NA NA
+PR1(W/L) NA NA NA 0.19/0.06
+M1,M2(W/L) NA NA NA 5.00/0.06
+24
+
+=== Page 35 ===
+Table3.8: Comparison of FOMs For 6T,5T,4T, and 5TA SRAM Cells in 65nm Tech-
+nology
+FOMs 6T 5T 4T 5TA
+ReadSNM(mV) 122.0 131.0 76.04 -
+FS/1.08V/125◦C
+ReadSNM(µ/σ) 6.460 6.70 6.5 -
+FS/1.08V/125◦C
+HoldSNM(mV) 343.9 345.9 103.0 102.0
+FS/1.08V/125◦C
+HoldSNM(µ/σ) 26.28 27.8 6.52 6.150
+FS/1.08V/125◦C
+HSNMofcellsincolumn 343.9 345.9 103.0 101.0
+duringwriteinabitcell(mV)
+HSNMofcellsincolumn 26.28 27.8 6.72 6.510
+duringwriteinabitcell(µ/σ)
+HSNMofcellsinrow 122.00 131.0 76.04 60.00
+duringwriteinabitcell(mV)
+HSNMofcellsinrow 6.460 6.7 6.5 3.000
+duringwriteinabitcell(µ/σ)
+WriteMargin(mV) 300.0 300 645.0 666.0
+FS/1.08V/125◦C
+WriteMargin(µ/σ) 13.03 13.03 35.0 33.80
+FS/1.08V/125◦C
+WriteTime(psec) 47.6 310 56 62.60
+FS/1.08V/125◦C
+CellCurrent(µA) 3.630 3.64 3.35 3.630
+FS/1.08V/125◦C
+RBLdischargerate(mV/psec) 2.130 2.14 1.87 2.150
+FS/1.08V/125◦C
+Leakage
+TT/1.08V/25◦C(pA) 78.50 78.5 20 12.60
+FF/1.08V/125◦C(nA) 11.96 11.95 3.36 1.970
+Area(64X64array)(um2) 4885 4881 4997 4990
+25
+
+=== Page 36 ===
+SRAMcellsfordifferentFOMs. ThesizeoftransistorsusedinSRAMcellsispresented
+inTABLES3.5and3.7.
+ComparisionOfFiguresOfMerit
+Leakage
+Leakage is the current that flows when the cell is in hold mode. In a 5TA SRAM, the
+length of the access transistor is larger, and fewer transistors are used in 5TA, causing
+lower leakage. We found that 5TA SRAM has 10X lower leakage in 130nm and 6.28X
+lower leakage in 65nm than 6T SRAM. In our analysis, we used battery life as the
+inverseofleakage.
+CellCurrent
+Cell current is the current that flows through the read transistor during the read oper-
+ation. To measure it, the RBL is precharged to the VDD to measure the cell current,
+whiletheWBLissetto0V.Thecurrentpassingthroughthereadtransistoristhenmea-
+sured and presented as the read current. In a 5TA SRAM, the cell current depends on
+the size of the PR1 transistor. Sizing up the PR1 transistor increases read current. For
+5TA SRAM, the cell current is improved by 1.34X at 130nm and 1.27X at 65nm as
+comparedtothe6TSRAM
+Performance
+Performance is directly proportional to the RBL/BL discharge rate. The RBL/BL dis-
+chargerateiscomputedasthesingle-endedvoltagecreationrateontheRBL/BLduring
+the read operation for 5TA. It is effectively the ratio of the RBL/BL discharge value to
+the time it takes to discharge the RBL/BL by that value. The RBL/BL capacitance is
+extracted for 64 rows to calculate the discharge rate. We found that the time to dis-
+chargetheRBLislowerduetohighercellcurrent,causingtheperformancetoimprove
+by1.07Xat130nm and1.01Xat65nmascomparedto6TSRAM
+26
+
+=== Page 37 ===
+StaticNoiseMargin
+RSNM is a measure of cell stability and ensures that memory content is not corrupted
+during the read operation. The proposed 5TA SRAM is a read-disturb-free SRAM
+because 5TA has a decoupled read. and its RSNM is the same as the HSNM, which
+is the maximum noise voltage that can be tolerated at the cross-coupled nodes during
+standbymode.
+Upon comparing HSNM, it can be observed that the HSNM of the proposed 5TA
+SRAMisdegradedby69%and74%at130nmand65nm,respectively,intermsofu/σ,
+whencomparedto6TSRAM.Thereasonforthisisthatin5TA,thereisnoPMOSload
+transistor to hold the value of ’1’ at node Q. Therefore, holding of ’1’ is carried out by
+leakagethroughthePMOSaccesstransistor.
+Ina5TASRAMshowninFig.2,duringawriteoperationinabitcell,thecellsother
+thanthewritecellinthesamecolumnareinholdmodeandsharethewritecircuitryin
+writemode,thisraisesthenodeGND1voltage,whichreducesthestrengthofthedriver
+transistor by decreasing the drain-source voltage of PD1. Therefore, if ‘0’ is stored on
+nodeQandanynoisechangesthevoltageofnodeQ,PD1maynotbeabletodischarge
+node Q to the ground because node GND1 is not at the ground voltage, reducing the
+standbyefficiencyofthestandbycellinacolumnduring write.
+ThencellssharedinarowarealsoinholdmodetheirwordlineisONandbitlineis
+prechargedtoVDDthenthebitlinetriestochargeboththeQandQBnodesthroughthe
+access transistor hence this reduces the standby efficiency of the cell. We observe that
+the HSNM of cells in a column during write in a bit cell degrades by 85% and 75% at
+130nm and 65nm, respectively as compared to 6TSRAM. The HSNM of cells in a row
+during write in a bit cell degraded by 60% and 38% at 130nm and 65nm, respectively
+ascomparedto6TSRAM
+Sinceatanygivenpointoftimefewcellsareinthesemodes,thememoryoperation
+continuestobeinastatisticallysaferegionoperation.
+27
+
+=== Page 38 ===
+WriteMargin
+The write margin for the 5TA is defined as the maximum voltage of WL at which
+new data can be written into the cell when bit-lines are precharged to VDD. In a 5TA
+SRAM, during the write ‘1’ operation, the source of the driver transistor PD1 is not at
+ground voltage, which prevents the driver transistor from discharging the internal not
+to ground, causing write ‘1’ can be done easily through access transistor but 5TA has
+higher sigma variation than 6T SRAM. In terms of u/σ, the write margin of the 5TA
+SRAM is degraded by 1.46X at 130nm and improved by 2.67X at 65nm as compared
+tothe6TSRAM.
+WriteTime
+Write Time is the time to write a ‘0’ and ‘1’ in a bit cell. In 5TA SRAM, we found
+thatthewritetimedegradesduetotheassistcircuitry. In5TASRAM,thewriteslowed
+downto5.8Xat130nmand1.3Xat65nmascomparedto6TSRAM.
+Area
+The layout of a 4x4 array is a component of a 64X64 array of 6T SRAM, 5T SRAM,
+and 4T SRAM in 130 nm CMOS technology as shown in Figs. 3.4-3.6, respectively.
+and layout of 5TA SRAM cell in 130nm shown in Fig. 3.13. In the case of 6T,5T, and
+5TA SRAM, each cell is flipped horizontally and vertically such that the adjacent cells
+can share the diffusion regions, n-wells, polys, contacts, and vias, but in the case of 4T
+SRAMlayoutismadeinZ-lockedtopology,wherethelayoutismirroredvertically,but
+translatedhorizontally.
+The layout of a 4x4 array of 6T SRAM, 5T SRAM, 4T SRAM, and 5TA SRAM
+in 65nm CMOS technology is shown in Figs. 3.14-3.17, respectively. Tables 3.5 and
+3.7 show the device size used in 130nm and 65nm, respectively. The total area of all
+SRAM cells for a 64X64 SRAM array is shown in Tables 3.6 and 3.8. Fig. 3.18 shows
+the benchmarking of the various FOMs in the form of a radar chart for all cells. The
+largerthefootprint, thebetterthecell.
+28
+
+=== Page 39 ===
+Figure3.13: 4X4 Proposed 5TA SRAM highlighting single cell and assist circuit
+(130nm)
+Figure3.14: 4X46TSRAMhighlighting singlecellandassistcircuit(65nm)
+Figure3.15: 4X45TSRAMhighlighting singlecellandassistcircuit(65nm)
+29
+
+[Image page_39_image_0.jpeg Error]
+No API key available for start.
+
+
+[Image page_39_image_1.png Error]
+No API key available for start.
+
+
+[Image page_39_image_2.png Error]
+No API key available for start.
+
+
+=== Page 40 ===
+Figure3.16: 4X44TSRAMhighlighting singlecellandassistcircuit(65nm)
+Figure3.17: 4X4Proposed5TASRAMhighlighting singlecell(65nm)
+Figure3.18: Comparision of 6T,5T,4T, and 5TA SRAM cells across various FOMs in
+(a)130nm (b)65nm
+30
+
+[Image page_40_image_0.png Error]
+No API key available for start.
+
+
+[Image page_40_image_1.png Error]
+No API key available for start.
+
+
+[Image page_40_image_2.jpeg Error]
+No API key available for start.
+
+
+=== Page 41 ===
+CHAPTER 4
+Conclusion
+In this work, we propose two asymmetric SRAM cell benchmarks with conventional
+6T, 5T, and 4T SRAM cells. We show that the Iso-Stable read 4TA SRAM cell has
+a higher density of 7% compared 6T SRAM cell, respectively. Additionally, the 4TA
+SRAM cell has up to 4X lower leakage than conventional 6T, but the performance is
+lower in the 4TA SRAM cell as compared to the 6T SRAM cell. Then, we designed
+an Iso-Area 5TA SRAM cell in 130nm and 65nm CMOS technology. It has 10X lower
+leakagethanthe6TSRAMcellin130nmand6.23Xlowerleakagethanthe6TSRAM
+cellin65nmtechnology. Furthermore,the5TASRAMcellexhibitshighercellcurrent.
+Hence, our results indicate that the Proposed 4TA SRAM cell is preferred to design
+low leakage and denser memories. The proposed 5TA cell is the preferred choice for
+designinglow-leakageandhigh-speedmemories.
+31
+
+=== Page 42 ===
+REFERENCES
+[1] M. Horowitz, Scaling, power, and the future of MOS, Proc. IEDM Tech. Dig.,
+2005,9-15.
+[2] Mathur, Anmol and Lisa Minwell. “Memory Power Reduction in SoC Designs
+UsingPowerProMG.”(2009).
+[3] H. Zhu et al., ”A comprehensive comparison of superior triple-threshold-voltage
+7-transistor, 8-transistor, and 9-transistor SRAM cells,” 2014 IEEE International
+Symposium on Circuits and Systems (ISCAS), Melbourne, VIC, Australia, 2014,
+pp.2185-2188, doi: 10.1109/ISCAS.2013.6865602.
+[4] Y. L. Yeoh et al., ”A 0.4V 7T SRAM with write through virtual ground and
+ultra-fine grain power gating switches,” 2013 IEEE International Symposium
+on Circuits and Systems (ISCAS), Beijing, China, 2013, pp. 3030-3033, doi:
+10.1109/ISCAS.2013.6572517.
+[5] R. Krishna et al., ”A Technique of Designing Low Leakage SRAM in Deep Sub-
+micron Technology,” 2020 IEEE International Conference on Electronics, Com-
+puting and Communication Technologies (CONECCT), Bangalore, India, 2020,
+pp.1-5,doi: 10.1109/CONECCT50063.2020.9198587.
+[6] F. Moradi and J. K. Madsen, ”Robust subthreshold 7T-SRAM cell for low-power
+applications,” 2014 IEEE 57th International Midwest Symposium on Circuits
+and Systems (MWSCAS), College Station, TX, USA, 2014, pp. 893-896, doi:
+10.1109/MWSCAS.2013.6908559.
+[7] N. Azizi, F. N. Najm and A. Moshovos, ”Low-leakage asymmetric-cell SRAM,”
+in IEEE Transactions on Very Large Scale Integration (VLSI) Systems, vol. 11,
+no.4,pp.701-715,Aug.2003,doi: 10.1109/TVLSI.2003.816139.
+[8] Yen-Jen Chang, Feipei Lai and Chia-Lin Yang, ”Zero-aware asymmetric SRAM
+cellforreducingcachepowerinwritingzero,”inIEEETransactionsonVeryLarge
+32 32
+
+=== Page 43 ===
+Scale Integration (VLSI) Systems, vol. 12, no. 8, pp. 827-836, Aug. 2004, doi:
+10.1109/TVLSI.2003.831471.
+[9] B. S. Gill, C. Papachristou and F. G. Wolff, ”A New Asymmetric SRAM Cell
+to Reduce Soft Errors and Leakage Power in FPGA,” 2007 Design, Automation
+& Test in Europe Conference & Exhibition, Nice, France, 2007, pp. 1-6, doi:
+10.1109/DATE.2007.364503.
+[10] S. Nalam and B. H. Calhoun, ”5T SRAM With Asymmetric Sizing for Improved
+ReadStability,”inIEEEJournalofSolid-StateCircuits,vol.46,no.10,pp.2431-
+2442,Oct.2011,doi: 10.1109/JSSC.2011.2160812.
+[11] Chien-Cheng Yu and Ming-Chuen Shiau, ”Single-Port 5T SRAM Cell with Im-
+provedWrite-AbilityandReducedStandbyLeakageCurrent,”InternationalJour-
+nal of Information and Electronics Engineering vol. 7, no. 1, pp. 22-28, 2017,doi:
+10.18178/IJIEE.2017.7.1.656.
+[12] C. -C. Yu, C. -B. Wu and M. -C. Shiau, ”A New Single-Port Five-Transistor
+SRAM Cell Design for Signal Processing Systems,” 2019 IEEE 4th International
+Conference on Integrated Circuits and Microsystems (ICICM), Beijing, China,
+2019,pp.178-181,doi: 10.1109/ICICM48536.2019.8977159.
+[13] C.B.C.Chan,F.R.G.CruzandW.-Y.Chung,”Asingleendedzeroawareasym-
+metric 4T SRAM cell,” 2017IEEE 9th International Conference on Humanoid,
+Nanotechnology, Information Technology, Communication and Control, Envi-
+ronment and Management (HNICEM), Manila, Philippines, 2017, pp. 1-4, doi:
+10.1109/HNICEM.2017.8269556.
+[14] K. Kim, J. -J. Kim and C. -T. Chuang, ”Asymmetrical SRAM Cells with En-
+hanced Read and Write Margins,” International Symposium on VLSI Technol-
+ogy,SystemsandApplications(VLSI-TSA),Hsinchu,Taiwan,2007,pp.1-2,doi:
+10.1109/VTSA.2007.378966.
+[15] A.Shafaeietal.,”Energy-efficientcachememoriesusingadual-Vt4TSRAMcell
+with read-assist techniques,” 2016 Design, Automation & Test in Europe Confer-
+ence&Exhibition (DATE),Dresden,Germany,2016,pp.457-462.
+33
+
+=== Page 44 ===
+[16] K. Itoh et al., ”0.5-V sub-ns open-BL SRAM array with mid-point-sensing
+multi-power 5T cell,” 2015 IEEE International Symposium on Circuits and
+Systems (ISCAS), Lisbon, Portugal, 2015, pp. 2892-2895, doi: 10.1109/IS-
+CAS.2015.7169291.
+[17] C. B. C. Chan et al., ”A single ended zero aware asymmetric 4T SRAM
+cell,” 2017IEEE 9th International Conference on Humanoid, Nanotechnol-
+ogy, Information Technology, Communication and Control, Environment
+and Management (HNICEM), Manila, Philippines, 2017, pp. 1-4, doi:
+10.1109/HNICEM.2017.8269556.
+[18] R. Kumar et al., ”Design and Benchmark of Iso-Stable High Density 4T SRAM
+cells for 64MB arrays in 65nm LSTP,” 2020 IEEE 17th India Council Interna-
+tionalConference(INDICON),NewDelhi,India,2020,pp.1-7,doi: 10.1109/IN-
+DICON49873.2020.9342091.
+[19] J. K. Yadav, P. Das, A. Jain and A. Grover, ”Area compact 5T portless SRAM
+cell for high density cache in 65nm CMOS,” 2015 19th International Symposium
+on VLSI Design and Test, Ahmedabad, India, 2015, pp. 1-4, doi: 10.1109/ISV-
+DAT.2015.7208095.
+34
+

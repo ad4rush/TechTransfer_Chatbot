@@ -1,0 +1,1382 @@
+=== Page 1 ===
+CRITICAL PATH ANALYSIS WITH RESPECT TO
+PVT, AGEING, WORKLOAD, AND ISM
+INSERTION FOR M0 ARM CORTEX
+Submitted by
+• Devaprasanth B [MT23210],
+• Manivannan S [MT23175]
+Under the supervision of
+Dr. Anuj Grover,
+Indraprastha Institute of Information Technology, Delhi,
+December 2024
+Submitted
+in partial fulfilment of the requirements for the degree of Master of
+Technology to
+Indraprastha Institute of Information Technology, Delhi
+December 2024
+©2024 Indraprastha Institute of Information Technology New Delhi, All rights reserved
+1 | Page
+
+[Image page_1_image_0.png Analysis (by Gemini)]
+Here's a breakdown of the image, its context, and significance, based on the provided information:
+
+**Image Description**
+
+The image is a logo. It consists of the following visual elements:
+
+*   **Three Gray Rectangles:** These are vertically oriented and appear to be solid gray. They are spaced apart equally.
+*   **Letter-shaped element:** A teal-colored shape resembling the letters "I" and "I" joined together. It's a stylized representation.
+
+**Text within the Image**
+
+There is no readily apparent text within the logo itself.
+
+**Context and Importance**
+
+Based on the surrounding text, here's the image's context and likely importance:
+
+*   **Institution Logo:** Given the text mentioning "Indraprastha Institute of Information Technology, Delhi," it's highly probable that this logo represents the institute.
+*   **Research Paper Cover:** This image appears on the first page of a research paper submitted by Devaprasanth B and Manivannan S under the supervision of Dr. Anuj Grover. The paper focuses on "Critical Path Analysis with respect to PVT, Ageing, Workload, and ISM Insertion for M0 ARM Cortex."
+*   **Professional Representation:** As the logo of the research institution, it signifies the affiliation of the authors and the institution's stamp of approval on the research. It provides a visual identity to the work.
+*   **Visual Marker:** It serves as a visual marker on the cover page, making the document easily recognizable.
+
+**Overall Significance**
+
+The image, being the logo of Indraprastha Institute of Information Technology, Delhi, is crucial for:
+
+*   **Establishing Institutional Authority:** It lends credibility to the research conducted.
+*   **Creating a Professional Impression:** Its presence immediately identifies the work as coming from a reputable academic institution.
+*   **Branding:** Contributes to the overall branding of the institution.
+
+In essence, the image is a visual representation of the institution where the research was conducted, lending legitimacy and identity to the research paper.
+
+
+
+=== Page 2 ===
+CERTIFICATE
+This is to certify that the capstone titled “Critical Path Analysis with
+respect to PVT, Ageing and Workload and ISM insertion for M0 arm
+Cortex” submitted for the partial fulfillment of the requirements for the
+degree of Master of Technology in VLSI & Embedded Systems is a record
+of the Bonafide work carried out by them under my guidance and
+supervision in the VLSI Circuits & System Lab group at Indraprastha
+Institute of Information Technology, Delhi. This work has not been
+submitted elsewhere for the reward of any other degree.
+Dr. Anuj Grover
+…………………
+2 | Page
+
+=== Page 3 ===
+ACKNOWLEDGMENT
+We take this opportunity to express our profound gratitude and deep
+regards to the Department of Electronics and Communication Engineering
+at Indraprastha Institute of Information Technology, Delhi, for providing
+us with this outstanding curriculum in the Master’s program. We
+gratefully acknowledge Professor Dr Anuj Grover, Associate Professor,
+Indraprastha Institute of Information Technology- Delhi, for his cordial
+support, sound guidance, valuable information, monitoring, and
+encouragement throughout this project.
+Finally, we would like to express my sincere thanks to the Ph.D.
+Scholar Ms Shanvi Srivastava for her constant guidance and to all my
+friends and group mates who helped me directly or indirectly during this
+project work. We will strive to use the skills and knowledge we have
+gained in the best possible way.
+3 | Page
+
+=== Page 4 ===
+LIST OF CONTENTS
+CHAPTER TITLE PAGE
+NO NO
+1. Introduction 7
+2. Canary Circuits & In Situ Monitors 9
+2.1 (ISM) 9
+2.2 The Role of Canary Circuit 10
+2.2.3 The Role of In Situ Monitor 11
+2.2.4 Working of ISM 13
+2.2.5 Insertion of ISM in Critical Paths 13
+Conclusion
+3. Design & Analysis of ISM 14
+3.1 ISM in 65nm 14
+3.2 ISM in 45nm 15
+3.3 ISM Cell Selection 16
+3.4 Analysis of ISM Delays 16
+4. Ageing Analysis of Inverter 21
+4.1 Reliability & Ageing Analysis 21
+5. RTL to GDS Flow – Cortex M0 24
+5.1 RTL to GDS Flow 24
+5.2 RTL to GDS Flow with ISM 30
+4 | Page
+
+=== Page 5 ===
+6. Stage Selection for ISM Insertion 34
+6.1 Post Synthesis 34
+6.2 Pre CTS 34
+6.3 Post CTS 35
+6.4 Post Route 36
+7 Results & Observations 37
+7.1 Objective 37
+7.2 Key Stages & Observations 37
+7.3 Insights of Critical Path 38
+7.4 Optimal Stage for ISM Insertion 39
+7.5 Conclusion 40
+8. References 41
+5 | Page
+
+=== Page 6 ===
+ABSTRACT
+This report presents the design, analysis, and validation of an In-Situ Monitor
+(ISM) integrated circuit, focusing on its performance across different process nodes and its impact
+on system timing. The study investigates a 4-to-1 multiplexer (MUX) implemented in 65nm
+technology, analyzing the effects of buffer insertion on signal delay, system reliability, and
+performance. A comparison of various buffer configurations demonstrates their impact on signal
+propagation time, resource efficiency, and power consumption, highlighting the trade-offs between
+performance and reduced area and power requirements. The ISM design is also evaluated in 45nm
+technology, utilizing a 2x1 multiplexer, with detailed timing analysis for delay characteristics.
+Using simulation-based and aged library approaches, aging effects on circuit reliability are
+considered to model the impact of process, voltage, temperature, and aging on critical path delays.
+The report explores the critical path selection process for ISM insertion within the
+RTL-to-GDS design flow. The analysis compares the insertion of ISMs at four stages: Post-
+Synthesis, Pre-Clock Tree Synthesis (Pre-CTS), Post-Clock Tree Synthesis (Post-CTS), and Post-
+Route. By analyzing 1000 top critical register-to-register paths, the study identifies that ISM
+insertion at the Pre-CTS stage offers the best balance between timing accuracy, implementation
+complexity, and timing closure. The results show that endpoint changes decrease progressively
+across stages, with post-route providing the highest accuracy but presenting challenges for timing
+closure. The findings emphasize the importance of signal integrity, aging effects, and long-term
+reliability in high-performance digital circuit design. Pre-CTS ISM insertion was identified as the
+most efficient approach for achieving reliable outcomes in the design flow.
+6 | Page
+
+=== Page 7 ===
+CHAPTER-1
+INTRODUCTION
+In this review section of our report, we will examine other researchers' work on the topic
+we are exploring. This involves reviewing various sources such as research papers and conference
+articles. The goal is to understand what is already known, identify gaps in our understanding, and
+explain how our project fits into the broader context. This section allows us to learn from past
+research and highlights the significance and uniqueness of our work. It is akin to reviewing the
+roadmap others have created before we begin our own journey.
+1.1. Introduction
+The computational capabilities of mobile and handheld devices have seen
+remarkable advancements, enabling complex applications such as 3D graphics, gaming, and
+video processing. Technology scaling, as predicted by Moore's Law, has been the driving force
+behind these improvements. Smaller transistor dimensions have allowed higher integration and
+faster switching speeds, contributing to better performance and energy efficiency. However,
+starting at the 45nm technology node, the benefits of scaling have been accompanied by
+significant challenges, including increased power consumption, process variations, and
+operational inefficiencies.
+As the computational demands of mobile platforms rise, especially with the
+advent of power-hungry applications such as 3D graphics and gaming, the need for energy-
+efficient yet robust processor designs have become more critical. Traditional methods of
+ensuring reliability—such as using larger safety margins—are increasingly unable to meet the
+growing energy constraints of modern devices. This has created a need for innovative solutions
+that balance both power efficiency and robust performance.
+1.2. Problem Identified
+The primary problem in modern processor design for mobile and handheld devices is achieving
+reliable operation while minimising power consumption. The key challenges include:
+1. Rising Power Dissipation:
+• With the shrinking of transistor sizes and increased integration levels, power
+consumption has risen despite expectations of energy savings. This has created
+7 | Page
+
+=== Page 8 ===
+a paradox, where more transistors can be added to a die, but power constraints
+prevent their full utilization.
+• Battery technology has not kept up with the increasing demands for
+performance, and as a result, mobile devices are constrained by limited power
+budgets.
+2. Process, Voltage, and Temperature (PVT) Variations:
+• Inter-die Variations: Manufacturing inconsistencies lead to significant speed
+differences between individual chips, meaning that some processors may be
+inherently slower or faster than others even when fabricated using the same
+process.
+• Intra-die Variations: Within a single chip, variations can occur due to
+localized voltage fluctuations, temperature hotspots, and uneven switching
+activity.
+3. Reliance on Safety Margins:
+• To account for these PVT variations, traditional designs use safety margins that
+increase supply voltage to ensure correct timing across all conditions. However,
+these margins result in wasted energy, especially since worst-case conditions
+rarely occur in practice.
+4. Trade-off Between Low Power and Robustness:
+• Robust designs typically require additional safety margins to ensure reliable
+performance under all possible conditions, leading to higher power
+consumption.
+• On the other hand, low-power techniques like Dynamic Voltage Scaling (DVS)
+reduce energy usage but compromise the integrity of signal timing, which may
+lead to timing errors and circuit failures.
+5. Complex Optimization Space:
+• Achieving design closure in the face of rising process variations and power
+constraints is increasingly difficult. This complex optimization space demands
+a more dynamic, responsive approach to circuit design—one that can adjust to
+real-time conditions rather than relying on static margins.
+8 | Page
+
+=== Page 9 ===
+CHAPTER-2
+CANARY CIRCUITS & IN-SITU MONITORS (ISM)
+2.1 The Role of Canary Circuits
+Canary circuits were an early solution to this problem, designed to predict timing failures
+before they occur by monitoring replica paths of critical paths. The concept is similar to a
+"canary in a coal mine," where the failure of the replica path signals an impending failure in
+the actual critical path.
+Fig 1: Canary circuit
+1. Dynamic Prediction of Timing Failures:
+• Canary circuits track the delays of critical paths and predict when timing
+violations may occur. Monitoring these replica paths allows the system to scale
+the supply voltage and frequency to prevent failures.
+2. Energy Efficiency:
+• Canary circuits aim to eliminate unnecessary safety margins by dynamically
+scaling the voltage to the point where timing errors begin to occur, thus saving
+energy.
+3. Limitations of Canary Circuits:
+• Replica Path Mismatch: The biggest drawback of canary circuits is the
+potential mismatch between the replica path and the actual critical path. This
+mismatch can inaccurately predict failures, especially in localised variations
+such as voltage noise and temperature fluctuations.
+• Limited Responsiveness: Canary circuits are less effective in responding to
+fast-changing environmental conditions or data-dependent delay variations,
+which can lead to suboptimal performance in real-world scenarios.
+9 | Page
+
+[Image page_9_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image provided:
+
+**Visual Elements and Structure:**
+
+The image is a schematic diagram representing a canary circuit. It includes the following visual elements:
+
+*   **D Flip-Flops (2):** Two D flip-flops are shown as rectangular boxes with 'D' input, a clock input (triangle symbol), and an inverted output 'Q with a line over it'. The first flip-flop has a feedback loop from its inverted output back to its input.
+*   **XOR Gate:** An XOR (exclusive OR) gate is represented by a curved shape with two inputs and one output.
+*   **Critical Path Replica:** A rectangular box labeled "Critical path replica" is positioned between the output of the first flip-flop and one of the XOR gate inputs.
+*   **Connecting Lines:** Lines connect the various components, indicating the flow of the signal.
+
+**Text within the Image:**
+
+*   **D:** Input to both Flip Flops.
+*   **Q with a line over it:** Output of both Flip Flops.
+*   **Critical path replica:** Label inside the rectangular box that identifies that part of the circuit.
+
+**Image Context and Importance:**
+
+The image is labeled as "Fig 1: Canary circuit" and appears in Chapter 2 of the document, which is titled "CANARY CIRCUITS & IN-SITU MONITORS (ISM)."  The page text explains that canary circuits are an early approach to predicting timing failures in critical paths of a circuit. They operate by monitoring a replica of the critical path and predicting failures based on the replica's behavior.
+
+The surrounding text highlights the challenges related to Process, Voltage, and Temperature (PVT) variations and the need for robust yet energy-efficient designs. It explains that traditional designs rely on safety margins to account for these variations, which leads to wasted energy. Canary circuits are introduced as a method to overcome this inefficiency by dynamically scaling voltage and frequency to prevent timing violations.
+
+**Overall Importance:**
+
+The image is important because it visually illustrates the concept of a canary circuit, which is a key component of the chapter's focus. It allows the reader to understand how the replica path is used to monitor potential timing failures. The visual representation of the circuit, including the flip-flops, XOR gate, and the "Critical path replica," is crucial for comprehending the canary circuit's structure and functionality. The surrounding text emphasizes the context, by discussing PVT variations and power constraints, the need for dynamic scaling, and, the tradeoffs between robustness and energy efficiency. The figure introduces canary circuits as a way to balance these tradeoffs, setting the stage for discussion of more advanced In-Situ Monitors (ISM) that are discussed later in the chapter.
+
+
+
+=== Page 10 ===
+2.2 The Role of In-Situ Monitors (ISM)
+2.2.1 What is ISM?
+Fig 2: Razor/In-situ Monitor
+An In-Situ Monitor (ISM), as the name suggests, is a real-time monitoring mechanism
+directly embedded within the actual critical paths of a circuit. Unlike canary circuits, which use
+replica paths to predict failures, ISMs actively observe and measure the timing behaviour of
+the real critical paths under normal operating conditions.
+ISM-based approaches, such as iRazer, leverage dynamic error detection and
+correction to continuously monitor the circuit’s timing performance in situ (in place) and adjust
+system parameters as needed to prevent timing violations. The fundamental goal of ISMs is to
+ensure the circuit remains within the desired performance parameters without relying on
+conservative safety margins that would otherwise waste energy.
+Fig 3: Output after ISM Insertion
+2.2.2 How ISM is Better Than Canary Circuits
+ISM offers several advantages over traditional canary circuits:
+10 | Page
+
+[Image page_10_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on your provided context:
+
+**Visual Elements and Structure:**
+
+The image (Fig 2: Razor/In-situ Monitor) is a circuit diagram illustrating the architecture of an In-Situ Monitor (ISM), specifically a Razor-based implementation. The diagram consists of the following components:
+
+*   **D Flip-Flop (left):** This represents a register storing data. It has inputs for data (D) and a clock signal (CLK).
+*   **Critical Path (Cloud):**  This represents the complex, time-critical signal path within the circuit.  It's labeled "path".
+*   **Q Flip-Flop (top right):** This is the output flip-flop, capturing the data after it propagates through the critical path. It also has inputs for data (D) and a clock signal (CLK).
+*   **In-Situ Monitor (ISM) – Red Dashed Box:** This is the core of the illustration, highlighting the ISM components. Inside the box, we see:
+    *   **Tapped Delay Lines (TW1, TW2, TW3):**  These are multiple delay lines (drawn in pink) that provide different delays to the data coming from the critical path ("Delayed data"). They are labeled "TW1", "TW2", and "TW3".
+    *   **Multiplexer:** A 4-to-1 multiplexer that selects one of the delayed signals or the original signal based on the select lines (S1, S0) and passes it through to the ISM's internal flip-flop. Input labelled "clk".
+    *   **Q Flip-Flop (within ISM):** Another flip-flop, clocked by CLK, capturing the delayed data from the multiplexer.
+    *   **XNOR Gate:** This gate compares the outputs of the original flip-flop (top right) and the ISM's flip-flop. Its output drives the "Flag" signal.
+
+**Text within the Image:**
+
+*   **D:**  Data input to the flip-flop.
+*   **Q:** Output of the flip-flops.
+*   **CLK:**  Clock signal input.
+*   **path:** Label for the critical path.
+*   **Delayed data:** The delayed data signal being passed to the in-situ monitor.
+*   **TW1, TW2, TW3:** Labels for the tapped delay lines.
+*   **S1 S0:** Select input labels of the multiplexer.
+*   **clk:** The enable clock signal from the multiplexer being passed to the flip-flop inside the in-situ monitor.
+*   **Flag:** The output of the XNOR gate, indicating a potential timing violation.
+*   **In-situ monitor:** Label for the overall ISM block.
+
+**Context and Importance:**
+
+The image is Figure 2 from a research paper comparing Canary Circuits and In-Situ Monitors (ISMs). According to the text surrounding the figure:
+
+*   ISMs are real-time monitoring mechanisms embedded *directly* within the critical paths of a circuit, unlike canary circuits that use replica paths.
+*   ISMs actively observe and measure the timing behavior of the *real* critical paths under normal operation.
+*   The diagram illustrates the architecture of an iRazer implementation of an ISM, which can dynamically detect and correct errors.
+*   The *goal* of ISMs is to ensure the circuit remains within performance parameters without using excessive safety margins.
+*   The figure is part of a section explaining *what* an ISM is and sets the stage for explaining *how* ISMs are better than canary circuits.
+
+Therefore, the image is *crucial* because it provides a *visual representation* of how an ISM works. The tapped delay lines, multiplexer, and comparison logic are all key components in detecting timing violations by comparing the original data path with delayed versions, allowing the system to identify if data arrives too late due to variations or errors in the critical path. The flag signal is then raised, to alert the system about the condition.
+
+The image directly supports the description in the text, making the explanation easier to understand. It also highlights the complexity and sophistication of ISM-based monitoring compared to the earlier canary circuit approach (mentioned in the surrounding pages), which relies on potentially inaccurate replica paths.
+
+
+
+[Image page_10_image_1.png Analysis (by Gemini)]
+Here's a detailed analysis of the image provided, based on the surrounding text:
+
+**Visual Elements and Structure:**
+
+*   **Graph:** The image is a timing diagram or waveform graph, displaying the behavior of several signals over time. The graph has two axes: a vertical axis likely representing voltage or signal level, and a horizontal axis representing time.
+*   **Waveforms:** Four waveforms are shown in blue:
+    *   **CLK:** Represents a clock signal. It's a periodic square wave.
+    *   **D:** Represents the data input. It changes value (high and low) with each clock cycle.
+    *   **Q:** Represents the output. It changes value in relation to the clock. It is delayed compared to D.
+    *   **Qsf:** Represents the output of the in-situ monitor.
+*   **Timing Markers:** Vertical dashed and dashed-dotted lines are used to highlight specific timing intervals. The markers are useful to understand and measure different time intervals.
+*   **Arrows and Labels:** The diagram uses arrows and labels to indicate and measure specific timing parameters.
+
+**Text within the Image:**
+
+*   **CLK:** Label for the clock signal waveform.
+*   **D:** Label for the data input waveform.
+*   **Q:** Label for the output signal waveform.
+*   **Qsf:** Label for the in-situ monitor output signal waveform.
+*   **Tcq:** Clock-to-Q delay (time interval). This label is positioned between two vertical markers indicating the delay between the clock signal's rising edge and the output signal's response.
+*   **Tbd:** Time boundary delay (time interval). This label is positioned between two vertical markers indicating the delay between Q and the output of the in-situ monitor.
+
+**Image Context and Importance:**
+
+Based on the text from page 10 and the surrounding pages, the image (likely Fig 3: Output after ISM Insertion) illustrates how an In-Situ Monitor (ISM) works in conjunction with a circuit.
+
+*   **Context:** The text introduces ISMs as a superior alternative to canary circuits for monitoring and managing timing performance in integrated circuits. Canary circuits use replica paths to predict failures, but ISMs directly monitor the *actual* critical paths. The goal is to maintain performance without excessively conservative safety margins. The ISM monitors the clock, data input, output of the critical path, and the output of an in-situ monitor to detect timing violations dynamically. ISMs are better because they monitor in real time, adjust dynamically, eliminate the need for replica paths, handle localized variations, and efficiently use energy.
+*   **Importance:** The image demonstrates how ISM is inserted and how it affects the performance of a circuit, the timing difference between signals, and helps in detecting and correcting timing errors dynamically. The timing parameters Tcq and Tbd are used to understand the relationship between Clock, Data, Output, and ISM.
+
+In summary, the image is a crucial visual aid in explaining the fundamental operation of an In-Situ Monitor. It complements the text by showing how the ISM interacts with the existing circuit and helps in understanding its working and advantages.
+
+
+
+=== Page 11 ===
+1. Real-Time Monitoring:
+• Accuracy: ISMs eliminate the inaccuracies inherent in canary circuits by
+directly monitoring the critical path, ensuring a more reliable prediction of the
+actual timing behaviour.
+• Data-Dependent Behavior: Unlike canary circuits, ISMs can adapt to
+workload variations. For example, they can detect timing violations due to
+specific data sequences or instruction types, which might not affect the system
+under other conditions.
+2. Dynamic Adjustments:
+• ISMs enable more flexible and responsive adjustments to supply voltage and
+frequency. This dynamic tuning helps prevent timing violations without
+unnecessarily increasing energy consumption.
+3. No Need for Replica Paths:
+• Since ISMs monitor the actual circuit paths, they eliminate the need for replica
+paths, reducing design complexity and overhead.
+4. Handling Localized Variations:
+• ISMs can respond to global (inter-die) and localised (intra-die) variations. They
+can directly monitor the impact of environmental factors such as temperature
+and voltage noise on the critical path.
+5. Energy Efficiency:
+• By dynamically adjusting voltage levels and clock frequencies in real time,
+ISMs ensure that the circuit operates as efficiently as possible while maintaining
+reliability. This is achieved without large safety margins, making ISMs far more
+energy-efficient than traditional designs.
+2.2.3 Working of ISM
+The working of ISMs involves several steps that enable them to detect and correct timing errors
+dynamically:
+1. Critical Path Monitoring:
+11 | Page
+
+=== Page 12 ===
+• ISMs embed enhanced flip-flops or transition detectors at critical path
+endpoints. These components monitor the signals along the path and flag any
+deviations from expected behaviour.
+• A shadow latch is typically used to capture a delayed version of the signal from
+the critical path. This ensures that any timing violations (such as setup or hold
+time violations) are detected in real-time.
+2. Error Detection and Flagging:
+• When the critical path experiences a timing violation, the ISM detects this
+discrepancy by comparing the speculative output (from the main flip-flop) with
+the correct data (from the shadow latch).
+• An error flag triggers the recovery mechanism if the data does not match.
+3. Recovery Mechanisms:
+• Upon detecting a timing error, the ISM triggers corrective actions, such as
+overwriting the speculative data with the correct data from the shadow latch.
+This ensures the circuit is restored to a valid state without propagating the error.
+• ISMs can also trigger more complex recovery mechanisms like pipeline replays
+or state restoration from a checkpoint.
+4. Dynamic Voltage and Frequency Adjustment:
+• ISMs adjust the supply voltage or clock frequency based on the error rate. For
+example, if too many timing violations occur, the voltage may be increased
+slightly to ensure a more stable operation. Conversely, if the error rate is low,
+the voltage can be lowered to save power.
+2.2.4 Insertion of In-situ Monitors in Critical Paths
+1. Embedding ISM at Critical Path Endpoints:
+• ISMs are typically inserted into flip-flops at the critical path endpoints, where
+timing violations are most likely to occur.
+• These flip-flops are augmented with a shadow latch and error comparison
+mechanism to monitor the data in real-time.
+2. Shadow Endpoint Flip-Flop:
+12 | Page
+
+=== Page 13 ===
+• The shadow endpoint flip-flop captures the data with a slight delay in comparing
+it against the speculative data in the main flip-flop. This ensures that any timing
+error is flagged immediately.
+3. Proactive Error Prevention:
+• The ISM works proactively, continuously monitoring timing slack. As soon as
+slack degrades, the ISM triggers recovery mechanisms before the system fails.
+This ensures that the circuit operates reliably without needing to scale up the
+voltage excessively.
+4. Saving the Circuit from Failure:
+• By detecting violations early and dynamically adjusting the system parameters,
+ISMs prevent circuit failures. This approach avoids the catastrophic failures
+typically caused by late detection and ensures the system remains in a correct
+state throughout its operation.
+2.2.5 Conclusion
+In-situ monitors (ISMs) represent a significant advancement in achieving low-power,
+robust operation for modern processors. By directly monitoring the critical paths, ISMs provide
+a far more accurate, responsive, and efficient solution than traditional canary circuits. Their
+ability to dynamically adjust voltage and frequency based on real-time conditions ensures that
+processors can operate close to their performance limits without sacrificing reliability. With
+the increasing challenges of PVT variations and energy constraints, ISMs enable variability-
+tolerant and energy-efficient designs in the semiconductor industry.
+The following chapter will describe the various structures of ISMs, analyze the critical
+paths, and identify the most commonly used standard cells in these top critical paths.It will also
+examine the effect of adding ISMs on slack degradation. After completing this analysis, the
+required number of paths for ISM insertion will be determined. Subsequently, we will test the
+insertion in benchmark circuits such as S27, S38147, and other test circuits to understand the
+effects before applying the technique to the M0 ARM Cortex circuit.
+13 | Page
+
+=== Page 14 ===
+CHAPTER-3
+DESIGN & ANALYSIS OF IN-SITU MONITOR (ISM)
+3.1.1 ISM 4X1 IN 65nm:
+The ISM 4x1 in 65nm refers to a 4-to-1 multiplexer (mux) design implemented in
+a 65nm process, and the implementation is as follows
+• Without any buffer: 4 direct pathways, no buffering, minimal delay.
+• With 1 buffer: One buffer is added for improved signal integrity and reduced delay.
+• With 2 buffers: Two buffers for further delay reduction and enhanced signal quality.
+• With 3 buffers: Three buffers for maximum signal strength and minimal delay.
+Fig 4: ISM Circuit
+• Problem: The synthesis tool removed all buffers from the ISM 4x1 in the S27 Verilog
+code due to optimization.
+• Solution: The ‘dont_touch’ command was used to prevent buffer removal.
+• Validation: The ISM 4x1 with buffers was retained, and the design was successfully
+generated using the Genus synthesis tool.
+3.1.2 ISM 4x1 with Lesser Resources:
+In this design, the ISM 4x1 multiplexer is implemented with minimal resources by
+utilizing optimized buffer and switch designs.
+• Reduces Congestion: The design minimizes the number of components, leading to less
+crowded signal paths and improved routing.
+14 | Page
+
+[Image page_14_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the provided image within the context of the research paper:
+
+**Visual Elements and Structure:**
+
+The image is a circuit diagram representing an In-Situ Monitor (ISM) circuit. Key components include:
+
+*   **4-to-1 Multiplexer (MUX):**  This is the central element, labeled "HS65\_LS\_MUX41X9". It has four input data lines (D0, D1, D2, D3) and one output line (Z). The mux selects one of the four inputs and passes it to the output based on select lines.
+*   **Input Signal (Vin):** This signal is labelled "Input" at one terminal of the circle and "Vin" at the other terminal of the circle.
+*   **Buffers:** The diagram shows different paths with varying numbers of buffers.
+    *   Path 0 (D0): Direct connection from `Vin` to MUX input D0 - "Without any buffer."
+    *   Path 1 (D1): One buffer ("HS65\_LS\_BFX2", labeled "P1\_B1")
+    *   Path 2 (D2): Two buffers (labeled "P2\_B1" and "P2\_B2")
+    *   Path 3 (D3): Three buffers (labeled "P3\_B1", "P3\_B2", and "P3\_B3")
+*   **Select Lines:** Two select lines labeled `s0` and `s1` are inputs to the multiplexer, used to select which input line (D0-D3) is routed to the output.
+*   **Output Signal (vout4):** The output of the mux, labeled "Output" at one terminal of the circle and "vout4" at the other terminal of the circle.
+
+The paths with different numbers of buffers introduce controlled delays, which are critical for the ISM's function in monitoring timing slack.
+
+**Text within the Image:**
+
+*   **HS65\_LS\_MUX41X9:** Label for the 4-to-1 multiplexer. Likely refers to a specific implementation or cell library name in the 65nm process.
+*   **HS65\_LS\_BFX2:** Label for the buffer. Similarly, probably refers to a buffer cell in the 65nm process.
+*   **P1\_B1:** Label for the single buffer.
+*   **P2\_B1, P2\_B2:** Labels for the two cascaded buffers.
+*   **P3\_B1, P3\_B2, P3\_B3:** Labels for the three cascaded buffers.
+*   **Vin:** Label for the input signal.
+*   **vout4:** Label for the output signal.
+*   **Input:** Label for the input signal.
+*   **Output:** Label for the output signal.
+*   **s0, s1:** Labels for the select lines.
+*   **D0, D1, D2, D3:** Labels for the input lines of the multiplexer.
+*   **Z:** Label for the output line of the multiplexer.
+
+**Context and Importance:**
+
+Based on the surrounding text, the image (likely Fig 5, "ISM Circuit (65nm)") depicts a specific implementation of an ISM 4x1 multiplexer in a 65nm process. The paper explores different ISM structures and aims to analyze their impact on timing slack.
+
+*   **ISM Functionality:** The surrounding pages discuss how ISMs proactively monitor timing slack and trigger recovery mechanisms before system failures occur. This circuit is likely a component in such a system.
+*   **Buffer Variation:** The different buffer configurations (0, 1, 2, and 3 buffers) are key to introducing varying delays in the signal paths.  By comparing the output of these paths, the ISM can detect changes in timing and potentially flag timing violations.
+*   **Optimization Issues:** The page text mentions that synthesis tools may remove buffers during optimization. The use of the 'dont_touch' command is a workaround to ensure the intended buffering remains in the final design.
+*   **Resource Optimization:** The text also describes an approach to implement the ISM with "lesser resources" to reduce congestion, power consumption, and area. The image potentially shows the "more resource-intensive version." The description of ISM in 45nm on the subsequent page helps understand potential challenges faced during ISM implementation due to tech limitations.
+*   **Overall Importance:** The ISM, as a whole, is important for achieving low-power and robust operation in modern processors by dynamically adjusting voltage and frequency based on real-time conditions.  This specific circuit is a component of such an ISM, providing a way to monitor timing variations.
+
+In summary, the image illustrates a 4-to-1 multiplexer based ISM circuit in 65nm technology with different buffer configurations. These configurations provide different delays, crucial for monitoring timing slack proactively and preventing circuit failures. The image is central to the discussion of ISM design, resource optimization, and implementation challenges in the research paper.
+
+
+
+=== Page 15 ===
+• Lowers Power Consumption: Fewer buffers and optimized components result in
+reduced power usage while maintaining the same functionality.
+• Decreases Area: By using fewer resources (buffers and logic gates), the overall area
+required for the design is minimized.
+• Maintains Effectiveness: Despite the resource reduction, the design retains the same
+operational performance and functionality as a more resource-intensive version.
+Fig 5: ISM Circuit (65nm)
+3.2.1 ISM in 45nm:
+Due to the unavailability of a 4x1 multiplexer in 45nm technology, a 2x1
+multiplexer was used instead.
+Fig 7: ISM in 45nm
+15 | Page
+
+[Image page_15_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, incorporating the surrounding text for context:
+
+**Image Analysis**
+
+*   **Visual Elements:** The image depicts a circuit diagram representing the In-Situ Monitor (ISM) in 65nm technology. It consists of the following main components:
+    *   **Multiplexer (MUX):** A 4-to-1 multiplexer (labelled `HS65_LS_MUX41X9`). This is the main selection component, where one of four inputs is routed to the output based on the select lines.
+    *   **Buffers:** Three inverters connected in series. These are labeled `B1`, `B2`, and `B3`, each associated with the label `HS65_LS_BFX2`.
+    *   **Input (Vin):** Marks the input to the circuit.
+    *   **Output (Vout):** Marks the output of the circuit.
+    *   **Select Lines (S0, S1):** Two select lines used to control the multiplexer.
+*   **Structure:**
+    *   The input signal `Vin` is fed into a chain of three buffers (`B1`, `B2`, `B3`).
+    *   Each buffer output is connected to one of the inputs (`D0`, `D1`, `D2`, `D3`) of the 4-to-1 multiplexer. Specifically, the input is also connected to input `D0`, the first buffer's output to `D1`, the second buffer's output to `D2`, and the third buffer's output to `D3`.
+    *   The multiplexer's output (Z) is the circuit's output `Vout`.
+    *   The select lines `S0` and `S1` control which of the four inputs (`D0`-`D3`) is routed to the output.
+*   **Text within the Image:**
+    *   `vin` (Input)
+    *   `B1`, `B2`, `B3`
+    *   `HS65_LS_BFX2` (Label for the buffers)
+    *   `HS65_LS_MUX41X9` (Label for the multiplexer)
+    *   `D0`, `D1`, `D2`, `D3` (Multiplexer input labels)
+    *   `Z` (Multiplexer output label)
+    *   `Output`
+    *   `Vout`
+    *   `S0`, `S1`
+*   **Significance:** The image visualizes a specific implementation of the ISM in 65nm technology. The buffers are intentionally added to control the delay. The 4x1 multiplexer then selects which delayed version of the input signal is passed through to the output.
+
+**Context and Importance**
+
+Based on the surrounding text:
+
+*   **Overall Context:** The research focuses on the design and analysis of an In-Situ Monitor (ISM) circuit. The ISM is designed to monitor and measure delays within a circuit. The analysis explores different implementations of the ISM using different technologies (65nm and 45nm) and varying resource constraints.
+*   **Specific Context:** Figure 5 represents the ISM circuit implemented using a 65nm process technology. The key point mentioned in the surrounding text is the optimization of this ISM design. Specifically, the goal is to reduce power consumption and area while maintaining effectiveness. The text also describes the use of the ‘dont_touch’ command to prevent the synthesis tool from removing buffers, implying that the number of buffers is an important design parameter being controlled in this circuit.
+*   **Importance:** This figure is important because it provides a visual representation of the ISM circuit being studied in the 65nm process. The analysis involves understanding how the number of buffers impacts the circuit's performance, area, and power consumption. The figure highlights how the input is processed through a series of buffers with increasing delay, and how the multiplexer is used to select the signal path and ultimately control the delay seen at the output. This circuit’s design helps to minimize congestion and also maintain performance effectiveness. This figure complements the surrounding text, helping to show the implementation of the principles of reducing resources, optimizing designs, and maintaining effectiveness. The ISM in 45 nm utilizes a 2x1 multiplexer instead of the 4x1 in 65nm as described in the analysis.
+
+
+
+[Image page_15_image_1.png Analysis (by Gemini)]
+Here's an analysis of the image, based on the provided information:
+
+**Visual Elements and Structure:**
+
+The image is a schematic diagram representing an electronic circuit.  It shows a simplified view of the In-Situ Monitor (ISM) design. The key components are:
+
+*   **Input (Vin):** This is the input signal to the circuit. It is labelled as both "Input" and "Vin"
+*   **BUF\_X16:** A buffer component, likely indicating a buffer with a certain drive strength.
+*   **Inverter:** A triangle with circle. This is an logic inverter.
+*   **MUX2\_X1:**  A 2x1 multiplexer. This selects one of its two inputs (D0 or D1) to pass to the output based on the select signal.
+*   **s0:** The select signal for the MUX, labelled "s0".
+*   **Output (Vout):** The output of the multiplexer, labelled as both "output" and "vout"
+*   **D0 and D1:** Inputs to the multiplexer.
+*   **Z:** Output of the multiplexer.
+
+The diagram shows the connections between these components. The input (Vin) is directly connected to the D0 input of the multiplexer via BUF_X16. It is also inverted then connected to D1 input. The s0 signal controls which of these two inputs is passed to the output (Vout).
+
+**Text within the Image:**
+
+*   **Input**
+*   **Vin**
+*   **BUF\_X16**
+*   **MUX2\_X1**
+*   **D0**
+*   **D1**
+*   **output**
+*   **vout**
+*   **s0**
+*   **Z**
+
+**Context and Importance:**
+
+The image is labelled "Fig 5: ISM Circuit (65nm)". This indicates that it depicts the ISM circuit design implemented in 65nm technology. However, the surrounding text indicates that this particular figure may not be completely representative of the actual implementation. Since the design in 45nm had to use a 2x1 multiplexer due to unavailability of 4x1 multiplexer in 45nm technology.
+
+The surrounding text highlights several key goals of the ISM design:
+
+*   **Reducing Power Consumption:** By optimizing the components and reducing the number of buffers used.
+*   **Decreasing Area:** By minimizing the use of resources (buffers and logic gates).
+*   **Maintaining Effectiveness:** Ensuring that the performance and functionality are not compromised despite the resource reduction.
+
+The surrounding text also implies that buffers were initially removed during synthesis but were forcibly retained using the 'dont\_touch' command. This suggests that buffers play a crucial role in the ISM design for signal integrity and delay management. The text on page 16 indicates that signal delay is actively analyzed using Cadence Virtuoso, suggesting precise timing control is paramount.
+
+The specific circuit in Fig 5 is likely illustrating how the ISM design functions with reduced resources but still retains the same operational performance. The surrounding text refers to the selection of medium-strength buffers and low-delay multiplexers, further supporting the idea of careful component selection.
+
+
+
+=== Page 16 ===
+3.3.1 ISM Cell Selection:
+• Buffer Selection: A medium-strength buffer was chosen to ensure adequate signal
+driving while minimizing power consumption and maintaining performance.
+• MUX Selection: The multiplexer was selected based on its low delay characteristics,
+optimizing speed and reducing propagation delay in the ISM design.
+3.4.1 Analysis of ISM Delays:
+• Path Setup: To improve the drive strength, an inverter is placed between the two D
+flip-flops (DFFs) at the Begin Point and Endpoint.
+• Delay Adjustment: The path delay pessimism can be adjusted by selecting the
+appropriate select lines (S0, S1).
+• Pulsated Input: A pulsated input is provided to the Begin Point DFF to initiate the
+signal.
+• Delay Observation: The delay caused by the selected ISM path is observed at the
+Endpoint DFF output.
+Fig 8: The schematics of the ISM design are inserted in a path illustration
+Timing Analysis with ADE L in Cadence Virtuoso:
+The delay of the signal at each marked point and the properties of the input
+data pulse at the Vin pin are observed by providing a pulsated input to the Begin Point DFF
+and checking the delay created by the selected ISM path at the Endpoint DFF output.
+16 | Page
+
+[Image page_16_image_0.jpeg Analysis (by Gemini)]
+Here's a thorough analysis of the image based on the provided information:
+
+**Visual Elements and Structure:**
+
+The image (Fig 8) is a schematic diagram representing a digital circuit, specifically the ISM (In Situ Measurement) design described in the text. It depicts the interconnection of several components:
+
+*   **D Flip-Flops (DFFs):** There are two DFFs, labeled "HS65\_LS\_DFPQX8." These are the primary storage elements.  One is located at the "Begin Point" and the other at the "Endpoint" as described in the surrounding text.  They each have inputs D (data), CP (clock pulse), and outputs Q.
+*   **Inverters:** Several inverters are present, represented by triangles. An inverter is present after the first DFF (labeled with the number "10" next to it) and before the input to the Multiplexer. Then 6 inverters in three paths (P1_B1 to P3_B3)
+*   **Multiplexer (MUX):** A 4x1 multiplexer, labeled "HS65\_LS\_MUX41X4," selects one of its four inputs (D0, D1, D2, D3) and forwards it to the output (Z). The selection is controlled by select lines "s0" and "s1".
+*   **Pulse Generators:** Two pulse generators are shown. The generator connected to the first DFF's "D" input is labelled "Vin," and is likely the "Pulsated Input" mentioned in the text.  The second pulse generator is connected to the clock pulse (CP) inputs of both DFFs.
+*   **Connections:** Lines connect the components, representing electrical signal flow. Dots on the lines represent connection points.
+
+**Text within the Image:**
+
+*   **Component Labels:**
+    *   HS65\_LS\_DFPQX8 (D Flip-Flop)
+    *   HS65\_LS\_MUX41X4 (Multiplexer)
+    *   HS65\_LS\_BFX2 (Buffer?)
+*   **Input/Output Labels:**
+    *   Vin (Input Voltage)
+    *   Vout (Output Voltage)
+    *   Input
+    *   Output
+*   **Multiplexer Inputs:** D0, D1, D2, D3
+*   **Multiplexer Select Lines:** s0, s1
+*   **Internal Nodes:** Z, 10, 11, 12, 13, 14, 15, 16, 17, 18
+*   **Buffer Path names**: P1_B1, P2_B1, P3_B1, P2_B2, P3_B2, P3_B3
+
+**Context and Importance:**
+
+Based on the text, the image illustrates the design of an ISM (In Situ Measurement) circuit used for timing analysis. Here's a breakdown of its importance:
+
+1.  **ISM Design Illustration:** The figure visually represents the architecture of the ISM, providing a concrete view of how the DFFs, inverters, and multiplexer are connected.
+
+2.  **Delay Analysis:** The text mentions that a pulsated input is provided to the Begin Point DFF, and the resulting delay is observed at the Endpoint DFF. The schematic shows how this input (Vin) is applied and how the output (Vout) is measured. The various points on the schematic are marked ("10, 11, 12, 13...") allowing for delay measurement at each of these steps.
+
+3.  **Delay Adjustment Mechanism:** The multiplexer and its select lines (S0, S1) are crucial for adjusting the path delay pessimism. By selecting different inputs to the multiplexer, different signal paths and hence different delays can be introduced. The buffers P1_B1, P2_B1, P3_B1, P2_B2, P3_B2, P3_B3 are the signal paths that control this delay.
+
+4.  **Optimization and Trade-offs:** The surrounding text describes the need to balance performance with power consumption and area. The choice of a medium-strength buffer and the optimization of components are directly related to this. The ISM provides a mechanism to measure and adjust delays in a way that meets these constraints.
+
+5.  **Technology Specific:** The text mentions the use of a 2x1 multiplexer in the 45nm process (Fig 7) due to the unavailability of a 4x1 MUX.  Figure 8 explicitly shows a 4x1 MUX, meaning this design is likely in a different technology node (possibly 65nm as in Fig 5, though the caption of Fig 8 does not specify this).
+
+**In summary,** Fig 8 is crucial because it visually represents the ISM design and allows researchers to understand how the circuit functions, how delays are introduced and adjusted, and how the timing analysis is performed. It provides a key element in understanding the optimization process described in the surrounding text.
+
+
+
+=== Page 17 ===
+Fig 9: The schematics generated by importing the s27 verilog
+code
+F ig 9: Delay of the signal at each marked point and the properties of
+input data pulse at Vin pin
+17 | Page
+
+[Image page_17_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image provided, considering the surrounding text and context:
+
+**Overall Description**
+
+The image (Fig 9) presents a transient response simulation result. It shows multiple voltage waveforms plotted against time. These waveforms represent the voltage signals at different points within the s27 benchmark circuit, specifically labeled as `/t1`, `/t2`, `/t3`, `/t4`, `/t5`, and `/vin`. The waveforms are square waves, indicating digital signals.
+
+**Visual Elements and Structure**
+
+*   **Graph:** The core of the image is a graph with time (in nanoseconds) on the x-axis and voltage (V) on the y-axis.
+
+*   **Waveforms:** Six distinct waveforms are plotted, each with a different color: red (`/t1`), green (`/t2`), magenta (`/t3`), cyan (`/t4`), purple (`/t5`), and yellow (`/vin`). Each waveform's label is displayed to the left of the graph area along with a corresponding voltage scale.
+
+*   **Labels and Scales:** The y-axis has voltage values marked. Each waveform's label displays also two y-axis voltage values, presumably representing the "high" and "low" voltage levels of the square wave. The x-axis is labeled with time in nanoseconds, ranging from 0 to 80 ns.
+
+*   **User Interface Elements:** The image appears to be a screenshot of a simulation tool (likely Cadence Virtuoso, based on the surrounding text). There are scrollbars and other UI elements along the edges of the image, indicating it's an interactive display within a software application. The title bar displays "Transient Response" and the date and time "Fri Jun 21 13:50:52".
+
+**Textual Elements**
+
+The following text is extracted from the image:
+
+*   "Transient Response"
+*   "Name"
+*   "Vis"
+*   "/t1" (red waveform)
+*   "/t2" (green waveform)
+*   "/t3" (magenta waveform)
+*   "/t4" (cyan waveform)
+*   "/t5" (purple waveform)
+*   "/vin" (yellow waveform)
+*   "V (V)" (y-axis label)
+*   "time (ns)" (x-axis label)
+*   Voltage scale numbers (e.g., 1.62, -0.517, 1.23, -0.132)
+*   "Fri Jun 21 13:50:52"
+
+**Significance and Context**
+
+*   **S27 Benchmark Circuit:** The image is directly related to the s27 benchmark circuit. According to the text, it shows waveforms generated after importing the s27 Verilog code into the simulation environment.
+
+*   **ISM Insertion Effects:** The surrounding text focuses on the Insertion of Sequential Monitoring (ISM) and its effect on the signal path delays. Fig 9 specifically displays "Delay of the signal at each marked point and the properties of input data pulse at Vin pin". The signals `/t3`, `/t4`, and `/t5` likely correspond to specific points after the insertion of one, two, and three buffers respectively, as explained in section 3.4.2. `/vin` represents the input signal.
+
+*   **Delay Analysis:** The image is a visual representation of the timing analysis, which is performed to measure and understand the delay introduced by the ISM components (specifically, the buffers).
+
+*   **Verification of Non-linear Delay:** The surrounding text discusses how the delay introduced by the buffers doesn't increase linearly, probably due to loading effects. This image provides the visual evidence for this claim by showing how the waveforms at `/t3`, `/t4`, and `/t5` are not equally spaced in terms of their falling/rising edges relative to each other.
+
+**Importance**
+
+Fig 9 is important because it graphically demonstrates the impact of ISM insertion on signal propagation within the s27 benchmark circuit.  It allows for a visual inspection of signal delays and timing characteristics at different points. It provides empirical evidence supporting the analysis of non-linear delay behavior mentioned in the text. It's a crucial visualization of the experimental results used to evaluate the performance of the ISM design. The waveforms at different checkpoints allows us to understand and quantify the delay characteristics of the inserted buffers.
+
+
+
+[Image page_17_image_1.png Error]
+No API key available for start.
+
+
+[Image page_17_image_2.png Error]
+No API key available for start.
+
+
+=== Page 18 ===
+3.4.2 Observation:
+Number of combination Buffer Time delay (ps)
+One buffer (t3) 26.33
+Two buffers (t4) 56.15
+Three buffers (t5) 85.32
+• Loading Effect: The buffer delay is affected by the loading effect, causing non-linear
+delay behavior.
+• Buffer Behavior: The delay does not increase linearly when checking the values from
+checkpoints t3, t4, and t5. The buffers exhibit ‘non-linear characteristics’ due to the
+varying load conditions, impacting signal propagation time.
+3.4.3 Effect of ISM Insertion in Benchmark Circuit s27:
+Technology used: 65nm
+Library used: CORE65LPSVT_bc_1.30V_125C.lib
+s27 Circuit without ISM:
+Fig 10: s27 Benchmark circuit without ISM
+18 | Page
+
+[Image page_18_image_0.png Error]
+No API key available for start.
+
+
+=== Page 19 ===
+s27 Circuit with ISM:
+ISM
+Fig 11: s27 Benchmark circuit with ISM
+3.4.4. Observations:
+s27 without ISM:
+The slack value of the Critical path-1 is ‘0.711’
+s27 with ISM:
+ISM’s MUX ISM selected Slack Critical path Slack Degradation (ps)
+path selected Path Contains (ns)
+D0 path 0 Buffer & 0 0.592 13 119
+Multiplexer
+D1 path 1 Buffer & 1 0.551 7 160
+Multiplexer
+D2 path 2 Buffer & 1 0.517 3 194
+Multiplexers
+D3 path 3 Buffer & 1 0.476 1 236
+Multiplexers
+Here the Slack Degradation is calculated by,
+Slack degradation for D1 path = 0.711 ns - 0.551 ns = 0.160 ns = 160 ps.
+19 | Page
+
+[Image page_19_image_0.png Error]
+No API key available for start.
+
+
+=== Page 20 ===
+• The ISM introduces complexity and delay, which negatively affects the overall timing
+performance of the system, thereby ‘worsening the slack’.
+3.4.5 Effect of ISM Insertion in Benchmark Circuit s38417:
+S38417 Circuit without ISM:
+The slack value of the Critical path-1 is ‘- 45 ps’.
+S38417 Circuit with ISM:
+Paths Path content Slack (ps)
+Path D1 1 mux + 1 BUF -312
+Path D2 1 mux + 2 BUF -372
+Path D3 1 mux + 3 BUF - 440
+• The ISM introduces complexity and delay, which negatively affects the overall timing
+performance of the system, thereby ‘worsening the slack’.
+20 | Page
+
+=== Page 21 ===
+CHAPTER-4
+AGING ANALYSIS OF INVERTER
+4.1.1 Reliability & Ageing Analysis using Eldo Simulation:
+• Timing Analysis: Performed timing analysis using Eldo simulation for the maxNmaxP
+corner.
+• Delay Focus: Focused primarily on analyzing the delays, especially related to the
+switching performance.
+• Aging Impact: Investigated the increase in average switching delays due to the aging
+process.
+• Simulated Results: Plotted the simulated results to visualize the rise in switching
+delays over time due to aging effects.
+Aging Period Delay (s)
+y=0 yrs/months 1.8855E-11
+y=5 months 1.9056E-11
+y=10 months 1.9110E-11
+y= 12m /1yr 1.9125E-11
+y=18 months 1.9170E-11
+y=2 yr 1.9203E-11
+y=3 yr 1.9260E-11
+y=4 yr 1.9309E-11
+y=5 yr 1.9350E-11
+y=6 yr 1.9388E-11
+y=7 yr 1.9423E-11
+y=8 yrs 1.9455E-11
+y=9 yr 1.9485E-11
+21 | Page
+
+=== Page 22 ===
+y=10 yr 1.9513E-11
+y=15 yr 1.9638E-11
+Fig 12: Delay Degradation over the Ages
+• Observation: Over time, the delay of the inverter increases due to the aging process.
+• Aging Effect: The simulation showed that as the circuit ages, the switching delays of
+the components (such as buffers and MUX) grow, leading to performance degradation.
+• Impact: The increase in delay over the aging process highlights the need for
+considering long-term reliability in timing analysis.
+4.1.2 Ageing Analysis using Aged Library:
+• To ensure long-term reliability and optimize performance.
+• By understanding and mitigating the impacts of process, voltage, temperature
+variations, and aging on the critical path.
+22 | Page
+
+[Image page_22_image_0.png Error]
+No API key available for start.
+
+
+=== Page 23 ===
+Fig 13: Delays across Various PVT, and Ageing
+• Voltage Effect: Changes in voltage can lead to variations in signal propagation speed,
+affecting the overall delay of the critical path.
+• Temperature Effect: Temperature fluctuations can cause delay variations due to
+changes in material properties and transistor behavior.
+• Aging Effect: As the circuit ages, the degradation of transistors and other components
+increases the delay, further affecting the critical path.
+• Combined Impact: The critical path delay is influenced by the combined effects of
+voltage, temperature, and aging, resulting in performance degradation over time.
+23 | Page
+
+[Image page_23_image_0.png Error]
+No API key available for start.
+
+
+=== Page 24 ===
+CHAPTER-5
+RTL TO GDS FLOW – CORTEX M0
+5.1.1 RTL TO GDS FLOW:
+• The initial CORTEX-M0 code was implemented at the 180 nm technology node.
+• We studied its functionality in 180nm and successfully implemented the design.
+• Reduce the technology node from 180nm to ‘45nm’ to explore the functionality of
+CORTEX-M0 at a smaller scale.
+1. Synthesis along with DFT:
+Input Files:
+• RTL File, Lib File, Constraint File
+• TCL File: Script file for automating synthesis and design processes.
+DFT:
+set_attribute dft_scan_style muxed_scan
+define_dft shift_enable -name $rm_scan_enable -active high -create_port $rm_scan_enable
+set_attribute lp_clock_gating_test_signal [find / -test_signal $rm_scan_enable] [find / -design *]
+define_dft test_mode -active high -create_port RSTBYPASS
+# Defining scan chains (16 in our case)
+for { set i 0 } {$i <= [expr $rm_no_of_chains - 1] } {incr i} {
+define_dft scan_chain -sdi ${rm_scan_data_in}${i} -sdo ${rm_scan_data_out}${i} -
+create_ports
+}
+# DFT rules initially fail
+check_dft_rules
+• DFT Implementation: Design-for-Testability (DFT) was achieved using ‘MUX-style flip-
+flops’.
+• Scan Chains: A total of ‘16 scan chains’ were implemented for efficient testability.
+• Enhanced Test Coverage: The MUX-style flip-flops and scan chains improved fault
+24 | Page
+
+=== Page 25 ===
+detection and debugging capabilities.
+2. STA analysis after DFT:
+# Report setup violations for 300 worst slack paths
+report_timing -retime path_slew_propagation -max_paths 300 -nworst 300 -late -net -format {pin
+arc net cell slew retime_slew delay retime_delay arrival required} >
+$report_dir/report_PBA_GBA_setup.rpt
+# Report hold violations for 300 worst slack paths
+report_timing -retime path_slew_propagation -max_paths 300 -nworst 300 -early -net -format {pin
+arc net cell slew retime_slew delay retime_delay arrival required} >
+$report_dir/report_PBA_GBA_hold.rpt
+• Post-Synthesis Analysis: Static Timing Analysis (STA) was performed using
+‘report_timing’ after synthesis.
+• Setup Violations: Identified and fixed instances where data arrival time exceeded the
+required time.
+•
+Hold Violations: Detected cases where data arrived too early, causing stability issues.
+PHYSICAL DESIGN:
+3. Power Planning:
+#/*Adding Rings*/
+addRing -skip_via_on_wire_shape Noshape -skip_via_on_pin Standardcell -center 1 -
+stacked_via_top_layer M7 -type core_rings -jog_distance 0.435 -threshold 0.435 -nets {GND
+VDD} -follow core -stacked_via_bottom_layer M1 -layer {bottom M6 top M6 right M7 left M7}
+-width 1.25 -spacing 0.4 -offset 0.435
+#/*Adding Stripes*/
+addStripe -skip_via_on_wire_shape Noshape -block_ring_top_layer_limit M7 -
+max_same_layer_jog_length 0.88 -padcore_ring_bottom_layer_limit M5 -number_of_sets 10 -
+skip_via_on_pin Standardcell -stacked_via_top_layer M7 -padcore_ring_top_layer_limit M7 -
+spacing 0.4 -merge_stripes_value s0.435 -layer M6 -block_ring_bottom_layer_limit M5 -width
+0.44 -nets {VDD GND} -stacked_via_bottom_layer M1
+25 | Page
+
+=== Page 26 ===
+• Adding Rings: Utilized the ‘addRing’ command to create power and ground rings (GND
+and VDD) around the core, with specified layers, width, spacing, and offset values.
+• Adding Stripes: Used the ‘addStripe’ command to add power and ground stripes with
+defined layers, width, spacing, and limits, ensuring efficient power delivery and
+minimizing IR drop.
+4. Placement:
+defIn
+/home/devaprasanth23210/Desktop/DEVA_M0/reports/synthesis/CORTEXM0INTEGRATION_
+mem_wrapper.def
+setPlaceMode -fp false
+placeDesign
+• DEF File: The .def file contains references to the scan chains in the synthesized netlist.
+• Placement Settings: Placement mode was configured with ‘setPlaceMode -fp false’, and
+the design was placed using the ‘placeDesign’ command.
+5. Clock Tree Synthesis:
+set_ccopt_mode -cts_buffer_cells {BUF_X1 BUF_X2 BUF_X3}-cts_opt_priority all
+create_ccopt_clock_tree_spec -file ../scripts/ccopt_new.spec -keep_all_sdc_clocks -views
+{view_slow view_fast}
+source ../scripts/ccopt_new.spec
+# ccopt_design is a super command. Capable of doing complete CTS
+ccopt_design -check_prerequisites
+ccopt_design
+optDesign -postCTS;
+• CTS Buffer Cells: Configured clock tree synthesis (CTS) to use specific buffer cells
+‘(BUF_X1, BUF_X2, BUF_X3)’ with ‘set_ccopt_mode’.
+• CTS Execution: Used ‘ccopt_design -check_prerequisites’ to validate prerequisites.
+Executed the comprehensive CTS process with ‘ccopt_design’.
+26 | Page
+
+=== Page 27 ===
+• Post-CTS Optimization: Performed further optimization after CTS using ‘optDesign -
+post-CTS’.
+6. Routing:
+setDesignMode -bottomRoutingLayer M1 -topRoutingLayer M6
+routeDesign
+• Design Mode Setup: Set the routing design mode with ‘setDesignMode’, specifying M1
+as the bottom routing layer and M6 as the top routing layer.
+• Routing: Executed the routing process for the design with the ‘routeDesign’ command.
+7. GDS:
+streamOut ../reports/place_and_route/GDS/GDSoutput
+saveNetlist
+../reports/place_and_route/netlist/CORTEXM0INTEGRATION_wrapper__post_pnr.v
+• GDS Stream Out: Used ‘streamOut’ to generate and save the GDS file to the directory.
+• Netlist Save: Saved the post-place and routed netlist using ‘saveNetlist’ to the file.
+5.1.2 Validations:
+1. Final Layout:
+• Final Layout: The final layout reflects the physical design, including all cells and
+routing, and is ready for further steps like GDS generation and sign-off.
+27 | Page
+
+=== Page 28 ===
+Fig 14: Final Layout
+2. STA Analysis:
+Static Timing Analysis (STA) is performed at multiple stages,
+• After Synthesis: To check timing violations and verify setup and hold requirements.
+• Post-CTS (Clock Tree Synthesis): To assess the effect of clock tree insertion on
+timing and check for any new violations.
+• Post-Routing: To examine the final timing after routing, ensuring that the design meets
+timing requirements and evaluating slack differences.
+3. DFT Rules:
+DFT Rules: Design-for-Testability (DFT) rules are checked to ensure the design is testable.
+• Clock Rule Violations: Ensured there were no violations related to clocking,
+confirming proper clock domain management.
+• Async Set/Reset Rule Violations: Verified that no asynchronous set/reset violations
+exist, ensuring that all set/reset signals are properly synchronized.
+28 | Page
+
+[Image page_28_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 29 ===
+Fig 15: DFT Report
+4. Design Rule Check (DRC):
+• Design Rule Check (DRC): A thorough Design Rule Check was performed to verify
+the layout against manufacturing constraints.
+• No Violations: The DRC showed no violations, indicating that the design adheres to
+all the required design rules.
+Fig 16: DRC Report
+29 | Page
+
+[Image page_29_image_0.png Error]
+No API key available for start.
+
+
+[Image page_29_image_1.jpeg Error]
+No API key available for start.
+
+
+=== Page 30 ===
+5. Check Design:
+• Unresolved References: Checked for any unresolved references; none were found.
+• Empty Modules: Verified there were no empty modules in the design.
+• Undriven Ports & Pins: Ensured all ports and pins were properly driven; no undriven
+ports/pins were found.
+• Multi-driven Ports & Pins: Checked for any multi-driven ports/pins; none were
+detected.
+Fig 17: Design Report
+5.2.1 RTL TO GDS FLOW WITH ISM:
+Design Process:
+From Chapter 5, it was determined that ISM insertion after CTS is more efficient. Therefore, the
+physical design process is split into two parts:
+Physical Design Flow – Part 1
+• Partitioning: Divide the design into manageable sections for optimized placement and
+routing.
+• Floor Planning: Establish layout constraints and ensure efficient space utilization.
+30 | Page
+
+[Image page_30_image_0.png Error]
+No API key available for start.
+
+
+=== Page 31 ===
+• Power Planning: Develop a robust power distribution network to support the design.
+• Placement: Position components to meet timing and design requirements.
+• Clock Tree Synthesis (CTS): Balance the clock tree for minimized skew and latency.
+• Output: Generate a netlist after Post CTS, which is the input for ISM insertion in Part 2.
+ISM Insertion
+• ISM Insertion: Insert ISM into the Post-CTS netlist, specifically targeting reg-to-reg paths
+to monitor delays effectively.
+Physical Design Flow – Part 2
+• Placement (Second Pass): Additional placement is performed to accommodate ISM
+insertion before routing.
+• Routing: Complete signal routing, ensuring timing closure and minimal Design Rule
+Check (DRC) violations.
+Generation of Reg-to-Reg Paths:
+• ISM Insertion Requirement: ISM should be inserted only in reg-to-reg paths to
+monitor delays effectively.
+• Issue: In the initial implementation, standard timing report commands failed to identify
+reg-to-reg paths, hindering the proper insertion of ISM.
+• Solution: The ‘timeDesign’ command was used to generate detailed timing reports for
+the CORTEX M0 design, covering various path types such as:
+a. Reg-to-Reg paths,
+b. Default paths,
+c. Reg-to-Cgate paths.
+timeDesign -postCTS -pathReports -drvReports -slackReports -numPaths 100 -prefix
+CORTEXM0_postCTS -outDir ../reports/place_and_route/Setup_Post_CTS
+31 | Page
+
+=== Page 32 ===
+The output of this command gives,
+5.2.2 Insertion of ISM in Netlist after CTS:
+ISM Code:
+Fig 17: ISM Circuit
+• The ISM code that corresponds to the above diagram is provided below.
+module circuit(vin, S0, vout);
+input vin, S0;
+output vout;
+wire vin, S0,vout, n_1;
+BUF_X16 P1B1(.A (vin), .Z (n_1));
+MUX2_X2 M1(.A (vin), .B (n_1), .S (S0), .Z (vout));
+endmodule
+• The Netlist is generated after Clock Tree Synthesis (CTS).
+• In this Netlist, the ISM is inserted.
+• Routing is then completed after the insertion of the ISM.
+• Below is an example demonstrating the process of ISM insertion.
+32 | Page
+
+[Image page_32_image_0.jpeg Error]
+No API key available for start.
+
+
+[Image page_32_image_1.png Error]
+No API key available for start.
+
+
+=== Page 33 ===
+Netlist before ISM Insertion Netlist after ISM Insertion
+SDFF_X1 \reg_r14_reg[30] (.D(psr_gpr_wdata_i[30]), wire n_ism_1, D_wire_1, s_ism_1;
+.SE(RC_CG_TEST_PORT), BUF_X16 P1B1_ism_1(.A (psr_gpr_wdata_i[30]),
+.SI(n_2721),
+.Z (D_wire_1));
+.CK(rc_gclk_5392),
+MUX2_X2 M1_ism_1(.A (psr_gpr_wdata_i[30]), .B
+.Q(n_2722),
+(D_wire_1), .S (s_ism_1), .Z (n_ism_1));
+.QN(n_1648));
+SDFF_X1 \reg_r14_reg[30] (.D(n_ism_1),
+.SE(RC_CG_TEST_PORT),
+.SI(n_2721),
+.CK(rc_gclk_5392),
+.Q(n_2722),
+.QN(n_1648));
+CP End FF Post CTS Post CTS
+Without ISM Slack With ISM Slack
+reg_r10_reg[29] 11.672 10.899
+reg_r14reg[29] 11.680 10.903
+reg_r11_reg[29] 11.674 10.902
+Insertion introduces pessimism due to using in-situ monitors (ISM), leading to
+observable degradation in delay.
+33 | Page
+
+=== Page 34 ===
+CHAPTER-6
+STAGE SELECTION FOR ISM INSERTION
+Critical paths are selected for ISM (In-Situ Monitoring) insertion at various stages of the
+RTL-to-GDS flow. Each stage offers unique advantages and drawbacks in terms of timing
+accuracy, implementation effort, and design complexity. Below is a detailed explanation of critical
+path selection at four key stages: Post-Synthesis, Pre-Clock Tree Synthesis (Pre-CTS), Post-
+Clock Tree Synthesis (Post-CTS), and Post-Route.
+6.1. Post-Synthesis
+Overview:
+At the post-synthesis stage, the design is represented in terms of logic gates and flip-flops, without
+considering physical placement or interconnect delays. Critical paths are identified based on static
+timing analysis (STA) performed on the synthesized netlist.
+Advantages:
+• Simplicity: The design is free from physical design complexities, making it easier to
+implement ISM insertion.
+• Early Detection: Identifies potential critical paths early, allowing time to address them in
+later stages.
+Drawbacks:
+• Lack of Physical Awareness: Critical paths are identified without considering actual cell
+placements or interconnect delays, leading to inaccuracies.
+• Limited Parasitic Effects: The impact of parasitic resistances and capacitances is not
+included.
+Best Practices:
+• Perform STA to identify paths with minimal slack.
+• Use early-stage critical paths as initial candidates for ISM insertion but refine them later in
+the flow.
+6.2. Pre-Clock Tree Synthesis (Pre-CTS)
+Overview:
+At the pre-CTS stage, the design has undergone placement, but the clock tree is not yet
+34 | Page
+
+=== Page 35 ===
+implemented. Critical paths are analyzed considering initial placement data, which provides a
+balance between accuracy and simplicity.
+Advantages:
+• Placement Awareness: The analysis incorporates the effect of cell placement, improving
+timing accuracy compared to the post-synthesis stage.
+• Avoids Clock Tree Disruption: ISM insertion at this stage ensures that the clock tree
+synthesis (CTS) phase can optimize the clock network without being affected by ISMs
+added later.
+• Reduced Iterations: By inserting ISMs before CTS, subsequent iterations of timing
+closure are minimized, saving time and resources.
+Drawbacks:
+• Partial Timing View: Interconnect parasitics are modeled, but clock tree effects such as
+skew and clock delays are not yet considered.
+Best Practices:
+• Perform STA with placement data to identify realistic critical paths.
+• Focus on paths with minimal slack while ensuring ISM placement does not interfere with
+clock tree optimization.
+6.3. Post-Clock Tree Synthesis (Post-CTS)
+Overview:
+At this stage, the clock tree has been implemented, ensuring balanced clock signals across the
+design. Critical paths include the impact of clock tree skew and clock delays.
+Advantages:
+• Clock Skew Inclusion: Paths affected by clock-related delays are better identified.
+• Improved Accuracy: Critical path analysis is more accurate compared to earlier stages, as
+it includes clock tree parasitics.
+Drawbacks:
+• Disruption of Clock Tree Optimization: ISM insertion at this stage may disrupt the clock
+tree and require re-synthesis of the clock network, leading to additional iterations.
+• Interconnect Effects Missing: Interconnect parasitics are still not fully modeled, leaving
+room for inaccuracies.
+Best Practices:
+• Use STA to refine paths identified at earlier stages, focusing on those impacted by clock.
+35 | Page
+
+=== Page 36 ===
+• Minimize ISM insertion to reduce disruptions to the clock tree structure.
+6.4. Post-Route
+Overview:
+At the post-route stage, physical placement, routing, and all parasitic effects of interconnects have
+been finalized. STA at this stage is the most accurate, reflecting actual delays in the fabricated
+chip.
+Advantages:
+• Highest Accuracy: The analysis incorporates all parasitics, such as resistance, capacitance,
+and inductance, along with crosstalk effects.
+• Comprehensive Timing View: Provides the most realistic timing picture for ISM
+placement.
+Drawbacks:
+• High Complexity: ISM insertion at this stage may require significant rework and iterations
+to close timing, increasing design effort.
+• Resource-Intensive: Performing STA with full parasitic extraction and incorporating ISM
+placement is computationally expensive and time-consuming.
+Best Practices:
+• Perform detailed STA to identify paths with minimal slack.
+• Finalize ISM placement on critical paths that remain after considering all physical and
+parasitic effects.
+Stage Timing Accuracy Ease of Parasitic Impact of
+Insertion Coverage Timing Closure
+Post Synthesis Low High None Minimal
+Pre CTS Medium Moderate Placement Low
+Parasitics Only
+Post CTS Medium – High Low Clock Tree Moderate
+Parasitics only
+Post Route High Very Low Comprehensive High
+36 | Page
+
+=== Page 37 ===
+CHAPTER-7
+RESULTS & OBSERVATIONS
+7.1. Objective:
+Goal:
+• To analyze changes in critical paths during various stages of the design flow after In-Place
+Optimization (ISM insertion).
+Scope:
+• 1000 top critical register-to-register paths were considered.
+• Changes in critical path endpoints were observed across four key stages.
+7.2. Key Stages & Observations:
+1. Post Synthesis (Easy Implementation Stage)
+• Endpoint Changes: 44
+• Observation: High endpoint changes due to lack of placement and timing
+optimization.
+2. Post Placement (Pre-CTS) (Moderate Implementation Stage)
+• Endpoint Changes: 19
+• Observation: Balanced accuracy and implementation effort. Timing analysis
+reflects placement effects without clock tree disruption.
+3. Post CTS (Clock Tree Synthesis) (Difficult Implementation Stage)
+• Endpoint Changes: 13
+• Observation: Critical paths stabilize further, but ISM insertion risks clock tree
+disruption and requires re-optimization.
+4. Post Routing (Very Difficult Implementation Stage)
+• Endpoint Changes: 9
+• Observation: Minimal endpoint changes, highest accuracy, but extremely complex
+and challenging for timing closure.
+37 | Page
+
+=== Page 38 ===
+Fig 18: Stages of ISM Insertion
+7.3. Insights of Critical Path
+Observations on Critical Path Endpoint Changes:
+• Trend: Endpoint changes reduce progressively across the stages, stabilizing at Post
+Routing.
+• Post Placement (Pre-CTS): Achieves a significant change drop while balancing
+accuracy and implementation effort.
+Fig 19: Endpoint Coverage with Critical Paths
+38 | Page
+
+[Image page_38_image_0.png Error]
+No API key available for start.
+
+
+[Image page_38_image_1.png Error]
+No API key available for start.
+
+
+=== Page 39 ===
+7.4. Optimal Stage for ISM Insertion: Pre-CTS
+Pre-CTS insertion offers the best trade-off between accuracy, timing closure, and
+implementation complexity:
+1. Avoids Clock Tree Disruption:
+• ISM insertion before CTS ensures the clock tree synthesis is undisturbed,
+eliminating the need for re-optimization.
+2. Placement Awareness:
+• Timing analysis during Pre-CTS reflects placement effects, improving accuracy
+over Post Synthesis insertion.
+3. Reduced Complexity:
+• Insertion at Pre-CTS simplifies downstream timing closure, reducing iterations
+and resource usage.
+Why Not Other Stages?
+1. Post-Synthesis:
+• Limitation: Timing analysis lacks placement information, leading to inaccurate
+ISM placement.
+2. Post-CTS:
+• Risk: ISM insertion disrupts the clock tree and requires additional optimization,
+increasing complexity.
+3. Post-Routing:
+• Challenge: Highest accuracy but impractical due to extreme complexity and
+timing closure challenges.
+39 | Page
+
+=== Page 40 ===
+7.5. Conclusion:
+The analysis shows a clear inverse relationship between the number of critical paths covered
+and the number of endpoint changes observed during ISM insertion. Specifically:
+1. Higher Critical Path Coverage Reduces Endpoint Changes:
+• As the critical path count increases, the coverage improves, resulting in fewer
+endpoint changes across the design.
+• This trend indicates diminishing variability when a broader set of paths is
+analyzed, leading to greater design stability.
+2. Optimal Coverage:
+• While covering more critical paths improves endpoint stability, the rate of
+improvement diminishes as critical paths increase. This suggests there is a
+practical limit to critical path coverage, beyond which gains are minimal.
+3. Pre-CTS Stage as the Best Balance:
+• Pre-CTS ISM insertion remains optimal as it balances timing accuracy and
+implementation effort while avoiding clock tree disruptions.
+• The decreasing endpoint variability with increased critical path coverage
+reinforces the importance of analyzing an adequate number of critical paths
+during ISM insertion.
+In conclusion, covering a higher number of critical paths enhances endpoint stability, and pre-
+CTS ISM insertion remains the most practical and efficient stage for achieving a reliable design
+outcome.
+40 | Page
+
+=== Page 41 ===
+CHAPTER-8
+REFERENCES
+[1] R. J. Shah, “Reliability Improvement by Dynamic Wearout Management using In-Situ
+Monitors,” phdthesis, Université Grenoble Alpes [2020-....], 2020. Accessed: Jul. 28, 2024.
+[Online]. Available: https://theses.hal.science/tel-03103505
+[2] R. Shah, F. Cacho, R. Lajmi, and L. Anghel, “Aging Investigation of Digital Circuit using
+In-Situ Monitor,” in 2018 International Integrated Reliability Workshop (IIRW), Oct. 2018,
+pp. 1–4. doi: 10.1109/IIRW.2018.8727100.
+[3] S. Sarrazin, S. Evain, I. Miro-Panades, L. A. de Barros Naviner, and V. Gherman, “Flip-
+Flop Selection for In-Situ Slack-Time Monitoring based on the Activation Probability of
+Timing-Critical Paths,” in 2014 IEEE 20th International On-Line Testing Symposium (IOLTS),
+Jul. 2014, pp. 160–163. doi: 10.1109/IOLTS.2014.6873689.
+[4] J. Mahmod, S. Millican, U. Guin, and V. Agrawal, “Special Session: Delay Fault Testing -
+Present and Future,” in 2019 IEEE 37th VLSI Test Symposium (VTS), Apr. 2019, pp. 1–10. doi:
+10.1109/VTS.2019.8758662.
+[5] A. Gomez, L. Poehls, F. Vargas, and V. Champac, “An early prediction methodology for
+aging sensor insertion to assure safe circuit operation due to NBTI aging,” in 2015 IEEE 33rd
+VLSI Test Symposium (VTS), Napa, CA, USA: IEEE, Apr. 2015, pp. 1–6. doi:
+10.1109/VTS.2015.7116290.
+[6] A. F. Gomez and V. Champac, “Selection of Critical Paths for Reliable Frequency Scaling
+under BTI-Aging Considering Workload Uncertainty and Process Variations Effects,” ACM
+Trans. Des. Autom. Electron. Syst., vol. 23, no. 3, p. 27:1-27:21, Feb. 2018, doi:
+10.1145/3177864.
+[7] D. De Caro, “Glitch-Free NAND-Based Digitally Controlled Delay-Lines,” IEEE
+Transactions on Very Large Scale Integration (VLSI) Systems, vol. 21, no. 1, pp. 55–66, Jan.
+2013, doi: 10.1109/TVLSI.2011.2181547.
+[8] S. Das, “RAZOR: A VARIABILITY-TOLERANT DESIGN METHODOLOGY FOR
+LOW-POWER AND ROBUST COMPUTING”.
+[9] F. Cacho, A. Benhassain, R. Shah, S. Mhira, V. Huard, and L. Anghel, “Investigation of
+critical path selection for in-situ monitors insertion,” in 2017 IEEE 23rd International
+41 | Page
+
+=== Page 42 ===
+Symposium on On-Line Testing and Robust System Design (IOLTS), Jul. 2017, pp. 247–252.
+doi: 10.1109/IOLTS.2017.8046229.
+[10] A. Benhassain et al., “Robustness of timing in-situ monitors for AVS management,” in
+2016 IEEE International Reliability Physics Symposium (IRPS), Apr. 2016, p. CR-4-1-CR-4-
+6. doi: 10.1109/IRPS.2016.7574593.
+42 | Page
+

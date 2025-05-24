@@ -1,0 +1,814 @@
+=== Page 1 ===
+Sustainably Secure: ChaCha20 Encryption Based on
+In-Memory Compute
+Abstract—Due to its high speed and simple structure, the overlooked.ExistingIMCimplementationsofChaCha20,such
+ChaCha20algorithmoffersabetteralternativetoAES,makingit as in [3], have demonstrated significant energy efficiency and
+well-suitedforlightweightencryptioninIoTdevices[1].However,
+reduced execution time. However, these studies primarily em-
+its execution on traditional Von Neumann architectures incurs
+phasize speedups and security enhancements, neglecting criti-
+significant energy overhead due to frequent memory accesses.
+In-memory compute (IMC) architectures address this challenge calsustainabilityfactorssuchashardwarereuseandlong-term
+by allowing computation directly within memory. Although efficiency. Given that memory occupies a significant portion
+these architectures are characterized by straightforward power ofsiliconarea,usingexistingmemoryarraysforcomputation,
+performance and area parameters, designers leave out other
+rather than relying on dedicated cryptographic accelerators,
+critical design considerations that impact sustainability. In this
+can significantly enhance sustainability by reducing hardware
+paper, we present a secure and sustainable implementation of
+the ChaCha20 encryption algorithm using IMC architectures. redundancy. Additionally, by eliminating processor-memory
+We evaluated the trade-offs of implementing ChaCha20 in communicationoverheads,IMCnaturallyalignswiththegoals
+6T, 9T, and 10T SRAM bitcell architectures by introducing a oflow-powerchipdesign.Despitetheseadvantages,asystem-
+sustainability-focused metric alongside conventional parameters.
+aticevaluationofIMCfromasustainabilityperspectiveisstill
+Additionally,weassessthesecurityofthesearchitecturesagainst
+missing, leaving a crucial gap in research that this work aims
+power-basedside-channelattacksusingWelch’st-test.Amongthe
+evaluated designs, the 6T implementation achieves the smallest to address.
+area footprint but at the cost of degraded performance. In In this work, we extend prior IMC implementations of
+contrast, the 9T implementation preserves the performance of ChaCha20 by evaluating multiple SRAM bitcell architec-
+the 10T design while reducing area overhead. Furthermore,
+tures i.e., 6T, 9T, and 10T, each with distinct trade-offs
+sustainability analysis based on the introduced metric identifies
+in area, power, and performance. Beyond traditional power-
+the 6T bitcell as the most sustainable option.
+Index Terms—Sustainability, In-Memory Compute, IoT, En- performance-area (PPA) analysis, we introduce sustainability
+cryption as a key evaluation metric in IMC-based cryptographic accel-
+erators, emphasizing environmentally conscious chip develop-
+I. INTRODUCTION
+ment.
+The growing demand for lightweight cryptographic solu-
+II. BACKGROUND
+tions in edge and IoT devices has shifted interest toward en-
+cryption algorithms that balance robustness, power efficiency, A. ChaCha20 Algorithm: Overview and Security
+and computational simplicity. ChaCha20, a stream cipher The ChaCha20 algorithm is a stream cipher that generates
+based on ARX (Addition, Rotation, XOR) operations, has a keystream of pseudo-random bits, which is XORed with the
+gainedpreferenceoverAESduetoitsresistancetodifferential plain-text to produce the cipher-text. Decryption is performed
+andlinearcryptanalysis,astreamlinedkeyschedule,andlower by XORing the cipher-text with the same keystream. The
+susceptibility to power analysis attacks. Unlike AES, which algorithm initializes a 4 × 4 state matrix of 16 words (32-
+relies on substitution-permutation networks (SPNs) and de- bit each), comprising a 128-bit constant, a 256-bit key, a 32-
+mandssubstantialhardwareresourcesforS-boxcomputations, bit block counter, and a 96-bit nonce [4]. Encryption involves
+ChaCha20operates efficientlyonlow-power processors,mak- 20 rounds, each with four quarter-round (QR) functions that
+ingitparticularlywell-suitedforedgecomputingapplications. updatefourwordsusingmodularaddition,XOR,androtations.
+However, despite its efficiency, implementing ChaCha20 on A single quarter round function is shown in Fig. 1.
+traditional Von Neumann architectures can introduce energy Duetoitsarithmeticsimplicityanduniformexecutionflow,
+overheads due to frequent memory accesses, a challenge ChaCha20 is inherently resistant to timing-based side-channel
+commoninmemory-boundworkloads[2].Thisbottleneckhas attacks. Furthermore, IMC-based implementation has been
+driven interest in In-Memory Compute (IMC) architectures, shown to enhance security by making power consumption in-
+where computations occur directly within memory arrays. By dependentoftheprocesseddata,effectivelymitigatingpower-
+minimizing data movement, IMC offers a promising approach based attacks, as demonstrated in [3].
+to improving processing speed and reducing power consump-
+B. In-Memory Compute for Security
+tion compared to traditional processor-centric execution.
+While IMC has been extensively researched for improving SRAM bit cells enable fundamental logic operations, such
+parallelism, performance, and security in cryptographic appli- as NAND/AND and NOR/OR, to be executed directly within
+cations,itsroleinsustainablehardwaredesignremainslargely the memory, enabling efficient in-memory computing. This
+
+=== Page 2 ===
+Fig.1. ChaCha20:QuarterRound
+Fig. 2. The above figure shows the representation of a single column. The
+logicunitisNORfor10Tand9Timplementations,andlogic-ANDisused
+for6Timplementation.
+approach allows logical operations to be performed during
+the read operation, eliminating the need for frequent data
+transfers between the processor and memory. The ChaCha20 samples, they should not be able to extract the stored data.
+encryption algorithm consists of 20 quarter rounds, each The t-value is calculated using the Eq.1 [6]:
+involving addition, XOR, and bit-level rotation. As outlined
+X¯ −X¯
+in [3], ChaCha20 can be effectively implemented using in- t= 1 2 (1)
+(cid:113)
+memory computing with SRAM bit cells. In this method, s2 1 + s2 2
+data is read, processed, and written back to memory within a
+n1 n2
+single cycle, known as the Read-Compute-Store (RCS) cycle where X¯ 1 and X¯ 2 are the mean power values of two
+[5]. Unlike conventional memory read operations, in-memory different datasets, s2 1 and s2 2 are their variances, and n 1 and
+computing during the read phase involves activating multiple n 2 are the respective sample sizes.
+wordlinessimultaneously.Specifically,tworowsareactivated A t-value of |4.5| or lower indicates a secure implemen-
+simultaneously, allowing all selected bit cells to influence tation, while a higher value suggests a significant difference
+the discharge of the bit line according to their stored values in power consumption, making key extraction possible [3].
+[3]. As illustrated in Fig.2, different data combinations in Welch’st-testisappliedtotheproposed9Tand6Timplemen-
+bitcell 1 and bitcell 2 lead to distinct logical operations on tationstoassesstheirsecurity.Thetestvectorsaregroupedinto
+the bitline (BL) and its complement (BLB). In particular, for twosets.Encryptionisperformedoneachinputvectorsample
+10T and 9T bitcells, BLB performs the NAND operation, using both the proposed 9T and 6T implementations, and the
+while BL carries out the AND operation. These outputs are correspondingpowertracesarerecorded.Thesepowersamples
+then processed through a logic unit to implement the XOR allow for the estimation of mean, variance, and sample size
+function.Additionally,asdescribedin[3],acustomizedadder for each group. Using these statistical parameters, the t-value
+performs addition using bit cell values derived from the sense is computed to assess the security of the architecture.
+amplifieroutput.Thecomputedresultsarethenwrittenbackto
+III. RELATEDWORKS
+the designated bitcells, completing an entire RCS cycle. This
+process co-occurs across four words, enabling the execution Research on In-Memory Computing (IMC) for crypto-
+of four quarter rounds within a single clock cycle. graphic applications has expanded significantly in recent
+years, demonstrating improvements in performance, energy
+efficiency,andsecurity.Theseimplementationscanbebroadly
+C. Welch’s T-Test
+categorized based on their target algorithms and memory
+It is crucial to evaluate whether the architectures used for technologies.
+implementingtheChaCha20encryptionalgorithmareresistant AESimplementationshavebeenparticularlywell-explored.
+toside-channelattacks.Theseattacksaregenerallycategorized AIM(AESIn-Memory)leveragesNon-VolatileMainMemory
+aspassiveoractive,withourfocusbeingonpower-basedside- (NVMM) to efficiently execute XOR operations by exploiting
+channel attacks, which fall under the passive category [6]. An the non-destructive read property of NVMs and utilizing
+adversarycananalyzepowertracestoinferoperationaldetails bitline-levelparallelism[7].Thisapproachachievessignificant
+based on transistor switching activity. speedup by performing multiple operations simultaneously
+To ensure security, Welch’s t-test is conducted to verify within the memory array. Recryptor [8] introduces a hybrid
+whether the power consumption remains consistent across approachthatcombinesin-memoryandnear-memorycomput-
+different data reads. If an adversary gains access to power ing techniques. While XOR operations are executed directly
+
+[Image page_2_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the provided image from the research paper, based on the given context:
+
+**Overall Context and Importance:**
+
+The research paper focuses on implementing the ChaCha20 encryption algorithm using In-Memory Compute (IMC) architectures. It explores the trade-offs of using different SRAM bitcell architectures (6T, 9T, and 10T) to achieve a secure and sustainable implementation. The paper emphasizes the importance of sustainability alongside performance and security.  The goal is to reduce energy consumption by minimizing data movement between the processor and memory, a common bottleneck in traditional Von Neumann architectures. The paper also aims to evaluate the security of these architectures against power-based side-channel attacks.
+
+**Image Analysis:**
+
+The image corresponds to "Fig.1. ChaCha20:QuarterRound" as mentioned in the provided text. It illustrates the operations performed in a single quarter round of the ChaCha20 encryption algorithm.
+
+**Visual Elements and Structure:**
+
+The image contains two main parts:
+
+1.  **Dataflow Diagram:** This diagram depicts the data flow and operations within a quarter round.
+    *   Four input variables "a", "b", "c", and "d" are represented at the top of the diagram. These are the four 32-bit words that are being updated.
+    *   "+" symbols within circles denote modular addition operations.
+    *   "XOR & ROT" symbols within ovals represent XOR operations followed by bitwise rotation by a specific number of bits. The rotation amounts are indicated (16, 12, 8, 7).
+    *   Arrows with solid circles indicate data dependencies and the flow of information between operations.
+    *   The resulting values "a", "b", "c", and "d" are output at the bottom of the diagram, showing how they are updated by the quarter round.
+    *   A dashed red box highlights a part of the flow.
+
+2.  **Table:** This table describes the specific operations performed in the quarter round.
+    *   It contains four rows, numbered 1 through 4, corresponding to four steps.
+    *   Each row shows the assignment operations: addition (`+=`), XOR (`^=`), and left bitwise rotation (`<<<`). For instance, Row 2 shows operations `c += d`, `b ^= c`, `b <<< 12`.
+
+**Text Within the Image:**
+
+*   Diagram labels: "a", "b", "c", "d" (input/output variables)
+*   Operation labels: "+", "XOR & ROT16", "XOR & ROT12", "XOR & ROT8", "XOR & ROT7"
+*   Table heading: "One Quarter Round"
+*   Table column labels: "1", "2", "3", "4"
+
+Table contents:
+* `a += b`
+* `d ^= a`
+* `d <<< 16`
+* `c += d`
+* `b ^= c`
+* `b <<< 12`
+* `a += b`
+* `d ^= a`
+* `d <<< 8`
+* `c += d`
+* `b ^= c`
+* `b <<< 7`
+
+**Significance:**
+
+*   The diagram provides a visual representation of the complex operations within a quarter round of ChaCha20. It helps in understanding the data dependencies and the sequence of operations.
+*   The table offers a concise summary of the specific calculations in each step of the quarter round.
+*   The image helps readers understand how the ChaCha20 quarter round transforms its input state through a series of additions, XORs, and rotations. This is fundamental to the cipher's security and efficiency.
+
+**Importance based on surrounding text:**
+
+The image is directly referenced in the paper's background section (II.A) where the ChaCha20 algorithm is described. The text mentions that encryption involves 20 rounds, each with four quarter-round functions. The diagram in Fig. 1 clarifies this core process. Understanding the quarter round is essential to understanding how the IMC implementations aim to optimize the ChaCha20 algorithm.
+
+In essence, Fig. 1 is a crucial component for illustrating the ChaCha20 algorithm, especially its quarter round function, which the paper seeks to implement efficiently and securely using in-memory computing techniques with different SRAM bitcell architectures.
+
+
+
+[Image page_2_image_1.png Analysis (by Gemini)]
+Here's a detailed analysis of the image you provided, based on the surrounding text and the image itself:
+
+**Overall Context and Importance:**
+
+The image (referred to as Fig. 2 in the text) illustrates a column within an SRAM memory array used for In-Memory Computing (IMC) as part of an implementation of the ChaCha20 encryption algorithm. This column is fundamental to how the in-memory computations are carried out. The different variations of the SRAM bit cells are being tested to find a balance between performance, power, and sustainability.
+
+**Visual Elements and Structure:**
+
+The image consists of two main parts:
+
+1.  **Schematic Diagram of a Memory Column:** This part depicts a single column of the SRAM memory array. It contains:
+    *   **Precharge:** At the top of the column.
+    *   **Bit-cells (Bit-cell1 to Bit-cell4):** Represented as rectangular blocks. The number of bit cells in the schematic is 4. Each bit cell has a wordline (WL1 to WL4) associated with it.
+    *   **RBL and RBLB:** Represent the Read Bit Line and its complement, respectively.
+    *   **Write Driver:** For writing data into the bit cells.
+    *   **Sense Amplifiers (SA1 and SA2):** Two sense amplifiers that amplify the voltage difference between the bit lines (RBL and RBLB) to produce the outputs Q and Qb.
+    *   **Rotation Unit:** Rotates the value outputted from the Sense Amplifiers.
+    *   **Adder:** Adds a value.
+    *   **Logic Unit:** Implements logic operations (NAND, AND, XOR) based on the bit cell type (10T, 9T, or 6T). The output of the Logic Unit feeds back into a "Next Column".
+    *   **Connections:** Lines indicate the flow of data and control signals between the elements. Different colors might be used to represent different signal types.
+    *   **Annotations:** Brackets and labels identify "In-Memory Compute Elements" (bit-cells, wordlines) and "Near Memory Compute Elements" (sense amplifiers, logic unit, adder, rotation unit). The entire column is enclosed in a red dotted rectangle, which likely represents the physical boundaries of the cell within the memory array.
+
+2.  **Truth Tables:** These present the logical operations performed based on different bit cell types (10T, 9T, and 6T).
+    *   **10T and 9T Truth Table:**
+        *   Columns: "Bit 1", "Bit 2", "Q", "Qb"
+        *   Rows: Each row represents a combination of Bit 1 and Bit 2 (00, 01, 10, 11) and the corresponding outputs Q and Qb.
+        *   Q values are: "0","0","0","1"
+        *   Qb values are: "1","0","0","0"
+    *   **6T Truth Table:**
+        *   Columns: "Bit 1", "Bit 2", "Q", "Qb"
+        *   Rows: Each row represents a combination of Bit 1 and Bit 2 (00, 01, 10, 11) and the corresponding outputs Q and Qb.
+        *   Q values are: "0","1","1","1"
+        *   Qb values are: "1","1","1","0"
+
+**Text Within the Image:**
+
+*   **Labels in the schematic:**
+    *   Precharge
+    *   Bit-cell1, Bit-cell2, Bit-cell3, Bit-cell4
+    *   WL1, WL2, WL3, WL4
+    *   RBL, RBLB
+    *   Write Driver
+    *   SA1, SA2
+    *   Rotation Unit
+    *   ADDER
+    *   LOGIC UNIT
+    *   Q, QB
+    *   Next Column
+*   **Annotations:**
+    *   In-Memory Compute Elements
+    *   Near Memory Compute Elements
+*   **Truth Table Labels:**
+    *   10T and 9T
+    *   6T
+    *   Bit 1, Bit 2, Q, QB
+*   **Truth Table Values:** The binary digits (0, 1) in the tables.
+
+**Significance:**
+
+*   **In-Memory Computing:** The image highlights the architecture that enables computations directly within the memory array. This avoids the energy overhead of frequent data transfers between the processor and memory, which is a crucial aspect of the paper's focus on sustainable and energy-efficient cryptographic implementations.
+*   **SRAM Bit Cell Variations:** The diagram shows three different bit-cell designs (10T, 9T, 6T) under consideration. Each design represents a trade-off between area, performance, and power consumption.
+*   **Logic Implementation:** The truth tables are important because they show the basic logical operations that can be performed by each type of SRAM bitcell, which forms the basis for more complex computations within the memory.
+*   **ChaCha20 Implementation:** The column architecture and associated logic are tailored for the ChaCha20 encryption algorithm, specifically for the "quarter round" operation which is the core computation within the algorithm.
+*   **Sustainability:** The paper emphasizes sustainability and the figure serves as a base for comparing different approaches in terms of resource usage and long-term efficiency.
+
+In summary, Fig. 2 is a key visual aid for understanding the hardware architecture used for the in-memory implementation of the ChaCha20 algorithm. It provides a clear representation of the memory column structure, its components, and the logic operations facilitated by the SRAM bit cells, all of which are vital for achieving energy efficiency and security while considering sustainability.
+
+
+
+=== Page 3 ===
+withinmemory,otheroperationssuchasshifting,rotation,and
+S-Box transformations are implemented through cross-wiring,
+combinational logic, and latches positioned near the memory.
+This partitioning optimizes each operation based on its most
+efficient implementation method. Sealer [9] transforms 6T
+SRAM subarrays into vector computing units, demonstrating
+how conventional memory can be repurposed for crypto-
+graphic acceleration. By harnessing the inherent parallelism
+of memory arrays, Sealer delivers fast, low-overhead AES
+encryptionsuitableformemoryencryptionapplications.These
+implementationsdemonstratetheversatilityofIMCtechniques
+across various memory technologies.
+Moving beyond AES, ChaCha20-in-Memory [3] demon-
+strates IMC’s potential for stream ciphers, particularly target-
+ingresource-constrainedIoTdevices.Thisimplementationex-
+Fig.4. 10TSRAM-bitcell[3]
+ecuteslogicaloperations(NAND,NOR,XOR)directlywithin
+memory using bitlines, while arithmetic operations (addition,
+subtraction, shifting, rotation) are handled by near-memory instance using 65nm technology to enable comprehensive
+elements coupled with sense amplifiers. Beyond performance comparison.
+improvements,thearchitecturealsoenhancessecuritybymiti-
+gatingpower-basedside-channelattacksthroughmoreuniform A. Implementation using 9T bitcell
+power consumption patterns. We introduce a 9T SRAM-bitcell (Fig. 3) based implemen-
+Despite these advancements, existing research primarily tation that preserves the functional characteristics of the 10T
+focuses on performance gains, energy efficiency, and security (Fig.4)approachwhilereducingarearequirements.Asshown
+enhancements, while overlooking critical sustainability con- inFig.2,the9Tbitcellmaintainsthesamefundamentalstruc-
+siderations. Additionally, the environmental impact of these ture as the 10T implementation but eliminates one transistor
+accelerators, encompassing both fabrication and operational without compromising the core IMC capabilities. When two
+footprints, remains unexplored. wordlines are activated simultaneously, the bitline (BL) per-
+formslogic-ANDwhilethecomplementarybitline(BLB)exe-
+IV. PROPOSEDIMPLEMENTATIONS cuteslogic-NANDoperations,withoutputsprocessedthrough
+a logic unit to implement XOR functionality. This design
+Our work extends the existing 10T bitcell implementa- maintains identical performance to the 10T implementation
+tion from [3] by designing and evaluating two additional while reducing area overhead.
+approaches using 6T and 9T bitcells. We designed layout Layout analysis confirms the area advantage of the 9T
+implementations for all three architectures for a 128x128 implementation(Fig.5)comparedtothe10Tdesign(Fig.6).
+SecurityassessmentusingWelch’st-test(Fig.7)demonstrates
+that the 9T implementation remains resistant to power-based
+side-channelattacks,witht-valuesconsistentlywithinthe|4.5|
+threshold across 8,000 samples at a 166 GHz sampling rate.
+B. Implementation using 6T bitcell
+Standard6TSRAM(Fig.8)cellspresentuniquechallenges
+for IMC implementation due to shared bitlines for read and
+write operations. As identified in [3], simultaneous activation
+Fig.5. Cross-sectionoflayoutfor128x128instancefor9Tbitcellimple-
+Fig.3. 9TSRAM-bitcell[10] mentationin65nmtechnology.Asinglecolumnwith4rowsishighlighted.
+
+[Image page_3_image_0.png Analysis (by Gemini)]
+Okay, I will analyze the provided image and its context within the research paper.
+
+**Image Analysis**
+
+The image shows a diagram of a 10T SRAM bitcell.
+
+*   **Structure:** The diagram depicts the schematic of the bitcell, showing transistors (represented by standard circuit symbols), connections (lines), and labels indicating different terminals. The key components like transistors, word line (WL), bit line (BL), complementary bit line (BLB), and storage nodes are visible.
+*   **Text/Labels:** The image includes the label "Fig. 4. 10T SRAM-bitcell [3]" This serves as the figure caption, indicating the type of SRAM bitcell being shown (10T) and the reference ([3]) from which the design is derived. The surrounding text should explain the function of each labeled component.
+
+**Context and Importance**
+
+The text on page 3 of the research paper mentions the 10T SRAM bitcell in the context of In-Memory Computing (IMC) for cryptographic applications, specifically ChaCha20. The image helps to visualize the architecture of the 10T SRAM cell. According to the text on the page, the paper extends this 10T bitcell implementation by designing and evaluating 6T and 9T bitcells. The figure helps readers understand the baseline (10T bitcell) that the other implementations are being compared against.
+
+The surrounding text explains that the 10T and 9T bitcells can perform logic operations (NAND, AND, XOR) using the bitlines when two wordlines are activated simultaneously. This capability is leveraged for in-memory computation to accelerate cryptographic algorithms like ChaCha20. The text also mentions that the custom adder performs the addition using bit cell values derived from the sense amplifier output, and the computed results are then written back to the designated bitcells, completing an entire RCS cycle. The image is important as the comparison between the 10T implementation and the others is a key aspect of the paper, helping the reader to understand the improvements and trade-offs.
+
+
+
+[Image page_3_image_1.png Analysis (by Gemini)]
+Okay, let's analyze the provided image and its context.
+
+**Image Description:**
+
+The image is labeled "Fig.4. 10TSRAM-bitcell[3]". It appears to be a circuit diagram illustrating the structure of a 10T SRAM (Static Random-Access Memory) bitcell. The diagram shows transistors arranged in a specific configuration.  There are likely labels for transistors, power supplies (Vdd), ground, bitlines (BL, BLB), and wordlines (WL). Without better resolution, I cannot clearly identify specific transistor connections.
+
+**Text Within the Image:**
+
+Unfortunately, with the current resolution of the provided image, I cannot discern any readable text or labels *within* the circuit diagram itself.  The transistors, connections, and other circuit elements would typically be labeled.
+
+**Context and Importance:**
+
+Based on the provided text snippets, the paper is investigating in-memory computing (IMC) techniques for cryptographic applications, specifically the ChaCha20 stream cipher. The paper evaluates the performance, security, and sustainability of different SRAM bitcell implementations (6T, 9T, and 10T) for in-memory ChaCha20 encryption.
+
+*   **Page 3 Text:** The page where this image appears focuses on prior work and introduces the paper's contributions. It discusses how existing IMC implementations often optimize for performance and security while neglecting sustainability aspects. The 10T SRAM bitcell design referenced in Fig. 4 is the baseline implementation from a previous study [3] that the current paper builds upon.
+
+*   **Surrounding Text:** The text mentions that the 10T and 9T bitcells allow the bitline (BLB) to perform a NAND operation and the complementary bitline (BL) an AND operation when two wordlines are activated simultaneously. The outputs are then sent to a logic unit to implement XOR.  The paper also touches on the need for security against side-channel attacks and the use of Welch's t-test for security assessment.
+
+*   **Importance:** Fig. 4 is important because it shows the original 10T SRAM bitcell architecture that the paper modifies to create the 9T and 6T designs.  Understanding the structure of this initial bitcell is critical to understanding the advantages and trade-offs of the proposed modifications (9T and 6T) in terms of area, performance, and security. The 10T bitcell serves as a benchmark in the study.
+
+**Overall Significance:**
+
+The research aims to extend the existing work on ChaCha20 in-memory computing by exploring alternative SRAM bitcell designs (9T and 6T) and considering sustainability metrics along with performance and security. The image is foundational because it illustrates the structure of the base implementation (10T) from which the other designs are derived. The paper seeks to find a balance between performance, security, and a smaller embodied footprint and better sustainability of the implemented chip.
+
+
+[Image page_3_image_2.png Analysis (by Gemini)]
+Here's a comprehensive analysis of the image and its context within the provided research paper:
+
+**Image Analysis**
+
+*   **Visual Elements:**
+    *   The image (Fig. 5) displays a cross-section of the layout for a 128x128 instance of a 9T SRAM (Static Random-Access Memory) bitcell implementation in 65nm technology.
+    *   The layout is intricate, showing the physical arrangement of transistors and interconnects within the chip. The dense pattern indicates a high level of integration.
+    *   A portion of the layout is highlighted to show a single column with 4 rows.
+    *   Red arrows with labels are used to identify key components within the layout, including:
+
+        *   9T Array
+        *   Precharge
+        *   Write Driver
+        *   Sense Amplifier1
+        *   Sense Amplifier2
+        *   NOR Logic Gate
+        *   Adder
+        *   Rotation Unit
+
+*   **Structure:**
+    *   The layout appears organized in a grid-like structure, which is characteristic of memory arrays.
+    *   The highlighted column provides a close-up view of the components within a single memory cell column, allowing for a better understanding of their arrangement.
+
+*   **Significance:**
+    *   The image visually demonstrates the physical implementation of the 9T SRAM bitcell.
+    *   It allows for a comparison of area occupancy and component arrangement between different bitcell designs (as stated in the text referencing comparison with 10T in Fig. 6, for example).
+    *   The labels highlight the essential functional blocks required for In-Memory Computing (IMC) operations.
+
+*   **Text within the Image:**
+    *   The labels beside the red arrows (listed above) clearly identify the various functional blocks present in the layout.
+
+**Context and Importance**
+
+*   **Overall Context:** The paper explores In-Memory Computing (IMC) implementations for cryptographic applications, specifically ChaCha20. The authors are investigating the use of different SRAM bitcell designs (6T, 9T, and comparing to an existing 10T) to optimize performance, energy efficiency, security, and importantly, *sustainability*.
+
+*   **Importance of Fig. 5:**
+    *   Fig. 5 specifically showcases the layout of the 9T SRAM bitcell implementation.
+    *   The text on page 3 states that this work extends a prior implementation of the 10T bitcell [3] by designing and evaluating two other designs using 6T and 9T bitcells. The text says this figure illustrates the physical implementation using 9T bitcells.
+    *   The text mentions that the 9T bitcell implementation preserves the functionality of the 10T approach while reducing area requirements. Layout analysis confirms the area advantage of the 9T implementation(Fig.5)comparedtothe10Tdesign(Fig.6).
+    *   Showing the physical layout allows for a visual confirmation of the area efficiency of the 9T design compared to the 10T implementation.
+
+*   **Relevance to the Paper's Argument:**
+    *   The paper is introducing two new implementations using 6T and 9T bitcells, so it's important to show the actual physical representation of these designs.
+    *   The layout images (along with other figures showcasing test results) support the claim that the proposed 9T and 6T implementations offer advantages in terms of area, and potentially security (resistance to side-channel attacks), while maintaining the necessary functionality for IMC operations related to ChaCha20 encryption.
+
+*   **Connection to Surrounding Text:**
+    *   The text surrounding the figure mentions that the 9T bitcell performs logic-AND and logic-NAND operations directly within the memory cell using bitlines.
+    *   The text directly references the figure as supporting that "layout analysis confirms the area advantage".
+    *   The paper highlights sustainability considerations, particularly the "embodied footprint" of the chip. The physical layout, representing area, is directly related to the embodied footprint, as smaller area generally implies lower material usage and fabrication cost.
+
+
+
+=== Page 4 ===
+Fig.6. Cross-sectionoflayoutfor128x128instancefor10Tbitcellimple-
+mentationin65nmtechnology.Asinglecolumnwith4rowsishighlighted.
+of two wordlines can cause destructive reads when cells store
+complementary values (0 and 1), potentially leading to data Fig.8. 6TSRAM-Bitcell[11]
+corruption as the bitline discharge affects the stored value.
+To overcome this limitation while capitalizing on the area
+advantageof6Tcells,ourimplementationemployssequential
+wordline activation as proposed in [5] and illustrated in Fig.
+9. We carefully calibrate activation timing to ensure bitlines
+discharge to approximately above 50% of V when reading
+dd
+complementary values. A skewed sense amplifier interprets
+voltage levels above Vdd as logic 1, enabling correct logical
+2
+interpretation. For identical stored values (00 or 11), the
+bitline or its complement discharges completely due to high Fig. 9. Timing diagram for sequentially activating word lines (WL1 and
+cell-current. This is also represented in Table present in WL2)forthecasewhenonebit-cellstores1andtheotherstores0.Boththe
+bit-lines(BLandBLB)dischargeonlyuptoacertainvoltagelevel.
+Fig 2. In this configuration, BL effectively performs logic-
+ORoperationswhileBLBexecuteslogic-NORoperations.We
+replace the logic unit shown in Fig 2 with a 2-input AND security properties.
+gate to extract XOR functionality from the outputs of sense-
+amplifiers. The basic column structure remains similar to the
+V. SUSTAINABILITYINCHIPS:METRICSTHATMATTER
+other implementations, with adaptations to accommodate the Sustainability for a chip depends mainly on two factors,
+6T operational characteristics. i.e., energy consumption during its fabrication and energy
+consumption during its operational lifetime [12]. These are
+The 65nm layout implementation (Fig. 10) demonstrates
+commonly known as embodied and operational footprint,
+that the 6T approach achieves the smallest area footprint
+respectively.In this work, we present sustainability metrics
+among all three designs. Security analysis validates its re-
+that enable designers to evaluate the sustainability of an IP
+sistance to power-based side-channel attacks, with t-values
+at the design stage itself. These metrics facilitate informed
+within required thresholds across 6,000 samples (Fig. 11),
+decision-making,allowingdesignerstoselectmoresustainable
+confirming that the area optimization does not compromise
+architectures for implementation.
+A. Embodied footprint
+Embodied footprint encompasses the environmental impact
+of material extraction and processing. It captures carbon
+Fig. 7. The above figure shows the welch’s test reults for 9t bitcell Fig.10. Cross-sectionoflayoutfor128x128instancefor6Tbitcellimple-
+implementation mentationin65nmtechnology.Asinglecolumnwith4rowsishighlighted.
+
+[Image page_4_image_0.png Analysis (by Gemini)]
+Here's a breakdown of the image, its context, and significance within the research paper:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a cross-section of a layout for a 128x128 instance of a 6T bitcell implementation.
+*   **Content:** The image displays a complex, color-coded layout diagram. It showcases a single column with 4 rows highlighted. The layout appears to be of a memory cell, with various functional components labeled.
+*   **Labels:** The image has arrows pointing to different sections within the layout, identifying the functions of each. The labels include:
+
+    *   "6T Array"
+    *   "Precharge"
+    *   "Write Driver"
+    *   "Sense Amplifier1"
+    *   "Sense Amplifier2"
+    *   "AND Logic Gate"
+    *   "Adder"
+    *   "Rotation Unit"
+
+**Image Context and Importance:**
+
+*   **Context from the Paper:**
+    *   This image (Fig. 10) shows the layout for a 6T SRAM bitcell implemented in 65nm technology.
+    *   The paper discusses the design and evaluation of different SRAM bitcell architectures (6T, 9T, and 10T) for in-memory computing (IMC).
+    *   The 6T implementation aims to achieve the smallest area footprint among the designs.
+    *   The surrounding text discusses how 6T SRAM cells pose unique challenges due to shared bitlines for read and write operations. Sequential wordline activation is employed to overcome destructive reads, as described by the images and surrounding text.
+
+*   **Importance:**
+    *   The image is important for visually demonstrating the physical layout and area efficiency of the 6T bitcell implementation.
+    *   It provides evidence to support the claim that the 6T approach achieves the smallest area footprint.
+    *   The labels and image help to understand the implementation strategy for integrating logic functions (AND, Adder, Rotation Unit) within the memory array.
+
+**Overall Significance:**
+
+The image is a key piece of evidence in the paper's argument for the feasibility and advantages of using a 6T bitcell design for in-memory computing, particularly in terms of area efficiency. It complements the discussion on the architectural adaptations required to make 6T cells suitable for IMC, specifically the use of sequential wordline activation to prevent data corruption. The image also provides a visual understanding of how logic operations are integrated into the 6T memory array.
+
+
+[Image page_4_image_1.png Analysis (by Gemini)]
+Here's a comprehensive analysis of the image based on the information provided:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a cross-sectional layout diagram of a 128x128 instance for a 10T bitcell implementation in 65nm technology. This represents a physical design of the memory cell within a chip.
+*   **Structure:** The image is divided into two main areas:
+    *   **Left Side (Detailed Section):** This section highlights a single column with 4 rows, showing the layout of various components within the memory array. These components are labeled using arrows. This provides a close-up view of the individual elements and their arrangement.
+    *   **Right Side (Array View):** This section shows a larger section of the entire 128x128 array. This provides context to the detailed column on the left, showing how it repeats across the memory array.
+*   **Color Coding:** Different colors are used in the layout to represent different layers of the chip's physical structure (e.g., metal layers, polysilicon, etc.). This color-coding is standard in chip design and aids in visualizing the fabrication process.
+*   **Labels:** Arrows point from the left to identify specific components:
+    *   10T Array
+    *   Precharge
+    *   Write Driver
+    *   Sense Amplifier1
+    *   Sense Amplifier2
+    *   NOR Logic Gate
+    *   Adder
+    *   Rotation Unit
+*   **Visual Highlight:** A white rectangular box is drawn on the detailed section, but does not clearly highlight a particular element.
+
+**Significance:**
+
+*   **Physical Design:** The image demonstrates the physical realization of the 10T bitcell design in silicon. It shows how the transistors and interconnections are arranged to create the memory functionality and integrate in-memory computing.
+*   **Area Footprint:** As mentioned in the surrounding text, this image and similar layouts for 6T and 9T cells are used to compare the area efficiency of different memory cell designs. Reducing area is a key design goal.
+*   **In-Memory Computing (IMC):** The presence of logic gates (NOR), an adder, and a rotation unit indicates that this is not just a standard memory, but one designed for in-memory computing, where computations are performed directly within the memory array.
+
+**Context and Importance:**
+
+*   **Comparative Analysis:** This image is part of a larger research paper that explores and compares different SRAM bitcell implementations (6T, 9T, and 10T) for in-memory computing in 65nm technology.
+*   **Sustainability:** The study connects area and circuit design to sustainability metrics (embodied and operational footprint). The images of the physical layouts are key because the area occupied by the memory and logic circuits directly influences the "embodied footprint" of the chip.
+*   **Trade-offs:** The paper explores the trade-offs between different bitcell designs. For example, 6T cells offer the smallest area, but require more complex control circuitry to implement IMC functions without data corruption. 9T and 10T designs can simplify control at the expense of area.
+*   **Security:** The paper also mentions security considerations. The images of the physical layouts can be related to the discussion of resistance to power-based side-channel attacks, since the layout can influence power consumption patterns.
+*   **Research Gap:** The study aims to address the gap in research on the sustainability implications of memory-centric computing, which is important for designing energy-efficient and environmentally conscious chips.
+
+**In summary,** the image is a visual representation of a crucial aspect of chip design, i.e., the physical layout. It is part of a study that considers area, performance, security, and *sustainability* in memory-centric computing. The layout allows for comparison with other implementations and to estimate the embodied energy required to manufacture the chip.
+
+
+
+[Image page_4_image_2.png Analysis (by Gemini)]
+Here's a thorough analysis of the image provided, incorporating its visual elements, text, context, and significance within the research paper:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a line graph.
+*   **Axes:**
+    *   *X-axis:* Labeled "Sample Number". The axis ranges from approximately 0 to 8000, likely representing a series of data samples collected during security analysis.
+    *   *Y-axis:* Labeled "t-Value".  The axis ranges from -4 to 4.
+*   **Data Representation:** A single, continuous blue line plots the t-values for each sample. The line fluctuates irregularly, indicating varying t-values across the sample set.
+*   **Gridlines:** Horizontal gridlines are present at integer t-value increments, aiding in visual assessment of the data.
+*   **Legend:** A legend in the upper right corner labels the blue line as "t-values".
+*   **Title:** "T-Values for Each Sample"
+
+**Text Extracted from the Image:**
+
+*   "T-Values for Each Sample" (Title)
+*   "Sample Number" (X-axis label)
+*   "t-Value" (Y-axis label)
+*   "t-values" (Legend)
+*   Numerical values along the X-axis (Sample Number)
+*   Numerical values along the Y-axis (t-Value)
+
+**Context and Importance:**
+
+Based on the provided text snippets from the research paper, the image (Fig. 11) visualizes the Welch's t-test results for the 6T bitcell implementation, related to side-channel attack resistance.
+
+*   **Side-Channel Attack Resistance:** The paper focuses on implementing In-Memory Computing (IMC) with different SRAM bitcells (6T, 9T, 10T) and evaluating their security and sustainability. Security analysis using Welch's t-test is performed to assess resistance against power-based side-channel attacks. T-values are a measure of the difference between two distributions, often used to detect subtle variations in power consumption patterns that could leak information about the cryptographic keys.
+*   **Acceptable Threshold:** The paper mentions that the t-values should be within required thresholds. In the discussion of the 9T bitcell (referencing Fig. 7), it states that t-values are consistently within the |4.5| threshold. This suggests a similar criterion is used for the 6T implementation shown in the current image.
+*   **Significance:** The image's importance lies in visually confirming the security of the 6T bitcell design.  The paper states, "Security analysis validates its resistance to power-based side-channel attacks, with t-values within required thresholds across 6,000 samples (Fig. 11), confirming that the area optimization does not compromise security properties." This means that the observed t-values in the graph fall within an acceptable range, demonstrating that the 6T design does not introduce vulnerabilities to power analysis attacks, despite its smaller area footprint.
+*   **Sustainability Context:** The t-test results contribute to the broader context of "Sustainability in Chips." The paper emphasizes both embodied (fabrication) and operational (lifetime energy consumption) footprints. The 6T design's smaller area footprint (demonstrated elsewhere in the paper with layout figures) is advantageous for embodied footprint. However, it's critical to verify that this area optimization doesn't compromise security, which is why the t-test data is essential.
+
+**In summary:** The graph is a key piece of evidence supporting the claim that the 6T bitcell implementation, while advantageous in terms of area (and thus embodied footprint), maintains acceptable security levels against power-based side-channel attacks. The fact that the t-values remain within acceptable limits (as implied by the previous discussion of the 9T cell) is a positive finding for the design.
+
+
+
+[Image page_4_image_3.png Analysis (by Gemini)]
+I am unable to access the image you provided. If you can provide more context around the image or the image itself, I will be happy to assist you further.
+
+
+[Image page_4_image_4.jpeg Analysis (by Gemini)]
+Here's a thorough analysis of the image you provided, based on the text you provided:
+
+**Image Analysis:**
+
+*   **Type:** The image is a timing diagram.
+*   **Elements:** It contains four waveforms plotted against time (implied x-axis).
+    *   WL1: Wordline 1
+    *   WL2: Wordline 2
+    *   BL: Bitline
+    *   BLB: Bitline Bar (complement of the bitline)
+*   **Structure:**
+    *   The waveforms are presented sequentially, one above the other, to facilitate comparison.
+    *   The x-axis is time. Vertical dotted lines act as guides for time alignment.
+    *   The y-axis (voltage levels) is not explicitly labeled but is implied by the waveforms' high and low states.
+    *   There are two downward sloping blue lines with labels a,b,c,d.
+*   **Labels:**
+    *   Vertical axis labels: WL1, WL2, BL, BLB
+    *   Downward sloping lines labels: a,b,c,d
+
+**Text within the Image (Labels):**
+
+*   WL1
+*   WL2
+*   BL
+*   BLB
+*   a
+*   b
+*   c
+*   d
+
+**Context and Significance:**
+
+*   **Overall Context:** This diagram (Fig. 9, as identified in the text) illustrates the sequential activation of wordlines (WL1 and WL2) in the implementation of a 6T SRAM bitcell for in-memory computing. The text explains that standard 6T SRAM cells present challenges for IMC due to shared bitlines. The timing diagram shows how these challenges are overcome by sequentially activating the wordlines.
+*   **Importance:**
+    *   The diagram demonstrates a critical technique for making 6T SRAM cells viable for in-memory computing. Standard simultaneous wordline activation can cause destructive reads in 6T SRAM when cells store complementary values.
+    *   The timing diagram clarifies how sequential activation ensures that the bitlines (BL and BLB) only discharge to a certain voltage level (approximately above 50% of Vdd when reading complementary values). This controlled discharge prevents data corruption.
+    *   The text also mentions a skewed sense amplifier that interprets voltage levels, enabled by the sequential wordline activation and preventing misinterpretation of logic levels.
+*   **Relevance to the Paper:** The paper focuses on the sustainability of in-memory computing architectures, evaluating different bitcell designs (6T, 9T, 10T). This timing diagram (Fig. 9) is important because it demonstrates how 6T SRAM cells, known for their area efficiency, can be adapted for in-memory computing through sequential wordline activation, thereby potentially offering a sustainable and area-efficient solution. The analysis of the 6T implementation will contribute to the paper's overall assessment of the embodied and operational footprint of different IMC architectures.
+
+In short, the image is a crucial part of explaining how a specific in-memory computing technique (sequential wordline activation) allows for the use of area-efficient 6T SRAM cells without compromising data integrity, a significant factor in the overall sustainability analysis presented in the paper.
+
+
+=== Page 5 ===
+power signature of the memory, as defined in equation (4)
+(cid:34)
+(cid:16)
+Power Factor= Dynamic charge per RCS cycle
+(cid:17)
+×Activity factor×f ×V (4)
+1 1
+(cid:35)
++P +P +P
+Active Standby Retention
+Here,thedynamicpowerconsumptionduringRead-Compute-
+Store (RCS) cycles is calculated using the charge consumed
+per cycle, activity factor, clock frequency (f ), and operating
+1
+voltage(V ).Specifictothemodeofoperationofthememory,
+1
+the power consumption is accommodated as different power
+components explained as follows.
+Fig. 11. The above figure shows the welch’s test reults for 6t bitcell
+implementation
+• Active mode power consumption
+V ×I ×T
+P = active leak1 active (5)
+active T
+emissions from energy-intensive fabrication steps such as total
+photolithography, doping, and etching, representing the envi- • Standby mode power consumption
+ronmentalinvestmentmadebeforeachipbecomesoperational
+V ×I ×T
+[13]. The embodied footprint metric, as defined in Eq. (2), is P Standby = standby Tleak2 standby (6)
+directly proportional to the architectural area, specifically the total
+memoryarea,thenumber ofmasksutilizedduringfabrication • Retention mode power consumption
+(Mask Factor), and the porosity introduced by the design V ×I ×T
+P = retention leak2 retention (7)
+(Porosity Factor). Porosity, in this context, quantifies the Retention T
+total
+number of available routing tracks within the memory. The
+This weighted approach accurately reflects real-world energy
+proportionalityconstant“k”intheequationdenotestheenergy
+consumption by accounting for the proportional time spent in
+consumption per unit area during fabrication, accounting for
+each operational state. For memory-intensive applications like
+the process complexity and manufacturing overhead.
+cryptographicimplementations,thedistributionoftimeacross
+these modes significantly impacts the overall sustainability
+profile.Bymodelingthesefactorscollectively,ouroperational
+footprint metric enables precise comparison between different
+Embodied Footprint Metric= k×Area×Mask Factor
+architecture implementations, revealing energy efficiency ad-
+×Porosity Factor
+vantages that might otherwise remain hidden in conventional
+(2)
+power analyses. The comprehensive sustainability metric is
+representedasthesumofembodiedandoperationalfootprint.
+C. Memory-Centric Sustainability Analysis
+B. Operational Footprint Memories typically consume 60-80% of the total SoC area,
+makingtheirsustainabilitycharacteristicsadominantfactorin
+Operational footprint quantifies the total energy consumed overall chip environmental impact. IMC-architectures funda-
+by the SoC throughout its functional lifetime. This metric is mentally alter the sustainability equation in two ways. First,
+expressed in Eq. (3). as demonstrated in [3], it enhances throughput while reducing
+power consumption by minimizing data movement between
+memory and processor, a particularly energy-intensive opera-
+Operational Footprint=Operational lifetime×Power Factor tion when performed recursively in cryptographic algorithms.
+(3) Second, IMC enables bit-level parallelism, allowing simulta-
+Here, the term “Operational lifetime” represents the total neous operations across multiple data points and improving
+duration for which the device remains in consumer use. computational efficiency. This architectural shift also presents
+The power factor aggregates energy consumption across all an important sustainability trade-off. IMC implementations
+operational modes, capturing the complexity of real-world typically require additional circuit components to integrate
+usage patterns. Since the power consumption varies signif- logicoperationswithinmemoryarrays,increasingsiliconarea
+icantly depending on the memory’s operational mode. Our and consequently the embodied footprint. However, the corre-
+comprehensivepowerfactorcomprehensivelycoverstheentire sponding reduction in operational footprint, achieved through
+
+[Image page_5_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on the provided context:
+
+**Image Description:**
+
+The image is a line graph titled "T-Values for Each Sample." It plots the t-values against the sample number. The x-axis represents the "Sample Number" ranging from 0 to approximately 6500. The y-axis represents the "t-Value" ranging from -4 to 4. The graph shows a fluctuating blue line representing the t-values across these samples.  A legend in the top right corner indicates that the blue line represents "t-values." There are horizontal grid lines at integer values on the y-axis.
+
+**Text within the Image:**
+
+*   **Title:** "T-Values for Each Sample"
+*   **X-axis label:** "Sample Number"
+*   **Y-axis label:** "t-Value"
+*   **Legend:** "t-values"
+
+**Context and Significance:**
+
+The image appears in the context of a research paper focused on the sustainability of chip architectures, specifically memory (SRAM) implementations for cryptographic algorithms (ChaCha20).  The surrounding text discusses security assessments, specifically resistance to power-based side-channel attacks. The Welch's t-test is used to evaluate this resistance.
+
+*   **Welch's t-test:** The page mentions that Welch's t-test is used to verify the resistance to power-based side-channel attacks. T-values within a threshold of |4.5| indicate a secure implementation.
+
+*   **6T Bitcell Implementation:** The caption of the figure indicates the graph represents the Welch's test results for a 6T bitcell implementation. The surrounding text discusses that the 6T implementation offers the highest sustainability score and smallest area, but the figure itself pertains to the *security* assessment of the 6T implementation.
+
+* **Security Assessment:** All three implementations (6T, 9T, and 10T) demonstrate strong resistance to power-based side-channel attacks according to the text. The t-values in the graph are essential to support this claim.
+
+**Importance:**
+
+The image's importance lies in visually representing the results of the security assessment (Welch's t-test) for the 6T bitcell implementation.  The fact that the t-values remain within acceptable limits (implicitly |4.5| based on the page text) across the samples supports the conclusion that the 6T design, despite its focus on sustainability and area optimization, does not compromise the security of the ChaCha20 algorithm. This visual confirmation strengthens the paper's claim that environmentally conscious design choices can be made without sacrificing security. The graph helps the reader understand the distribution and magnitude of the t-values, offering a more intuitive understanding of the security performance than simply stating a range of values.
+
+
+
+=== Page 6 ===
+TABLEI
+COMPARISONOFDIFFERENTARCHITECTURESBASEDONPOWER,PERFORMANCE,AREA,SECURITY,ANDSUSTAINABILITY
+Architecture Power(mW) Performance(ns) Area(µm2) Welch’sT-testScore SustainabilityMetric(mWh)
+10T 1.43 3.8 375608 -3.1to3.5 21932
+9T 1.62 4.1 360417 -2.6to2.6 20809
+6T 1.87 10.8 134883 -3.6to2.9 7906
+improved performance and lower power consumption, often C. Sustainability Evaluation
+outweighs this initial environmental cost over the device life- The sustainability metric, which combines both embodied
+time, especially in energy-constrained IoT applications where and operational footprints, reveals the 6T implementation as
+operational efficiency is paramount. Our analysis quantifies the most environmentally efficient option, approximately 62%
+this trade-off across different bitcell architectures, enabling betterthanthe9Timplementationand64%betterthanthe10T
+designers to select implementations that optimize the balance implementation. This substantial advantage stems primarily
+between embodied and operational footprints to reduce the from two factors: the smaller silicon area of the 6T design,
+overall environmental impact based on expected deployment which significantly reduces its embodied footprint, and the
+scenarios. relatively short operational lifetime typical of IoT devices,
+whichdiminishestheimpactofitshigherpowerconsumption.
+VI. RESULTSANDANALYSIS For applications with longer operational lifetimes, this sus-
+tainability advantage may narrow as the operational footprint
+Our comprehensive analysis of 6T, 9T, and 10T SRAM becomes more dominant.
+bitcell architectures implementing the ChaCha20 algorithm
+D. Implementation Trade-offs
+reveals significant trade-offs across power, performance, area,
+security, and sustainability metrics. Table I summarizes these Our results demonstrate clear trade-offs between different
+results, providing a multi-dimensional comparison. design priorities. For performance-critical applications, the
+9T implementation offers optimal characteristics, i.e., per-
+formance equivalent to 10T with reduced area. For area-
+A. Power-Performance-Area Analysis
+constrained and environmentally focused designs, particularly
+The 10T implementation demonstrates the lowest power inshort-lifecycleIoTdevices,the6Timplementationprovides
+consumption, but requires the largest silicon footprint. In significantadvantagesdespiteitsperformancelimitations.The
+contrast, the 6T implementation occupies 64% less area but 10T implementation remains relevant primarily for applica-
+consumes approximately 32% more power. This increased tions where performance is the overriding concern and area
+power consumption results from the sequential activation of constraints are less restrictive. These findings underscore the
+wordlines in the 6T implementation, which is necessary to importance of considering sustainability metrics alongside
+prevent data corruption but increases the operation time to traditional PPA parameters when selecting cryptographic im-
+10.8nscomparedtoaround4nsfortheotherarchitectures.The plementations for resource-constrained environments.
+9T implementation offers an attractive compromise, achieving
+VII. CONCLUSION
+similar performance as the 10T-bitcell design while reducing
+This paper presented implementations of the ChaCha20
+area by 4%, with only a modest power increase of 13.3%.
+encryption algorithm using 6T, 9T, and 10T SRAM bitcell
+This makes the 9T architecture particularly appealing for
+architectures, evaluated through both traditional metrics and
+applications where both performance and area efficiency are
+a novel sustainability framework. Our results reveal that the
+critical.
+6T implementation offers the highest sustainability score and
+smallest area, although with reduced performance. The 9T
+B. Security Assessment
+implementation maintains the performance of the 10T de-
+All three implementations demonstrate strong resistance to sign while reducing area by 4%. Security evaluation using
+power-basedside-channelattacks,asverifiedbyWelch’st-test. Welch’st-testconfirmsallimplementationsresistpower-based
+The t-values for the 10T, 9T, and 6T implementations remain side-channel attacks, with t-values remaining within |4.5|.
+well within the security threshold of |4.5|, ranging from -3.1 Thisworkdemonstratesthatenvironmentallyconsciousdesign
+to 3.5, -2.6 to 2.6, and -3.6 to 2.9, respectively. This confirms choicescanbemadewithoutcompromisingsecurity,providing
+that our area and power optimizations do not compromise the designers with quantifiable metrics to balance performance,
+fundamental security properties of the ChaCha20 algorithm. area, power, and sustainability in secure IoT applications.
+Thesimilarityinsecurityprofilesacrossallthreearchitectures
+REFERENCES
+suggests that designers can select the most appropriate imple-
+[1] L.E.Kane,J.J.Chen,R.Thomas,V.Liu,andM.Mckague,”Security
+mentationbasedonothermetricswithoutsacrificingresistance
+and performance in IoT: A balancing act,” IEEE Access, vol. 8, pp.
+to power analysis attacks. 121969-121986,2020,doi:10.1109/ACCESS.2020.3007536.
+
+=== Page 7 ===
+[2] B. Iqbal, A. Grover, and H. Rawat, ”A process and data vari-
+ations tolerant capacitive coupled 10T1C SRAM for in-memory
+compute (IMC) in deep neural network accelerators,” 2022 IEEE
+4th International Conference on Artificial Intelligence Circuits and
+Systems (AICAS), Incheon, South Korea, 2022, pp. 459-462, doi:
+10.1109/AICAS54282.2022.9870026.
+[3] M.Aamir,S.Sharma,andA.Grover,”ChaCha20-in-memoryforside-
+channel resistance in IoT edge-node devices,” IEEE Open Journal of
+Circuits and Systems, vol. 2, pp. 833-842, 2021, doi: 10.1109/OJ-
+CAS.2021.3127273.
+[4] D. J. Bernstein, ”ChaCha, a variant of Salsa20,” in Workshop Record
+ofSASC2008,vol.8,pp.3-5,2008.
+[5] A. Agrawal, A. Jaiswal, C. Lee, and K. Roy, ”X-SRAM: Enabling in-
+memoryBooleancomputationsinCMOSstaticrandomaccessmemo-
+ries,”IEEETransactionsonCircuitsandSystemsI:RegularPapers,vol.
+65,no.12,pp.4219-4232,Dec.2018,doi:10.1109/TCSI.2018.2848999.
+[6] S.BhuniaandM.Tehranipoor,HardwareSecurity.Elsevier,2019.Avail-
+able: https://www.sciencedirect.com/book/9780128124772/hardware-
+security.
+[7] M. Xie, S. Li, A. O. Glova, J. Hu, Y. Wang, and Y. Xie, ”AIM:
+Fast and energy-efficient AES in-memory implementation for emerg-
+ing non-volatile main memory,” 2018 Design, Automation & Test in
+Europe Conference & Exhibition (DATE), 2018, pp. 625-628, doi:
+10.23919/DATE.2018.8342085.
+[8] Y. Zhang, L. Xu, Q. Dong, J. Wang, D. Blaauw, and D. Sylvester,
+”Recryptor: A reconfigurable cryptographic Cortex-M0 processor with
+in-memoryandnear-memorycomputingforIoTsecurity,”IEEEJournal
+of Solid-State Circuits, vol. 53, no. 4, pp. 995-1005, Apr. 2018, doi:
+10.1109/JSSC.2017.2776302.
+[9] J. Zhang, H. Naghibijouybari, and E. Sadredini, ”Sealer: In-SRAM
+AES for high-performance and low-overhead memory encryption,” in
+ProceedingsoftheACM/IEEEInternationalSymposiumonLowPower
+ElectronicsandDesign,Aug.2022,pp.1-6.
+[10] Z.LiuandV.Kursun,”Highreadstabilityandlowleakagecachemem-
+ory cell,” in IEEE International Symposium on Circuits and Systems
+(ISCAS),2007,pp.2774-2777,doi:10.1109/ISCAS.2007.378628.
+[11] A.MishraandA.Grover,”A0.9V64Mb6TSRAMcellwithreadand
+writeassistschemesin65nmLSTPtechnology,”202024thInternational
+Symposium on VLSI Design and Test (VDAT), Bhubaneswar, India,
+2020,pp.1-4,doi:10.1109/VDAT50263.2020.9190373.
+[12] S. B. Boyd, Life-Cycle Assessment of Semiconductors, 1st ed. New
+York, NY, USA: Springer, 2012. DOI:https://doi.org/10.1007/978-1-
+4419-9988-7.
+[13] D. Kline et al., ”Sustainable IC design and fabrication,” 2017 Eighth
+International Green and Sustainable Computing Conference (IGSC),
+Orlando,FL,USA,2017,pp.1-8,doi:10.1109/IGCC.2017.8323572.
+

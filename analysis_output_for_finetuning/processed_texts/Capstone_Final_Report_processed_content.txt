@@ -1,0 +1,1585 @@
+=== Page 1 ===
+Advance Digital Droop Detector Circuit
+Submitted by
+Debangshu Mahanayak (MT23165) and Shivani Mishra (MT23189)
+Under the supervision of
+Dr. Anuj Grover
+Indraprastha Institute of Information Technology, Delhi
+December 2024
+Submitted
+in partial fulfilment of the requirements for the degree of Master of Technology to
+Indraprastha Institute of Information Technology, Delhi
+December 2024
+©2024 Indraprastha Institute of Information Technology New Delhi, all rights reserved
+
+[Image page_1_image_0.jpeg Analysis (by Gemini)]
+Here's a detailed analysis of the image provided within the context of the research paper:
+
+**Visual Elements and Structure:**
+
+The image is a logo. It consists of the following elements:
+
+*   **Four Vertical Rectangles:** Three grey-colored vertical rectangles, uniform in width and spacing.
+*   **Modified "I" Shape:** A dark-grey shape, which appears to be a stylized capital "I" but with a portion of its upper segment removed.
+*   **Partial Circle:** A teal-colored partial circle or crescent moon shape attached to the right side of the modified "I".
+
+**Text Within the Image:**
+
+There is no explicit text embedded within the logo itself.
+
+**Context and Importance:**
+
+Based on the surrounding text provided, the image likely represents the logo of "Indraprastha Institute of Information Technology, Delhi" (IIIT-Delhi). This can be inferred from the repetition of the institute's name and location on the title page and within the certificate.
+
+**Significance:**
+
+*   **Institutional Affiliation:** The logo indicates that the research paper ("Advance Digital Droop Detector Circuit") originates from and is affiliated with IIIT-Delhi. This provides context and credibility to the work.
+*   **Branding:** The logo serves as a visual identifier for the institute. It reinforces the institute's brand identity and helps to differentiate the research.
+*   **Formal Presentation:** The inclusion of the logo on the title page and potentially within the report itself signifies a formal submission, conforming to the institute's standards for Master's thesis presentations.
+
+**Overall Interpretation:**
+
+The logo in this context functions as a visual marker of institutional origin and endorsement. Its presence is crucial for establishing the credibility of the research and positioning it within the academic framework of IIIT-Delhi. The research is submitted by Debangshu Mahanayak (MT23165) and Shivani Mishra (MT23189) under the supervision of Dr. Anuj Grover from Indraprastha Institute of Information Technology, Delhi in December 2024.
+
+
+
+=== Page 2 ===
+Certificate
+This is to certify that the capstone titled “Advance Digital Droop Detector Circuit”
+submitted by Shivani Mishra and Debangshu Mahanayak for the partial fulfilment of
+the requirements for the degree of Master of Technology in VLSI & Embedded Systems
+is a record of the bonafide work carried out by them under my guidance and supervision
+in the VLSI Circuits & System Lab group at Indraprastha Institute of Information
+Technology, Delhi. This work has not been submitted anywhere else for the reward of
+any other degree.
+Dr. Anuj Grover
+………………………
+
+=== Page 3 ===
+Acknowledgment
+We wish to extend our deepest gratitude to the Department of Electronics and
+Communication Engineering at Indraprastha Institute of Information Technology,
+Delhi, for providing us with such an exceptional Master’s program.
+We are profoundly thankful to Professor Dr. Anuj Grover, Associate Professor at
+Indraprastha Institute of Information Technology - Delhi. Your unwavering support,
+insightful guidance, and constant encouragement have been pivotal throughout this
+project.
+Our heartfelt thanks also go to Dr. Amit Chhabra, Senior Engineer at ARM
+Technologies. Your invaluable support and expertise have been instrumental in shaping
+our progress and ensuring our success.
+We sincerely acknowledge both of you for your significant contributions and
+unwavering support. Your mentorship has inspired us to strive for excellence and fully
+utilize the knowledge and skills we have gained.
+
+=== Page 4 ===
+List of Contents
+Title Page No.
+Abstract
+1. Introduction ................................................................................ 8
+1.1 Introduction .................................................................................. 8
+1.2 Power Delivery Network (PDN) and Voltage Droop .................... 9
+1.3 Droop Profiles and Mitigation .......................................................9
+1.4 Problem Statement ....................................................................... 10
+2. Literature Review ...................................................................... 11
+3. Design Analysis & Proposed Work ......................................... 25
+3.1 Different Type of Droop Detector Circuit ..................................... 25
+3.1 Design Analysis ............................................................................27
+3.2 Proposed Work ............................................................................ 28
+3.2.1 Delay Chain ................................................................... 28
+3.2.2 Transmission Gate Based D-Flipflop Design ................... 29
+3.2.3 Thermometer Code Generator .........................................29
+3.2.4 Reset of Flipflop ............................................................. 30
+4. Results & Analysis… ..................................................................... 31
+4.1 Circuit Schematic ................................................................................. 31
+4.1.1 Staging Effect of Buffers ............................................................... 32
+4.1.2 Buffer Size vs Delay ...................................................................... 33
+4.2 Buffer Based Delay Line Design ........................................................... 34
+4.3 Voltage Droop vs Delay Observation .................................................... 34
+4.3.1 Delay Observations............................................................................... 35
+4.4 Transmission Gate Design ...................................................................... 37
+4.5 D Flipflop Design...................................................................................39
+4.6 Metastable Encounter ............................................................................. 41
+4.6.1 Metastability Encounter by Setup-Hold Window .................................... 44
+
+=== Page 5 ===
+4.6.2 Adder Based Metastability Encounter ..................................................... 45
+4.6.3 Metastability Encounter using Bit Ignorance ...................................... 46
+5. Conclusion And Future Enhancement… ....................................... 48
+5.1 Conclusion .................................................................................... 48
+5.2 Future Enhancement ..................................................................... 50
+6 References… ..................................................................................... 52
+
+=== Page 6 ===
+Abstract
+Voltage droop, a transient reduction in supply voltage, poses a significant challenge in
+high-speed digital circuits, potentially leading to performance degradation and timing
+violations. Detecting and profiling droops is critical for maintaining system reliability.
+While analog methods like SAR ADCs provide precision, they often suffer from higher
+complexity and slower response times. This project focuses on a digital approach using
+thermometer code generation, which is faster, scalable, and seamlessly integrates into
+digital workflows.
+The system utilizes an inverter-based delay line to introduce controlled delays that vary
+with supply voltage droop. A series of transmission gate-based D flip-flops is placed at
+each delay stage, clocked by the system clock and its complement. As voltage droop
+increases, the propagation delay through the inverter chain grows, causing the flip-flops
+to sequentially latch either '1' or '0', thereby generating a thermometer code. This code
+transitions from (111…11) to (110…00), providing a direct digital representation of the
+droop magnitude. The digital methodology ensures fast and accurate droop detection
+with high resolution, leveraging the simplicity and speed of digital circuits while
+overcoming the latency and complexity of analog solutions.
+
+=== Page 7 ===
+CHAPTER-1
+INTRODUCTION
+1.1 Introduction
+The supply voltage (Vdd) level in systems-on-a-chip (SoCs) is a critical determinant of
+power consumption and performance. Ensuring voltage stability is crucial as supply-
+voltage fluctuations, or voltage droop, can degrade performance and potentially lead to
+malfunctions. These fluctuations, caused by parasitic inductance and resistivity within
+the power delivery network (PDN), are exacerbated by rapid changes in current
+consumption due to dynamic processor activities, such as switching and architectural
+power-saving events. The phenomenon, commonly referred to as the voltage droop.
+Decoupling capacitors, placed across the PDN on the board, package, and die, aim to
+stabilize Vdd however, these capacitors may introduce resonant frequencies, leading to
+Vdd droops during current surges. Power-gated PDNs, which utilize switchable sleep
+transistors for localized power management, face unique challenges such as switching
+noise from logic cell activity and rush current noise during wake-up phases.
+Designing efficient PDNs involves balancing power efficiency with power integrity.
+Traditional strategies focus on minimizing supply noise while maintaining performance,
+while modern approaches emphasize advanced PDN architectures tailored for multi-core
+chips and SoCs. These architectures integrate global and local grids with decoupling
+capacitors to address the dual objectives of voltage stability and leakage power reduction,
+stabilizing supply voltage in SoCs is an intricate challenge driven by dynamic resource
+utilization, scaling trends, and power gating designs. Addressing this issue is critical for
+enhancing the performance and energy efficiency of high-performance processors.
+1.2 Power Delivery Network (PDN) and Voltage Droop
+A Power Delivery Network (PDN) is essential in VLSI designs, responsible for
+distributing stable power supply and returning electrical current across all
+components in a system. It comprises on-chip power grids, off-chip packages,
+voltage regulator modules (VRMs), and decoupling capacitors. PDNs are often
+structured as pseudo-distributed RLC networks, where parasitic resistances,
+inductances, and capacitances significantly influence stability. High-frequency
+
+=== Page 8 ===
+switching activities and dynamic workloads introduce challenges such as voltage
+droops, impedance peaks, and jitter, which degrade signal integrity and can cause
+timing errors. Decoupling capacitors are hierarchically placed to stabilize voltage
+levels, reduce impedance, and mitigate transient spikes, ensuring stable power
+delivery. Advanced optimization techniques, including model order reduction
+(MOR) and simulated annealing, are employed to improve capacitor placement and
+minimize power supply noise. As transistor sizes shrink and clock frequencies rise,
+PDNs must balance robustness, efficiency, and cost to maintain power integrity and
+meet the demands of modern VLSI systems.
+1.3 Droop Profiles and Mitigation
+Voltage droop refers to a temporary reduction in supply voltage, often occurring due to
+sudden changes in current demand in high-performance digital circuits like processors.
+The behaviour of voltage droop can be classified into 1st-order, 2nd-order, and 3rd-order
+effects, each with unique characteristics and requiring specific mitigation strategies.
+1st-order voltage droop represents the immediate voltage drop caused by IR losses in the
+power delivery network (PDN) due to rapid current increases. This droop occurs on a
+nanosecond timescale and is typically mitigated using decoupling capacitors (decaps),
+which provide local charge reservoirs to counter sudden demand. Additionally, on-chip
+voltage regulators can quickly respond to load variations to stabilize the supply. In
+contrast, 2nd-order droop arises from the LC resonance of the PDN, leading to a slower
+oscillatory response that occurs on the microsecond scale. This is often managed through
+active charge injection from switched capacitors or dynamic voltage scaling (DVS),
+which gradually adjusts the supply voltage based on workload demands.
+3rd-order voltage droop occurs over longer timescales, typically in milliseconds, and is
+caused by sustained high current loads or thermal effects, which can strain the regulator
+or power grid. To address this, techniques like CPU throttling reduce power consumption
+by lowering clock frequency or disabling cores temporarily. Dual Mode Logic (DML)
+offers an alternative by dynamically switching between low-power and high-performance
+operating modes based on workload requirements.
+Additional mitigation strategies include hierarchical decap placement to provide
+localized charge supply across the chip, adaptive clocking to synchronize with droop
+conditions, and resonance dampers to reduce LC oscillation effects. At the architectural
+level, asynchronous logic design can minimize timing violations caused by droop by
+reducing dependency on synchronous clocking. By understanding the nature and impact
+of different orders of voltage droop, targeted solutions can ensure reliable and efficient
+operation in power-intensive circuits.
+
+=== Page 9 ===
+1.4 Problem Statement
+Voltage droop is a critical challenge in modern integrated circuits (ICs), arising from
+rapid changes in current demand during high-frequency switching or load variations in
+the power delivery network (PDN). These fluctuations cause transient voltage drops due
+to the parasitic inductance, resistance, and capacitance inherent in the PDN, which can
+lead to timing violations, degraded signal integrity, and even circuit malfunction. As
+transistor scaling continues and operating frequencies increase, the susceptibility to
+voltage droops becomes more pronounced, exacerbating the problem in advanced
+systems such as high-performance processors, GPUs, and SoCs. Additionally, power-
+saving techniques like dynamic clocking and power gating, while efficient, further
+contribute to abrupt current surges, intensifying droop-related issues. The need for robust
+droop detection and mitigation mechanisms is critical to ensure stable and reliable
+operation, particularly in systems with stringent performance and power efficiency
+requirements. Addressing this issue is essential to avoid performance degradation,
+maintain timing margins, and ensure the overall reliability of modern electronic systems.
+
+=== Page 10 ===
+CHAPTER-2
+LITERATURE REVIEW
+In the literature review section of our report, we will examine existing research and
+scholarly articles related to our topic. This involves reviewing a variety of sources, such
+as research papers and conference proceedings, to understand the current state of
+knowledge, identify gaps, and establish how our project contributes to the broader field.
+By analysing prior work, we aim to build on existing insights, highlight the significance
+of our study, and demonstrate its unique contribution. This process serves as a guide,
+helping us navigate the foundation laid by previous researchers before embarking on our
+own journey.
+2.1 PDN and Its Design Challenges-
+A Power Delivery Network (PDN) encompasses all the devices and interconnects that
+distribute power supply and return electrical current across an electronic system's board.
+The increasing clock frequencies and transistor scaling in integrated circuits (ICs) pose
+significant challenges for designing robust PDNs. The primary goal is to ensure stable
+power delivery while effectively managing power supply noise to keep it within
+acceptable thresholds. Rapid load changes, transient spikes, and high current demands
+can result in significant power supply noise, such as impedance peaks, voltage droops,
+and jitter—commonly measured as a timing uncertainty metric. These issues can
+ultimately lead to the malfunction of integrated circuits if not properly addressed.
+Fig 2.1.1: Proposed Voltage Biasing circuit for 3-stage Current Starved Ring Oscillator
+
+[Image page_10_image_0.jpeg Analysis (by Gemini)]
+Here's a breakdown of the image based on your request:
+
+**Image Analysis:**
+
+The image (Fig 2.1.1 according to the surrounding text) is a schematic diagram representing a Power Delivery Network (PDN) with a proposed voltage biasing circuit for a 3-stage Current Starved Ring Oscillator. It models the various components and interconnections involved in supplying power to an integrated circuit (IC).
+
+**Visual Elements and Structure:**
+
+*   **Circuit Components:** The diagram employs standard circuit symbols to represent different components.
+    *   **VRM (Voltage Regulator Module):** Depicted on the left, including a voltage reference ("Ref"), an amplifier, and a Low-Pass Filter ("LPF").
+    *   **Inductors (Coils):** Represent parasitic inductance in the interconnects (e.g., PCB traces, vias, balls, bumps).
+    *   **Capacitors:** Represent decoupling capacitors used to stabilize voltage and filter noise. There are labeled components for bulk capacitors, ceramic capacitors, a package capacitor, and on-chip capacitance.
+    *   **Resistors:** Represent parasitic resistance.
+    *   **Load:** A variable resistor representing the IC load.
+*   **Interconnects:**  The inductors and capacitors are arranged in a manner that suggests a cascade or network, reflecting the physical path of power delivery from the VRM to the IC load.
+*   **Hierarchical Representation:**  The schematic suggests different levels of power delivery. The VRM supplies power to the PCB level, which is then delivered to the package level, and finally to the on-chip load.
+*   **Areas of Focus:** Distinct areas are highlighted and labeled:
+    *   "PCB Power Planes"
+    *   "PCB Planes & Vias"
+    *   "Package Power Planes"
+    *   "Balls & Vias"
+    *   "Bumps"
+    *   "On-chip Capacitance"
+*   **Color Coding:** The package and on-chip components are enclosed in a shaded (blue) area, likely to visually distinguish them from the off-chip components.
+
+**Text within the Image:**
+
+*   **VRM:** (Voltage Regulator Module)
+*   **Ref:** (Voltage Reference)
+*   **LPF:** (Low-Pass Filter)
+*   **Bulk Capacitors**
+*   **Ceramic Capacitors**
+*   **PCB Power Planes**
+*   **PCB Planes & Vias**
+*   **Package Power Planes**
+*   **Balls & Vias**
+*   **Bumps**
+*   **Package Capacitor**
+*   **On-chip Capacitance**
+*   **Load**
+
+**Context and Importance:**
+
+Based on the surrounding text:
+
+*   **Chapter Context:** The image appears in the Literature Review chapter, specifically section 2.1, which discusses PDN design challenges.
+*   **PDN Importance:** The text emphasizes that PDNs are critical for delivering stable power to ICs.  The image is likely used to illustrate the components and interconnects that make up a PDN.
+*   **Design Challenges:** The increasing speed and complexity of ICs create challenges in PDN design. The text mentions power supply noise (voltage droops, impedance peaks) as a key concern.
+*   **Voltage Droop:** The problem statement (page 9) focuses on voltage droop as a major issue that can lead to performance degradation and malfunction. The schematic likely aims to visually explain how voltage droops can occur due to parasitic elements (inductance, resistance, capacitance) within the PDN.
+*   **Proposed Voltage Biasing Circuit:** The figure caption indicates the diagram represents a "proposed voltage biasing circuit for 3-stage Current Starved Ring Oscillator". This suggests the figure aims to offer a potential solution or configuration for addressing the voltage biasing issues and PDN stability for this type of IC.
+*   **Fig 2.1.1:** This indicates that this figure appears as the first figure in the first section of chapter 2.
+
+**Overall Importance:**
+
+The image is important because it visually represents the complexity of a Power Delivery Network and helps to illustrate the sources of potential problems like voltage droops. It provides a visual aid to understand the discussion of PDN design challenges in the literature review and highlights the need for effective noise management and stable power delivery in modern ICs.
+
+
+
+=== Page 11 ===
+2.2 PDN Impedance Profile (Frequency Response)-
+The impedance profile serves as a critical system-level metric to evaluate the quality and
+performance of a Power Delivery Network (PDN). Ideally, the impedance profile should
+be as low and flat as possible across all operating frequencies to ensure minimal voltage
+noise and stable power delivery. However, parasitic elements inherent in the die and
+package often lead to significant resonances at high frequencies, causing peaks in the
+impedance profile. These peaks can exacerbate power supply noise and compromise
+signal integrity, particularly during high-frequency switching activities. By analyzing the
+impedance profile, engineers can identify potentially problematic frequency ranges and
+take proactive measures, such as optimizing decoupling capacitor placement or
+modifying PDN design, to mitigate noise and enhance overall system reliability and
+efficiency.
+Fig 2.2: Impedance Profile
+2.3 PDN Voltage Droops (Time Responses)
+Voltage droop is a critical phenomenon in Power Delivery Networks (PDNs), driven by
+various factors at different stages. The first-order voltage droop is primarily influenced
+by on-die capacitance, resistive parasitic, and package connections, directly impacting
+the chip's performance. Frequency-domain effects appear as voltage droops in the time
+domain, which can lead to operational errors or system failures. The second-order droop
+is predominantly dictated by package capacitance and occasionally by connector pins,
+while the third-order droop arises from voltage regulator capacitance and nearby bulk
+capacitance. As the magnitude and duration of voltage droop events increase, the system's
+ability to tolerate them diminishes, jeopardizing signal integrity. This underscores the
+importance of implementing.
+
+[Image page_11_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the provided image based on the given context:
+
+**Image Analysis:**
+
+*   **Type:** The image is a line graph.
+*   **Structure:**
+    *   **Axes:** The x-axis represents "Frequency," and the y-axis represents "Impedance." The frequency axis is using a logarithmic scale.
+    *   **Data:** A blue line plots the relationship between frequency and impedance.
+    *   **Annotations:** Three annotations point to specific peaks in the graph:
+        *   "3rd Order Effects" points to a small peak at a lower frequency.
+        *   "2nd Order Effects" points to a smaller peak at a mid-range frequency.
+        *   "1st Order Effects" points to a large, prominent peak at a higher frequency.
+    *   **Grid:** The graph has a black grid for easy data point identification.
+*   **Text in Image:**
+    *   Title: "Impedance Profile"
+    *   Axis Labels: "Frequency" (x-axis), "Impedance" (y-axis)
+    *   Annotations: "1st Order Effects," "2nd Order Effects," "3rd Order Effects"
+
+**Context and Importance:**
+
+The image "Impedance Profile" (Fig 2.2) illustrates the frequency response of a Power Delivery Network (PDN). According to the surrounding text, the impedance profile is a crucial metric for evaluating the quality and performance of a PDN. Ideally, the profile should be low and flat across all frequencies to minimize voltage noise and ensure stable power delivery. However, parasitic elements cause resonances, leading to peaks in the impedance profile, especially at higher frequencies.
+
+The annotations "1st Order Effects," "2nd Order Effects," and "3rd Order Effects" highlight different sources of impedance peaks, which, based on the text from section 2.3, are related to on-die capacitance, package capacitance, and voltage regulator capacitance, respectively. These peaks can exacerbate power supply noise and compromise signal integrity during high-frequency switching.
+
+By analyzing the impedance profile, engineers can pinpoint problematic frequency ranges and take corrective actions like optimizing decoupling capacitor placement or modifying the PDN design to mitigate noise and improve system reliability and efficiency. The figure visually represents the concept explained in section 2.2.
+
+**Overall Importance:**
+
+The image and the related text in the "Literature Review" chapter highlight the importance of PDN design and analysis in modern electronic systems. It demonstrates how analyzing the impedance profile is a key step in identifying and addressing potential issues with power delivery. These issues, if unaddressed, can lead to voltage droops and timing uncertainty, ultimately causing malfunction of integrated circuits. Understanding and mitigating these effects is crucial for designing reliable and efficient high-performance computing systems. The image is therefore critical to understanding the PDN frequency domain behavior.
+
+
+
+=== Page 12 ===
+Fig 2.3: Result of the Voltage droop
+2.4 Droop Effects and how often it happens in Advanced SoC Design
+Advanced CPUs, GPUs, and other IPs in modern SoCs face growing complexity to
+deliver high single-thread performance while maintaining power efficiency, particularly
+in high-end mobile, infrastructure, and automotive computing systems. This increasing
+complexity results in higher maximum current draw, leading to significant transient
+current fluctuations. These fluctuations, often triggered by abrupt activity changes or load
+variations at the PDN impedance resonance frequency, cause voltage droops at transistor
+junctions. Addressing these droops during sign-off timing closure is critical to prevent
+brown-out events during transient operations. To analyze voltage droops, three
+fundamental current sources—impulse, step, and sinusoidal—are examined, with the
+maximum droop observed under sinusoidal current pulses. The frequency of these events
+depends on factors such as the specific device in use, its activity level, and the operating
+clock frequency, emphasizing the need for careful PDN design and analysis.
+
+[Image page_12_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, incorporating the provided context:
+
+**Image Analysis**
+
+*   **Visual Elements:** The image is a line graph showing voltage as a function of time.  The x-axis represents time, and the y-axis represents voltage. The graph depicts a transient analysis of a voltage droop event.  The voltage starts at a stable level, then experiences a sharp drop, followed by damped oscillations, eventually settling at a slightly lower voltage than the initial level.  Arrows point to different sections of the curve, labeling them "1st Order," "2nd Order," and "3rd Order."
+
+*   **Structure:** The graph is simple, with labeled axes and a clear depiction of the voltage droop. The arrows make it easy to identify the different phases of the droop event. The oscillations appear to dampen over time.
+
+*   **Text:** The following text is visible within the image:
+    *   "Transient Analysis" (Title)
+    *   "Voltage" (Y-axis label)
+    *   "Time" (X-axis label)
+    *   "Nominal voltage (Vnom)" (Label indicating the initial voltage level)
+    *   "1st Order" (Label pointing to the initial voltage drop)
+    *   "2nd Order" (Label pointing to the first voltage peak after the initial drop)
+    *   "3rd Order" (Label pointing to a later voltage peak as the ringing effect dampens)
+
+**Contextual Importance and Interpretation**
+
+*   **Overall Context:** The image is part of a discussion on Power Delivery Network (PDN) voltage droops, a significant concern in advanced SoC design, as evidenced by the titles of nearby sections: 2.3 PDN Voltage Droops (Time Responses), 2.4 Droop Effects and how often it happens in Advanced SoC Design. The surrounding text emphasizes that voltage droops are caused by transient current fluctuations in complex SoCs (System on a Chip). These fluctuations can lead to system failures or operational errors.
+
+*   **Significance:**
+    *   *Transient Voltage Droop:* The graph in Fig 2.3 depicts the voltage droop phenomenon described in the page's text. It shows the impact of transient current draw on the voltage level in the PDN.
+    *   *Impact of Parasitics:* The labeled sections ("1st Order," "2nd Order," "3rd Order") likely refer to the contributions of different parasitic elements within the PDN to the overall voltage droop. Based on the preceding section (2.2 PDN Impedance Profile) and the text, "1st Order" probably relates to on-die capacitance, resistive parasitics and package connections. "2nd Order" likely corresponds to package capacitance and connector pins. "3rd Order" most likely arises from voltage regulator capacitance and bulk capacitance.
+    *   *Design Importance:* The image emphasizes the importance of understanding and mitigating voltage droops to maintain system stability.  The damped oscillations show that the voltage eventually recovers, but the initial dip could cause issues during critical operations.  Proper PDN design is crucial to minimize the magnitude and duration of these droops, as discussed in the surrounding text.
+    * *Link to Figure 2.4:* Section 2.4 discusses that the on-chip voltage has dips and peaks associated with the current transients and rings out in a damped sinusoid at the PDN resonant frequency, which is the behavior shown on the graph in Figure 2.3.
+
+In summary, the image is a visual representation of voltage droop behavior in a PDN, illustrating the different stages of the transient response and highlighting the importance of PDN design and analysis in modern SoCs. The labelled sections of the graph likely tie into the contributing parasitics mentioned in section 2.2.
+
+
+
+[Image page_12_image_1.jpeg Analysis (by Gemini)]
+Here's a detailed analysis of the image, considering its visual elements, text, and context within the research paper:
+
+**Overall Image Description:**
+
+The image consists of two plots, one above the other. Both plots share the same horizontal axis: "Time (lin) (TIME)", measured in nanoseconds (ns) from 0 to 300ns. The top plot shows "Currents (lin)" on the vertical axis, ranging from 0 to 10. The bottom plot shows "Voltages (lin)" on the vertical axis, ranging from 800mV to 1.1V (1100mV). Both plots display waveforms showing transient behavior.
+
+**Detailed Visual Element Breakdown:**
+
+*   **Top Plot (Currents):**
+    *   **Waveform:** A blue line represents the transient current. It starts at a low value, jumps quickly to around 7, remains there for a period (around 100ns), drops down to a lower value of around 2, remains there, and then jumps back up to around 7. The current waveform shows some ringing (oscillations) after each step change.
+    *   **Label:** The text "Transient Current" appears next to the current waveform.
+    *   **Data point:** A X marker is displayed on the wave starting point.
+
+*   **Bottom Plot (Voltages):**
+    *   **Waveform:** A blue line represents the voltage response to the transient current shown in the top plot. The voltage exhibits significant ringing/oscillations, particularly after changes in the current. There is a large voltage droop (dip below the nominal value) and overshoot (exceeding the nominal value).
+    *   **Reference lines:** There is a red horizontal line which represents the nominal voltage. There are also two beige lines which represents the +5% and -5% voltage deviation from the nominal value.
+    *   **Labels:** "+5%" and "-5%" denote the voltage tolerance bounds.
+    *   **Data points:** A X marker and a circle are displayed on the wave starting point.
+
+**Textual Elements:**
+
+*   **Top Plot:**
+    *   "Currents (lin)" - Label for the Y-axis
+    *   "Time (lin) (TIME)" - Label for the X-axis
+    *   "Transient Current" - Label indicating the waveform.
+*   **Bottom Plot:**
+    *   "Voltages (lin)" - Label for the Y-axis
+    *   "Time (lin) (TIME)" - Label for the X-axis
+    *   "+5%" - Label indicating the upper voltage tolerance limit.
+    *   "-5%" - Label indicating the lower voltage tolerance limit.
+
+**Context and Significance:**
+
+The image, labeled as "Fig 2.3: Result of the Voltage droop", directly relates to the surrounding text describing PDN (Power Delivery Network) voltage droops. Here's a breakdown of its importance:
+
+*   **Visualizing Voltage Droop:** The image visually demonstrates the voltage droop phenomenon discussed in section 2.3. The bottom plot shows the voltage fluctuations caused by the changing current draw depicted in the top plot.
+*   **Transient Current Fluctuations:** The surrounding text in section 2.4 explains that advanced SoCs experience increasing complexity and current draw, leading to transient current fluctuations. The top plot visualizes an example of such a transient current.
+*   **PDN Resonance and Ringing:** The text in section 2.4 mentions voltage droops are often triggered by activity changes at the PDN impedance resonance frequency. The ringing (oscillations) in the voltage waveform suggests this resonance is a key factor in the observed voltage droop. Also, section 2.4 describes the voltage droop as a damped sinusoid which correlates with the image.
+*   **Importance of PDN Design:** The text emphasizes the need for careful PDN design and analysis to address these voltage droops. The image provides visual evidence of the potential impact of these droops on voltage stability, which is critical for reliable system operation. Section 2.2 explains the importance of the PDN impedance profile, and the drooping in this figure is a result of the PDN design.
+*   **Sign-Off Timing Closure:** Section 2.4 mentions "Addressing these droops during sign-off timing closure is critical to prevent brown-out events during transient operations.". This implies that the depicted voltage droop could potentially cause system failures if not adequately addressed in the design phase.
+
+**In summary:** This image is crucial for understanding the concept of voltage droop in PDNs. It visually connects transient current fluctuations to voltage variations and shows the impact of PDN resonance. It reinforces the importance of proper PDN design and analysis to ensure voltage stability and prevent system failures in advanced SoCs.
+
+
+
+=== Page 13 ===
+Fig 2.4: The on-chip voltage has dips and peaks associated with the current transients and rings out in
+a damped sinusoid at the PDN resonant frequency.
+2.5 Voltage Droop Profiling
+Voltage variation analysis in integrated circuits (ICs) or power distribution networks is
+essential to ensure reliable and efficient performance, particularly in high-performance
+computing applications. Current consumption in SPEC benchmarks, such as earthquake,
+apsi, bzip, and mcf, is classified into step, pulse, and resonating current profiles. Step and
+pulse currents are major contributors to voltage fluctuations and timing violations, with
+the worst-case scenarios occurring during simultaneous core power-on events.
+Implementing staggered core power-on intervals effectively mitigates these fluctuations,
+stabilizing voltage levels. However, resonating currents at the system's resonant
+frequencies can induce severe voltage swings, emphasizing the importance of
+comprehensive voltage analysis to optimize PDN design and maintain system integrity.
+
+[Image page_13_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image provided, based on the surrounding text and the image itself:
+
+**Visual Elements and Structure:**
+
+The image is a schematic diagram representing a four-core chip floorplan. It's structured as a grid, visually dividing the chip into four main quadrants, each representing a core (Core 1, Core 2, Core 3, and Core 4).
+
+Within each core, there are further subdivisions, suggesting different functional units.  Based on the labels in Core 1, we can identify some of these units:
+
+*   **FPU:** Floating Point Unit
+*   **OOO:** Out-of-Order execution unit.
+*   **INT:** Integer unit.
+*   **FETCH:** Instruction Fetch unit.
+*   **DATA:** Data unit.
+
+The other cores appear to have a similar arrangement of functional blocks although they are not explicitly labeled, suggesting a relatively uniform design across the cores. At the top left of the grid, the label "(0,0)" indicates the coordinate origin.
+
+**Text within the Image:**
+
+*   **(0,0)**:  Indicates the coordinate origin point.
+*   **FPU**: (Floating Point Unit)
+*   **OOO**: (Out-of-Order execution)
+*   **INT**: (Integer Unit)
+*   **FETCH**:
+*   **DATA**:
+*   **CORE 1**:
+*   **CORE 2**:
+*   **CORE 3**:
+*   **CORE 4**:
+
+**Significance and Context (Based on Provided Text):**
+
+The image, specifically labeled "Fig 2.5.1 A four-core chip floorplan, Core 1 running bzip, Voltage variation across the chip for a snapshot of bzip", is crucial for understanding how voltage variations affect chip multiprocessor (CMP) architectures.
+
+Here's the breakdown of its importance:
+
+1.  **Illustrating the physical layout:** The floorplan shows the spatial arrangement of the cores and functional units. This is important because voltage droops and variations are highly dependent on location due to the impedance of the power distribution network (PDN). A core's proximity to the power source or other cores can affect its voltage stability.
+
+2.  **Relating workload to voltage variation:** The caption explicitly mentions "Core 1 running bzip" and links this activity to "Voltage variation across the chip."  The surrounding text details that SPEC benchmarks like *bzip* represent different current consumption profiles, which are classified as Step, Pulse, or Resonating Currents. The text mentions that resonating currents, especially near the PDN's resonant frequency, can cause severe voltage swings.  Therefore, this figure visually connects the execution of a specific benchmark on a core (*bzip* on Core 1) to potential voltage problems across the entire chip. *Bzip* is specifically mentioned as exhibiting resonating currents.
+
+3.  **PDN analysis:**  The image implicitly underscores the importance of Power Distribution Network (PDN) design.  The whole reason for analyzing voltage droops is to ensure that the PDN is robust enough to handle transient current demands without causing brown-out events or timing violations. The arrangement of cores and functional units within the chip directly influences the PDN's requirements.
+
+4.  **Relevance to voltage droop profiling:**  The surrounding text discusses voltage droop profiling, highlighting the need to analyze voltage variations in ICs for reliable performance. This image serves as a visual reference point for understanding how different workloads and their associated current profiles translate into voltage fluctuations within a multi-core chip. Staggered core power-on intervals are mentioned in the surrounding text as a method to mitigate voltage fluctuations.
+
+**In Summary:**
+
+The image is a key visual aid in understanding voltage droop phenomena in multi-core chips. It connects the physical layout of the chip, the workload being executed (specifically *bzip*), and the resulting voltage variations. It reinforces the importance of analyzing current consumption profiles and designing robust PDNs to maintain system integrity in high-performance computing applications. The fact that it's labeled "Fig 2.5.1" indicates that it's likely followed by other figures showing the actual voltage variation data, building upon this foundational floorplan representation.
+
+
+
+[Image page_13_image_1.jpeg Analysis (by Gemini)]
+Here's a thorough analysis of the image you provided, considering its visual elements, text, context, and significance within the research paper.
+
+**Visual Elements and Structure:**
+
+The image is a 3D surface plot overlaid on a 2D representation of a chip floorplan.  Here's a breakdown:
+
+*   **3D Surface Plot:** This plot depicts voltage levels across the chip. The X and Y axes likely represent spatial coordinates on the chip. The Z-axis (vertical axis) represents the voltage (v). The surface is rendered as a red wireframe grid. The height of the wireframe above the X-Y plane indicates the voltage at that location. Dips in the surface indicate voltage droop.
+*   **2D Floorplan Overlay:**  A grid is overlaid on the X-Y plane, representing the layout of the chip. This grid is divided into four quadrants, labelled "CORE 1", "CORE 2", "CORE 3", and "CORE 4".  Thick black lines delineate the boundaries between these cores. The background is dotted, and contour lines of voltage are superimposed on the dotted background.
+*   **Color-Coded Contours:**  Below the floorplan, a legend indicates the voltage levels corresponding to the different colored contour lines drawn on the floorplan overlay.
+
+**Text within the Image:**
+
+*   **Axis Labels:**
+    *   "Voltage (v)" (Vertical axis label for the 3D surface plot)
+    *   "X Coordinates" (Horizontal axis label for the floorplan)
+    *   "Y Coordinates" (Vertical axis label for the floorplan)
+*   **Core Labels:** "CORE 1", "CORE 2", "CORE 3", "CORE 4"
+*   **Voltage Levels:**  Numerical values along the Voltage axis (0.925, 0.93, 0.935, 0.94, 0.945, 0.95, 0.955, 0.96)
+*   **Coordinate Values:** Numerical values along the X and Y Coordinate axes (0, 2, 4, 6, 8, 10, 12)
+*   **Lumped Voltage:** "Lumped Voltage = 0.96 V"
+*   **Contour Legend**: Specifies voltage levels (0.93, 0.935, 0.94, 0.945, 0.95, 0.955)
+
+**Context and Importance:**
+
+Based on the provided text, the image is illustrating voltage variations across a multi-core chip due to current consumption patterns. Here's how it connects to the text:
+
+*   **Voltage Droop and Resonant Frequencies:** The text mentions that resonating currents at the system's resonant frequencies can induce severe voltage swings.  The image likely depicts this phenomenon, showing how voltage levels fluctuate across the chip, particularly near the cores. The dips in the 3D surface plot likely correspond to voltage droops.
+*   **SPEC Benchmarks and Core Activity:** The text refers to SPEC benchmarks like earthquake, apsi, bzip, and mcf. The surrounding text mentions that Figure 2.5.1 depicts "Voltage variation across the chip for a snapshot of bzip". Thus, it is likely that this image (originally labeled Fig 2.5.1) shows the voltage profile across the chip when Core 1 is running the bzip benchmark, as mentioned in the surrounding page.
+*   **Power Distribution Network (PDN) Design:** The text emphasizes the importance of voltage analysis to optimize PDN design and maintain system integrity. The image provides a visual representation of the voltage distribution, helping engineers understand the effectiveness of their PDN design.
+*   **Mitigating Voltage Fluctuations:**  The text mentions that staggered core power-on intervals can mitigate voltage fluctuations. This image likely serves as a baseline against which the effectiveness of such mitigation techniques can be compared.
+*   **Current profiles:**The text classified current consumption profiles into three main categories, Step Currents, Pulse Currents, and Resonating Currents. This image depicts a chip experiencing resonating current profile and thus large voltage variation.
+
+**In summary,** the image visually represents the voltage distribution across a four-core chip, highlighting voltage droops and variations associated with core activity (likely the bzip benchmark). It's an important tool for analyzing the effectiveness of the power distribution network and understanding how current consumption patterns impact voltage stability, which is crucial for reliable and efficient chip performance.
+
+
+
+[Image page_13_image_2.jpeg Analysis (by Gemini)]
+Here's a comprehensive analysis of the image, integrating visual elements, text, context, and significance:
+
+**1. Visual Elements and Structure:**
+
+*   **3D Surface Plot:** The primary element is a 3D surface plot. The X and Y axes represent coordinates on a chip, likely in arbitrary units. The Z-axis represents voltage (V), ranging from approximately 0.98V to 1.005V. The surface is rendered as a red grid, showing voltage distribution across the chip area.
+*   **Core Divisions:** The plot's base is divided into four quadrants, labeled "CORE 1," "CORE 2," "CORE 3," and "CORE 4." These quadrants represent the physical locations of four cores on a chip.
+*   **Contour Lines:** Color-coded contour lines are projected onto the X-Y plane. These lines represent iso-voltage lines, showing locations where the voltage is a constant value. The legend indicates the voltage values corresponding to each line (1, 0.995, 0.99, 0.985).
+*   **Voltage Droop:** A pronounced "dip" or trough in the 3D surface occurs over the area designated as "CORE 3". This dip shows a significant voltage droop in that core's region.
+
+**2. Text within the Image:**
+
+*   **Axis Labels:**
+    *   "Voltage (v)" - Z-axis label
+    *   "X Coordinates" - X-axis label
+    *   "Y Coordinates" - Y-axis label
+*   **Core Labels:** "CORE 1," "CORE 2," "CORE 3," "CORE 4"
+*   **Voltage Legend:** A legend indicating the voltage values for the iso-voltage lines.
+*   **"Lumped Voltage = 1.001 V"**: This indicates the nominal or expected voltage level.
+*   **Contour Values:** "1", "0.995", "0.99", "0.985". These values represent the voltage level of each contour.
+
+**3. Image Context and Importance:**
+
+*   **Figure Caption (Fig 2.4):** "The on-chip voltage has dips and peaks associated with the current transients and rings out in a damped sinusoid at the PDN resonant frequency." This indicates that the image depicts voltage fluctuations on a chip caused by transient currents. The "ringing" refers to oscillations in voltage due to the resonant frequency of the power distribution network (PDN).
+*   **Page Text (2.5 Voltage Droop Profiling):** The surrounding text discusses the importance of voltage variation analysis for reliable IC performance. It mentions that current consumption in SPEC benchmarks (earthquake, apsi, bzip, mcf) can be classified as step, pulse, or resonating. Resonating currents, especially at the PDN's resonant frequency, can cause severe voltage swings.
+*   **Surrounding Pages:** These pages add that modern SoCs have increasing complexity and transient current fluctuations. Voltage droops must be addressed during sign-off timing closure. They discuss the impact of step, pulse, and sinusoidal current sources on voltage droop, with the maximum droop observed under sinusoidal current pulses. The text surrounding the images 2.5.2 mentions the relation between benchmark currents and voltage droop.
+*   **Overall Importance:** The image illustrates the *spatial* distribution of voltage droop across a multi-core chip. The significant droop in CORE 3 is concerning because it could lead to timing violations, brown-out events, and unreliable operation. The image emphasizes the need for careful PDN design to mitigate voltage fluctuations and maintain system integrity. The correlation between core activity (implied by the benchmark being run) and voltage droop is an important design consideration. Staggering core power-on and optimizing the PDN are mentioned as mitigation techniques.
+
+**4. Synthesis:**
+
+In summary, the image is a visualization of voltage droop across a four-core chip. It showcases the spatial distribution of voltage, with a noticeable droop occurring in Core 3. Based on the surrounding text, this droop is likely due to resonating currents at the PDN's resonant frequency or a power-on event. The image underscores the significance of voltage variation analysis in IC design and the need to optimize the PDN to ensure reliable and efficient performance, particularly in high-performance computing applications where transient current fluctuations are common.
+
+
+
+=== Page 14 ===
+Fig 2.5.1 A four-core chip floorplan, Core 1 running bzip, Voltage variation across the chip for a
+snapshot of bzip
+To analyze the use of a distributed power-delivery network in chip multiprocessor
+(CMP) architectures, we begin by examining the current consumption profiles of various
+workloads based on a set of SPEC benchmarks. Figure 5 illustrates the current profiles
+for four SPEC benchmarks—equake, apsi, bzip, and mcf—on a single core. From the
+observed characteristics, we classify current consumption profiles into three main
+categories.
+The first category, Step Currents, occurs when a core suddenly changes its state, such as
+a sudden increase or decrease in activity after long periods of inactivity due to events
+like cache misses or branch mispredictions. Step currents can also arise when the
+firmware switches cores between sleep and active states. The second category, Pulse
+Currents, refers to brief and sudden changes in core activity, typically caused by short
+stalls or transient events. Figures 2.52(a) and 2.5.2(b) show examples of these short-
+duration pulses with varying widths. The third category, Resonating Currents, involves
+periodic current variations, often due to recurring loops in an application. These currents
+are particularly problematic when they occur near the resonant frequency of the power-
+delivery network, as seen in Figures 2.5.2(c) and 2.5.2(d) for the bzip and mcf
+benchmarks, respectively.
+Fig: 2.5.2(a,b): Droop Nature for Pulse Input (equake, apsi)
+
+[Image page_14_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image provided, based on the given context:
+
+**Image Description**
+
+The image consists of two graphs displayed side-by-side. Both graphs are line plots that depict current consumption over time.
+
+*   **Structure:**
+    *   **X-axis:** Represents "Cycles" (likely clock cycles or processing cycles). The left graph goes from 0 to 1000 cycles, while the right graph goes from 0 to 500 cycles.
+    *   **Y-axis:** Represents "Current (amp)", with values ranging from 4 to 10 amps.
+    *   **Data:** The plots show fluctuations in current consumption, with varying peaks and valleys, depicted by a red line.
+*   **Elements and their significance:**
+    * The graphs visualize the current consumption profiles over time.
+    * The red line tracks the current consumption pattern, with the fluctuations indicating areas of high and low processor activity. The left graph has a noisy signal for the initial cycles, while the right graph shows a sharper pulse-like response.
+
+**Text Within the Image**
+
+*   **Axis Labels:**
+    *   X-axis: "Cycles"
+    *   Y-axis: "Current (amp)"
+*   **Axis Values:**
+    *   Y-axis: 4, 5, 6, 7, 8, 9, 10
+    *   X-axis (Left Graph): 0, 200, 400, 600, 800, 1000
+    *   X-axis (Right Graph): 0, 100, 200, 300, 400, 500
+
+**Context and Importance**
+
+Based on the surrounding text, the image shows examples of current consumption for pulse-like inputs on a single core of a chip multiprocessor (CMP) architecture. The text mentions the classifications of Step, Pulse, and Resonating currents. This image specifically shows what "Pulse Currents" look like. The text also mentions specific SPEC benchmarks and correlates Figures 2.52(a) and 2.5.2(b) as Droop Nature for Pulse Input (equake, apsi). This means that the graphs shown in the image represents the pulse current nature of SPEC benchmarks equake and apsi respectively.
+
+**Importance:**
+
+The image is important because it visually represents the "Pulse Currents" category that contribute to voltage fluctuations in integrated circuits, thus helping in understanding the behavior of on-chip power delivery networks. The text emphasizes that understanding current consumption profiles and their categories helps engineers optimize PDN design to maintain system integrity. The images serve as reference points for understanding how various workloads generate these current profiles.
+
+In summary, the image serves as a visual aid to understand voltage variation and current consumption in chip multiprocessor architectures and underscores the importance of voltage analysis in PDN design to ensure reliable and efficient performance.
+
+
+=== Page 15 ===
+Fig 2.5.2(b,C): Snapshot of current consumption for equake, apsi, bzip and mcf for a single core
+2.6 Voltage Droop Detector
+The droop detector identifies voltage droops by monitoring propagation delay changes in
+the SDMDL (Synchronous Delay Monitor Delay Line) and asserts a FLAG signal when
+a droop is detected. Upon detection, the SDMDL reconfigures as a Digitally Controlled
+Oscillator (DCO) operating at a reduced frequency, temporarily serving as the system
+clock (CLKOUT) to prevent timing violations. The DCO frequency gradually increases
+to align with the input clock (CLKIN) frequency, avoiding abrupt current surges. Once
+aligned, the GFRC smoothly switches CLKOUT back to CLKIN without glitches or
+supply voltage overshoot.
+Droop detection techniques fall into two categories: digital and analog. Digital detectors
+translate voltage droops into delay variations of logic gates, using methods like delay
+lines sensitive to AC Vdd levels or ring oscillators that modulate output frequency based
+on Vdd droops. These fully digital solutions are simpler and provide high-resolution
+supply level indications but require extensive calibration across DC Vdd levels,
+temperature, and aging due to sensitivity to these parameters, limiting their real-time
+accuracy. Analog detectors, in contrast, use comparators to identify droops by detecting
+Vdd crossing predefined thresholds. They require fewer calibration points but depend on
+precision reference voltages, offering robust detection under varying conditions. Both
+approaches highlight the importance of accurate droop detection to ensure reliable system
+operation.
+2.6.1 Digital Droop Detector-
+
+[Image page_15_image_0.png Error]
+No API key available for start.
+
+
+=== Page 16 ===
+Digital droop detectors are designed to translate voltage droops into delay variations in
+logic gates, offering a fully digital and high-resolution approach to supply level
+monitoring. These detectors often utilize delay lines, where delays depend on the AC
+Vdd level, or ring oscillators, which modulate Vdd droops into output frequency changes.
+While simpler to design and implement, these systems are highly sensitive to DC Vdd
+levels, temperature, and aging, requiring extensive 3-D calibration and backend
+characterization. The proposed design addresses these challenges with a shared dual-
+mode delay line (SDMDL) consisting of 100 delay cells. The SDMDL functions as both
+a TDC-based droop detector and a DCO-based droop mitigator. It detects droops by
+observing propagation delays and asserting a FLAG signal when thresholds are breached.
+Upon detection, the SDMDL reconfigures as a DCO operating at a slower frequency,
+temporarily serving as the system clock (CLKOUT) to prevent timing violations. The
+DCO frequency is gradually increased to match the input clock (CLKIN), avoiding abrupt
+current surges, and the source of CLKOUT is seamlessly switched back to CLKIN via
+GFRC without glitches or overshoot. The detector supports external tuning of the droop
+detection threshold (DRth) to compensate for process variations, ensuring robust droop
+detection and mitigation in digital systems.
+Fig- 2.6 Digital droop detection scheme.
+2.6.2 Analog Droop Detector-
+The proposed droop detector features a supply filter, offset comparators, and a clock
+phase generator to monitor voltage droops effectively. The supply filter generates a stable
+reference voltage (QDVdd) using a low-pass RC filter and a unity-gain buffer to suppress
+noise and drive the offset comparators. The offset comparators employ a novel inverter-
+based architecture with auto-zeroing for high accuracy and minimal dependency on
+process, voltage, and temperature (PVT) variations. They measure droop size by
+comparing the noisy voltage (NDVdd) with QDVdd and output a 3-bit thermometer code
+to indicate droop severity. The clock phase generator creates overlapping clock phases
+for seamless integration and evaluation transitions, preventing dead zones or capacitor
+discharge. The detector operates on a quiet analog Vdd and supports configurable
+thresholds for system-specific requirements, making it efficient and robust for voltage
+
+[Image page_16_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 17 ===
+droop detection and mitigation
+Fig 2.6.1 (a) Block diagram of the droop detector top-level, comprising a parallel three droop levels
+detector, a filter, and a phase generator. (b) Transistor-level diagram of the VCDA instantiated in the
+filter. (c) Diagram of the clock phase generator, consisting of one MBB circuit and two BBM circuits.
+(d) Schematic of the detector’s offset comparator.
+2.7 Voltage Droop Mitigation Techniques-
+Droop mitigation techniques encompass a wide range of methods aimed at stabilizing
+supply voltage and preventing performance degradation in electronic systems.
+Decoupling capacitors (decaps) are commonly used to locally supply charge during
+transient events, reducing voltage fluctuations. Low-Dropout Regulators (LDOs) provide
+stable power delivery with precise voltage control but may struggle with high-frequency
+noise. Guard bands involve over-provisioning voltage to ensure safe operation, though
+this reduces power efficiency. Dual-mode delay lines (DMDLs), such as those in droop
+detectors, temporarily adjust clock frequencies to avoid timing violations during droop
+events. Charge injection methods rapidly supply current to the load, effectively
+countering transient voltage drops. Critical Path Monitors (CPMs) dynamically adjust
+performance to account for voltage changes, ensuring reliability. Other techniques, like
+adaptive voltage scaling and on-chip voltage regulators, complement these approaches,
+providing robust and efficient droop mitigation tailored to system requirements.
+
+[Image page_17_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 18 ===
+2.7.1 LDOs
+Low-Dropout Regulators (LDOs) are widely used in integrated circuits (ICs) as efficient
+voltage regulation solutions to mitigate droops and maintain power stability. By
+providing a steady output voltage with minimal dropout from the input supply, LDOs
+ensure reliable operation even under fluctuating load conditions. They operate by
+adjusting a pass transistor based on feedback from the output voltage, dynamically
+compensating for variations caused by transient currents or noise in the power delivery
+network (PDN). Research highlights their effectiveness in applications requiring low
+noise and fast transient response, making them essential for sensitive analog and digital
+circuits. Advanced designs incorporate techniques such as adaptive biasing and
+feedforward ripple cancellation to enhance their droop mitigation capabilities, especially
+in high-frequency domains. LDOs are particularly advantageous in systems with tight
+power and noise constraints, such as mobile SoCs and high-performance processors,
+where they provide localized voltage regulation and complement other droop mitigation
+methods like decoupling capacitors and charge injection circuits. Their compact design,
+ease of integration, and ability to stabilize voltage at the point of load make LDOs a
+crucial component in modern ICs.
+Fig 2.7.1- A detailed on-chip power grid model with LDOs
+
+[Image page_18_image_0.png Error]
+No API key available for start.
+
+
+=== Page 19 ===
+2.7.2 CPM with CPU Throttling
+Critical Path Monitors (CPMs) are a dynamic approach to mitigating voltage droops and
+ensuring robust performance in integrated circuits (ICs) by continuously monitoring and
+managing timing margins in real-time. CPMs track delays along the critical paths of a
+circuit, identifying potential timing violations caused by supply voltage fluctuations,
+temperature variations, or aging effects. By integrating timing sensors along these paths,
+CPMs provide precise feedback to adjust operational parameters such as clock frequency,
+voltage, or gate states dynamically. Research indicates that CPMs can be coupled with
+adaptive voltage scaling (AVS) or clock gating techniques to optimize power efficiency
+while maintaining performance. These monitors are particularly effective in high-
+performance systems, where timing margins are narrow, and supply noise is a significant
+concern. CPMs not only enhance droop tolerance but also reduce the need for over-
+provisioning through guard bands, offering a more efficient and scalable solution for
+modern ICs. Their integration into power delivery networks (PDNs) underscores their
+importance in addressing real-time challenges in voltage stability and timing integrity.
+Fig-2.7.2 : Centralized CPM processing in each core based on local CPM value, slope, or nearest
+neighbour throttling.
+
+[Image page_19_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 20 ===
+2.7.3 CI Method
+The charge injection (CI) method is an effective droop mitigation technique designed to
+stabilize supply voltage during transient events by rapidly injecting charge into the power
+delivery network (PDN). This approach relies on on-chip charge reservoirs, such as
+capacitors or specially designed circuits, that store energy and release it during supply
+voltage drops caused by high-frequency switching or load variations. When a droop is
+detected, the stored charge is discharged into the PDN, counteracting the voltage dip and
+maintaining operational stability. Research shows that charge injection methods are
+particularly beneficial in scenarios where traditional decoupling capacitors may be
+insufficient, such as in high-performance computing and advanced SoCs with tight
+timing constraints. The method's effectiveness depends on the precision and speed of
+droop detection mechanisms, as well as the design of the injection circuits to minimize
+overshoot and ensure consistent performance. Compared to other techniques, charge
+injection offers a low-latency solution to droop mitigation, making it an attractive option
+for applications requiring robust power integrity and high reliability.
+Fig- 2.7.3Schematic of a CI instance (CI LS + CI power switch), CI clamp layout
+2.7.4 DML
+Dual-Mode Logic (DML) is a versatile logic family capable of switching between a low-
+power static mode and a high-performance dynamic mode, making it ideal for energy-
+efficient and high-speed applications. At the gate level, a DML gate integrates a static
+CMOS design with an additional clocked transistor to enable dynamic operation. In
+dynamic mode, the output is pre-charged or pre-discharged by the clocked transistor and
+then evaluated for speed optimization, while static mode conserves energy. This
+
+[Image page_20_image_0.jpeg Error]
+No API key available for start.
+
+
+[Image page_20_image_1.jpeg Error]
+No API key available for start.
+
+
+=== Page 21 ===
+flexibility allows for selective dynamic mode activation in critical timing paths, enabling
+higher performance where needed, while maintaining energy efficiency elsewhere. DML
+designs can be segmented, gradually accelerating specific paths during voltage droops by
+switching critical gates to dynamic mode, thereby preserving timing integrity and circuit
+functionality. A critical path replica is used to optimize pre-charge and evaluation phases.
+DML implementations, such as a 28 nm FD-SOI multiplier-accumulator (MAC), have
+demonstrated significant energy savings and performance gains over CMOS designs. By
+leveraging DML’s dynamic capabilities, droop mitigation is achieved by selectively
+accelerating gates in critical paths, ensuring stable operation under varying supply
+voltages without corrupting circuit outputs. This approach, coupled with a lookup table
+for acceleration levels, allows cycle-specific adaptations to droop conditions, enhancing
+reliability and efficiency in modern systems.
+Fig-2.7.4: Block diagram of the droop mitigation scheme by using DML
+
+[Image page_21_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 22 ===
+CHAPTER-3
+DESIGN ANALYSIS & PROPOSED WORK
+3.1 Different Type of Droop Detector Circuit
+As discussed in the literature parts, Voltage droop detectors ensure system reliability by
+identifying voltage fluctuations and preventing timing violations. The digital droop
+detector detects droops by monitoring delay variations in a shared dual-mode delay line.
+Upon detection, it reconfigures as a Digitally Controlled Oscillator (DCO) to
+temporarily serve as the system clock at a reduced frequency, gradually realigning with
+the input clock to prevent current surges. Analog droop detectors, using comparators
+and reference voltages, measure droops by comparing noisy and filtered voltage levels.
+While analog detectors are robust and require fewer calibration points, digital detectors,
+though more sensitive to environmental variations, offer high resolution, full digital
+integration, and external tunability for enhanced supply level monitoring.
+3.1.1 Advantages of Digital Droop Detector Over Analog:
+1. High Resolution: Digital detectors provide precise monitoring of voltage levels,
+translating droops into delay variations or frequency modulations.
+2. Simpler Design: Fully digital implementation reduces the complexity of analog
+components like comparators and reference voltage generators.
+3. Integration Flexibility: Digital designs are easily integrated into modern digital
+systems without requiring separate analog design expertise.
+4. External Tunability: The droop detection threshold (DRth) can be dynamically
+adjusted to compensate for process variations, ensuring consistent performance
+across conditions.
+5. Scalability: Digital detectors scale well with technology nodes, aligning with
+trends in advanced semiconductor processes.
+3.1.2 Why Choose Digital Over Analog:
+1. Ease of Calibration: Although digital detectors require initial 3D calibration, they
+offer flexibility in tuning thresholds post-deployment, unlike analog detectors
+dependent on precise reference voltages.
+2. System Integration: Digital detectors seamlessly integrate with existing digital
+system components, reducing overhead in mixed-signal design.
+
+=== Page 23 ===
+3. Adaptability: Digital droop detectors can dynamically adjust thresholds and
+operation modes, providing adaptability in real-time scenarios.
+4. Compact Design: Digital implementations typically require fewer specialized
+components, reducing overall area and power consumption.
+For systems where high resolution and seamless digital integration are priorities, digital
+droop detectors are the preferred choice despite calibration challenges.
+3.2 Design Analysis
+The design of this digital droop detection system integrates advanced concepts in voltage
+monitoring, metastability handling, and digital circuit design to create an efficient
+solution for modern System-on-Chip (SoC) applications. Below is a detailed analysis of
+the key components and techniques used in this project:
+3.2. Core Design Components
+
+Delay Line:
+The delay line is a crucial component that converts voltage droops into
+measurable delay variations. Propagation delays in the delay cells are directly
+influenced by supply voltage levels, providing a dynamic response to transient
+droops.
+
+D Flip-Flop (DFF) Chain:
+The chain of DFFs captures the delayed signals from the delay line, generating a
+thermometer code that indicates the severity of the droop. This approach ensures
+high-resolution monitoring with minimal complexity.
+
+Thermometer Code Generation:
+The thermometer code provides a visual representation of droop severity by
+marking the number of stages affected by delay variations. This coding
+mechanism allows for straightforward droop analysis.
+3.2.2 Metastability Handling
+
+Challenges Addressed:
+Setup violations and metastability issues in the DFF chain, caused by delays near
+the clock edge, are a significant concern in high-frequency operations.
+
+Techniques Used:
+o Adder-Based Correction: Adds metastable bits to neighbouring stable bits,
+ensuring reliable outputs and maintaining the integrity of the thermometer
+code.
+
+=== Page 24 ===
+Bit Ignoring: Unpredictable bits resulting from metastability are strategically
+neglected, relying on redundancy in the thermometer code for error resilience.
+3.3.3 Design Optimizations
+
+Delay Line Calibration:
+The delay line is optimized to balance sensitivity and response time, allowing
+precise detection of supply voltage variations.
+
+Configurable Thresholds:
+The system supports external tuning of droop detection thresholds, enabling
+customization for specific application requirements.
+
+Buffer Sizing:
+Buffer sizing is analysed to minimize delay variations while ensuring stable
+propagation of signals through the delay line. Larger buffers mitigate positive
+delays but increase power consumption, requiring careful trade-off analysis.
+This analysis highlights the systematic approach taken in designing a robust and efficient
+droop detection system, addressing challenges like metastability, delay variability, and
+scalability while ensuring compatibility with future SoC architectures.
+3.3 Proposed Work
+3.3.1 Delay chain
+In this specific design, a inverter based buffer stage is being designed. The inverter
+circuit, so as the buffer chain produces a delay when a lower supply voltage is
+applied. The lower the supply voltage higher the output delay of that inverter. The
+delay (𝑡𝑑) through a single stage is inversely proportional to the supply voltage
+(𝑉𝑑𝑑) as per the equation:
+𝑡𝑑∝ 𝐶𝐿⋅𝑉𝑑𝑑 / 𝐼𝑑𝑟𝑖𝑣𝑒
+Here, 𝐶𝐿 is the load capacitance and 𝐼𝑑𝑟𝑖𝑣𝑒 depends on 𝑉𝑑𝑑. Lowering 𝑉𝑑𝑑 reduces
+power but significantly increases delay due to reduced 𝐼𝑑𝑟𝑖𝑣𝑒
+
+=== Page 25 ===
+Fig 3.2.1: Inverter Based Buffer Chain
+3.3.2 Transmission Gate Based D-FlipFlop Design
+A transmission gate-based D flip-flop (TG-DFF) is often preferred in high-speed
+applications like a thermometer code generator due to its reduced propagation delay
+compared to static logic designs. The TG-DFF achieves faster transitions by minimizing
+the number of active stages in the signal path, leading to lower overall clock-to-output
+delay (𝑡𝑐𝑙𝑘→𝑄). Its reduced latency minimizes timing skew between stages, which is
+critical for maintaining the monotonicity of the thermometer code.
+Fig: (3.2.2): CMOS Based Transmission Gate
+
+[Image page_25_image_0.png Error]
+No API key available for start.
+
+
+[Image page_25_image_1.jpeg Error]
+No API key available for start.
+
+
+=== Page 26 ===
+Transmissi
+Transmissi
+on Gate
+on Gate
+Fig: (3.2.3): Transmission Gate Based D FliFlop Design
+3.2.3 Thermometer Code generate:
+In the thermometer code generation system, the same clock signal propagates through a
+delay line and drives the clock inputs of the D flip-flops (DFFs) placed at each stage.
+The data pin of each DFF receives the delayed version of the clock signal. When a
+voltage droop occurs, the increased delay in the clock signal at the data pin results in a
+timing mismatch, causing the DFF to latch a '0'. Conversely, without a droop, the timing
+alignment ensures the DFF latches a '1'. This creates a clear binary transition from
+(111…11) to (110…00), accurately representing the delay-induced changes in the clock
+signal. The resolution of the delay stages and proper synchronization ensure precise
+detection and monotonicity of the thermometer code, crucial for droop detection.
+
+[Image page_26_image_0.png Error]
+No API key available for start.
+
+
+[Image page_26_image_1.png Error]
+No API key available for start.
+
+
+=== Page 27 ===
+Fig: (3.2.4): A Thermometer Code Generator using DFF from a Delay Line
+The resolution of the thermometer code is defined by the relationship between voltage
+droop and the delay introduced at each stage. For example, if a 10mV voltage drop (from
+970 mV to 960 mV) causes sufficient delay at a specific stage for a D flip-flop to latch
+a '0' in consecutive bit position, then each subsequent 10 mV drop improves one
+additional bit from 1 to 0 in the thermometer code. This ensures that for a small step in
+voltage (e.g., 10 mV), the thermometer code decrements precisely by one bit, providing
+high resolution for detecting and profiling voltage droops across the delay line stages.
+To calculate the number of bits planned for a voltage range from 1.06V to 960mV with
+a resolution of 10mV per stage:
+1. Determine the total voltage range:
+Voltage range=1.06 V−0.96 V=0.10 V=100 mV
+2. Divide the range by the resolution per stage:
+Thus, 10 bits are planned to represent the voltage range from 1.06V to 960mV, with
+each stage corresponding to a 10mV drop.
+3.2.4 Reset of The Flops:
+To minimize jitter and ensure reliable operation, the D flip-flops in the thermometer
+code generator are reset at the negative edge of the clock. This reset mechanism clears
+any residual state or metastability issues before the next sampling cycle, improving the
+
+[Image page_27_image_0.png Error]
+No API key available for start.
+
+
+[Image page_27_image_1.jpeg Error]
+No API key available for start.
+
+
+=== Page 28 ===
+accuracy of the code transition. By aligning the reset with the clock's negative edge, the
+system ensures that all flip-flops are prepared to capture the delayed clock transitions
+cleanly, reducing the impact of noise and maintaining the integrity of the thermometer
+code under varying droop condition.
+
+=== Page 29 ===
+CHAPTER-4
+RESULTS & ANALYSIS
+At the starting of the Design, Inverter based Buffer Circuit is made and A buffer chain
+is being proposed of 10 stages for analyzing delay vs staging affect with a lower
+voltage supply.
+The pMOS and the nMOS are taken for high Vt devices for better delay implementation
+on the delay line. Different ports are created for various Supply voltage application for
+a perfect droop measurement.
+4.1 Circuit Schematic:
+Fig 4.1.1: Schematic of an Inverter Based Buffer
+
+[Image page_29_image_0.png Error]
+No API key available for start.
+
+
+=== Page 30 ===
+IN
+Fig: 4.1.2: Working Waveform of the Buffer
+4.1.1 Staging effect of buffers:
+Buffers are cascaded into stages and in/Out Delay observed. A linear type delay
+profile is being observed, where a single stage contributes around 0.1ns of Delay.
+Fig: 4.1.3: Buffer Stages vs Delay Plot
+
+[Image page_30_image_0.jpeg Error]
+No API key available for start.
+
+
+[Image page_30_image_1.png Error]
+No API key available for start.
+
+
+[Image page_30_image_2.jpeg Error]
+No API key available for start.
+
+
+=== Page 31 ===
+4.1.2 Buffer Size vs Delay:
+In counter of different staging of buffers, sizing effects in delays can also be
+implemented. So different (W/L) ratios are plotted against their corresponding delays.
+Here is the tabular represent of the points where W/L ratio changed of a single buffer
+and corresponding single stage delay counted. The insight of -ve delay is discussed in
+later part.
+W, L (W/L) μm DELAY (ns)
+W=3, L=1, W/L= 3 9.6nS
+W=1.6, L=0.8, W/L=2 8.3ns
+W=1.2, L=0.6, W/L=2 6.2ns
+W=0.4, L=0.2, W/L =2 (-ve) 1.2ns
+4.2 Buffer Based Delay Line Design:
+Fig: 4.2.1: Buffer Based Delay Line Design with variable Supply Voltage
+Delay is observed when a drooped supply voltage applied to a delay chain. The delay
+keeps increasing with increased drop in supply voltage. After a particular drop when
+voltage again settled to 1.06V the delay of total stage becomes a constant (≈ 0.41ns)
+and a highest (≈ 0.63ns) at highest voltage drop.
+
+[Image page_31_image_0.png Error]
+No API key available for start.
+
+
+=== Page 32 ===
+4.3 Voltage Droop vs Delay Observation:
+Supply Voltage In-Out Delay
+1.01939V 0.45 nS
+958.249mV 0.5 nS
+909.6323mV 0.58 nS
+883.8524mV 0.63 nS
+896.147mV 0.6 nS
+916.1487mV 0.568 nS
+1.0336V 0.436 nS
+1.06V 0.417 nS
+Fig: 4.3.1: Supply
+Voltage vs Delay
+Graph
+
+[Image page_32_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 33 ===
+4.3.1 Delay Observations:
+In an inverter or buffer-based chain, when a pulse is applied, the source signal
+inherently exhibits some skew due to its rise and fall times. However, the standard-
+sized inverter or buffer has a high driving capability, which helps reduce this skew by
+quickly charging or discharging the load capacitance. As a result, the output signal,
+which lags slightly behind the input due to the inherent delays of the chain, may show
+a time advance at the 50% threshold of both the input and output waveforms. This
+phenomenon results in a negative delay, where the output transitions before the
+expected time, effectively reducing the overall propagation delay seen in the signal
+path.
+Fig: 4.3.2: Here in the second pulse in the positive edge a -1.2ns of delay and in the negative edge
+a -2.1ns of delay is being observed.
+To calculate the perfect delay in a buffer or inverter chain, it is common to sample the
+output from the 2nd or 3rd stage of the buffer chain, as opposed to the immediate first
+output. This is because the first output may exhibit some skew or negative delay due
+to the fast switching of the first buffer, as discussed earlier. By taking the output from
+the second or third buffer, you allow the signal to settle and reach a more stable
+
+[Image page_33_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 34 ===
+transition, minimizing the impact of any initial distortions or timing mismatches
+introduced by the first stage.
+The second or third output stage typically reflects the delayed signal more accurately,
+as it would have had time to propagate through a few stages, providing a more reliable
+measure of the overall delay. This approach helps in achieving a consistent delay
+profile by ensuring that the timing characteristics of the signal are more representative
+of the chain's overall behaviour, rather than any transient effects seen at the very first
+stage.
+A negative delay also observed in a standard or lower sized single stage buffer,
+this concept of negative delay in smaller buffers versus positive delay in larger buffers
+arises from the electrical behaviour of logic gates and the parasitic associated with them.
+1. Small Buffer (Negative Delay):
+o When a small or standard-size buffer is used, the input capacitance is
+minimal, and the output load driven by the buffer is also small if they are
+staged together.
+o In some cases, the switching transition of the output appears faster than the
+input signal's full swing (due to fast initial charging of the gate capacitance
+at the input). This creates the "negative delay" because the output transition
+seems to lead the complete input signal transition.
+o The phenomenon is heavily dependent on signal rise/fall times and circuit
+parasitic.
+2. Large Buffer (Positive Delay):
+o A larger buffer has a higher input capacitance and is usually designed to
+drive heavier loads. The increased capacitance takes more time to
+charge/discharge, introducing a positive delay in signal propagation.
+o As the buffer size increases, the input gate capacitance and output parasitic
+grow proportionally, resulting in a cumulative delay that increases with the
+size of the buffer.
+o This is a direct result of the RC (resistance-capacitance) time constant,
+which dominates the delay characteristics in larger buffers.
+3. Transition from Negative to Positive Delay:
+o For very small buffers, the input load is so light that the transition delay is
+negligible or appears negative under certain conditions.
+o As the buffer size increases, the delay gradually transitions to a positive
+value, and this delay grows linearly or quadratically with the size of the
+buffer due to the increased capacitance and resistance.
+
+=== Page 35 ===
+4.4 Transmission Gate Design:
+Fig: 4.4.1: A CMOS
+Transmission Gate is
+designed with 4
+terminals
+A low Vth nMOS, pMOS is being used for fatser performance and accurate code
+generation.
+In a low-Vt transmission gate, where speed is the primary goal, the reduced threshold
+voltage allows for faster switching, but this comes at the cost of compromised stability.
+When a pulse and its complementary signal (clock and clock_bar) are applied to the
+transmission gate, the output is ideally perfect when both transistors are on, as the
+transmission gate conducts with minimal delay. However, when both transistors turn
+off, the output can become imperfect, exhibiting a sloppy output, typically floating
+close to 0V instead of a clean logic '0'. This issue arises due to charge sharing and
+threshold leakage in the off state, particularly with low-Vt devices. To overcome this,
+an inverter can be inserted at the output to ensure the lowered voltage is correctly
+interpreted as logic '0'. The inverter pulls the output to a clean low voltage, mitigating
+issues like charge leakage and metastability, and stabilizing the output for reliable
+operation. This approach leverages the high-speed benefits of the low-Vt gate while
+compensating for its inherent drawbacks.
+
+[Image page_35_image_0.png Error]
+No API key available for start.
+
+
+=== Page 36 ===
+Fig: 4.4.2: Waveform of Transmission Gate output of a Pulsed Input
+4.5 D Flip Flop Design:
+A transmission gate-based D flip-flop offers faster operation due to its low-Vt devices,
+which enable rapid switching and reduced propagation delay. However, this speed
+comes at the cost of stability, as low-Vt transistors are more prone to charge sharing
+and threshold leakage when turned off.
+
+[Image page_36_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 37 ===
+Clock
+Data_in
+Fig: 4.4.1: Schematic View
+(-ve) Level Triggered Latch
+Clock_Bar
+O
+u
+t
+Clock/
+Clock_Bar
+D ata_in
+Fig:4.4.3: D
+FF design
+O
+using 1 -ve
+u
+Clock/
+t
+latch 1 +ve
+Clock_Bar Clock/
+latch
+Clock_Bar
+(-ve) Latch (+ve) Latch
+
+[Image page_37_image_0.png Error]
+No API key available for start.
+
+
+[Image page_37_image_1.png Error]
+No API key available for start.
+
+
+[Image page_37_image_2.png Error]
+No API key available for start.
+
+
+[Image page_37_image_3.png Error]
+No API key available for start.
+
+
+[Image page_37_image_4.png Error]
+No API key available for start.
+
+
+[Image page_37_image_5.png Error]
+No API key available for start.
+
+
+[Image page_37_image_6.png Error]
+No API key available for start.
+
+
+[Image page_37_image_7.png Error]
+No API key available for start.
+
+
+=== Page 38 ===
+Fig: 4.4.3: Output Waveform of Positive Edge D Flip Flop
+4.6 Metastability Encounter:
+Metastability in a transmission gate-based D flip-flop occurs when the data input
+changes within the setup and hold window, causing the flip-flop to enter an undefined
+state. With low-Vt devices and minimal delay, the flip-flop becomes more susceptible
+to such conditions, as the timing margins are tighter. During metastability, the output
+remains in a transitional or unstable voltage level, failing to latch a definitive logic '0'
+or '1'. This instability results in imperfect latching of the signal, leading to
+unpredictable circuit behavior. Proper timing analysis, careful clock-data alignment,
+and introducing synchronization stages are crucial to mitigating metastability in high-
+speed designs like these.
+
+[Image page_38_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 39 ===
+Fig: 4.5.1: Meta stable condition, Flop gets Wrong Output
+
+Metastability in DFFs (Transmission Gate-Based):
+o Metastability occurs when the data input (D) transitions too close to the
+clock edge, violating the setup or hold time requirements.
+o In this condition, the DFF may fail to resolve into a stable logic level and
+produce an intermediate voltage or "bump."
+
+Setup Window Impact:
+o The setup window is the time interval before the clock edge during which
+the input must remain stable for proper operation.
+o If the input violates the setup time (e.g., close to the clock edge), the DFF
+becomes more likely to enter a metastable state.
+
+Voltage Bump Behaviour:
+o A shorter violation of the setup window results in higher voltage bumps
+because the transmission gate inside the DFF struggles more to settle to
+a stable state.
+o With a longer violation of the setup window, the voltage bump is smaller
+because the metastability condition begins to resolve itself earlier.
+
+[Image page_39_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 40 ===
+o Transmission gates in metastable conditions partially conduct, creating
+an intermediate voltage at the output node.
+o The closer the violation is to the clock edge, the less time the circuit has
+to suppress the voltage bump before the latch transitions, leading to
+higher bumps.
+Fig:4.5.2: A D Flop (of setup time 18ns) counters its input signal delay vs metastable
+voltage bump plot.
+For observation a DFF of 18ns set up time is encountered with a step input signal of
+approximately nearer setup values. Input signal is being applied remembering it set up
+time limit and starting from a lower delay to increasing straightly. The voltage in
+metastable bump is being observed and noted. And is being observed that more the
+delay input side more the chances of the metastable state to reach up to logic ‘1’.
+At nearest to the setup time the metastable state finally reaches to log’1’ and a voltage
+of 1.06V approximately.
+
+[Image page_40_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 41 ===
+Fig: 4.5.3: Perfectly latched ass ‘0’ when the Delay is out of Setup and Hold Window
+4.6.1 Metastability Encounter by Setup-Hold Window
+To resolve metastability issues in a transmission gate-based D flip-flop, the setup and
+hold window must be minimized to reduce the likelihood of data transitions during
+critical timing intervals.
+Using a small setup-hold window flip-flop design, which involves transistor-level
+optimizations like reducing parasitic capacitances and adjusting the aspect ratios
+(W/L) of the transmission gates for faster switching and tighter timing margins.
+To encounter this, the basic block of DFF the Buffers so as the transistors of that size
+is being varied. The size is changed from its standard size to a W/L ratio of 2,3,4… so
+on and also later keeping W/L ratio same the W,L are changed and a clear variety of
+set up time of each case being observed. But the standard sized low Vt transistor only
+provides a lowest set up time as shown in the graph.
+
+[Image page_41_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 42 ===
+Fig:4.5.4: Transistor size of DFF vs Setup time Plot
+4.6.2 Adder Based Metastability Encounter
+When generating a thermometer code, encountering metastability in one of the bits can
+create an ambiguous logic state. Using an adder to handle this issue is a practical approach
+that resolves the metastable bit by combining it with a prominent, stable bit. This method
+effectively converts the uncertainty of the metastable bit into a valid binary result through
+arithmetic correction.
+
+Metastable Bit Handling: The metastable bit is added to a neighbouring stable
+bit to "absorb" the uncertainty and produce a reliable output.
+
+Thermometer Code Recovery: The adder ensures the generated thermometer
+code sequence remains intact despite metastability in one or more bits.
+
+Simplified Resolution: Instead of advanced synchronizers, this method uses
+straightforward arithmetic to address metastability.
+To implement this concept an adder is being implemented where the metastable output
+of the flop is taken as bit A and strong logic ‘0’ or ‘1’ takes as bit B and Sum as A+B.
+
+[Image page_42_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 43 ===
+The results reflects that a better metastable bump input tries to catch up with the
+summation part more correctly.
+Fig: 4.5.5: Adder Output Shows ‘Sum’ where the inputs are ‘A’ ‘B’
+4.6.3 Metastability Encounter using Bit Ignorance:
+This method involves intentionally discarding one or more unreliable bits in situations
+where their inclusion could compromise the system's functionality
+Instead of attempting to resolve or correct metastable bits, they are simply neglected or
+masked out from the final code generation process.
+This ensures that the unreliable information does not propagate through the system.
+1. Detecting Unreliable Bits:
+- Use a metastability detector or monitor specific flip-flops for prolonged transition
+times (indicating metastability).
+- Identify bits that fall outside the stable threshold.
+2. Masking or Replacing Unstable Bits:
+- Replace the metastable bit with a predefined value, such as `0`, to preserve the
+sequential integrity of the thermometer code.
+
+[Image page_43_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 44 ===
+- Alternatively, skip the bit entirely and continue processing the remaining bits.
+3. Maintaining Code Sequence:
+- If the metastable bit is ignored, ensure adjacent stable bits maintain the correct
+thermometer sequence.
+- This can be done by enforcing logical continuity, such as filling skipped bits with
+the last stable value.
+
+=== Page 45 ===
+CHAPTER 5
+CONCLUSION & FUTURE ENHANCEMENTS
+5.1 Conclusion
+Voltage droop, a transient reduction in supply voltage caused by sudden changes in
+current demand or power delivery network limitations, poses significant challenges to
+chip performance and reliability. Detecting and mitigating droops promptly is critical to
+ensuring stable operation in modern SoCs, where margins for error are minimal. This
+project focuses on the design and implementation of a digital droop detection system,
+which leverages delay variations in logic gates to effectively translate voltage droops into
+measurable parameters
+ The system employs a delay line-based architecture integrated with a chain of D
+flip-flops (DFFs) to generate a thermometer code for precise droop detection. This
+method ensures high-resolution monitoring while maintaining a fully digital,
+scalable design suited for modern SoCs.
+ The delay line plays a central role in this architecture, where propagation delays
+are directly influenced by supply voltage variations (Vdd droops). By cascading
+delay cells and synchronizing them with a clock signal, the delay line produces a
+dynamic response that the D flip-flop chain captures, enabling the generation of a
+reliable thermometer code. This code provides a real-time indication of droop
+severity, making it an efficient tool for supply level monitoring and mitigation.
+ To address potential metastability issues, techniques such as bit ignoring and
+adder-based correction mechanisms are incorporated. These methods ensure that
+any unstable or ambiguous states caused by setup time violations do not
+compromise the integrity of the thermometer code. The design also supports
+configurable thresholds, allowing flexibility in adjusting droop detection
+sensitivity to suit system-specific requirements.
+ The use of digital techniques overcomes challenges associated with process,
+voltage, and temperature (PVT) variations, offering greater reliability compared to
+analog counterparts. Furthermore, the project explores buffer sizing to manage
+
+=== Page 46 ===
+delay propagation, as well as methods to ensure stable transmission gate operation
+and efficient metastability handling in DFFs.
+In summary, the project successfully combines advanced digital design concepts with
+practical engineering considerations to develop a robust, high-resolution droop
+detection and mitigation system. The use of delay lines, D flip-flops, and innovative
+metastability handling techniques ensures that the design is scalable, reliable, and
+adaptable for various SoC applications, addressing one of the most critical challenges
+in modern digital circuit design.
+5.2 Future Enhancement:
+ Enhanced Droop Mitigation Strategies: A case study where adaptive control
+mechanisms that dynamically adjust system performance (e.g., clock frequency)
+based on droop severity to further enhance reliability under extreme operating
+conditions may take part.
+ Higher Resolution and Faster Response: Optimize the delay line and D flip-flop
+chain to achieve finer detection thresholds and faster response times, allowing for
+more precise and real-time voltage droop monitoring.
+ Error Correction Using Redundancy: Develop advanced techniques for
+thermometer code error correction that leverage redundancy to mitigate the impact
+of metastable bits or unreliable outputs more efficiently.
+ Power Optimization: Focus on reducing the power overhead of the delay line and
+DFF chain by exploring low-power design techniques, making the droop detection
+system suitable for ultra-low-power applications.
+ Hybrid Detection Mechanisms: Combine digital and analog approaches within a
+single system to exploit the high resolution of digital techniques and the sensitivity
+of analog circuits for a more versatile detection framework.
+ Advanced Synchronizers for Metastability: Incorporate advanced
+metastability-handling techniques, such as multi-stage synchronizers or
+metastability-resistant D flip-flops, to further enhance robustness in high-
+frequency operations.
+
+=== Page 47 ===
+Droop
+Profiling
+Profile Detection Mitigation
+Characteristics & Techniques Techniques
+Locations
+1.SPEC Benchmarks (equake, apsi, bzip etc.)
+2.Synthetic Current Traces
+3. Mathematical Modelling (VDPred, Linear 1.Analog
+Regression, K-neatest Neighbours, Decision Tree 2.Digital
+etc.) 3.Hybrid LDOs
+4.Event Based CPU Throttling's
+Charge Injection
+Dual Mode Logic
+etc..
+Problems
+1.Resolutions
+2.Metastability
+3.Reset and Parallelism
+Finally Thermometer Code Generation
+Fig: 5.1: Figure Depicts the whole ‘Droop Profiling’ topic where each branch represent an unique
+Problem Statement itself, Where Digital Detection part is just a subpart of Droop detection branch.
+
+[Image page_47_image_0.jpeg Error]
+No API key available for start.
+
+
+[Image page_47_image_1.jpeg Error]
+No API key available for start.
+
+
+[Image page_47_image_2.png Error]
+No API key available for start.
+
+
+[Image page_47_image_3.png Error]
+No API key available for start.
+
+
+[Image page_47_image_4.png Error]
+No API key available for start.
+
+
+[Image page_47_image_5.jpeg Error]
+No API key available for start.
+
+
+[Image page_47_image_6.png Error]
+No API key available for start.
+
+
+[Image page_47_image_7.png Error]
+No API key available for start.
+
+
+[Image page_47_image_8.png Error]
+No API key available for start.
+
+
+[Image page_47_image_9.png Error]
+No API key available for start.
+
+
+[Image page_47_image_10.png Error]
+No API key available for start.
+
+
+[Image page_47_image_11.png Error]
+No API key available for start.
+
+
+[Image page_47_image_12.png Error]
+No API key available for start.
+
+
+[Image page_47_image_13.png Error]
+No API key available for start.
+
+
+=== Page 48 ===
+REFERENCE
+ Voltage Droop Aware Task Mapping for Multi-Core Systems with On-Chip Voltage Regulator
+Wing Oi Siu, Chak Sing Ng, Terrence Mak Department of Computer Science and Engineering,
+The Chinese University of Hong Kong, Hong Kong Email: fwosiu, csng,
+stmakg@cse.cuhk.edu.hk
+ VDPred: Predicting Voltage Droop for Power-Efficient 3D Multi-core Processor Design He
+Xiao
+Cadence Design Systems, Inc. San Jose, CA, United States xiheasas@gmail.com Monodeep Kar,
+Georgia Institute of Technology Atlanta, GA, United States. Saibal Mukhopadhyay, Georgia
+Institute of Technology Atlanta, GA, United States, Sudhakar Yalamanchili, Georgia Institute of
+Technology Atlanta, GA, United States.
+ Understanding Voltage Variations in Chip Multiprocessors using a Distributed Power-Delivery
+Network
+Meeta S. Gupta, Jarod L. Oatley, Russ Joseph, Gu-Yeon Wei and David M. Brooks Division of
+Engineering and Applied Sciences, Harvard University, Cambridge, MA {meeta, jloatley,
+guyeon, dbrooks}@eecs.harvard.edu
+Department of Electrical Engineering and Computer Science, Northwestern University,
+Evanston, IL
+rjoseph@ece.northwestern.edu
+ A Method for Mitigation of Droop Timing Errors Including a 500 MHz Droop Detector and
+Dual Mode Logic
+Yizhak Shifman, Graduate Student Member, IEEE, Inbal Stanger, Graduate Student Member,
+IEEE,
+Netanel Shavit, Graduate Student Member, IEEE, Ramiro Taco, Member, IEEE,
+Alexander Fish, Member, IEEE, and Joseph Shor, Senior Member, IEEE
+ Power Supply Noise in a 22nm z13TM Microprocessor
+Pierce I-Jen Chuang1, Christos Vezyrtzis1, Divya Pathak2, Richard Rizzolo3, Tobias Webel4,
+Thomas Strach4, Otto Torreiter4, Preetham Lobo5, Alper Buyuktosunoglu1, Ramon Bertran1,
+Michael Floyd6, Malcolm Ware6, Gerard Salem7, Sean Carey8, Phillip Restle
+ A Distributed Critical-Path Timing 65nm High-Performance Microprocessor
+Alan Drake, Robert Senger, Harmander Deogun, Gary Carpenter, latched in the edge detector
+on the rising edge of the system clock.
+Soraya Ghiasi Tuyet NguyeSn, or NaoyramaGn’ N Jiaagmesus Ti,
+yuynlet,ichNaerlmFlaoyJd,a\miksas,PiokcahlaacloThcekCcPycMlesc
+ A 28nm All-Digital Droop Detection and Mitigation Circuit Using A Shared Dual-Mode Delay
+Line with 14.8% Vmin Reduction and 42.9% Throughput Gain
+
+=== Page 49 ===
+Minyoung Kang, Sunghoon Kim, Youngmin Park, Sangsu Jeong, Dongsuk Jeon
+Seoul National University, Seoul, Korea
+ Droop Mitigation Using Critical-Path Sensors and an On-Chip Distributed Power Supply
+Estimation Engine in the z14TM Enterprise Processor
+Christos Vezyrtzis1, Thomas Strach2, Pierce I-Jen Chuang1, Preetham Lobo3, Richard
+Rizzolo4, Tobias Webel2, Pawel Owczarczyk4, Alper Buyuktosunoglu1, Ramon Bertran1,
+David Hui4, Susan M. Eickhoff4, Michael Floyd5, Gerard Salem6, Sean Carey4, Stelios G.
+Tsapepas4, Phillip J. Restle1
+ On-Die Droop Detector for Analog Sensing of Power Supply Noise
+Ali Muhtaroglu, Member, IEEE, Greg Taylor, Senior Member, IEEE, and Tawfik Rahal-Arabi,
+Senior Member, IEEE.
+
+=== Page 50 ===
+
+
+=== Page 51 ===
+
+

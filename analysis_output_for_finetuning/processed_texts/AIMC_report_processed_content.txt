@@ -1,0 +1,1186 @@
+=== Page 1 ===
+Design Modelling Framework for
+Analog IMC
+by
+Hitesh Sajwan, Hritik Mittal, Utpal Gupta, Yash Kaushik
+Vaibhav Arora, Shivam Kumar, Mohit Kasaundhan, Mridula
+Sharma, Jai Sachdeva, Sankhadeep Mondal
+Under the supervision of
+Dr. Anuj Grover
+Indraprastha Institute of Information Technology Delhi
+December, 2023
+
+[Image page_1_image_0.png Analysis (by Gemini)]
+Here's a breakdown of the image and its context within the provided research paper:
+
+**Image Analysis:**
+
+*   **Visual Elements:** The image is an abstract logo consisting of a series of vertical bars of varying widths and shades of gray, followed by a darker gray block and a curved turquoise (or teal) element. The elements are arranged to create a stylized, modern design.
+*   **Structure:** The leftmost elements consist of vertical bars with varying widths and shades of gray, from lighter to darker, with white space between them. The subsequent element is a dark gray rectangular block with a small L-shaped cutout in its upper right corner. Finally, a thick, curved teal arc completes the design. The entire design seems to be meant to resemble the acronym of the institution name as it appears to be the stylized acronym IIITD (Indraprastha Institute of Information Technology Delhi).
+*   **Text:** There is no visible text within the image itself.
+
+**Context and Importance:**
+
+*   **Page Context:** The image appears on the first page of the research paper, indicating it's most likely the institute's logo (IIITD).
+*   **Significance:** As the institute's logo, the image serves as a visual representation of the institution overseeing the research. It provides a visual identifier and adds a professional touch to the paper. Given the title of the research paper and the mention of "Indraprastha Institute of Information Technology Delhi", this logo firmly connects the work to the institution.
+*   **Relevance to Research:** Although the logo doesn't directly relate to the technical content of the "Design Modelling Framework for Analog IMC," it's crucial for establishing the paper's origin and authorship, as well as the validity of the study, and could also speak to the branding of the institute.
+
+**In summary:**
+
+The image is the logo of Indraprastha Institute of Information Technology Delhi (IIITD), which is the institution associated with the research paper "Design Modelling Framework for Analog IMC." While the logo is abstract, it's important as a visual marker of the paper's affiliation and provides a visual representation of the institution where the research was conducted.
+
+
+
+=== Page 2 ===
+©Indraprastha Institute of Information Technology (IIITD), New
+Delhi, 2023
+
+=== Page 3 ===
+Design Modelling Framework for Analog IMC
+By
+Hitesh Sajwan (MT22159)
+Hritik Mittal (MT22160)
+Utpal Gupta (MT22178)
+Yash Kaushik (MT22181)
+Vaibhav Arora (MT22179)
+Shivam Kumar (MT22175)
+Mohit Kasaundhan (MT22164)
+Mridula Sharma (MT22187)
+Jai Sachdeva (MT22162)
+Sankhadeep Mondal (MT22174)
+Submitted
+in partial fulfilment of the requirements for the degree of Master
+of Technology
+to
+Indraprastha Institute of Information Technology Delhi
+December, 2023
+
+[Image page_3_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image provided within the context of the research paper:
+
+**Visual Analysis**
+
+*   **Type:** The image is a stylized logo.
+*   **Elements:** It comprises of several vertical rectangles and a curved "D" shape, arranged horizontally.
+*   **Structure:** The logo is horizontally oriented. There are five vertical bars on the left side and then a vertical and curved section on the right side.
+*   **Color:** The image uses a combination of grayscale colors for the vertical bars and a teal color for the "D" shape. The color variance adds contrast and separates visual elements.
+*   **Text:** There is no discernible text within the image itself.
+*   **Possible Interpretation:** The logo's structure is that of "IIITD" with the two I's, two T's, and the D.
+
+**Context and Importance**
+
+Based on the provided text, the research paper is titled "Design Modelling Framework for Analog IMC". Given that the paper is submitted to Indraprastha Institute of Information Technology Delhi (IIITD), it is highly probable that the logo represents the institute.
+
+*   **Page Context:** On page 3, the image likely functions as a header logo to identify the work as belonging to IIITD. Its presence serves to visually brand the paper.
+*   **Surrounding Pages:** The adjacent pages contain the title, author names, submission details, and a certificate of originality from a professor at IIITD. The consistent repetition of "Indraprastha Institute of Information Technology Delhi" reinforces the logo's meaning.
+
+**Overall Importance**
+
+The logo's presence is important for these reasons:
+
+*   **Institutional Identity:** It provides immediate visual identification of the institution associated with the research.
+*   **Professionalism:** Using the official logo lends a professional touch to the document.
+*   **Copyright and Ownership:** The logo can implicitly signal that the work is copyrighted by IIITD, or at least that the institute is affiliated with the work.
+
+
+
+=== Page 4 ===
+Certificate
+This is to certify that the Capstone Project titled “Design Modelling Framework for Analog
+IMC”, being submitted by Hitesh Sajwan, Hritik Mittal, Utpal Gupta, Yash Kaushik, Vaibhav
+Arora, Shivam Kumar, Mohit Kasaundhan, Mridula Sharma, Sankhadeep Mondal and Jai
+Sachdeva to the Indraprastha Institute of Information Technology Delhi for the award of the
+Master of Technology, is an originalresearchwork carriedoutbythem undermy supervision.In
+my opinion, the Capstone Project has reached the standards of fulfilling the requirements of the
+regulationsrelating tothe degree.
+Theresults containedin thiscapstoneproject havenot beensubmitted inpartorfull to anyother
+university or institutefor the awardof anydegree/diploma.
+December,2023
+DrAnujGrover
+Departmentof Electronics&
+Communications Engineering
+Indraprastha Instituteof Information
+Technology Delhi
+New Delhi
+110020
+
+=== Page 5 ===
+Acknowledgements
+First and foremost,weexpress ourprofound gratitude toDr.AnujGrover for allowing usto
+carryout our CapstoneProjectunder hisguidance.We find greatpleasure inexpressing our
+unfeigned thanksto Dr.AnujGroverfor his invaluableguidance,supportand suggestionsat
+everystageof this project, withoutwhich theproject wouldnothaveturnedupthis way. Our
+heartfeltgratitude tohim for his immensehelp andsupport,usefuldiscussions andvaluable
+recommendations throughout thecourse ofour project.We wouldalsolike tothank Talha Bin
+Aslam for personallyguiding usand assistingthe flowof theproject. It wasagreatopportunity
+for us towork alongwithhim.
+
+=== Page 6 ===
+Abstract
+In Von-Neumann's Architecture, memory and processor are separate entities. Thus, for
+computation, the data has to move back and forth between the two. This leads to the
+Von-Neumann bottleneck. In-Memory Compute wasintroduced todeal withthis. UsingIMCwe
+can directly use memory cells to perform computations without any involvement of the
+processor. It can be used as AI / ML accelerators and DNN applications where
+Multiply-and-Accumulate (MAC) operations need to be performed. There are several
+architectures, like charge-based bitcell, current-based bitcell, etc., in which the MAC resultsare
+obtained in the analog format at the bitlines. This workaimsto studyvariousstate ofthe artcell
+architectures and compare their performance on various figures of merits and further integrate
+the array with different ADCs. The main aim of the project is to study non-idealities in all the
+bitcells and analyse the causes of these non-idealities. Also, thesebitcellswere compared onthe
+basis of their linearity andotherfigures ofmerits. Here twoADCsarecompared, SARADCand
+Flash ADC on the basis of accuracy of digital outputs for differentcellarchitectures.This entire
+configuration is then modelled using Matlab Simulink such thatthe model isHDLsynthesizable
+and it isableto simulateall thestudiednon-idealities.
+
+=== Page 7 ===
+Contents
+Certificate
+Acknowledgements
+Abstract
+1. INTRODUCTION
+1.1. What isIMC?
+1.2. Typesof IMC
+1.3. Figure of merits
+1.4. ADC
+1.4.1. SARADC
+1.4.2. Flash ADC
+2. STUDYOF CURRENTBASED IMC
+2.1. 6T Cell
+2.2. Split Wordline Cell
+2.3. 8T Cell
+2.4. Comparison
+3. STUDYOF CHARGE BASEDIMC
+3.1. 9T+1C
+3.2. 10T+1C
+3.3. C3SRAM
+3.4. Comparison
+4. ADC IMPLEMENTATION
+4.1. SARADC
+4.2. FlashADC
+4.3. Limitations
+4.3.1. SARADC
+4.3.2. FLASH ADC
+4.3.3. Effects offrequency onaccuracy
+5. MATLAB SIMULINKMODELLING
+
+=== Page 8 ===
+5.1. BasicADCModeling
+5.2. Non-ideal ADCModeling
+5.3. NoiseModeling
+6. FUTUREWORK
+7. CONCLUSION
+
+=== Page 9 ===
+Chapter - 1
+INTRODUCTION
+______________________________________________________________
+1.1What isIMC?
+Memory density has improved in recent years, but processor speed has increased dramatically.
+Data and programs used to be provided at runtime before Von Neumann's architecture. Von
+Neumann introduced a new approach byseparatingmemoryandprocessorinto separateentities.
+Both programs and data are now stored in memory, and data moves back and forth betweenthe
+two. The weights, input, and intermediate data must transfer from memory to the processorand
+vice-versa. This led to a problem of a lot of energy consumption and delays, called the Von
+Neumannbottleneck.
+Fig 1.1:Von Neumann Architecture
+The bottleneck increased the waiting time for the processors as they became faster. The
+improvement in the bottleneck can be made with the help of RAM or cache to store the dataso
+that data can be readily available, but RAM is volatile and needs to be stored permanently. So
+hard disks are used for permanent storage, but they are unfit for the massive amount of data
+storage required for applications like DNN(Deep Neural Networks), Business Intelligence(BI),
+etc. This bottleneck can be dealt with by Computation-In-Memory(CIM) and
+Process-In-Memory (PIM), in which the computations take place in the memory itself, thus
+reducing energy consumption. For applications like DNN etc., MAC(Multiply andAccumulate)
+operations are necessary; CIMhelps reducethe energy consumptionrequired atMAC operations
+execution as multiple rows are activated simultaneously in each column, thus reducing the
+
+[Image page_9_image_0.png Analysis (by Gemini)]
+Here's a breakdown of the image analysis for the research paper:
+
+**Visual Elements and Their Structure**
+
+The image (Fig 1.1) is a simplified block diagram representing the Von Neumann architecture and contrasting it with the concept of In-Memory Computing (IMC). It features the following elements:
+
+*   **Memory Array:** A blue grid depicting a memory array, with a green rectangle inside containing the text "Memory Array". The grid implies a matrix-like organization of memory cells.
+*   **Processor:** A solid green rectangle representing the processor unit.
+*   **Von Neumann Bottleneck:** A central element depicting the bottleneck problem. It's represented by a narrow, cylindrical shape with a red arrow pointing downward on top labeled "Von-Neumann Bottleneck," suggesting a restriction or blockage of data flow. There are black arrows pointing in both directions between the "bottleneck" and the processor and the memory, which show that data is moving back and forth between them.
+*   **In-Memory Computing Path:** A red arrow originates from the memory array and points towards the processor, with the label "In-memory' Computing" below.
+
+**Text Within the Image**
+
+The following text labels are present in the image:
+
+*   "Memory Array" (inside the green rectangle within the memory grid)
+*   "Processor" (next to the green rectangle representing the processor)
+*   "Von-Neumann Bottleneck" (above the cylindrical representation of the bottleneck)
+*   "'In-memory' Computing" (below the red arrow suggesting the direct connection from memory to processor)
+
+**Image Context and Importance**
+
+Based on the provided text from page 9 and surrounding pages, the image illustrates the core concept of the introduction: the Von Neumann bottleneck and its potential solution through In-Memory Computing (IMC).
+
+*   The image visually represents the problem stated in the text: the constant data transfer between memory and processor in the traditional Von Neumann architecture. This transfer is energy-consuming and time-delaying, hence the "bottleneck" depiction.
+*   The "Von-Neumann Bottleneck" and arrows between it and the processor and memory indicates that this constant movement of data back and forth is limiting the processor's speed, as processor speed has increased dramatically in recent years.
+*   The "In-memory Computing" arrow represents a solution to this bottleneck by performing computations directly within the memory, reducing the need for constant data transfer to the processor.
+*   The introduction states the goal of the research is to study and compare different memory cell architectures to find different factors that will help compute and processes within the memory, which implies that the image is important for setting the context of the paper.
+
+**Overall Importance**
+
+The image is essential for introducing the problem the paper aims to address (the Von Neumann bottleneck) and highlighting the alternative approach (In-Memory Computing) the research explores. It provides a quick, visual understanding of the core concepts and motivates the need for improved memory architectures for applications like Deep Neural Networks (DNNs) and Business Intelligence (BI). The image and the introduction explain the necessity of Computation-In-Memory (CIM) and Process-In-Memory (PIM).
+
+
+
+=== Page 10 ===
+intermediate data generated and facilitating parallel computation. IMC(In-Memory Compute)
+also eradicated the need to store intermediate multiplication results and reduced memoryaccess
+time.
+1.2Types of IMC
+There aremanyarchitectures proposedtoperform MACoperations, current-based,and
+charge-based,dependingonhow theMAC valuesareestimatedatthe bitline. In current-based
+architecture,thebit line current isdirectly influenced bycharginganddischargingof theinternal
+nodes,and incharge-basedarchitecture,the bitline voltagesarecoupled tothe internal nodesof
+thecellthrough aninternalcapacitor. Thenall thevaluesarecombinedusing anadequate
+clusteringstructure perthe architecture,orall thebitline values(analog)parallelly mightgointo
+theADC.Differentconfigurationsareused.
+Currentbased:
+● 6T SRAM
+● 6T Split Wordline
+● 8T SRAM
+Charge based:
+● 9T+1C
+● 10T+1C
+● C3SRAM
+1.3 Figureof merits
+Theaim of thisprojectistostudy andcompare differentcellsonthe basisofdifferentfactors.To
+doso differentfactorsare defined.
+Theta(θ):
+It’s afigure of merit to define thelevelof linearity.
+𝑀𝑖𝑛𝑖𝑚𝑢𝑚 𝑑𝑖𝑠𝑐ℎ𝑎𝑟𝑔𝑒 𝑏𝑒𝑡𝑤𝑒𝑒𝑛 𝑡𝑤𝑜 𝑐𝑜𝑛𝑠𝑒𝑐𝑢𝑡𝑖𝑣𝑒 𝑙𝑒𝑣𝑒𝑙𝑠
+θ =
+𝑀𝑎𝑥𝑖𝑚𝑢𝑚 𝑑𝑖𝑠𝑐ℎ𝑎𝑟𝑔𝑒 𝑏𝑒𝑡𝑤𝑒𝑒𝑛 𝑡𝑤𝑜 𝑐𝑜𝑛𝑠𝑒𝑐𝑢𝑡𝑖𝑣𝑒 𝑙𝑒𝑣𝑒𝑙𝑠
+Morelinearityresults inbetter resolutionof digitalvalues.
+Voltage swing:
+Morevoltageswing, better operationof ADC.ADCswithlower resolution canbe employed.
+
+=== Page 11 ===
+Density:
+Cellswith lesserarea arestillthe priorityas aslightest increaseinareacan make ahuge
+differenceasin anarraythereexistmorethan onelakh cells.Asaresult areapenaltyisalso
+multiplied.
+1.4ADC
+Analog-to-digital converter (ADC)isan electronicdeviceinwhichan analogsignalis changed
+into a multilevel digitalsignalwithout alteringits essentialcontent.It isused inorderto get
+digital valuesfromtheanalog bitlinevoltage.Flash ADCscanbe usedfor low-precisionIMCs
+astheyhavea simplearchitecture,buttheir areaincreasesrapidlywith theresolution, andtheir
+powerconsumption isalsohigher. So SAR(SuccessiveApproximationRegister) ADCsareused
+for higherresolution IMCs.Thecapacitor-basedSARADCs arenotthat fit for IMCapplications
+asthelargesizeof thecapacitiveDACused inthecapacitor-basedSARADCmakesthe sizeof
+theADCaslargeasthearray.ThecapacitiveDACrequirespowerful referencebuffers having
+largeoutput currentsto drive theirbottom platesinthe givenmacro. That'swhy the transmission
+gate-basedSARADChas beenused inthis design.
+1.3.1FlashADC
+Also calledtheparallelA/D converter,this circuit isthe simplest tounderstand.It is formedof a
+series of comparators,each onecomparingthe inputsignalto auniquereference voltage.The
+comparator outputsconnecttothe inputs ofapriority encodercircuit, whichthen producesa
+binaryoutput. FlashADC uses alinearvoltageladder withacomparatorat each "rung"of the
+ladder tocomparetheinput voltagetosuccessivereference voltages.Often thesereference
+laddersareconstructedof many resistors;however, modernimplementationsshowthat
+capacitivevoltagedivisionis alsopossible. Theoutputof thesecomparatorsis generallyfed into
+adigital encoder,whichconvertsthe inputsinto abinaryvalue.
+
+=== Page 12 ===
+Fig 1.2: 2-BitFlash ADCConverter
+1.3.2SARADC
+Successive-Approximation-Register(SAR) Analog-to-Digital Converters(ADCs) workona
+binarysearchalgorithm. TheSARADCemploysa comparator,DACand SARlogic.DACs are
+usedto createreference levels for comparisonwithin theSARADCs. Here,MSB isset tologic
+high. Thecorrespondingoutput voltageofDAC(digital-to-analog converter) iscalculatedand
+comparedwith theinput voltage, Vin.Theoutput voltageofthe DACdependsuponthe
+reference voltage.Fora 4-bitADC,the DACoutputvoltageis givenby
+VDAC= Vref∗{B0∗(1/16) +B1 ∗(1/8)+ B2∗(1/4) +B3∗(1/2)}
+where B3andB1areMSB andLSB respectively.It consistsof thecomparator, DAC,andSAR
+logic. Theanaloginput (Vin)received fromthe bitline goes intothe comparator.Thecomparator
+
+[Image page_12_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on your description and the provided text:
+
+**Image Analysis**
+
+*   **Overall Structure:** The image is a circuit diagram representing a 2-bit Flash Analog-to-Digital Converter (ADC). The diagram is divided into three conceptual sections from left to right: Input Quantization (Comparison), Bubble Error Correction, and Digital Encoding.
+
+*   **Visual Elements:**
+    *   **Resistor Ladder:** On the left side, a voltage divider network is depicted, consisting of several resistors. Two resistors have the value "R/2" on the top and bottom, and three resistors in between have a value of "R". The top node connects to VREF (reference voltage), and the bottom node connects to ground. This network provides different reference voltages for the comparators.
+    *   **Comparators:** The core of the "Input Quantization" section consists of three comparators (represented by triangle symbols). Each comparator takes the input voltage (VIN) and one of the reference voltages from the resistor ladder as inputs. The comparator outputs are denoted by a phi symbol (Φ1)
+    *   **Logic Gates:** The "Bubble Error Correction" and "Digital Encoding" sections are implemented using a network of AND and NOT (inverter) gates. These gates process the outputs of the comparators to produce the digital output.
+    *   **Output:** The digital output of the ADC is represented by two lines labeled "B1" and "B0". These represent the two bits of the converted digital signal.
+
+*   **Text within the Image:**
+    *   "VREF": Reference Voltage
+    *   "VIN": Input Voltage
+    *   "R/2", "R": Resistor values
+    *   "Φ1":Comparator outputs
+    *   "B1", "B0": Output bits (digital representation of the analog input)
+    *   "2-Bit Flash Analog to Digital Converter": Title of the circuit
+    *   "Input Quantization (Comparison)": Label for the comparator section
+    *   "Bubble Error Correction": Label for the gate section
+    *   "Digital Encoding": Label for the final stage of the gate section
+
+**Context and Importance**
+
+*   **ADC Functionality:** The surrounding text defines an ADC as a device that converts analog signals into multi-level digital signals. This image depicts a "Flash ADC", a type of ADC known for its speed.
+*   **Flash ADC Working Principle:** The provided text explains how a Flash ADC operates by comparing the input signal to a series of reference voltages using comparators. The resistor ladder creates these reference voltages. The comparator outputs are then encoded into a binary value.
+*   **Advantages and Disadvantages:** The text mentions that Flash ADCs have a simple architecture and can be used for low-precision applications. However, their area and power consumption increase rapidly with resolution. This explains why this example only shows a 2-bit ADC; the complexity grows significantly for higher resolutions.
+*   **Relevance to the Research:** The mention of "SAR(SuccessiveApproximationRegister) ADCs" highlights a contrast to the Flash ADC. The research favors SAR ADCs for higher-resolution applications, suggesting the limitations of Flash ADCs for the specific integrated memory circuit (IMC) being studied. The SAR ADC described is used for higher resolution, and is more area efficient than the Flash ADC. The surrounding text further suggests that the transmission gate-based SAR ADC is most optimal.
+*   **"Bubble Error Correction"** The text does not elaborate on this, and the surrounding text does not explain this further, however, this refers to circuitry used to eliminate metastability error caused by multiple outputs changing simultaneously.
+
+**In summary,** the image illustrates the architecture of a 2-bit Flash ADC, a relatively simple but power-hungry type of ADC. It is presented in the context of a research paper that is evaluating different types of ADCs for use in integrated memory circuits, ultimately favoring SAR ADCs due to their area efficiency and suitability for higher resolutions.
+
+
+
+=== Page 13 ===
+compares theanalogbit lineinput withthe DACoutput(VDACis thereference voltagehere).
+Thecomparator output goesto theSARlogic. Basedonthe comparatorresult,the SARlogic
+gives thecorrespondingdigital output.
+Fig 1.3: SARADCConverter
+
+[Image page_13_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image provided, incorporating its visual elements, text, and context within the research paper:
+
+**Image Analysis**
+
+*   **Visual Elements:** The image is a circuit diagram illustrating the architecture of a Successive Approximation Register Analog-to-Digital Converter (SAR ADC). It consists of several interconnected blocks:
+
+    *   **Sample and Hold Circuit (S/H):**  This is represented as a rectangular block labeled "S/H" located on the left side of the image. It's connected to an input signal labeled "Vin" and a voltage value of "5.2V".
+    *   **Comparator:**  A triangle shape, the standard symbol for a comparator. It has two inputs (positive and negative) labeled "3" and "2", respectively. The comparator's output is labeled "1".
+    *   **Control Circuit:** A rectangular block linked to the Comparator.
+    *   **Successive Approximation Register (SAR):** Another rectangular block, labeled "SAR". It's positioned to the right of the comparator and control circuit.
+    *   **Digital-to-Analog Converter (DAC):** A rectangular block labeled "DAC". It is positioned at the lower right of the image. The diagram shows that the DAC receives inputs from the SAR.
+    *   **Connections:** Lines connect the different blocks, indicating the flow of signals. The line between the Control Circuit and SAR is a thicker dark red, which might imply a "Control" signal path.
+
+*   **Text Elements:**
+
+    *   **Titles/Labels:**
+        *   Sample and Hold Circuit
+        *   Comparator
+        *   Successive Approximation Register
+        *   Digital to Analog Converter
+    *   **Signal Names/Voltages:**
+        *   Vin: 5.2V
+        *   VREF: 10V
+        *   5V VDC
+        *   Binary Output
+    *   **Input/Output Labels:**
+        *   Numbers are included, representing the pins of the comparator.
+        *   "Binary Output": Indicates the digital output of the SAR ADC.
+        *   Individual outputs are labeled '1', '0', '0', '0' from top to bottom.
+
+*   **Structure and Significance:** The diagram shows the data flow within the SAR ADC.
+    *   An analog input signal (Vin) is sampled and held by the S/H circuit.
+    *   This signal is compared to the DAC output (VREF) using the comparator.
+    *   The comparator output drives the SAR logic.
+    *   The SAR logic adjusts the digital input to the DAC to successively approximate the analog input voltage.
+    *   The final digital value generated by the SAR is the digital representation of the analog input (Binary Output).
+
+**Context and Importance**
+
+*   **Overall Context:** The image is part of a research paper focusing on Analog-to-Digital Converters (ADCs), specifically the SAR ADC architecture. The surrounding text describes the SAR ADC's working principle and highlights the roles of the comparator, DAC, and SAR logic. The preceding figure, Fig 1.2, shows a different ADC architecture (Flash ADC), indicating the paper is comparing and contrasting different ADC types. The following section on "STUDY OF CURRENT BASED IMC" indicates that later research will be based on in-memory computing.
+
+*   **Importance:** The image is essential for understanding how SAR ADCs work. It visually represents the core components and their interconnections.  The figure helps illustrate the binary search algorithm implemented within the SAR ADC to convert an analog signal into a digital one. In conjunction with the text, the diagram clarifies the function of each block and their interactions, providing a comprehensive understanding of the SAR ADC's operation. The "bitline" reference on a page after hints that this might be used in conjunction with SRAM.
+
+
+
+=== Page 14 ===
+Chapter - 2
+STUDY OF CURRENT BASED IMC
+______________________________________________________________
+2.1 6T Cell: We use a fundamental building block 6T SRAM cell, for implementing memory
+array (64*1). The typical steps for reading and writing data in a 6T SRAM cell are as follows:
+For reading stored information, the bitline terminals, identified as BL and BLB, are precharged
+to VDD.Atthesametime,the wordline (WL) isturnedon.When a'1'is storedinthe cell(where
+Q is atahigh voltageof VDD,andQb is at0V),the BLvoltageremains closetoVDD,and BLB
+starts to discharge. Similarly,whena'0' isstored (withQ at 0Vand Qbat VDD), BLBstaysnear
+VDD, and BL discharges from its initially precharged voltage. To store a '1' in the cell, we
+increase the voltage on BL to VDD, decrease the voltage on BLB to 0V, and then activate the
+wordline (WL). Similarly, to store a '0', we raise the voltage onBLB toVDD,lower thevoltage
+onBL to0V,andactivate the wordline(WL).
+Fig 2.1:6T SRAMCell
+We will explain our plan for activating the 'in-memory compute' mode. In this mode, when we
+perform a readoperation, insteadof gettingbackindividualdata, weget theresult asthe product
+
+[Image page_14_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, based on the provided text and the image itself:
+
+**Image Analysis:**
+
+*   **Visual Elements:** The image is a circuit diagram depicting a 6T SRAM (Static Random-Access Memory) cell. It's composed of six transistors (hence "6T"). The transistors are labeled M1 through M6. The diagram shows the interconnection of these transistors along with power and ground connections. The circuit has two bitlines (BL and BLB), and a wordline (WL). The nodes labeled Q and Qb are the storage nodes of the cell, representing the stored bit and its complement.
+
+*   **Structure:** The circuit is arranged with the wordline (WL) running horizontally across the top. The two bitlines (BL and BLB) run vertically down either side. Transistors M1 and M3 are connected in series between Q and ground. Transistors M2 and M4 are connected in series between Qb and ground. Transistors M5 and M6 act as access transistors, connecting the bitlines to the storage nodes when the wordline is activated.
+
+*   **Text within the image:** The following text is visible and labeled within the image:
+    *   WL (Word Line)
+    *   BL (Bit Line)
+    *   BLB (Bit Line Bar, also commonly referred to as Bit Line Complement)
+    *   Q (Storage node)
+    *   Qb (Complement of the storage node)
+    *   M1, M2, M3, M4, M5, M6 (Labels for the six transistors)
+
+**Context and Importance:**
+
+The surrounding text clearly establishes the image's context.
+
+*   **Image Title:** The caption "Fig 2.1: 6T SRAM Cell" directly relates the diagram to the description of the 6T SRAM cell presented in Chapter 2 of the research paper.
+
+*   **Chapter Focus:** Chapter 2 focuses on "Study of Current Based IMC" (In-Memory Compute). The image shows the fundamental building block used in the memory array (64*1) for this research. The 6T SRAM cell is the core component for storing and retrieving information.
+
+*   **Working Principle:** The text explains the read and write operations of the 6T SRAM cell, which are crucial for understanding how data is stored and accessed. The description of pre-charging the bitlines (BL and BLB) and activating the wordline (WL) is directly related to the circuit diagram. The text details how the state of Q and Qb determines the discharge of BL or BLB during a read operation.
+
+*   **In-Memory Compute:** The following text describes that the research will describe their plan to activate the 'in-memory compute' mode. In this mode, instead of getting back individual data, we get the result as the product of two multi-bit words.  The function of multiplication in 6T SRAM Cell is later explained.
+
+*   **Significance:** The 6T SRAM cell is a fundamental component of modern memory systems. In the context of this research, it's the basic element upon which the in-memory compute operations are built. Understanding its structure and functionality is essential for comprehending the subsequent discussion of current-based in-memory computing. The way the current behaves in the SRAM cell and how it is manipulated to perform computations is what this research is focused on. The detailed description of the read/write operations highlights how the cell's behavior can be leveraged for in-memory computations.
+
+**Summary:**
+
+The image is a schematic of a 6T SRAM cell, the fundamental building block for the memory array used in a current-based in-memory compute study. The image is important because the chapter provides context on its read and write functions to enable compute operations to occur directly inside the memory itself.
+
+
+
+=== Page 15 ===
+of two multi-bit words. In the process of multiplication, we useavoltageonthe WL(wordline)
+asone of theinputs,and theotherinput isthe operandstoredinthe memory.
+MULTIPLICATIONIN6T SRAMCELL:
+Vin isaterm usedfor amulti-bit word,and Wisa termfor asingle-bitword.Assume Wis set to
+'1' (with Q at VDD and Qb at 0V) and isstored inthe6T SRAMcell.BL andBLB areprepared
+by precharging them to VDD for a read operation. When we turn on the wordline, it causes
+transistor M5 to start conducting current, while transistor M6 stays inactive in a cut-off state
+(since Q node stores Vdd). This means that transistor M5 creates a path for BLB, which was
+initially charged to VDD,to dischargetowardsthe ground(0V). Howquickly BLB discharges in
+this situation depends on the current flowing through transistorM5. Thecurrentin transistorM5
+increases in directly proportional to its overdrive voltage.Therefore,bychanging thestrength of
+the WL pulse, we directly control the gate voltage of transistor M5, effectively overseeing how
+quickly BLBdischarges.
+For amulti-bit input asan analog voltagerangingfromthetransistor'sthreshold voltagetoVDD,
+the discharge on BLB will be directly linked to Vin, given that Qb holds 0V. For a system that
+multiplies a 4-bit input called Vin by another 4-bit valuecalled W.Most significantbit(MSB) is
+the bit in W that holds the highest value. MSB is placed in the rightmost cellofthe row.Onthe
+other hand, the least significant bit (LSB), which represents the lowest value, is stored in the
+leftmost cell of the same row.The discharge rate needs to be faster for the most important bit
+(MSB) thanfor theleast important bit(LSB).
+To ensure properfunctioning, pre-chargecircuitsareused tokeep thevoltageinthe BLandBLB
+lines constant at the level VDD. We can turn off the pre-charge circuit by adjusting the Vpre
+voltage to be the same as VDD at certain points in time. This guarantees that the Bit Line Bar
+(BLB) linkedwith theMostSignificant Bit(MSB)starts discharging beforethe LeastSignificant
+Bit(LSB).
+
+=== Page 16 ===
+Fig 2.2:6T SRAMCell Array
+Therefore, by carefully activating the pre-charge circuit when Vin is applied to the Word Line
+(WL), we can regulate the discharge on the Bit Line Bars (BLBs).OncetheBitline bars(BLBs)
+have discharged sufficiently, by activating the ENch−sh signal the four BLBs become
+interconnected, which enables the sharing of charges among them. Therefore, the average
+discharge from the four Bit line bars (BLBs) is obtained when the ENch-sh signal is activated
+and all four BLBsareinterconnected andthedischarge ratedepends onthevalue of analogvalue
+of W.
+CHALLENGES:
+In a 6T SRAM cell, a bit flip occurs when the stored binary value of a bit changes
+unintentionally. Bit flip condition occurs because all the WLs areONsimultaneously ,therefore
+this creates the charge sharing among adjacent cells which causes the flipping of stored data in
+the cell. Bit flips are undesirable as they can lead to errors in storing and retrieving data. To
+avoid this condition, write assist techniquecould beusedin whichthevoltageprovidedto allthe
+wordlines arealtered.
+
+[Image page_16_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, incorporating the visual elements, text, context, and importance based on the provided information:
+
+**Overall Image Description**
+
+The image depicts an array of four 6T SRAM (Static Random-Access Memory) cells. It shows the circuit diagram for each cell, along with timing diagrams illustrating the voltage levels on key signal lines (Word Line (WL), Bit Line Bars (BLBs), and charge sharing signal (ENch-sh)) during a read or multiplication operation. The image shows how these cells are interconnected to share charge, and the relative timing of the control signals that facilitate this charge sharing.
+
+**Visual Elements and Structure**
+
+*   **6T SRAM Cell Circuits:** Four identical circuit diagrams are shown, representing the 6T SRAM cells. These cells are labeled "6T cell". Each cell includes:
+    *   Two cross-coupled inverters (formed by transistors) that store the bit value (Q and its complement).
+    *   Two access transistors (M5 and M6 from the surrounding text description) controlled by the Word Line (WL).
+*   **Word Line (WL):** A horizontal line that connects to the gate of the access transistors in each SRAM cell. This line represents the "Word Line" (WL). A timing diagram above the circuit indicates the voltage level on the WL, showing that the pulse starts from t=0 to t=8T.
+*   **Bit Line Bars (BLBs):** Each cell has a Bit Line Bar (BLB) associated with it. The four bit lines are labelled BLB3, BLB2, BLB1 and BLB0.  Timing diagrams below each cell show the voltage level of the BLB during operation.  The diagram indicates the initial pre-charge, followed by discharge when the cell is accessed. The discharge rate differs slightly for each BLB, starting at t=0, t=4, t=6, and t=7 respectively.
+*   **Pre-charge Circuits:** Above each 6T SRAM cell, there is a pre-charge circuit that is connected to the bit line bars. Vpre3, Vpre2, Vpre1, and Vpre0 shows the voltage levels with starting times of 0T, 4T, 6T and 7T respectively.
+*   **Charge Sharing Circuit:** At the bottom of the diagram is the circuitry that performs charge sharing between the four BLBs, controlled by the signal "ENch-sh". A timing diagram indicates the voltage level on ENch-sh starts at t=8T and goes to t=8T + T_ch-sh. Vch-sh at t=8T.
+*   **Timing Diagrams:** These diagrams show the voltage levels of WL, BLBs (BLB3 to BLB0), and ENch-sh over time. The x-axis represents time, with key points marked as multiples of 'T' (e.g., t=0, t=4T, t=8T).  The y-axis implicitly represents voltage level. The timing of these signals is crucial for understanding the SRAM cell's operation.
+
+**Text within the Image**
+
+*   **Labels:** "WL" (Word Line), "BLB3", "BLB2", "BLB1", "BLB0" (Bit Line Bars), "6T cell", "ENch-sh" (Enable Charge Sharing)., Vpre3, Vpre2, Vpre1, and Vpre0 (Pre-charge voltage), and Vch-sh (Charge sharing voltage).
+*   **Timestamps:** t=0, t=4T, t=6T, t=7T, t=8T, t=8T+Tch-sh.
+
+**Image Context and Importance**
+
+Based on the surrounding text, the image is related to a 6T SRAM cell array used in multiplication operations. Specifically:
+
+*   **Multiplication using SRAM:** The surrounding text explains that the SRAM array is used to perform multiplication.  Vin (a multi-bit word, represented as an analog voltage) is applied to the Word Line (WL) to control the discharge of the Bit Line Bars (BLBs). The value W (a single-bit word) is stored in the SRAM cell.
+*   **Controlled Discharge:** The rate at which the BLBs discharge is directly proportional to the input voltage Vin applied to the word line. By controlling the strength of the WL pulse, the discharge rate of the BLBs can be controlled.
+*   **MSB/LSB Placement:** The text mentions the placement of the Most Significant Bit (MSB) and Least Significant Bit (LSB). The MSB is placed in the rightmost cell of the row, and the LSB is in the leftmost cell.  The discharge rate for the MSB needs to be faster than for the LSB.  This difference in discharge rate is facilitated by the staggered timing of the pre-charge circuits.
+*   **Charge Sharing:** The "ENch-sh" signal activates a circuit that interconnects the four BLBs, allowing them to share charges. This averaging of the discharge values across the bit lines is used in the multiplication process.
+*   **Pre-charge Circuits:** The text describes the pre-charge circuits. These circuits keep the voltage in the BL and BLB lines constant at VDD.
+*   **Addressing Bitflip Challenges:** The initial sentences discuss a "Bitflip" issue in the 6T SRAM cell. The next page (2.3) provides a solution (Split WL 6T-SRAM cell).
+
+**Importance of the Image**
+
+*   **Visualizing SRAM Operation:** The image provides a visual representation of how a 6T SRAM cell array functions during a read/multiplication operation. It illustrates the timing relationships between the control signals (WL, ENch-sh) and the bit line behavior (BLBs).
+*   **Understanding Charge Sharing:** The image highlights the mechanism of charge sharing between the BLBs, which is crucial for the multiplication operation.
+*   **Relating to Multiplication Algorithm:** The image visually connects the circuit behavior to the multiplication algorithm described in the surrounding text.
+*   **Context for Challenges:** The image provides a visual base for understanding the "bit flip" challenge and the need for more sophisticated SRAM designs (like the split WL 6T-SRAM cell discussed later).
+
+In summary, the image is a critical component of the research paper, visually explaining the operation of a 6T SRAM cell array used for multiplication, specifically highlighting the controlled discharge and charge sharing mechanisms.  It also sets the stage for understanding the limitations of this basic architecture and the motivation for exploring more advanced designs.
+
+
+
+=== Page 17 ===
+2.2 Split Wordline 6T:
+Fig 2.3:Split WL6T Cell
+The usual 6T-SRAM cell, which is used in the IMC structure, has a problem with "Bitflip"
+occurring inthecircuit. Moreover, thetypical6T-SRAM cellhasa low-voltageswing.
+To overcome the problem of bitflip, a split WL 6T-SRAM cell is used as shown in above
+figure.WLL is "ON '' and WLR is grounded when the IMC mode of operation is in used.
+Assuming that Q=1 and Qb=0 are originally stored in the bitcell as depicted in above fig. , if
+both WLL and WLR are "ON'' then noise at the Qb causes a little discharge of the BL tocause
+the data to flip. However, no assistance from node Qb is provided to flip the cell content if just
+WLL is"ON'' andWLRis "OFF".Tochange thecellcontent,wemust dischargethe BLfurther.
+Toimprove thelinearityandvoltageswingperformance of 6TSRAM cells,weworkedon
+different operationallevels anddifferentprocess-voltage-temperature(PVT) corners.Theresults
+were examinedthrough simulations byturning on64WLssimultaneously,inwhich binary
+values(0 and 1) arestored intheQ node,the cell'sinternal storage component.Thesimulation
+results showthatasoperating levelsrise,linearitydeclines, andvoltageswingincreases.
+Results of normal(TT), slow(SS), andfast(FF) PVTconditionsshowdifferent behavior
+
+[Image page_17_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image and its context within the provided research paper excerpt:
+
+**Image Analysis:**
+
+The image is a circuit diagram representing a "Split Wordline 6T-SRAM Cell."  Here's a breakdown of the visual elements:
+
+*   **Transistors:** The core of the diagram consists of six transistors.  There are two PMOS transistors (Mp1, Mp2) and four NMOS transistors (Mn1, Mn2, Mn3, Mn4).  The PMOS transistors are indicated by the circle on the gate terminal.
+*   **Inverters:** Mp1 and Mn1 form a CMOS inverter, and Mp2 and Mn2 form another CMOS inverter. These inverters are cross-coupled. The output of one inverter is connected to the input of the other, creating a latch (a bistable circuit) that can store a single bit of information.
+*   **Access Transistors:** Mn3 and Mn4 are access transistors (also called pass transistors). They are controlled by the word lines (WLL and WLR) and connect the internal storage nodes (Q and Qb) to the bit lines (BL and BLB).
+*   **Word Lines:**  Two horizontal lines are labeled "WLL" (Word Line Left) and "WLR" (Word Line Right). These are the control signals that activate the access transistors to read or write data to the cell.
+*   **Bit Lines:** Two vertical lines are labeled "BL" (Bit Line) and "BLB" (Bit Line Bar, which is the complement of the bit line). These lines are used to transfer data into and out of the cell.
+*   **Power Supply:** "Vdd" is indicated as the positive power supply voltage.
+*   **Ground:** The ground connection is represented by the standard ground symbol.
+*   **Nodes:** Q and Qb represent the storage nodes of the SRAM cell. Qb holds the complement of the data stored at Q.
+
+**Text within the Image:**
+
+*   WLL
+*   WLR
+*   BL
+*   BLB
+*   Vdd
+*   Q
+*   Qb
+*   Mp1
+*   Mp2
+*   Mn1
+*   Mn2
+*   Mn3
+*   Mn4
+
+**Overall Context and Importance:**
+
+The text provided from the research paper explains that standard 6T-SRAM cells have problems with "bit flips" (unintentional changes in the stored data) and low-voltage swing (a small difference between the high and low voltage levels). The "Split Wordline 6T-SRAM cell," shown in the image, is a proposed solution to mitigate these issues.
+
+Here's how the split wordline structure is intended to work, based on the surrounding text:
+
+*   **Bitflip Mitigation:** By splitting the word line (WLL and WLR), the researchers are able to control the access to the cell more precisely.  The text mentions that during "IMC mode of operation" (presumably in-memory computing), only WLL is "ON" and WLR is grounded.  This helps prevent noise at Qb from causing a bit flip. When both WLL and WLR are on, the cell is more susceptible to bit flips.
+*   **Improved Linearity and Voltage Swing:** The research explores different operating levels and PVT (Process, Voltage, Temperature) corners to optimize the linearity and voltage swing of the SRAM cell. The surrounding text discusses simulation results obtained by turning on 64 word lines simultaneously and analyzing the behavior of the cell under various conditions (TT, SS, FF). They are trying to improve the linearity by applying low gate voltage at the pass gate transistor.
+
+**Importance:**
+
+The image is important because it visually represents the proposed solution (the split wordline 6T-SRAM cell) to the problem of bit flips and low voltage swing in standard 6T-SRAM cells. The circuit diagram allows the reader to understand the structure of the modified cell and how it differs from the standard 6T-SRAM cell. The research focuses on simulating and optimizing this structure to improve its performance under different operating conditions.
+
+
+
+=== Page 18 ===
+patterns. At1.08Vand 125°C,slowconditions (SS)have betterlinearitythan normalconditions
+(TT) of 1.2V and25°C. Onthe otherhand,fastconditions(FF) haveworse linearityat 1.32V
+and -40°Ccomparedto TT.
+Toimprove thelinearitywe aremovingto theWLunderdrive assistscheme inwhichweare
+applying lowgatevoltage atthe passgate transistor.Dueto lowvoltage,thechargecarriers will
+be lesssocurrent throughthe transistorwill belower ascompared topreviousvalues.Thisnew
+current will nowdischarge thetransistor toasmalleramount andthis willlead todecreased
+voltageswing andimprove thelinearitybya significantamount.
+2.3 8TCell:
+In this configurationof the SRAM-cell,there areatotaleight transistorsused. Inthis type of
+configuration wedecoupleboth READand WRITEoperations insuch awaythat if wedoany
+kind of modificationregarding READ operationthen itwouldhave noimpacton WRITE
+operation.For normalwriteoperation, Word-line WWLisused toturn thepass gatesof thecell
+and dependingonthedatato bewritten,discharge isobservedat boththe bitlinesWBL and
+WBLB.Nowfor readoperationworldlineRWL isused andfor its dischargeoperation RBLis
+usedand throughtwotransistorsconnected inseries dischargeis done.
+The8T cellisbetterfrom6T becausein6T bothreadand writeoperationsaredone throughthe
+sameset of transistorsandif readis improvedbychanging variouscircuit parametersthen italso
+hasan impactonwriteoperations. Forexample,for better read,thePull Downtransistor should
+be largerinsizethenPassGate sothat ithas lessvoltagedropacross itandhence goodread
+SNM. Butfor writeoperation,tobe ableto writedataproperly thePass Gateshould beof
+moderate sizeandhence thereexistsa tradeoff betweenreadand writeoperationinthe
+6T-SRAMcell.But in8T,different setof transistors areusedfor readandwriteso individual
+assisttechniquescanbe applied withoutimpacting otheroperations.
+
+=== Page 19 ===
+Fig 2.4:8T-SRAM Cell
+For IMCoperation,readoperation isdonefor weights storedat internal nodes,RWLis turn-ON
+and ifweightstored is0,then nodischargeis observedat RBLand itwill beconsidered asread
+0.Similarly ifweightstoredis1 dischargeis observedat RBLand itwill beconsidered asread1.
+AsM7 transistorishaving its gateconnected withinternal nodesothereis very lesschanceof
+data corruptionasfor that noise voltagelevelshouldbegreaterthan thresholdvoltageof theM7
+transistor.NowduringIMC operation,it isobserved thatas number oftransistors storing1at
+internal nodesincreasesthenduelargedischarge RBL valuegoes belowgate overdrive valueof
+M7 anddue towhich transistorsswitch intolinear regionfromsaturationwhichis themain
+causeof Non-linearity in8T-SRAM Cell.Therefore,tocompensate for ita verylargeClamperis
+usedto maintainvoltagelevelin caseoflargedischarge atRBL. But itresults inreducedvoltage
+swing thatwill havea bad impactonprecision for thesensingmechanism.
+Therefore,in an8T-SRAMcell,thereexists atradeoff between Linearityfactor andthe
+precision of ADC.
+
+[Image page_19_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image provided, based on the context and text:
+
+**Visual Elements and Structure:**
+
+The image is a circuit diagram depicting an 8T-SRAM (8-Transistor Static Random Access Memory) cell.  Here's a breakdown:
+
+*   **Transistors:** The core components are the eight transistors, labeled M1 through M8. The diagram uses standard symbols for NMOS and PMOS transistors.
+    *   PMOS transistors (M3, M5) are typically depicted with a small circle at the gate. NMOS transistors (M1, M2, M4, M6, M7, M8) do not have this circle.
+*   **Power and Ground:** VDD represents the power supply voltage, and VSS represents the ground (0V).
+*   **Word Lines:** There are two word lines labeled RWL (Read Word Line) and WWL (Write Word Line), depicted as horizontal lines at the top of the diagram.
+*   **Bit Lines:** There are Write Bit Lines labeled WBL and WBLB. There's also a Read Bit Line, labeled RBL.
+*   **Internal Nodes:**  The nodes labeled Q and QB (Q-bar) represent the stored data within the SRAM cell. These nodes are connected in a latch configuration, forming the memory storage element.
+*   **Connections:** Lines indicate the electrical connections between the different components. The diagram shows how the transistors are interconnected to form the SRAM cell.
+
+**Text within the Image:**
+
+*   **RWL:** Read Word Line
+*   **WWL:** Write Word Line
+*   **WBL:** Write Bit Line
+*   **WBLB:** Write Bit Line Bar
+*   **RBI:** Read Bit Line. *Note, the text on the diagram says RBI but based on the content it appears that is a typo and it is supposed to read RBL.*
+*   **VDD:** Power Supply Voltage
+*   **VSS:** Ground Voltage
+*   **Q:** Data storage node
+*   **QB:** Inverted data storage node
+*   **M1-M8:** Transistor Labels
+
+**Context and Importance:**
+
+Based on the text provided from the research paper, the image (Fig 2.4) is central to understanding the 8T-SRAM cell's operation, specifically for in-memory computing (IMC).
+
+*   **IMC Operation:** The text explains that for IMC, the read operation is used to sense the weights stored at the internal nodes (likely Q and QB).  The RWL is activated.  If a '0' is stored, no discharge occurs on the RBL. If a '1' is stored, a discharge occurs on the RBL.
+*   **8T vs. 6T SRAM:** The preceding text (Section 2.3) explains that the 8T SRAM cell is advantageous because it decouples read and write operations. This allows for independent optimization of read and write paths, unlike 6T SRAM cells where improvements in read operations can negatively affect write operations.
+*   **Linearity Trade-off:** The text identifies a key issue: as more transistors storing '1' discharge the RBL, the voltage on RBL can drop below the gate overdrive voltage of transistor M7.  This causes M7 to switch into the linear region, introducing non-linearity in the cell's behavior. To compensate, a large clamper is used, but this reduces the voltage swing, negatively impacting the precision of the ADC (Analog-to-Digital Converter) used for sensing the output.  This leads to a trade-off between linearity and ADC precision.
+*   **Transistor M7 and Data Corruption:** The text highlights that the gate of M7 is connected to the internal nodes (Q/QB), reducing the risk of data corruption. This is because a significant noise voltage is needed to exceed the threshold voltage of M7 to corrupt the data.
+*   **WL Underdrive Scheme:** One potential solution to improve linearity is the "WL underdrive assist scheme," where a lower gate voltage is applied to the pass-gate transistors, reducing the current and voltage swing.
+*   **Comparison with Other Cells:** The following text (Section 2.4) mentions a comparison with other SRAM cell architectures (6T).  It states that split worldline 6T cells are generally superior for IMC implementations in terms of linearity, area, and voltage swing. The 8T cell suffers from low density and linearity compared to the split worldline 6T.
+
+**Significance:**
+
+The 8T-SRAM cell diagram is crucial for visualizing how the memory cell functions and understanding the trade-offs involved in its design, particularly for in-memory computing applications. The image, coupled with the surrounding text, provides insights into the challenges of achieving both linearity and precision in sensing the stored weights, leading to a comparison with other cell architectures.  The image and related text are vital for researchers designing and optimizing SRAM cells for AI and machine learning applications where in-memory computing is used.
+
+
+
+=== Page 20 ===
+2.4 Comparison:
+Fig2.5: Current basedcellperformance comparison
+Split worldline 6Tcellisthe bestcircuit for IMCimplementation asit isbest interms ofall
+linearity,areaaswellasvoltage swing.6T havelowlinearityandvoltageswing whereas8T
+havelowdensityand linearity, makingsplitWLthe best inclass.
+
+[Image page_20_image_0.png Error]
+No API key available for start.
+
+
+=== Page 21 ===
+Chapter - 3
+STUDY OF CHARGE BASED IMC
+______________________________________________________________
+3.1 9T+1C:
+Fig 3.1: 9T+1C Cell
+Thecompleteinnerproduct operationtakesplaceinthree phases:
+Fig3.2:Waveform [Operationof 9T+1C Cell]
+(1) ResetPhase: In thisphase,all the capacitorsarecompletely dischargedtoground by
+switchingonNMOSwith theSHORT signalandNMOS withthe PRE signal.Here,the NMOS
+with thePRE signalisconnected toRBL andiscommon toall the cellsinacolumn. Also,in this
+
+[Image page_21_image_0.png Error]
+No API key available for start.
+
+
+[Image page_21_image_1.png Error]
+No API key available for start.
+
+
+=== Page 22 ===
+phase, thePMOS deviceswithsignalRWL andRWLB arekeptOFFto decoupleinternalstorage
+nodes.
+(2) Binary-Multiply Phase:In thisphase, bothNMOS withSHORT signalandNMOS withPRE
+signalarekeptOFF,andonlyone ofthe PMOSconnectedto eitherRWLor RWLB isswitched
+ONata time,andthecapacitoris chargeduptoVDDXNOR conditionally dependingonthe
+weightstored ininternal nodesQ or Qb.
+(3) AccumulatePhase: In this phase,NMOS withthe SHORTsignalis switchedONwhile the
+NMOSwith thePRE signalis switchedOFF.Withthis, all thecapacitors accumulatetheirvalues
+ontheRBL, hencethenameof this phase,i.e., AccumulatePhase.
+3.2 10T+1C:
+Fig 3.3:10T+1C Cell
+Toincreaseparallelrow accessesof theSRAM arrayduring computemode,10T1C SRAM
+bitcellcanbe used.ANAND gatebased capacitivelycoupled readport isadded tothe
+conventional6T SRAMcell. ReadWordline(RWL)carries theFeatureVector (FV)during the
+’compute’modeof thememory. Readbitline(RBL) accumulatesthepartial sum of
+multiplication of FV and Weightsas analogvoltage.Theproposedcelldoes notsuffer fromthe
+limitations of variablecapacitance duetodiffusion connectionsseen bythe FVdriver.It also
+doesnot needoperationatmultiple supplylevels. Thecapacitanceinthe proposed10T1Ccellis
+implementedbyusinga MOSCAP. Sincea MOSCAPdoes nothave symmetricoperationacross
+thetwoterminals, theorientationof theMOSCAP has tobecarefullychosen. If wecallthe gate
+terminal”A” andtheS/D terminal ”B”,thenas shownin,the capacitancebehaviouris very
+
+[Image page_22_image_0.png Error]
+No API key available for start.
+
+
+=== Page 23 ===
+different.
+Fig 3.4:Changein MOS-capacitancewithrespect toVoltage
+It is found thatathighervoltagesthe BAconfigurationappears tobemorelinear.
+IMC implementationinthis work,RBL isprecharged toVDD beforethe startof thecomputation
+cycle.It wasobserved thatMOSCAP value isconstantin BAorientationinthe desiredvoltage
+range,and thereforeweimplement capacitanceinthe SRAMcellinBAorientation.AB
+configuration shouldbeused ifRBL is prechargedto the’0’ level.
+Two stagesof operation:
+Precharge: In thisphase, RWLis keptlowsothat nodeX prechargestoVDD. Initially,the Read
+BL hastobe broughtto 0Vsothat operation canbeperformed inthenext cycle.Thisis doneso
+that theevaluationphasealwaysstarts withsome known value.
+Evaluate: In thisphase, RWL iskept highandthe internalnode ofthe cell(Wor Wb) either
+dischargesthenodeX or maintains itat VDDdepending onthevalue storedinthat node.For
+instance,if Wbis‘1’ then Xdischarges as RWLisalso ‘1’. Thisnode Xinturn slightly dropsthe
+RBL fromVDD toa slightlylower value.
+Whilereadand writeoperationsaredonelike aconventional 6T SRAMcell.The proposedcell
+operates in2statesasexplainedabove.
+
+[Image page_23_image_0.png Error]
+No API key available for start.
+
+
+=== Page 24 ===
+3.3 C3SRAM:
+Fig 3.5: C3SRAM cell
+C3SRAM standsfor Capacitive-Coupling ComputingSRAM.C3SRAM uses aCapacitive
+Couplingtechnique totransferthe computedchargefromthebitcell tothe ReadBitline.Each
+bitcellperforms aXNOR computationand theresult ofall thecells inacolumn areaccumulated
+acrosstheReadbitline. In ourproject, wehavemade anarray of256x4cells. Therearefour
+ADCs connectedto thefourReadbitlines tosensethe accumulatedchargeinthecolumn and
+givea Digital Valueaccordingtothe level.
+Fig 3.6: Logic implemented using C3SRAM
+
+[Image page_24_image_0.png Error]
+No API key available for start.
+
+
+[Image page_24_image_1.png Error]
+No API key available for start.
+
+
+=== Page 25 ===
+C3SRAM isa8Transistor+1Capacitor cell.Thestructureconsistsof 2additionalnmos
+transistors incomparison tothe regular6T SRAM.Thegate of theseadditionaltransistors are
+connected totheQ andQbar nodesof theSRAM.TheWeights arestoredinthe nodesQ and
+Qbar.Theinput vectorfor computation isgiven throughthe Source/Drain terminalofthe two
+additionaltransistors. Theinputs complement each other.If MWL=1,MWLB must be0.The
+ReadBitline(MBL) isprecharged toVdd/2beforeproviding the inputs. Theentireoperation
+takesplacein twocycles.
+Fig 3.7: Waveform [Operation of C3SRAM]
+In thefirst cycle,theMBL isprecharged toVdd/2.Atthat time,MWLand MWLBarealso
+Vdd/2,to preventany computation.TheReadbitline isprecharged withthe helpof annmos
+transistor.VRSTisset toVdd/2 andRST isset toVdd. inthe second cycle,RST iskept 0,and
+theinputs areappliedthroughMWLand MWLB.Let ustake acase,Q=1,Qbar=0, MWL=1,
+MWLB=0.ThetransistorT7 turnson,transistorT8 is off.Thenode VcischargedtoVdd-Vt.
+Thechargeiscoupled across thecapacitorCc tothe MBL.Each bitcellcouplesthe chargeand
+thefinal accumulatedvalue isreflected intheMBL. Allthe casesarecoveredinthe table.The
+voltageswing for C3SRAMis lessascompared tootherchargedbased analogIMC structures,
+but thelinearityisquitehighfor this configuration.
+
+[Image page_25_image_0.png Error]
+No API key available for start.
+
+
+=== Page 26 ===
+3.4 Comparison:
+Fig3.8:Charge basedcellperformance comparison
+It is observedthat a10T+1C cellisabetter cellfor IMCimplementation. Ithas highdensityand
+ismorelinear.Italso offersrelativelygoodvoltageswing aswell. 9T1Chasthe highestdensity
+and voltageswingbut itslinearity isachallenge for operation.Also C3SRAMoffers highest
+linearitybut itsdensityandswing arecompromised.Overall10T+1C isthe most balancedcell
+for IMC operationinbothchargebased andcurrent based cells.
+
+[Image page_26_image_0.png Error]
+No API key available for start.
+
+
+=== Page 27 ===
+Chapter - 4
+ADC IMPLEMENTATION
+______________________________________________________________
+4.1 SAR ADC
+ASuccessive Approximation RegisterAnalog-to-Digital Converter(SARADC) isa typeof
+analog-to-digital converterthat operates based onthesuccessiveapproximationmethod. A 4-bit
+SARADCoperates onthesameprinciple as higher-bitSARADCs butwithasmallerresolution.
+Let's breakdownthestepsfor asimplified 4-bit SARADC:
+Fig 4.1:Operation ofSARADC
+1.Initialization: The4-bitSARADCinitializes bysettingthe mostsignificant bit(MSB) ofthe
+output to 1(1000) sinceit's a4-bit ADC.
+2.Comparisonand Approximation:TheADCcompares theanalog input voltageagainstthe
+midpoint of theADC'srange (Vref/2).If the inputvoltageis greaterthanVref/2, theMSB
+remains 1;otherwise,it'ssetto 0.
+3.SuccessiveApproximation Loop:
+• Step 1(MSB): Thefirstcomparison setsthemost significantbit (MSB)of thedigital output
+based onthecomparisonresult.
+
+[Image page_27_image_0.png Error]
+No API key available for start.
+
+
+=== Page 28 ===
+• Step 2: Thenit movestothe nextbit (thesecond mostsignificant bit). Ittemporarily setsthis
+bit to 1(0100) andcompares theinput voltageagainstthe DACoutput.
+• Step 3: Theprocesscontinues withthesubsequent bits,successively trying 0010and0001.
+• Step 4(LSB): Afterall 4 bits havebeen determined,theleastsignificant bit(LSB) is alsoset
+based onthecomparison,resulting inthe 4-bit digitaloutput.
+4.Conversion Complete: Onceall 4bits aredetermined,theADChas approximatedtheanalog
+input voltageto a4-bit digitalvalue.
+4
+A4-bit ADCcanrepresent 2 (16) different levelsorquantization steps.Thislimited resolution
+meansit canrepresent analogsignalswith only16discretelevelsbetween theminimum and
+maximum values.Consequently, itprovides loweraccuracy compared tohigher-bit ADCs.
+Despiteits lowerprecision,a 4-bit SARADCcanstillbe usefulinapplicationswhere moderate
+accuracy isacceptable,and speedor simplicityismorecritical. However,for moreaccurateand
+precise conversions,higher-bitADCs aretypicallyemployed.
+4.2 FLASH ADC
+AFlash Analog-to-Digital Converter(ADC)is atypeof ADCthat offersextremelyfast
+conversionspeedsbyusingaparallelarray ofcomparators. Unlikesuccessiveapproximation
+ADCs, it doesn’tuseaniterative processto approximatetheinput voltage.Instead,it providesa
+directdigital output correspondingto theinput voltagelevel.
+Here’s howa FlashADCworks:
+1. ComparatorArray: A keycomponentofa FlashADCis abankof comparators.Each
+comparator inthearray comparesthe inputvoltageagainst auniquereference voltage
+levelgenerated by aresistorladder network.
+2. ThresholdDetection: Thecomparatorsareset atdifferent referencelevels thatcorrespond
+to thequantization levelsofthe ADC.Forinstance, inann-bit Flash ADC,therewillbe
+𝑛
+2 comparators,eachwith areference voltagerepresentingaspecificdigital outputlevel.
+3. Parallel Comparison:When theinput voltageisapplied,all comparatorssimultaneously
+comparetheinput voltage againsttheirrespectivereference voltages.
+4. Encoding:Theoutput of eachcomparator isthen encodedinto abinaryformat. This
+encoding processdetermines whichcomparatorshave theirreference voltagesexceeded
+
+=== Page 29 ===
+bytheinput voltage,effectively creatinga digitalcodethat represents theanalog input.
+5. Priority Encoding:Theoutputs ofthesecomparators areprioritizedto findthe
+highest-order bit that’s set(due tothe inputvoltagebeing higher thanthe corresponding
+reference level).This informationisthen usedto generatethe digitaloutput code.
+6. DigitalOutput:The outputof theFlash ADCisabinarydigital codethat directly
+representstheanalog inputvoltagelevel.This codeis availablealmost instantaneously
+sincethecomparisonand encodingoccurin parallel.
+FlashADCs areknownfor theirexceptional speed,as theyprovidea digitaloutputin asingle
+clock cycle.However,theyrequire alargenumber of comparators,which increasestheir
+complexityand powerconsumption significantly,especiallyasthe bitresolution increases.Asa
+result,they'remorecommonlyused inapplicationswhere speedis critical,such ashigh-speed
+communications, instrumentation,andsignalprocessing systems wherepower efficiencyis not
+theprimary concern.
+4.3 Limitation
+4.3.1 SARADC
+Themajor limitation of theSARADCcomesfrom thecomparator.Thelower thedifference
+between thetwoinput voltagesof thecomparator, thelonger it takesfor thecomparator to
+stabilizetheoutput to a‘0’ ora‘1’. Also atlower voltages,this timetoresolve tendsto increase
+evenfurther.Forexample if thetwovoltagesare1V and1.015V, the differencebetween the
+input voltages being15mV,the timeittakesfor the comparatortogive anoutput ‘0’ is80nsand
+for thesamedifferenceof 15mVifthe voltagesarenow reducedto0.4V and0.385V, the timeit
+takesfor thecomparator togive thesameoutput 0willbe140ns.
+AsSARADCworksin differentclock cyclesandthe outputof theSARlogic depends onthe
+comparator output, soif thecomparator outputdoes notsettlebefore theclock edge comes,the
+SARlogic canproduceawrong output.Theonly waytoimprovethe accuracyof theSARADC
+isto decreasetheoperating frequency ofthe SARlogic.
+
+=== Page 30 ===
+Fig 4.2:Comparator resolvingtimefor high voltagelevels
+Fig 4.3:Comparator resolvingtimefor high voltagelevels
+4.3.2 FLASH ADC
+Similar to thelimitation of theSARADCthe comparatortakessome timetoresolve theoutput
+in Flash ADCastheinputvoltageis comparedto allthe voltagesgenerated bythevoltage
+divider circuit.Asthedifferencebetween theinput voltagesof thecomparatordecreases, the
+comparatorstake moreand moretimetoresolveit andhence theoutput changeswitheach
+comparator output settlingto thecorrectvalue. Thecorrectdigitaloutput willbeobtainedwhen
+thecomparator withminimumdifference inputvoltagesettles tothe correctoutput.
+
+[Image page_30_image_0.png Error]
+No API key available for start.
+
+
+[Image page_30_image_1.png Error]
+No API key available for start.
+
+
+=== Page 31 ===
+Theaccuracy of theflashADCcan beincreasedbyincreasingtheoperating period ofthe ADC.
+Fig 4.4:Flash ADCoperation
+4.3.3 Effectsof frequency onaccuracy
+With theincreaseinfrequency ofoperation, accuracy ofthe ADCdecreases.It isdueto the
+limitations incomparator resolvingtimeas discussedabove. Theoutputof theADChighlighted
+with greycolourarewrongoutputs withan errorof 1bit,and outputswith purplecolourarethe
+oneswith anerror of twobits.
+
+[Image page_31_image_0.png Error]
+No API key available for start.
+
+
+=== Page 32 ===
+Fig 4.5:ADCOutputs atdifferent frequencies
+
+[Image page_32_image_0.png Error]
+No API key available for start.
+
+
+=== Page 33 ===
+Chapter - 5
+MATLAB SIMULINK MODELING
+______________________________________________________________
+SRAM Modelling:
+Wehavemade anarrayof 1x64.Onebitcell ofSRAMhas beenlogically drawnas followsin
+simulink. Inputvectorshavebeen givenexternallywiththe helpof MATLAB.
+Fig 5.1:OneSRAMbitcell
+The above model shown is a SRAM cell in which MAC operations have been performed
+logically. w1-w64 are feature vectors (weights) which are given from outside and f1-f64 are
+worldline inputs.Worldline inputs willbe1if they areonotherwisethey willbezero.z-1block is
+some delay provided to weights. xblockis themultiplication blockwhichmultipliesthe weights
+and feature vector depending on the discharge value. Theswitch blockforwards the value0or 2
+as per the results from the multiplication block. If it is not discharging it gives result as0and if
+discharging it can give result 2. Another switch block has been added which gives the final
+discharge value based on the result of the first switch block. If all wordlines are off it produces
+result0which showsnothing isbeing dischargedandotherwise itgives the resultof worldline.
+
+[Image page_33_image_0.png Error]
+No API key available for start.
+
+
+=== Page 34 ===
+Fig 5.2:Rowof Bitcells
+Theabovefigure shows a portion ofacombination ofall 64bitcell. Allthebitcell results have
+beencombinedwith thehelp ofan adderwhichsums upallthe discharges givenbyindividual
+
+[Image page_34_image_0.png Error]
+No API key available for start.
+
+
+=== Page 35 ===
+bitcells andaddsthem together.
+Fig 5.3:Addingthe dischargevalues
+Theabovefigure shows a 64inputadderwhichsums updischarges ofall individualbitcell and
+gives theoutput withthehelpof adisplay.
+5.1Basic ADCModeling
+Themain featuresof ADC aresamplerateandbit resolution.
+● Thesample rate ofanADCis nothingbut howfast anADCcanconvert thesignal
+from analogto digital.
+● Bitresolution isnothing butwithhow much accuracyan analogto digitalconverter
+canconvert thesignalfrom analogto digital.
+
+[Image page_35_image_0.png Error]
+No API key available for start.
+
+
+=== Page 36 ===
+Fig 5.4:Blockdiagram ofbasicADC
+First, theanalog signalisapplied tothe firstblock namelyasamplewherever itcan besampled
+atan exactsamplingfrequency. Theamplitudevalue ofthe samplelike ananalog value canbe
+maintained aswellasheld withinthe second blocklike Hold.Theholdsamplecan bequantized
+into discretevaluesthroughthe third blocklike quantize.Finally, thelastblock-like encoder
+changesthediscreteamplitudeinto abinarynumber. Therearevarious processesinvolvedin
+Analog toDigitalconversion:-
+Sample
+In thesample block,theanalogsignalcan besampledat anexactinterval oftime.Thesamples
+areusedin continuousamplitudeand holdrealvalue however theyarediscretewithrespect to
+time.Whileconvertingthesignal,the samplingfrequency playsan essentialrole.Soit canbe
+maintained ataprecise rate. Basedonthesystem requirement,the samplingratecan befixed.
+Hold
+In ADC,HOLDisthesecondblock andit doesn’thaveanyfunction becauseitsimplyholds the
+sample amplitudetill thenext sampleis taken.So the valueof holddoesn’tchange until thenext
+sample.
+Quantize
+
+[Image page_36_image_0.png Error]
+No API key available for start.
+
+
+=== Page 37 ===
+In ADC,this isthethird block whichis mainlyusedfor quantization. Themain functionofthis
+isto converttheamplitudefromcontinuous(analog) into discrete.Thevalueof continuous
+amplitudewithin thehold blockmoves throughout the quantizedblockto turninto discrete
+amplitude.Now,thesignalwill beindigital formbecauseit includesdiscreteamplitudeas well
+astime.
+Encoder
+Thefinal blockinADCis anencoderthat convertsthe signalfromdigitalform tobinary. We
+know thata digitaldeviceworks byusingbinarysignals.So it isrequired tochange thesignal
+from digitalto binarywiththe helpof anencoder.So thisis theentire method tochange an
+analog signaltodigital using anADC.
+5.2 Non-ideal ADC Modeling
+Theaccuracy of basicADCis very poorthatswhy newtypeof ADCnamed Non-idealADCis
+proposedwhich isfarbetter thanbasicADCinterms ofprecision andaccuracy andit also uses
+very lessAreaasin thiscircuit very simplecircuitsareusedand Analogsignalisconverted to
+Digitalsignalusingsome Mathematicalcomputation. ThisisModelled insucha waythatthe
+Model isHDLsynthesizable sothat itcan bedeployed onFPGA andrealtimeoutputs can be
+obtained,
+Beforethis circuit,Multiplexer isused between Cellarrayand ADCasif separateADCisused
+per columnthenfor largedata set ofneuralnetworks,largeno.of ADCwillbe usedwhichwill
+resultin lotsof Area andpower loss.For thispurpose,4:1 MUXis usedso thatfour columnsare
+connected asinput of MUX andits outputis connectedtoADC.
+
+=== Page 38 ===
+Fig 5.5:Blockdiagram of4:1MUX
+Whileusage of MUXhelped ustosave Area andPowerbut ithas somenon-idealities also. The
+RBL dischargewill notbedirectly passedthrough MUX toADCandit willsee some riseinits
+value. Thisisbecause of Capacitive-Couplingbetween capacitanceof MUXinput and
+capacitance of ADC.If thevalue of boththecapacitors issamethen averageof bothvalueswill
+be obtainedatinput of ADC. There alsoexists OffsetErrorof theADCdueits design atthe
+devicelevel.This canbedueto Mismatchesindevicecomponentsetc.
+So, inleft part of theblock diagramshownbelow ofNon-idealADC,both thetwoNon-idealities
+aremodelled andthenit ispassedtoinput ofADC.
+Fig 5.6:Blockdiagram ofNon-ideal ADC
+This ADChavevarioustypes ofblocks :-
+
+[Image page_38_image_0.png Error]
+No API key available for start.
+
+
+[Image page_38_image_1.png Error]
+No API key available for start.
+
+
+=== Page 39 ===
+Saturation block
+This blockwill actasa Clipper asit willpass voltageasit isto outputbetween some voltage
+range.If voltageisaboveMAX voltagethenit willclip it backtomaximum voltageofthis block
+which isspecifiedbythedesigner. Similarly,if voltageisbelow MINvoltagethen itwill clipit
+backto minimumvoltageof thisblock.
+Gain
+This blockisobtainedbasedonthe number oflevelsthat has tobefitted withinthe specified
+voltagerange.For example, ifthe voltagerangeisfrom 1.2Vto 0.25Vand 256levelsneedto be
+fitted within this rangethena gainof magnitude3.71isobtained.It can varyand canbe
+reconfigured.
+Typecast
+This blockjusttypecastthe output.If wewant8-bit output thenuint8 data typeis usedandif
+16-bit output isneeded thenuint16 data typeis used.Thiswill providethefinal digitaloutputin
+aspecified number of bits.
+5.3 NoiseModeling
+ThePrecisionand Accuracyof anADCisimpacted byvariouskinds ofnoise that canbe
+observed onlyafter actual implementationonHardware.So todoaccuratemodelling, thesenoise
+shouldalso bemodelled andhence aretobeincludedin thefull circuit Model.
+5.3.1ThermalNoise
+Thethermal noiseispresent inall circuitelements containingresistor, aMOS transistor
+operatingin thesaturationregionidentical toa passiveresistorbetween its drainandsource
+terminals (theinvertedchannel),Thermal noiseis causedbytherandomthermal motion of
+
+=== Page 40 ===
+carriers inthechannel.The thermalnoise is usuallymodelledasan additivewhitenoise source
+with Gaussiandistribution,it canbe modelledasa randomvariablegeneratorwith zero-order
+block,thegainblockisusedtoadjustthe value ofthe totalthermalnoise.
+Fig 5.7:ThermalNoise Modelling
+5.3.2Quantization Error
+Quantizationerror isthedifference between theanalog signalandthe closestavailable digital
+value ateachsampling instant fromtheA/D converter. Quantizationerror also introduces noise,
+called quantizationnoise, tothe samplesignal.Thehigher theresolution of theA/D converter,
+thelower thequantization errorand thesmallerthe quantizationnoise.
+Therelationship betweenresolution (in bits)andquantization noise for anidealA/D converter
+canbe expressedasSignal toNoise(S/N):-
+SNR= -20*log(1/2^n)dB
+This relationshipcanalso beapproximatedas:-
+SNR= (6.02n+1.76)dB
+where nistheresolutionof the A/Dconverterin bits.SNRis thesignalto noiseand isexpressed
+in dB.
+
+[Image page_40_image_0.png Error]
+No API key available for start.
+
+
+=== Page 41 ===
+Chapter - 6
+FUTURE SCOPE
+______________________________________________________________
+● Thecomparator takessome timetoresolve thedifference inthe inputvoltageandgive an
+output. This differenceis theoffset voltage.Thelower theoffset voltage,thebetter isthe
+performance of the comparator.Weneed tosizethe comparatormoreprecisely, sothat
+theoffsetvoltageis reducedandthe comparatortakesminimumtimetoresolve the
+differencebetweeninput voltagesandgive output.
+● In this projectatotalsix differenttypes ofanalog IMCcellsaretaken into
+consideration(3 charge based and3current basedcells). We areinterestedinexploring
+moreanalog IMCcellsand comparingthem interms ofdifferentparameters like PPAand
+linearity.
+● Wearealso planningtoexplore higherbitADCconfigurations, toimprovethe accuracy
+of theoutput and comparethe change inaccuracy withtheoverhead ofareaand power.
+● Weintend toexplore evendifferent typesof ADCsandMUX configurations.
+● In this projectwehavemodelled afewnon-idealities of thecellsand ADCsusing
+MATLABSimulink. Wearehoping toencountermany morenon-idealities inPostlayout
+Extraction, studythe causeandimpactof allthose non-idealities andmodel them using
+Simulink.
+
+=== Page 42 ===
+Chapter - 7
+CONCLUSION
+______________________________________________________________
+This workhascompareddifferent types ofmemorycells, bothchargebased andcurrent based,
+onthebasisof different figuresof merits.It is observedthat withincreaseinvoltageswingat the
+bitline resultsin decreasein linearity,this is because,atlower voltagestransistors shiftfrom
+saturationregionto linear region.Afterthis comparison, twotypesof ADCswere implemented,
+SARADCand FlashADC. Duringtheir implementationthey wereanalyzed withrespect totheir
+merits andlimitations. Resolutiontimeof thecomparator, usedin bothSARandFlash, have
+turnedout tobe asignificanthurdlein operation.Theaim ofthis project istomodel this entire
+analog IMCin MATLABSimulink,whichwas achievedbydesigningboththe cellarrayandthe
+ADC. Non-idealitieswereintroduced usingrandomand gaussiannoise. Itwas expectedtomake
+themodel HDLsynthesizable, duetowhich useof allsimulink componentswasrestricted. The
+data relatedto non-idealities andoperationof devicesis recordedand isreadytobe introducedin
+thedesignedmodels.
+
+=== Page 43 ===
+Chapter - 8
+REFERENCES
+______________________________________________________________
+[1]. J. Zhang,Z.Wangand N. Verma,"In-MemoryComputation ofa Machine-Learning
+Classifier ina Standard6T SRAMArray," inIEEE JournalofSolid-State Circuits,vol.52,no.4,
+pp.915-924, April 2017,doi: 10.1109/JSSC.2016.2642198.
+[2]. C.-J. Jhang,C.-X.Xue, J.-M. Hung,F. -C.Chang andM.-F. Chang,"Challengesand
+Trends of SRAM-BasedComputing-In-Memoryfor AI EdgeDevices,"inIEEE Transactionson
+Circuits andSystemsI: RegularPapers,vol.68,no.5,pp.1773-1786, May2021,doi:
+10.1109/TCSI.2021.3064189.
+[3]. B.Iqbal,A. Groverand H.Rawat,"A Processand DataVariationsTolerant Capacitive
+Coupled10T1C SRAMfor In-MemoryCompute(IMC)in DeepNeuralNetworkAccelerators,"
+2022IEEE 4thInternational ConferenceonArtificial IntelligenceCircuits andSystems
+(AICAS), Incheon,Korea,Republic of,2022,pp.459-462, doi:
+10.1109/AICAS54282.2022.9870026.
+[4]. A. Agrawal,A. Jaiswal, C.Leeand K.Roy, "X-SRAM:Enabling In-MemoryBoolean
+Computationsin CMOSStatic RandomAccessMemories,"inIEEE TransactionsonCircuits
+and SystemsI:Regular Papers, vol.65,no.12,pp.4219-4232, Dec.2018,doi:
+10.1109/TCSI.2018.2848999.
+[5]. Z. Jiang,S. Yin,J. -S. SeoandM.Seok,"C3SRAM:In-Memory-Computing SRAMMacro
+Based onCapacitive-CouplingComputing,"in IEEESolid-State CircuitsLetters, vol.2,no.9,
+pp.131-134, Sept. 2019,doi:10.1109/LSSC.2019.2934831.
+[6]. M. Ali,A. Jaiswal,S.Kodge,A. Agrawal, I.Chakraborty,and K.Roy, “IMAC:In-memory
+multi-bit MultiplicationandACcumulation in6T SRAMArray,”IEEE Trans.Circuits Syst.I,
+vol. 67,no.8,pp.2521–2531,Aug. 2020,doi: 10.1109/TCSI.2020.2981901.
+[7]. A. Antolinietal.,"AnembeddedPCM PeripheralUnitadding AnalogMACIn-Memory
+Computing FeatureaddressingNon-linearity andTimeDrift Compensation,"ESSCIRC2022-
+IEEE 48thEuropean SolidState CircuitsConference (ESSCIRC),Milan,Italy,2022, pp.
+109-112,doi: 10.1109/ESSCIRC55480.2022.9911447.
+
+=== Page 44 ===
+[8]. C.-T. Huang,Y.-C.Chuang,M. -G.Lin andA. -Y.A. Wu, "AutomatedQuantizationRange
+Mapping for DAC/ADCNon-linearityin Computing-In-Memory,"2022IEEE International
+Symposium onCircuitsandSystems(ISCAS), Austin,TX, USA,2022,pp.2998-3002,doi:
+10.1109/ISCAS48785.2022.9937544.
+[9]. A. Kneipand D.Bol, "Impactof AnalogNon-Idealities ontheDesign Spaceof 6T-SRAM
+Current-DomainDot-ProductOperators for In-MemoryComputing," inIEEE Transactionson
+Circuits andSystemsI: RegularPapers,vol.68,no.5,pp.1931-1944, May2021,doi:
+10.1109/TCSI.2021.3058510.
+

@@ -1,0 +1,1185 @@
+=== Page 1 ===
+Sustainability Framework for Computing Element
+Design
+Abstract—The semiconductor industry has revolutionized in- and so on. So, there is an obvious and very strong influence
+formation and communication technologies by enabling un- of ICT to take human society towards more sustainable ways
+precedented advancements in computing, communication, and
+of living. However, each of these devices that allows us to
+automation. However, alongside this rapid progress, the esca-
+adoptamoresustainablelifestylehasitsowncarbonfootprint
+lating power consumption and resource demands of integrated
+circuits have raised critical sustainability concerns. Traditional [1], [3].
+evaluation figures of merit, such as Power, Performance, and Aselectronicsbecomemoreprevalent,theirnegativeimpact
+Area (PPA), no longer appear to be sufficient enough to address on the environment also becomes prominent. While, on one
+the environmental impact of these designs. Hence, there is a
+hand, each replacement of a mechanical component with an
+need for an evaluation paradigm that can assess a design based
+electronic part results in more electricity consumption (for
+on Power, Performance, Area and Sustainability (PPAS). This
+research proposes a novel Sustainability Framework to allow the additional intelligence), manufacturing these parts also
+designerstoassess,benchmarkandchoosethemostefficientand consumes energy. So, the total environmental cost of these
+environment-friendlyarchitecturefortheirproductdevelopment devices is not negligible.
+at the early design phase (i.e. ‘schematic’ and ‘layout’). The
+In 2022, Bloomberg reported that TSMC consumes more
+proposed framework is applied on a wide variety of foundation
+powerthantheentireislandcountryofSriLanka[4].In2023,
+cellstodemonstrateit’swideapplicabilityandagility.Foundation
+cells have been benchmarked and the impact of design choices TSMC’s electricity demand was 250GW [5]. In 2024, India
+onsustainabilityispresentedbasedondifferentapplicationslike claimed to have met the maximum demand of 250GW for the
+IoT, Automotive, High-Performance Computing, and Portable firsttime[6].Putdifferently,theworld’slargestsemiconductor
+Electronics.
+manufacturer consumes more electricity than large countries.
+IndexTerms—Sustainability,Embodiedfootprint,Operational
+It is also evident from the present trends that semiconductor
+footprint, Foundation cell, ICT
+manufacturing is bound to become more energy intensive
+progressively[5].Therefore,itisveryimportantthatconcerted
+I. INTRODUCTION
+efforts are made to tame this impact.
+Advancement in Information and Communication Technol- Leading product and IC manufacturers such as STMicro-
+ogy(ICT)overthepastfewdecadeshastransformedtheworld electronics, Apple, Google, TSMC, Meta, and Intel have
+as we experience it. From the wake-up alarm in the morning declared carbon neutrality targets in their recent sustainability
+to the shoes of the morning walk, to the ticketing in public reports [7]–[12]. Many studies have characterized the sources
+transit, to the entry into the office premises, to the social of emissions during the manufacturing process and explored
+life in the evening, the dinner bookings, and even bedtime methods to reduce them [13], [14]. Despite focused efforts,
+routines - everything has changed. ICT has brought about TSMC stated in its report [10] that with the current surge in
+these transformations. In turn, ICT has been enabled by the semiconductor demand and the increasing energy intensity of
+advancement in semiconductor technologies [1]. advanced process technology, it finds it difficult to achieve
+Semiconductor manufacturing technology involves multiple net zero targets for another 50 years. So, it is evident that the
+processing steps [2] has evolved multi-fold over the past presentfocusonreducingthemanufacturingfootprintmaynot
+decades. A combination of advancements in optics, chemi- be sufficient. It requires making conscious choices at every
+cals, materials, instrumentation, mathematics, and computing step of the product development life cycle (PDLC) [15].
+(positive feedback) has enabled the scaling of technology to In the context of System on Chip (SoC) design, every
+a level where today we have 3D transistors that are designed stageinthechipdesignprocessinvolvesdecision-making,and
+to the precision of an atom. This has led to unprecedented therefore, sustainable choices have to be made at each step.
+integration [1]. Traditionally, designs are optimized on the axes of power,
+A modern mobile phone has practically replaced landline performance, and area (PPA). Despite considerable progress
+telephony,mediaplayers,still(evenvideo)cameras,andalarm in optimizing circuits for these figures of merit (FoMs), the
+clocks. Additionally, with the help of high-speed internet environmental impact of these designs is neither estimated
+(again, enabled significantly by semiconductors), app-based nor improved. To a large extent, as the PPA of a design
+ecosystem, and increased functionality, it has significantly is improved, its cost is reduced, or profitability improves. It
+reduced the need for more cash vending machines (through is assumed that this also results in a reduced environmental
+digital payments); avoided a lot of travel (through meeting impact. Current approaches to circuit design and architecture
+apps); saved innumerable trees from being felled for paper, selectionprioritizePPAmetricswithoutadequatelyaddressing
+
+=== Page 2 ===
+TABLEI who generates them. The scopes are broadly presented in
+GHGPROTOCOLCLASSIFICATION Table I.
+One of the initial works to assess the sustainability of
+Scope Level Emission types
+the semiconductor manufacturing process appeared in 2000
+Scope1 DirectEmissionsfromcompanyresources:
+[18]. It was the time when the regulations to phase out toxic
+• Fuelcombustioninfacilities,refrigerantuse
+• Transportationandchemicalemissions materials like lead from the semiconductor supply chain were
+coming into force. EE-Toolbox presented in [18] evaluates
+Scope2 IndirectEmissionsfrompurchasedenergy: the sustainability of a SoC on material-related parameters. It
+• Runningfabs,facilities,anddatacenters evaluates the products on a range of metrics like the Toxic
+• Energyconsumedduringoperation PotentialIndicator,RecyclingPotentialIndicator,Energycon-
+• Carbonemissionreleasedperunitenergycon- sumption(CombinationofRawMaterialsEnergyandProduct
+sumed
+UsageEnergy),ProcessToxicityScreening,etc.Thesemetrics
+are entirely focused on material-related data, and while they
+Scope3 OtherIndirectEmissions:
+arerelatedtosustainability,theydon’trelatetoGHGprotocol.
+• LogisticsandBusiness
+In2012,amultiple-criteriadecisionapproachwaspresented
+• Rawmaterialproduction
+that emphasized the concept of ‘Eco-reliability’ to enhance
+• Supplychain
+the design optimization process [19]. The authors discuss
+factors like product lifetime and life-cycle optimization from
+the perspectives of reliability, cost, and environmental impact.
+sustainability. Theyusemulti-criteriaLCA-basedevaluationstoestimatethe
+In this work, we introduce a method for assessing the envi- environmental impact. This was amongst the first works to
+ronmental efficiency of circuit architectures. It is formulated highlight the complexity of carbon footprint (CFP) estimation
+to evaluate sustainability from a designer-centric perspective for electronic products. The paper presents a qualitative view
+in the early stages of PDLC. Designers utilize foundation of the LCA-based CFP assessment. It does not provide quan-
+cell libraries either developed in-house or by the foundry to titative measures or FOMs for evaluating emissions.
+implement SoCs. These foundation cell libraries include a A2017research[20]explorestheincreasingenvironmental
+range of combinational, sequential, storage, analog, digital, impact of IC fabrication, which is becoming comparable to
+andinterfacecellsthatareusedascomputingbuildingblocks/ operational energy consumption, particularly in low-power
+elementsforSoCs.Thisworkprimarilyprovidesaframework computing applications. To address this challenge, the au-
+formakingsustainability-awaredesignchoicesatthisstageof thors introduce a scalable parameterized model for evaluat-
+design, which runs before SoC design implementation begins. ing fabrication-related environmental costs across technology
+The remaining part of this paper is organized as follows. nodes ranging from 130nm to 32nm. Through the proposed
+In Section II, we present previous work that has been done to framework, the authors highlight the impact of changing the
+integrate chip design and sustainability. We also present the metal stack in a VLSI chip design, showcasing that reducing
+tenetsoftheGreenHouseGas(GHG)emissionsprotocol[16]. the highest metal routing layer allowed for designing the chip
+InSectionIII,weoutlinethekeyfeaturesofaneffectivedesign decreases the manufacturing energy consumption by nearly
+metric for wide acceptability. In Section IV, the proposed 13.8%inspecificnodes.Thesefindingssignifytheimportance
+framework is presented. We demonstrate the effectiveness of balancing fabrication and operational energy to design a
+of the framework in Section V, by applying it on a wide sustainable IC. This work focuses on a chip or product-level
+range of foundation cells like Flipflops, Level Shifters, and analysis only.
+Approximate Adders. Then we conclude by showing that In 2022, a comprehensive research study that investigated
+the proposed framework can enable designers to make well- the CFP of computing systems was published [16]. The study
+informeddecisionsearlyinthedesignprocesstooptimizeboth reveals that, despite improvement in the energy efficiency
+performance and long-term sustainability. of products, primarily due to advancements in algorithms,
+software, and hardware, the overall environmental impact
+II. SUSTAINABILITYRELATEDWORKINVLSI
+remains substantial. In recent years, a major source of these
+Sustainability as a broad concept originated in 1987 in the emissions has been hardware production and infrastructure,
+Brundtland Report [17] and has varying interpretations. In the and not energy use during lifetime operation. This highlights
+context of this work, we consider it as Designing reliable the importance of focusing on sustainable design practices to
+products in such a way that it does not have a drastic impact reduce the environmental impact of computing systems. The
+on the environment in the long term. Today, sustainability is workeffectivelyfocusesontherecognitionofGHGemissions
+analyzed using conventional life cycle analysis (LCA) and related to products along the entire PDLC. It provides a sig-
+the GHG emission protocol. GHG, established in 1998, is nificanttheoreticalandstatisticalanalysisofcarbonemissions
+a standard protocol for quantifying organization-level carbon and sharpens the pitch for call-for-action.
+emissions in which the emissions are classified into 3 scopes Moore’s law, which has been driving the VLSI industry,
+[16] depending on which stage of the PDLC they occur and has been slowing down [21] and the industry is looking at
+
+=== Page 3 ===
+TABLEII
+PREVIOUSCONTRIBUTIONSINTHESUSTAINABILITYEVALUATION
+Work Year PDLC ProposalsandKeyContribution Limitation
+Stage
+EE-Toolbox[18] 2000 Material • EE-Toolbox driven sustainability as- • Focusonlyonmaterialselectionprocess
+Selection sessmentmethodology • Lacks integration with carbon footprint-
+• Evaluation based on Material-based basedGHGmetrics
+metrics:
+-ToxicPotentialIndicator
+-RecyclingPotentialIndicator
+-ProcessToxicityetc.
+Multi-criteria 2012 Allstagesof • Concept of ’Eco-reliability’ for design • Lacksquantitativemetricandassessment
+Eco-reliability PDLC optimization
+[19] • Multi-criteria LCA-based evaluation
+approach
+• QualitativeCFPassessment
+SustainableIC 2017 Allstagesof • Scalable parameterized sustainability • Focusesonachiporproduct-leveldesign
+Design[20] PDLC evaluationframeworkfor130to32nm. andisnotcell-specific
+• Showcase impact of changing metal
+stackinaVLSIchipdesign
+ChasingCarbon 2022 Complete • Provided insights into the lifetime car- • Enables product CFP analysis de facto.
+[16] Product bonfootprintofcommonproducts. Nosupportduringthedevelopmentphase
+LifeCycle • Categorized product carbon footprints • Lacksmetric-basedanalysis
+Analysis usingtheindustryGHGprotocol. • Limitedtohigherabstraction-levelprod-
+• Highlighted the significance of manu- uctdata,withoutcell-levelspecificity
+facturingandoperationalfootprints
+ECO-CHIP[23] 2024 System/ • Open-source framework to • Applicable at higher chiplet-based ab-
+Product estimate sustainability benefits of stractionlevelandnotcell-specific
+Architecture heterogeneously integrated chiplet-
+baseddesigns
+Eco-reliability 2024 System • Eco-reliable metric for circuit sustain- • Lacks designer-focused, decision-driven
+Metric[24] Analysis ability analysis at the fundamental computing
+• Integrate reliability and environmental logicblocklevelforsustainability
+impact associated with manufacturing
+overhead
+• Enablessystemandcircuit-leveldesign
+footprintcomparisons
+alternative routes to maintain the rate of integration [22]. One It is embedded into the IC design flow, expanding the eval-
+of the methods to maintain the pace of ongoing integration is uation framework beyond power, performance, and area to
+theuseofchiplets[22].In2024,aframeworkwaspresentedto facilitate efficient system- and circuit-level comparisons. It is
+estimatetheefficacyofchiplet-baseddesign[23].Theauthors definedbycombiningcircuit-specificparameterssuchasMean
+developed an open-source carbon footprint evaluation tool/ Time to Failure (MTTF) and Mean Time Between Failures
+framework to assess the potential of heterogenous integrated (MTBF) with environmental factors, including System Earth
+chiplet-basedsystemsovertraditionalmonolithicsystemswith equivalent Time, life cycle assessment (LCA)-based carbon
+theaimofsustainablecomputing.Theydiscusstheadvantages footprint (CFP), and available biocapacity (Earth’s resource
+of chiplet-based systems in terms of yield, area, reusability, availability). While this metric introduces a novel approach to
+design complexity, and design overheads. They analyzed and sustainability assessment for electronic circuit designs, it does
+reportedCFPofafewdesignstoestablishtheveracityoftheir not incorporate an independent analysis at the fundamental
+framework. This framework is specifically suited to chiplet- computing logic cell level, which is crucial for selecting a
+based designs and is very handy at the time of product more sustainable circuit architecture.
+specification and requirement analysis.
+Table II presents a summary of recent contributions in
+Another significant work was presented in 2024 [24], the domain. It is evident that the sustainability frameworks
+where a new eco-reliable metric was proposed to evaluate proposed until now, even though they operate at different
+the sustainability of VLSI circuits by considering the aspect stages of PDLC are used primarily at product/ system level
+of both reliability and environmental cost of manufacturing. abstraction. This leaves a big gap for designers who build the
+
+=== Page 4 ===
+foundation blocks that go into making the SoC/ product. To TABLEIII
+our knowledge, there is no existing framework or metric that IMPACTOFTRADITIONALFOMSONCFP
+enables designersto makedecisions inthe early designstages
+FoM Embodied Footprint Operational Footprint
+of PDLC. The designer-oriented framework proposed in this Performance Secondary impact Primary impact
+work aims to fill this gap. Power No Impact Primary impact
+Area Primary Impact Limited impact
+III. STANDARDFIGURESOFMERITANDSUSTAINABILITY
+Lifecycle Analysis (LCA) involves the assessment of GHG
+emissions linked to manufacturing and then operating a prod- increased cost and complexity of packaging to dissipate heat.
+uct through life. It is a necessary step to classify GHG This has an impact on the embodied footprint too. However,
+emissions into different scopes as presented in Table I. from the perspective of a circuit designer, such impact on
+GHG emissions or carbon footprint (CFP) of a product can embodied footprint is too downstream in PDLC. Therefore,
+be broadly estimated by utilizing two components [16]: for the purpose of this work, we ignore this impact.
+It is clear that the standard figures of merit of power,
+• Embodied footprint – CFP that is built into the product
+performance, and area influence the CFP of a design. The
+before the product even reaches the point of use. This
+summary of the impact of traditional FoMs on CFP is pre-
+includes the emissions in the entire design and manufac-
+sented in Table III. Typically, designers have to make trade-
+turing process, including design, prototyping, materials,
+offsbetweendifferentFoMstomeettheproductspecifications.
+processing, testing, validation, etc. This also includes
+Usually, there could be many ways to optimize the design.
+emissions associated with marketing, shipping, etc.
+When there are apparently two equivalent ways to meet the
+• Operational footprint – CFP that is caused when the
+requirements, then the PPA framework does not enable a
+product is used over its entire life. This includes the
+designer to make sustainable choices. Hence, a framework for
+energy consumed by the product during its operation in
+estimating sustainability is additionally required.
+all possible modes.
+This broad classification is important from the perspective IV. PROPOSEDSUSTAINABILITYFRAMEWORK
+of a designer because the key FOMs that a designer considers
+In this section, we present the proposed framework for
+atthetimeofmakingdesignchoicesimpactoneoftheabove.
+evaluating the sustainability of a circuit/ design/ architecture
+The area has a direct bearing on the embodied footprint.
+based on LCA. As discussed in Section III, the sustainability
+In semiconductor manufacturing, multiple SoCs are arranged
+of a VLSI design is evaluated in terms of embodied and
+in an array on a wafer and manufactured in parallel. Energy
+operational footprints.
+and material used in processing a wafer are amortized over
+Estimating the CFP of any product is a very data-intensive
+the number of copies of the SoC that can successfully fit
+exercise. Usually, this data may not be available in the early
+on a wafer. A larger area results in fewer copies per wafer,
+stagesofPDLCwhenadesignerisexpectedtomakechoices.
+and each SoC shares a larger portion of GHG emissions in
+Therefore, the proposed framework has the flexibility to fall
+waferprocessing.ThelargerareaalsoresultsinalowerYield
+back on historical trends/ data to still be able to compare
+[25]. This further reduces the number of SoCs on which the
+between alternatives.
+manufacturing emissions need to be amortized and increases VLSI circuit and system designers do not have an op-
+the CFP of the SoC. portunity to choose the materials (or their source) used in
+Performancehasadirectimpactontheoperationalfootprint.
+the manufacturing process, the type of energy (renewable/
+Most advanced SoCs implement a power-saving technique
+non-renewable) used, where the chips are fabricated or sold
+called pulse width modulation. In this, the system is powered
+(transport), and so on. The choices they have to make are
+up to a high voltage level when it is operated. At other times,
+independent of these details. The level of abstraction is far
+thesupplyiseitherswitchedoffortakentoamuchlowerlevel.
+different. Consequently, the output of this framework is not
+This helps reduce power consumption. A high-performance
+intended to give the accurate CFP of a design, but intelligent
+system with high throughput can do the desired activity in a
+pointers to support the designer in decision-making. We have
+shorterperiodoftimeandcanthenbeturnedoff.Thisreduces
+kept the units of the metric as energy units, which can be
+overall power consumption.
+converted to their CO2 equivalent.
+When a system is expected to deliver a threshold level
+A. Embodied Carbon Footprint (eCFP) metric
+of performance, multiple copies of a low-performing circuit
+may be used to increase throughput. This results in a larger As discussed in Section III, the embodied carbon footprint
+areaand,consequently,alargerembodiedfootprint.Therefore, (eCFP) includes the emissions in the entire design and man-
+performance also has a secondary impact on the embodied ufacturing process. Eq. (1) represents the eCFP which is a
+footprint. product of ‘Base energy per µm2’ (BE), ’Cell Area’, ‘Extra
+Power consumption - dynamic, static, and leakage - has Metal Impact’ (EMI), and ‘Additional Process Step Impact’
+a direct bearing on the energy consumed during operation. (APSI) in the designed cell layout.
+Therefore, it has a direct impact on the operational footprint.
+Attheproductlevel,ahigherpowerconsumptionmayresultin eCFP=BE×Cell Area×EMI×APSI (1)
+
+=== Page 5 ===
+1) Base energy per µm2 (BE): BE is calculated by amor- TABLEIV
+tizing the total energy consumed per wafer that is processed APPLICATION-BASEDOPERATINGTIMERATIOS
+in a base/ standard/ reference process, over per unit area as
+Application-based operating
+shown in Eq. (2). Operating modes
+time ratios %
+Energy consumed per standard wafer IoT HPC Auto PE
+BE= (2)
+Wafer area(µm2) Operational Lifetime 20000 25000 10000 35000
+(in hrs)
+In this work, we consider the energy consumed in process-
+ing a wafer of diameter 300mm with a 6-metal layer stack in Active (ATR) 5 40 15 10
+a standard 65nm process to be 4204 kWh per wafer [20]. Stand-by (STR) 25 40 45 30
+2) Cell Area: Embodied CFP of a design is directly pro- Switched-off (SOTR) 70 20 40 60
+portional to its area. It is considered in µm2 unit.
+3) Extra Metal Impact (EMI): A designer may need to
+compare two different layout implementations of a circuit. value of the Mask Factor is 0.045. This is based on the data
+Here, a layout could be denser because it utilizes more metal published in [20]. Depending on the actual additional energy
+layers. A denser layout can result in reducing its eCFP. consumed in the additional process steps, this value can be
+However, when designs use extra metal layers, fewer routing updated.
+resources are left for SoC-level routing. This can lead to
+more congestion and, hence, more area utilization at the SoC B. Operational Carbon footprint metric (oCFP)
+(system)level.So,whiletherecouldbegainsatthecelllevel, The operational carbon footprint (oCFP) is a measure of
+itmayleadtoanoveralllossatthesystemlevel.EMIaccounts CFP linked to the energy consumed by hardware during
+for the impact of reduced availability of routing resources its operation over life. Hence, the proposed oCFP estimates
+on system-level eCFP. Eq. (3) defines the Track Ratio as the energy consumed across all operational modes of the device.
+proportionoftotaltracksavailableinanadditionalmetallayer In Eq. (6), oCFP is estimated by adding dynamic power, and
+to the remaining tracks allocated for SoC-level routing after leakage power during the total operational period over life,
+accounting for those used in intra-cell layout design. which varies according to application-specific requirements
+and usage conditions.
+Total tracks available in the metal layer
+TR =
+Tracks available for routing in the metal layer
+(3) oCFP=T ×(Dynamic power+Leakage power) (6)
+total
+Theextrametalimpactonfabricationenergyconsumptionis
+shown in Eq. (4). Here, the congestion factor (CF) serves as a 1) Application specific operation profile: Electronics has
+multiplierthattranslatestheextrametaltrackusagetechnique foundaplaceinavarietyofapplications.Eachapplicationhas
+intoaproportionalimpactinthecellarea,therebyinfluencing different operational conditions, performance requirements,
+the eCFP metric. and usage profiles. Circuits designed in foundation libraries
+may be targeted to specific applications. Depending on the
+(cid:16) (cid:17)
+EMI=1+ TR−1 ×CF (4) application, the operational profile of a design - the duration
+for which it is expected to operate in high-performance,
+In this work, the value of CF is kept as 0.3, to reflect the
+regular, low-power, or stand-by mode - changes. This directly
+impact of increased congestion on the eCFP of a design.
+impacts oCFP.
+4) Additional Process Step Impact (APSI): While the BE
+In this work, we consider four applications, namely the In-
+factor above represents the energy consumed in processing
+ternet of Things (IoT), High-Performance Computing (HPC),
+a standard wafer, process variants - like with extra device
+Portable Electronics (PE), and Automotive (Auto). Together,
+types (transistors with different threshold voltage) or different
+theseapplicationprofilesrepresentupto90%ofusagepatterns
+capacitor types or extra metal layers - may consume more
+in electronics. Based on the application for which the chip is
+energy due to additional steps in the processing of the wafer.
+beingdeveloped,theoperatinglifetimeoftheproductchanges.
+APSI is calculated by using Eq. (5).
+In our work, we have assumed representative operational life-
+times for different applications as below. These are notional,
+APSI=((Total masks−Reference masks)×Mask Factor)+1 anddifferentchipsineachoftheseapplicationsmayalsohave
+(5) different profiles. The purpose of considering these profiles
+In this work, we have considered that a wafer processed in is to ensure and demonstrate that the proposed framework is
+thestandardprocessrequires36masks(andrelatedprocessing versatile for estimating sustainability metric for a very wide
+steps). range of applications.
+Although different additional steps may add a different • Internet of Things (IoT): We assume total operational
+level of emissions, in this work we have assumed that every lifetime of 20000 hours (24 hrs for 2.5 - 3 yrs). Battery
+additionalprocesssteprequires4.5%additionalenergy.So,the powered IoT devices usually keep a large part of the
+
+=== Page 6 ===
+deviceinstand-byorswitched-offmode,andonlyasmall operates in low leakage stand-by mode for a longer duration
+part is active. of time and saves power. Circuit implementations that operate
+• High-Performance Computing (HPC): We consider a faster enter into such stand-by mode faster. In Eq. (8), PWM
+life of about 3 years where it remains active for a large is a Boolean variable that is set to 1 when the design uses
+part of life and is in switched-off mode for a short pulse width modulation.
+duration. Here, we also introduce a performance factor, PF, to esti-
+• Automotive (Auto): We consider the total mileage of a mate the extra duration when a design will operate in stand-
+car to be 3,00,000 km before a car is discarded. We have by. PF is the ratio of the time required for a given design
+assumed that it runs this distance at an average speed of to complete an operation to the time taken by the reference
+30 km/ hr. So, an operational lifetime of 10000 hours. design for the same operation.
+• Portable Electronics (PE): We consider a portable elec- The second term in Eq. (8) represents the leakage power
+tronic item like a mobile phone to have a life of 5 consumed in stand-by mode and takes into account the extra
+years where it remains in stand-by or switched-off mode time a high performing system will operate at V by
+standby
+for a large part of its life. Therefore, 35000 hours of utilizing PF.
+operational life.
+For estimating oCFP, the operational lifetime of a foun- V. VALIDATINGSUSTAINABILITYFRAMEWORKFOR
+dation cell is categorized into three phases: Active, Standby, FOUNDATIONCELLDESIGNS
+and Switched-off. These phases are quantified as ratios of
+A good assessment framework has to be robust, adaptable,
+the total operating time (T ), defined as Active Time Ratio
+total verifiable, coherent, fair, repeatable, scalable, and relevant
+(ATR), Standby Time Ratio (STR), and Switched-off Time
+[26].Inthissectionwedemonstratetheagilityandrobustness
+Ratio (SOTR). These ratios are presented in Table IV.
+oftheframeworkbyusingittocomparedifferentarchitectures
+2) DynamicPower: Dynamicpoweristhepowerconsumed
+orimplementationsofdesiredfunctionalityinfoundationcells.
+byafoundationcellduringthatpartofitsoperationallifewhen
+In particular, we compare a variety of Flipflops, Level
+it is active. Therefore, the Dynamic Power component in Eq.
+Shifters,andApproximateAdders,ontheaxesofPPAandalso
+(7) is normalized for the ratio of total operating time when
+Sustainability. The designs have been implemented in 65nm
+the cell is powered up and expected to drive output.
+Low Standby Power technology from STMicroelectronics.
+Herethedynamicchargeconsumedduringoperation(Q ),
+dyn
+ismultipliedwiththeswitchingactivity(α),whichistheratio
+A. Embodied Carbon Footprint (eCFP) metric
+of times/ cycles in which the inputs/ outputs of the circuit
+change. This is then multiplied with the operational voltage Wefirstevaluatetheversatilityoftheframeworktoconsider
+of active mode V active, and operating frequency f. the impact of layout efficiency, additional process steps, and
+extra metal on sustainability.
+ATR 1) ImpactofAreaandExtraMetalLayer: Foundationcells
+Dynamic power=Q ×α×V ×f × (7)
+dyn active 100 like buffers, combinational gates, latches, and flipflops are
+For the sake of simplicity, we have considered only 1 kind designedwiththelowestmetallayer(Metal-1orM1)only.For
+of active states of a system. Advanced SoCs usually operate complex cells like flipflops, this results in congestion within
+at different supply levels and operational frequency according the cell, and the area of the cell increases. We implemented
+to the performance requirements of the system. In such cases, one of the simplest and most commonly used flipflop -
+ATR is split into components to represent different voltage- Transmission Gate Flipflop (TGFF) [27], which has a master-
+frequency combinations in which the system operates. slave latch configuration as shown in Fig. 1. Its layouts were
+3) Leakage Power: For the context of this framework, designed by sporadically using the next metal layer (Metal-2
+powerconsumedbythesysteminstand-bystatesisconsidered or M2) along with M1. Using M2 results in a denser layout
+as leakage power. It is estimated as in Eq. (8). incomparisontoM1-onlyimplementationasshowninFig.2.
+(cid:34) (cid:35)
+(cid:16)ATR (cid:17)
+Leakage power= I ×V × ×PFPWM
+active active 100
+(cid:34) (cid:32) (cid:33)(cid:35)
+(cid:16) (cid:17)
++ I ×V × STR+ PWM×ATR×(1−PF)
+standby standby 100 100
+(8)
+The first term in Eq. (8) represents the leakage power con-
+sumedinactivemode(I ).Designstargetedforlow-power
+active
+applications frequently implement pulse width modulation, a
+technique in which the supply level is lowered as soon as
+the desired computation is completed. Therefore, the system Fig.1. TransmissionGateFlipflop(TGFF)circuit
+
+[Image page_6_image_0.jpeg Analysis (by Gemini)]
+Here is a thorough analysis of the image you provided:
+
+**Visual Elements and Structure:**
+
+*   **Diagram Type:** The image is a circuit diagram. Specifically, it depicts the schematic of a Transmission Gate Flip-Flop (TGFF).
+*   **Components:** The diagram shows the following key components:
+    *   **Clocking Circuit:** Two inverters connected in series at the top, labeled `CLK`, `CLKB`, and `CLKI`. `CLK` is the clock input. The inverters produce the inverted clock signal `CLKB`, and then inverting `CLKB` results in `CLKI`.
+    *   **Master Latch:** A section enclosed in a dashed rectangle labeled "Master Latch". It consists of:
+        *   A transmission gate controlled by `CLKI` and `CLKB`.
+        *   Two CMOS inverters connected back-to-back to form a latch.
+    *   **Slave Latch:** A section enclosed in a dashed rectangle labeled "Slave Latch". It mirrors the structure of the master latch.
+        *   A transmission gate controlled by `CLKB` and `CLKI`.
+        *   Two CMOS inverters connected back-to-back to form a latch.
+    *   **Input/Output:** The input is labeled "D", and the output is labeled "Q".
+    *   **Power:** `Vdd` and Ground symbols are present, indicating the power supply.
+
+**Text within the Image:**
+
+*   `CLK`: Clock Input
+*   `CLKB`: Clock Bar (inverted clock signal)
+*   `CLKI`: Clock Inverted (re-inverted clock signal)
+*   `D`: Data Input
+*   `Q`: Data Output
+*   `Vdd`: Power Supply Voltage
+*   "Master Latch": Label for the first latch stage.
+*   "Slave Latch": Label for the second latch stage.
+
+**Significance:**
+
+*   The TGFF is a common type of flip-flop, which is a fundamental building block in digital circuits for storing binary data.
+*   The master-slave configuration is used to prevent race conditions and ensure correct data transfer.
+*   The transmission gates are used to control the flow of data into the latches.
+*   The CMOS inverters provide the latching functionality, holding the data value until the next clock cycle.
+*   The clocking scheme ensures that the master and slave latches are active on opposite phases of the clock.
+
+**Context and Importance:**
+
+The text on page 6, along with the surrounding pages, establishes the following context:
+
+1.  **Sustainability Framework:** The paper is about validating a sustainability framework for foundation cell designs. This framework aims to consider not only performance and power (PPA) but also environmental impact.
+
+2.  **Embodied Carbon Footprint (eCFP):** The paper is evaluating the eCFP of different flip-flop implementations, considering factors like area, extra metal usage, and additional processing steps.
+
+3.  **TGFF as an Example:** The TGFF (the circuit in the image) is used as an example to illustrate the impact of layout optimization and metal layer usage on eCFP. The paper compares TGFF implementations using only Metal-1 (M1) versus using Metal-1 and Metal-2 (M2).
+
+4.  **Metal Layer Impact:** The discussion revolves around whether using extra metal layers (like M2) in the layout reduces or increases the eCFP. A denser layout may reduce eCFP but using an additional metal layer may increase it.
+
+Therefore, the image is important because it visually represents the TGFF circuit that is being analyzed in the context of the paper's sustainability framework. The paper uses the TGFF to show how design choices in foundation cells (like the layout using different metal layers) influence the overall environmental impact, measured by eCFP. This shows the importance of considering manufacturing impacts, in addition to power usage.
+
+
+
+=== Page 7 ===
+(a) (b)
+Fig.2. (a)TGFF(M1)(b)TGFF(M1+1M2).TGFFlayoutisimplementedin Fig. 4. For CSFF, layouts with 1 or 2 M2 routing tracks have same area.
+2ways-TGFF(M1)usesonlyM1andTGFF(M1+1M2)usesonly1trackof UsingthirdM2trackresultedinadenserimplementation.eCFPincreasesin
+M2inadditiontoM1 M1+1M2toM1+2M2transitionduetoincreasedcongestionatsystemlevel.
+Arearecoveryin3M2versionreducedeCFP.
+DifferentnumbersofM2routingtrackswereusedinsidethe
+The use of 1 track of M2 in the layout results in increased
+cell while designing its layout variations. These are named
+congestionattheSoCleveland,thereforeEMI,relatedimpact
+CSFF(M1+1M2), CSFF(M1+2M2), and CSFF(M1+3M2).
+sets in. However, as shown in Fig. 3, eCFP estimated using
+Hence,inadditiontoM1,theselayoutversionsuse1,2,and3
+Eq. (1) is lower in M1+1M2 implementation than M1 only
+additional M2 tracks, respectively. Our findings are presented
+implementation. Adding only 1 track of M2 reduces flipflop
+in Fig. 4.
+area from 22.9 µm2 to 21.8 µm2, and hence, despite the
+Here,CSFF(M1+1M2)andCSFF(M1+2M2)havethesame
+impactonsystem-levelrouting,eCFPreducesfrom1.36mWh
+area. The CSFF(M1+2M2) version has a larger embodied
+to 1.3 mWh.
+footprint due to increased congestion at the SoC level. In
+Intheaboveexample,wenoticethateCFPreducedbecause contrast, CSFF(M1+3M2) could be drawn denser, and despite
+of using one track of M2. However, utilizing higher metal the higher congestion-related impact, eCFP is smaller.
+layers (M2 in this case) within a cell may not always reduce
+2) Impact of using additional processing step (mask):
+area. It only increases SoC-level congestion. The framework
+Incorporating specialized devices such as different threshold
+should then show an increase in eCFP.
+voltageflavorsofdevicesandtrenchorMetal-in-Metal(MIM)
+capacitors results in additional processing of the wafer. This
+To study this impact, we designed a Change Sensing
+includes more lithography steps and also additional use of
+Flipflop(CSFF)[27]whichisalow-powerflipfloparchitecture
+materials and thermal cycles. This increases manufacturing
+used in IoT applications.
+complexity and results in a larger eCFP.
+The following example illustrates the impact of using addi-
+tional devices in another set of flipflop variants - a radiation-
+hardened flipflop (RAV FF) [28] where a trench capacitor is
+used, and an error-tolerant flipflop (SETU FF) [29] where no
+additional device is required. Using a trench capacitor results
+in increased processing steps for RAV FF.
+We compare the design area and eCFP for SETU FF and
+RAVFFinFig.5.RAVFFisdenserthanSETUFFbecauseit
+usestrenchcapacitance.However,duetoadditionalprocessing
+steps required to manufacture a chip with RAV FF, its eCFP
+is larger than that of SETU FF.
+From [14], it is evident that different process steps have
+different energy consumption. So, depending on which extra
+process steps are added, a different impact will be observed.
+Since detailed data for the technology in which we performed
+this analysis are not available [20], in this analysis, we have
+Fig.3. Impactonareaandembodiedfootprintonusinganadditionalupper
+metalroutinglayerM2fordesigningTGFF.AstheTGFFdesignwithM1+ notdifferentiatedbetweentheCFPimpactofdifferentprocess
+M2requireslessarea,itsembodiedfootprintisless. steps, although the framework allows it.
+
+[Image page_7_image_0.png Analysis (by Gemini)]
+Here's an analysis of the image based on your instructions:
+
+**Visual Elements and Structure:**
+
+*   **Layout Diagram:** The image is a layout diagram of a circuit, presumably a Transmission Gate Flip-Flop (TGFF) based on the surrounding text. It shows the physical arrangement of different circuit elements in a 2D view.
+*   **Color Coding:** The diagram uses color coding to differentiate between layers and materials. Based on the key, we see:
+    *   Purple striped pattern: Metal 1 layer
+    *   Red brick pattern: Polysilicon (Poly)
+*   **Dimensions:** The image indicates dimensions in terms of "Tracks". The width is labeled as "22 Track" and the height as "26 Track".
+*   **Labels:**  Within the diagram, there are labels identifying specific nodes or components, though the resolution makes them difficult to decipher completely. Noticeable labels include "vdd", "gnd", and partially readable labels near transistor gates. There are also small numerical values.
+*   **Transistors:** The most visually prominent features are the transistor layouts, easily identifiable by the gate (red polysilicon) crossing the active area (within a rectangular green boundary in the Metal 1 layer). These are repeated and interconnected to implement the flip-flop's logic.
+
+**Text within the Image:**
+
+*   **"Metal 1" and "Poly":** Legend for material layers.
+*   **"22 Track":** Width of the layout.
+*   **"26 Track":** Height of the layout.
+*   **"vdd":** Power supply voltage.
+*   **"gnd":** Ground connection.
+*   Numerical values are also displayed, presumably related to dimensions.
+
+**Context and Importance:**
+
+The image shows the layout of a TGFF, a type of flip-flop circuit. Based on the text from page 7 and surrounding pages, here's the significance:
+
+*   **Embodied Carbon Footprint (eCFP) analysis:** The paper aims to develop a framework for evaluating the sustainability of foundation cell designs (like flip-flops). The layout and the materials used in its construction are key factors in determining the *embodied* carbon footprint (eCFP). A denser layout typically means less material is used and potentially a lower eCFP, however using more complex layering introduces additional process steps which contribute to a higher eCFP.
+*   **Metal Layer Impact:**  The paper explores the impact of using additional metal layers (Metal 2, or M2) in addition to Metal 1 (M1) for routing within the cell.  The layout likely represents the TGFF implemented using only M1, or potentially a hybrid M1+M2 approach.  The image, along with other figures, demonstrates how using M2 can result in a smaller, denser layout (smaller area).
+*   **Trade-offs:**  While using M2 can reduce area, the surrounding text explains there's a trade-off. It can increase congestion at the System-on-Chip (SoC) level, leading to a higher eCFP due to increased routing complexity during the chip integration phase.
+*   **Optimization:** The layout is part of an optimization process to minimize eCFP. Different layout variations (using different numbers of M2 routing tracks) are compared.
+*   **TGFF as Example:** The TGFF serves as a case study to illustrate the framework's ability to assess the impact of layout choices on sustainability.
+*   **Foundation Cell Design:** This analysis is relevant to the design of foundation cells, basic building blocks used in digital circuits. Evaluating the carbon footprint early in the design process can lead to more sustainable overall system designs.
+*   **Application Context:** The surrounding pages mention different application profiles (IoT, HPC, Automotive, Portable Electronics). The choice of layout (and the metal layer usage) can impact the power consumption and overall sustainability of the circuit, depending on its intended application and operational lifetime.
+
+In summary, the image provides a visual representation of a key element in the paper's investigation: the layout of a TGFF. Its importance lies in illustrating how physical design choices directly affect the embodied carbon footprint of a circuit and showcasing the framework's ability to analyze these effects.
+
+
+
+[Image page_7_image_1.png Analysis (by Gemini)]
+Here's a breakdown of the image based on your instructions:
+
+**Visual Elements and Structure:**
+
+The image is a layout diagram of an integrated circuit (IC) component. It is a top-down view showing the various layers of the circuit. The legend at the top indicates three distinct materials used:
+
+*   **Metal 1:** Represented by a purple/lavender hatched pattern.
+*   **Metal 2:** Represented by a cyan/turquoise hatched pattern.
+*   **Poly (Polysilicon):** Represented by a dark red hatched pattern.
+
+The layout shows an arrangement of these materials in specific patterns to create transistors and interconnect them to form a functional circuit. The layout has a rectangular shape, and arrows with text indicate the dimensions of the layout: 21 Tracks (horizontal) and 26 Tracks (vertical).
+
+**Text Within the Image:**
+
+*   **Legend:** "Metal 1," "Metal 2," "Poly."
+*   **Dimensions:** "21 Track," "26 Track."
+*   **Labels within the layout:** You can see the labels “Vdd,” “Gnd,” and “ck”.
+
+**Context and Importance:**
+
+The image is Figure 4 from the research paper. Based on the surrounding text, this figure likely shows the layout of a "Change Sensing Flipflop (CSFF)." The text mentions designing different layout variations of this flip-flop using different numbers of M2 routing tracks: CSFF(M1+1M2), CSFF(M1+2M2), and CSFF(M1+3M2).
+
+Based on the text, it is likely that this is the layout of the CSFF(M1+1M2) flip-flop, and that these different layout variations are designed to evaluate the impact of using additional metal layers (M2) on the embodied carbon footprint (eCFP).
+
+The paper discusses how using higher metal layers (like M2) can reduce the area of the cell but can also increase SoC-level congestion, potentially increasing eCFP. The goal is to find a balance that minimizes the overall carbon footprint. The text mentions that using one track of M2 reduces the flip-flop area and lowers the eCFP compared to an M1-only implementation.
+
+**Overall Importance:**
+
+The image is important because it visually represents the design choices being made to optimize the circuit for both performance (area) and sustainability (eCFP). By comparing the different CSFF layouts with varying M2 tracks, the researchers aim to determine the optimal design for minimizing environmental impact. The figure provides a visual component that grounds the more abstract discussion of carbon footprint and design trade-offs.
+
+
+
+[Image page_7_image_2.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on your instructions:
+
+**1. Visual Elements and Structure:**
+
+*   **Type:** The image is a bar graph.
+*   **Structure:** The graph has two sections, each representing a different metric: "Area" and "Embodied Footprint". For each metric, there are two bars, one for TGFF(M1) and another for TGFF(M1 + 1M2).
+*   **Axes:**
+    *   The left y-axis represents "Area" in µm².
+    *   The right y-axis represents "Embodied Footprint" in mWh.
+    *   The x-axis represents "Metric", with labels for "Area" and "Embodied Footprint".
+*   **Bars:** The bars are color-coded and patterned for differentiation:
+    *   TGFF(M1): Orange with diagonal lines
+    *   TGFF(M1 + 1M2): Yellowish-orange with dotted pattern
+    *   The Embodied Footprint has the same pattern, but with the color light-blue
+
+**2. Text within the Image:**
+
+*   **Title/Legend:**
+    *   TGFF (M1) - Top right above area
+    *   TGFF (M1 + 1M2) - Top right above are
+*   **Axis Labels:**
+    *   Area (µm²)
+    *   Embodied Footprint (mWh)
+    *   Metric
+*   **Data Point Labels:**
+    *   Area: 22.9, 21.8
+    *   Embodied Footprint: 1.36, 1.3
+
+**3. Image Context and Significance (Based on Provided Text):**
+
+*   **Overall Context:** The image (Fig. 3 in the paper) is part of a study that evaluates a "sustainability framework" for foundation cell designs in integrated circuits. Specifically, it illustrates the impact of using an additional metal routing layer (M2) in designing a Transmission Gate Flipflop (TGFF). The aim is to analyze how layout efficiency (through the use of M2) affects both the area and the embodied carbon footprint (eCFP).
+
+*   **Importance/Findings:**
+
+    *   The text indicates that using M2 in the TGFF layout (TGFF(M1+1M2)) results in a slightly smaller area compared to using only M1 (TGFF(M1)).  The graph confirms this, showing a reduction from 22.9 µm² to 21.8 µm².
+    *   The text also highlights that the use of M2 reduces the eCFP. The graph visually supports this, with the eCFP decreasing from 1.36 mWh to 1.3 mWh.
+
+*   **Broader Significance:** The image is used to validate the sustainability framework's ability to capture the trade-offs between area and eCFP when different layout techniques are used. While smaller area is generally desirable, the framework aims to account for the broader environmental impact, including the energy and materials used in manufacturing. The text explains that even though using an additional metal layer might initially seem like a positive change (due to area reduction), it can potentially increase system-level congestion, which the framework is designed to consider. The results shown in the figure suggest that, in this specific case, the benefit of reduced area outweighs the potential increase in congestion.
+
+**In summary:** The image visually represents the trade-off between area and embodied footprint for two different layouts of a TGFF, one using only metal layer 1 (M1) and the other using M1 with an additional routing track of metal layer 2 (M2). The results, depicted in the graph, show that using M2 slightly reduces both area and embodied footprint. The figure's significance lies in its contribution to validating a sustainability framework for foundation cell designs.
+
+
+
+[Image page_7_image_3.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on the provided context:
+
+**Image Description:**
+
+The image is a bar graph comparing the area and embodied footprint (eCFP) of different versions of a Change Sensing Flipflop (CSFF). The x-axis is labeled "Metric" and shows two categories: "Area" and "Embodied Footprint". The left y-axis is labeled "Area (µm²)", and the right y-axis is labeled "Embodied Footprint (mWh)".
+
+There are three versions of the CSFF being compared, differentiated by the number of metal routing tracks used in their layout:
+1.  CSFF(M1+1M2)
+2.  CSFF(M1+2M2)
+3.  CSFF(M1+3M2)
+
+Each version has a bar for "Area" (in orange) and a bar for "Embodied Footprint" (in light blue). The bars are patterned to distinguish them:
+
+*   CSFF(M1+1M2) has diagonal stripes.
+*   CSFF(M1+2M2) has circles.
+*   CSFF(M1+3M2) has stars.
+
+Data values are printed above each bar.
+
+**Text within the Image:**
+
+*   **X-axis:** "Metric", "Area", "Embodied Footprint"
+*   **Y-axes:** "Area (µm²)", "Embodied Footprint (mWh)"
+*   **Legend:** "CSFF(M1+1M2)", "CSFF(M1+2M2)", "CSFF(M1+3M2)"
+*   **Data values (Area):** 16.6, 16.6, 15.1
+*   **Data values (Embodied Footprint):** 1.01, 1.04, 0.978
+
+**Structure:**
+
+The graph is a standard bar chart, designed for easy comparison of discrete data points. The use of two y-axes allows for displaying area and embodied footprint, which have different units, on the same plot. The patterning and legend clearly identify the different versions of the flipflop.
+
+**Significance:**
+
+The graph illustrates the impact of using different numbers of metal routing tracks (specifically Metal-2 or M2) in the layout of a CSFF on its area and embodied footprint.
+
+**Context and Importance:**
+
+Based on the surrounding text from page 7, the purpose of this graph (Fig. 4) is to support the argument that simply using more metal layers in cell layout does *not* automatically reduce the embodied carbon footprint (eCFP). The authors designed and implemented different layout versions of a Change Sensing Flipflop (CSFF) using varying numbers of M2 routing tracks, in addition to Metal-1 (M1).
+
+The text states that while adding M2 tracks can sometimes *reduce* the area of the cell (and therefore potentially the eCFP), it can also increase congestion at the system-on-chip (SoC) level, leading to a *larger* eCFP.  The graph visually shows that CSFF(M1+3M2) has the smallest area (15.1 µm²), but CSFF(M1+2M2) has the largest embodied footprint (1.04 mWh), indicating that using two M2 tracks is less efficient in overall layout.
+
+The surrounding text also provides the following crucial context:
+
+*   CSFF is a low-power flipflop architecture used in IoT applications.
+*   The study aims to validate a sustainability framework for foundation cell designs.
+*   They are evaluating the impact of layout efficiency and extra metal on sustainability.
+
+**In summary, this image is important because it provides visual evidence to support the paper's argument that the relationship between layout choices (number of metal layers) and environmental impact (eCFP) is not straightforward. It shows that while using more metal layers can reduce area, it may not always lead to a lower embodied carbon footprint due to factors like increased congestion at the SoC level.**
+
+
+
+=== Page 8 ===
+In this work, we implemented and analyzed two Ap-
+proximate Adder architectures - Approximate Mirror Adder
+1 (AMA1) [30] and Low-Cost Approximate Full Adder 3
+(LCAFA3) [31]. To compare their oCFP, we ran experiments
+for all four chosen application profiles as described in Sec-
+tion IV-B - IoT, HPC, Auto, and PE - to support a designer
+in making a correct choice.
+AMA1isalow-leakagedesign.Ontheotherhand,LCAFA3
+consumes less power per computation. From Fig. 6, it can
+be observed that for use in IoT applications, the oCFP
+of AMA1 is smaller than that of LCAFA3. However, for
+other applications (HPC, PE, and Auto), the lower oCFP for
+LCAFA3makesitamoresuitablechoicefromasustainability
+perspective.
+Fig. 5. Area and eCFP of robust flipflop designs. SETU FF has a larger b) Level Shifter: Level Shifters are foundation cells that
+area. However, RAV FF uses trench capacitors and, therefore, has higher are used to interface communication between multi-voltage
+manufacturingemissions.Theframeworkconsidersthisandassessesthatthe
+operating domains in a system. In this work, two state-of-
+eCFPofRAVFFislarger.
+the-artLevelShifterarchitectures,DeepSub-thresholdEnergy
+EfficientLevelShifter(DSELS)[32]andRobustSubthreshold
+B. Operational Carbon Footprint (oCFP) metric Level Shifter with Wide Conversion Range (RSWCRLS) [33]
+are implemented, simulated, and evaluated for sustainability.
+In this section, we study the capability of the framework to
+Both architectures are optimized for IoT use. oCFP is esti-
+considerdifferentusecasesanddesignprofilestocompareand
+mated for all four application profiles as shown in Fig. 7.
+benchmark competing designs for their operational footprint.
+It is observed that for the IoT application profile, DSELS
+1) Impact of Application Profile: oCFP of designs is es-
+hasasmalleroCFP.However,RSWCRLSisapreferredchoice
+timated by using Eq. (6), which indicates dependence on
+for other application profiles. Since both architectures are
+operatingtimeratiosandtheoperationallifetimeofaproduct,
+targeted to extremely low-power IoT applications, DSELS is
+which vary depending on the target application, as shown in
+a better design. However, if the product may be used, even
+TableIV.Adesignmaybeoptimizedforlowerdynamicpower
+if sporadically, in other profiles, RSWCRLS may be a more
+orforlowerleakageorforboth.Theseoptimizationsmayhave
+sustainable choice.
+different costs in terms of area. However, in terms of oCFP,
+2) Impact of Operating Frequency (f): As defined in Eq.
+these optimizations may result in very different outcomes.
+(7), dynamic power is influenced by f and α - both of
+We compare variants of two computing blocks - Approximate
+which vary depending on the target application and result in
+Adders and Level Shifters - for the sensitivity of their oCFP
+significant differences in dynamic power consumption.
+to the application profile.
+Weoperatedtheapproximateadders-AMA1andLCAFA3
+a) Approximate Adder: Adders are fundamental compu-
+-atdifferentf,toobservetheimpactofchangesinf onoCFP.
+tational units in hardware chips across various applications.
+From Fig. 8, it is evident that for low-frequency applications
+In digital image processing, Approximate Adders are used to
+(e.g., 500 MHz), AMA1 is the preferred choice but for
+optimize PPA by strategically trading off accuracy.
+Fig. 6. Comparison of operational carbon footprint (oCFP) of approximate Fig. 7. oCFP of DSELS and RSWCRLS Level Shifters across application
+adders for different application profiles. AMA1 has smallest oCFP for IoT profiles.DSELShasthesmallestoCFPforIoTprofile,whileRSWCRLSis
+application,whileLCAFA3ismoresuitableforotherapplications. moresuitableforotherapplications.
+
+[Image page_8_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, incorporating the surrounding text and focusing on its context and significance within the research paper:
+
+**Image Description**
+
+The image (Fig. 5) is a bar graph comparing two flip-flop designs, "SETU FF" and "RAV FF", based on two metrics: "Area (µm²)" and "Embodied Footprint (mWh)".
+
+*   **Visual Elements:**
+    *   Two sets of paired bars. Each pair represents one metric (Area, Embodied Footprint) and compares SETU FF and RAV FF for that metric.
+    *   The bar for SETU FF has a diagonal hatch pattern, while the bar for RAV FF has a pattern of small circles.
+    *   Values are displayed above each bar, indicating the specific measurement for that metric and design.
+    *   There are two y-axis, one each for the area and the embodied footprint.
+    *   Each bar has a black border.
+    *   The color of SETU FF bars are orange and light blue. The color of RAV FF bars is orange and light blue
+
+*   **Text Elements:**
+    *   X-axis label: "Metric"
+    *   X-axis ticks: "Area", "Embodied Footprint"
+    *   Y-axis label (left): "Area (µm²)"
+    *   Y-axis label (right): "Embodied Footprint (mWh)"
+    *   Legend: "SETU FF", "RAV FF"
+    *   Values above bars: "84", "72.8" for Area; "6.5", "6.67" for Embodied Footprint.
+
+**Data Interpretation and Significance**
+
+*   **Area:** SETU FF has a larger area (84 µm²) than RAV FF (72.8 µm²).
+*   **Embodied Footprint:** RAV FF has a slightly larger embodied footprint (6.67 mWh) than SETU FF (6.5 mWh).
+
+**Context and Importance**
+
+The research paper aims to provide a framework for evaluating the sustainability of different hardware designs by considering both operational and embodied carbon footprints. The image illustrates how this framework can be used to compare two flip-flop designs, SETU FF and RAV FF.
+
+*   **Page Text Context:**
+    *   The text mentions that RAV FF uses trench capacitors, which leads to higher manufacturing emissions. This contributes to its larger embodied footprint.
+    *   The text states that the framework considers this and assesses that the eCFP of RAV FF is larger, as shown in Fig 5.
+
+*   **Surrounding Text Context:**
+    *   Page 6 mentions: "Using a trench capacitor results in increased processing steps for RAV FF."
+    *   Page 6: "RAVFF is denser than SETUFF because it usestrench capacitance.However,duetoadditionalprocessingsteps required to manufacture a chip with RAV FF, its eCFP is larger than that of SETU FF."
+
+**Overall Significance**
+
+The image and the surrounding text emphasize that a smaller area (as seen with RAV FF) doesn't necessarily translate to a lower environmental impact. The additional processing steps needed to create the trench capacitors in RAV FF outweigh the area benefit in terms of embodied footprint. This highlights the importance of considering the entire life cycle and manufacturing processes of a hardware component when assessing its sustainability. The framework presented in the paper aims to facilitate this comprehensive assessment.
+
+The figure provides a specific example that a designer can use to understand the trade-offs between different design choices and their impact on overall sustainability. This is crucial for making informed decisions in creating more environmentally friendly hardware.
+
+
+
+[Image page_8_image_1.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, based on the provided text and the surrounding context:
+
+**Image Description**
+
+The image (identified as Fig. 6 in the text) is a bar graph comparing the operational carbon footprint (oCFP) of two approximate adder architectures: AMA1 (Approximate Mirror Adder 1) and LCAFA3 (Low-Cost Approximate Full Adder 3).
+
+*   **Type:** Bar graph
+*   **X-axis:** Applications (IoT, HPC, PE, Auto)
+*   **Y-axis:** Footprint (mWh) - note the logarithmic scale
+*   **Bars:** Two bars for each application, representing the oCFP of AMA1 and LCAFA3. LCAFA3 is represented by diagonal lines and AMA1 is represented by dots.
+*   **Data Labels:** Numerical values are displayed above each bar, indicating the specific oCFP values in mWh.
+
+**Text within the Image:**
+
+*   **Title:** None visible, but the caption is "Comparison of operational carbon footprint (oCFP) of approximate adders for different application profiles. AMA1 has smallest oCFP for IoT application, while LCAFA3 is more suitable for other applications."
+*   **Axis Labels:** "Footprint (mWh)" on the y-axis, "Applications" on the x-axis.
+*   **Application Labels:** "IoT", "HPC", "PE", "Auto"
+*   **Legend:** "LCAFA3", "AMA1" with their respective patterns.
+*   **Data Values:** 1.35 (LCAFA3, IoT), 0.978 (AMA1, IoT), 25.6 (LCAFA3, HPC), 69.3 (AMA1, HPC), 5.48 (LCAFA3, PE), 9.34 (AMA1, PE), 3.03 (LCAFA3, Auto), 33.0 (AMA1, Auto)
+
+**Analysis and Significance**
+
+The image is crucial to understanding the core findings of this section of the research paper.  The paper is investigating a framework to evaluate the *sustainability* of different hardware designs by measuring operational carbon footprint (oCFP).
+
+*   **Context from Text:** The surrounding text explains that AMA1 is a low-leakage design, while LCAFA3 consumes less power per computation. The graph visually compares these two designs across four different application profiles: IoT, HPC (High-Performance Computing), PE (Presumably, processing element), and Auto (Automotive).
+*   **Key Observation:** The graph clearly shows that for IoT applications, AMA1 has a significantly *lower* oCFP than LCAFA3.  However, for HPC, PE, and Auto applications, LCAFA3 exhibits a lower oCFP.  This is also explicitly stated in the figure caption.
+*   **Importance and Interpretation:** This visual representation supports the authors' argument that the optimal choice of hardware design (in this case, an approximate adder) is *dependent on the intended application*. A design optimized for one use case (e.g., IoT) may not be the most sustainable choice for another (e.g., HPC).  The graph quantifies this difference, making it easy to see the magnitude of the oCFP variation across application profiles.
+*   **Logarithmic Scale Significance:** The logarithmic scale on the y-axis is important because it allows for the visualization of a wide range of oCFP values. The differences in oCFP between AMA1 and LCAFA3 in HPC are much larger, and the log scale helps make the differences in smaller numbers, like in IoT, visible.
+
+**Summary**
+
+Fig. 6 effectively illustrates that the optimal selection between the AMA1 and LCAFA3 approximate adder architectures hinges on the intended application profile. AMA1 is preferable for IoT applications due to its lower oCFP, while LCAFA3 is more suitable for HPC, PE, and automotive applications from a sustainability perspective. This highlights the importance of considering application-specific factors when evaluating the environmental impact of hardware designs.
+
+
+
+[Image page_8_image_2.png Analysis (by Gemini)]
+Here's a detailed analysis of the image and its context within the research paper:
+
+**Image Description:**
+
+The image is a bar graph comparing the "Operational Carbon Footprint (oCFP)" of two Level Shifter architectures: "Deep Sub-threshold Energy Efficient Level Shifter (DSELS)" and "Robust Subthreshold Level Shifter with Wide Conversion Range (RSWCRLS)".
+
+*   **Visual Elements:**
+    *   **Bar Graph:** The graph presents the oCFP values for each architecture across four different application profiles: IoT, HPC, PE (presumably Power Electronics), and Auto (Automotive).
+    *   **Bars:** Each bar represents the oCFP value for a specific architecture within a given application profile. DSELS bars have a hatched pattern, while RSWCRLS bars have a dotted pattern. Both are filled with a light green color.
+    *   **Axes:** The x-axis represents the application profiles. The y-axis represents the oCFP in milliWatt-hours (mWh), using a logarithmic scale.
+    *   **Data Labels:** The oCFP values are clearly labeled numerically above each bar.
+
+*   **Text within the Image:**
+    *   **Legend:** "DSELS" and "RSWCRLS" with their respective bar patterns.
+    *   **X-axis Labels:** "IoT", "HPC", "PE", "Auto"
+    *   **Y-axis Label:** "Footprint (mWh)"
+    *   **Data values:** 0.04, 0.08, 104.18, 63.72, 1.57, 1.08, 5.20, 3.20
+
+**Significance and Context:**
+
+According to the surrounding text, the paper is evaluating the sustainability of different hardware designs by measuring their "operational carbon footprint (oCFP)." The goal is to provide designers with a framework for making informed choices about which designs are more environmentally friendly across different use cases. The image is Figure 7.
+
+*   **Level Shifters:** Level Shifters are vital components used to interface communication between multi-voltage operating domains.
+*   **DSELS vs. RSWCRLS:** The paper has implemented and simulated two state-of-the-art level shifter architectures – DSELS and RSWCRLS – both optimized for IoT applications.
+*   **Application Profiles:** The oCFP is calculated for four distinct application profiles to demonstrate how usage patterns affect sustainability. The profiles consider variations in operating time ratios and product lifespan, factors directly influencing oCFP (as indicated by Equation 6, mentioned on page 8).
+*   **Findings (Based on the Image and Text):**
+    *   For IoT applications, DSELS has a significantly lower oCFP (0.04 mWh) than RSWCRLS (0.08 mWh).
+    *   However, for HPC, PE, and Auto applications, RSWCRLS has a lower oCFP than DSELS. The oCFP is much higher for HPC than PE and Auto for both the designs. The difference between DSELS and RSWCRLS is significant for HPC compared to PE and Auto.
+    *   The surrounding text emphasizes that while DSELS is better for IoT due to its low power consumption, RSWCRLS might be a more sustainable choice if the product is also used in other applications, even sporadically. The image data supports this conclusion.
+
+**Importance:**
+
+The image is important because it visually demonstrates the paper's key finding: the optimal hardware design for sustainability depends heavily on the intended application profile. While a design might be best for a specific use case (e.g., DSELS in IoT), it may not be the best choice for broader applications. This underscores the importance of considering the entire lifecycle and operating conditions when designing for sustainability. This reinforces the claim in the paper that the proposed framework can compare different designs for their operational footprint in different usecases and design profiles.
+
+
+
+=== Page 9 ===
+Fig.8. oCFPofApproximateAdders-LCAFA3andAMA1at500Mhzand
+3000Mhztoobservetheimpactoffrequencyofoperation.
+high-frequency applications (e.g., 3000 MHz), LCAFA3 is a
+Fig.10. ConsolidatedtotalCFPfor3pairsoffoundationalcells-TGFF(M1)
+more sustainable choice. Thus, the optimal selection of an &TGFF(M1+1M2),DSELS&RSWCRLS,andCSFF&C2SFF
+Approximate Adder also depends on its targeted f.
+3) Impact of Leakage Power: As defined in Eq. (8), the
+leakage power depends on leakage in both active and standby C. Total carbon footprint metric
+modes. A design with a higher leakage can have a larger
+oCFP even if its active dynamic power is lower. In low-power Until now, we have looked at the effectiveness of the
+applications,whereαandf areless,leakagepowerdominates proposed framework to account for different parameters for
+oCFP of the design. a wide range of designs. We implemented a wide range of
+We compared oCFP of Change Sensing Flipflop (CSFF) foundation cells to illustrate the strength of the proposed
+[27] of Section V-A and Contention free Change Sensing frameworkforevaluatingfoundationcelllibrariesandmaking
+Flipflop(C2SFF)[34].AsshowninFig.9,theywereanalyzed sustainability-aware decisions. In this part, we consolidate the
+with two combinations of alpha and frequencies: (a) 10% and eCFP and oCFP assessments to build and analyze the total
+100Mhz and (b) 50% and 400Mhz. carbon footprint. Here, we present the overall footprint for 3
+Itwasobservedthatwhenswitchingactivity(α)andoperat- pairs of designs.
+ingfrequency(f)arelow,CSFFhaslowerleakagepowerthan In Fig. 10, the first cluster represents the simple TGFF in
+C2SFF. So, for an application like IoT, CSFF may be a more bothM1andM1+M2layoutimplementations.Itisinteresting
+sustainable choice. However, in scenarios where switching tonotethatthetotalfootprintofTGFF(M1)issmallerthanthat
+activity (α) and operating frequency (f) are high, dynamic ofTGFF(M1+1M2).Whenwehadstudiedthispairofcellsin
+power becomes the dominant factor influencing sustainability. SectionV-A,wehadfavoredTGFF(M1+M2)becauseoflower
+Since C2SFF architecture has lower dynamic power, it is a eCFP (Fig. 3). However, when oCFP was evaluated for the
+more sustainable design option. IoT profile, and the results combined with eCFP, TGFF(M1)
+emerged as a more sustainable option. This demonstrates the
+value of the proposed framework in combining two standard
+FoMs - area and power - in a meaningful way.
+ThesecondclusterinFig.10representsthetotalfootprintof
+the level shifters - DSELS and RSWCRLS - for which oCFP
+trends were presented in Fig. 7. We discussed that for the
+target application - IoT - DSELS is clearly the better option.
+However,whenweconsolidateoCFPwiththeeCFPofthetwo
+designsinFig.10,itemergesthatdespitealmostdoubleoCFP,
+RSWCRLS is the more sustainable option. This reemphasizes
+that looking only at the standard FoMs of PPA can lead to
+less sustainable choices.
+In the third cluster, the eCFP of both designs is the
+same. However, when the oCFP of the two designs (for 10%
+switchingactivityand100MHzfrequencyusage)isalsotaken
+Fig.9. oCFPofCSFFandC2SFFFlipflopsfordifferentswitchingactivity,
+αandfrequency,f.Forlowactivitysettings,CSFFisapreferredchoice,but into account (as shown in Fig. 9), CSFF emerges as a more
+asswitchingactivityandfrequencyincrease,C2SFFarchitectureisbetter. sustainable choice.
+
+[Image page_9_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on the provided text and the image itself:
+
+**Visual Elements and Structure**
+
+The image is a bar graph comparing the operational carbon footprint (oCFP) of two flip-flop designs: CSFF (Change Sensing Flip-Flop) and C2SFF (Contention-free Change Sensing Flip-Flop).
+
+*   **Type:** Bar graph
+*   **Axes:**
+    *   X-axis: "Activity Factor (%) | Frequency (MHz)". Two data points are shown: "10 | 100" (representing 10% activity factor and 100 MHz frequency) and "50 | 400" (representing 50% activity factor and 400 MHz frequency).
+    *   Y-axis: "Footprint (mWh)", ranging from 0.0 to 2.5 mWh.
+*   **Bars:** Each data point on the x-axis has two bars, one for CSFF and one for C2SFF, representing their oCFP values. The CSFF bars are distinguished by diagonal hatching, and the C2SFF bars are distinguished by a dot pattern inside.
+*   **Values:** Numerical values are displayed above each bar, indicating the precise oCFP for each design under each condition.
+*   **Legend:** The graph includes a legend at the top right to differentiate between the CSFF and C2SFF bar representations.
+
+**Text within the Image**
+
+*   **Axis Labels:**
+    *   X-axis: "Activity Factor (%) | Frequency (MHz)"
+    *   Y-axis: "Footprint (mWh)"
+*   **Data Point Labels:**
+    *   "10 | 100"
+    *   "50 | 400"
+*   **Bar Values:**
+    *   CSFF (10% | 100MHz): 0.14
+    *   C2SFF (10% | 100MHz): 0.527
+    *   CSFF (50% | 400MHz): 2.41
+    *   C2SFF (50% | 400MHz): 2.17
+*   **Legend Labels:**
+    *   CSFF
+    *   C2SFF
+
+**Context and Importance**
+
+*   **Overall Context:** The image is part of a research paper focused on developing a sustainability framework for evaluating foundation cell libraries in VLSI design. The goal is to incorporate environmental impact assessments (specifically, carbon footprint) into the design process, enabling more sustainable design choices.
+*   **Specific Context (Page 9):**  The image (Fig. 9) specifically visualizes the operational carbon footprint (oCFP) comparison between CSFF and C2SFF flip-flops under different switching activity (α) and frequency (f) conditions.
+*   **Importance:**
+    *   **Illustrates Impact of α and f:** The graph clearly demonstrates that the oCFP of both flip-flops is heavily influenced by the switching activity and frequency.
+    *   **Design Choice Dependence:** The image and accompanying text emphasize that the *optimal choice of flip-flop design is application-dependent*. Specifically, at low activity and frequency (10% & 100MHz), CSFF has a significantly lower oCFP (0.14 mWh) than C2SFF (0.527 mWh), making it a more sustainable choice for low-power applications like IoT. However, as activity and frequency increase (50% & 400MHz), the difference narrows, with C2SFF showing a slightly lower oCFP than CSFF. In scenarios where switching activity and operating frequency are high, dynamic power becomes the dominant factor influencing sustainability. The C2SFF architecture has lower dynamic power, making it a more sustainable design option.
+    *   **Validates the Framework:** The figure and associated discussion demonstrate the framework's ability to capture the trade-offs between different design parameters (like power, frequency, and switching activity) and their impact on environmental sustainability. The framework can provide insights not easily gleaned from traditional power/performance/area (PPA) metrics alone.
+*   **Relationship to Surrounding Text:** The text surrounding the image provides the explanation and context for the results. It discusses the impact of operating frequency on the oCFP of the approximate adders AMA1 and LCAFA3. At low frequencies, AMA1 has better oCFP, while at high frequencies, LCAFA3 is more suitable. The subsequent paragraph discusses the impact of leakage power on oCFP.
+*   **Relevance to Total Carbon Footprint:** Fig. 9 is later used in the discussion of *total* carbon footprint (consolidating both embodied and operational carbon footprints), demonstrating how the oCFP analysis (as visualized in this image) affects the overall sustainability assessment. As mentioned in the text from page 9, "...when the oCFP of the two designs (for 10% switching activity and 100MHz frequency usage) is also taken into account (as shown in Fig. 9), CSFF emerges as a more sustainable choice."
+
+
+
+[Image page_9_image_1.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on the provided text and the image itself:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a bar graph (or technically a stacked bar graph) used to compare the "Total Footprint (mWh)" of different design implementations.
+
+*   **X-axis:** Labeled as "Designs," the x-axis displays categorical labels representing different foundational cell designs. These include:
+    *   TGFF(M1)
+    *   TGFF(M1+1M2)
+    *   DSELS
+    *   RSWCRLS
+    *   CSFF
+    *   C2SFF
+
+*   **Y-axis:** Labeled as "Total Footprint (mWh)", the y-axis represents the total carbon footprint measured in milliWatt-hours. It ranges from 0 to 2.5 mWh.
+
+*   **Bars:** Each design has a bar that is divided into two stacked sections:
+    *   **Bottom Section:** Light blue with diagonal hatching, representing the "Embodied" carbon footprint (eCFP).
+    *   **Top Section:** Light green with a dotted pattern, representing the "Operational" carbon footprint (oCFP).
+
+*   **Data Labels:** Each bar has a numeric label at the top representing the *total* carbon footprint for that design (the sum of embodied and operational).
+
+*   **Legend:** In the top right corner of the graph, the legend specifies that the light blue, hatched section represents "Embodied" carbon footprint, and the green, dotted section represents "Operational" carbon footprint.
+
+**Text within the Image:**
+
+*   **Axis Labels:** "Designs" (x-axis) and "Total Footprint (mWh)" (y-axis).
+*   **Design Labels:** TGFF(M1), TGFF(M1+1M2), DSELS, RSWCRLS, CSFF, C2SFF.
+*   **Legend Labels:** "Embodied" and "Operational".
+*   **Data Labels:** 1.97, 2.13, 0.88, 0.81, 1.11, 1.49 (representing the total footprint values for each design).
+
+**Significance and Context:**
+
+Based on the surrounding text, the image (Fig. 10) is crucial for illustrating the overall carbon footprint assessment of different foundational cell designs. Here's a breakdown of its importance:
+
+1.  **Consolidated Footprint:** The figure consolidates the embodied carbon footprint (eCFP) and operational carbon footprint (oCFP) to provide a *total* carbon footprint metric for the evaluated designs.  Previous figures and sections of the paper examined eCFP and oCFP separately. This figure combines these factors.
+
+2.  **Design Comparison:** It allows for a direct comparison of the sustainability of different design options, considering both the manufacturing and operational phases.
+
+3.  **Counterintuitive Findings:** The text emphasizes that analyzing only one type of carbon footprint (either eCFP or oCFP) or using traditional Power, Performance, and Area (PPA) metrics can lead to *less* sustainable choices. The figure supports this by showing cases where a design with a lower eCFP might have a higher total footprint when the oCFP is considered, or vice-versa. For example:
+
+    *   TGFF(M1) has a lower total footprint than TGFF(M1+1M2), even though TGFF(M1+1M2) was initially favored due to lower *eCFP* (as seen in Fig. 3).
+    *   RSWCRLS has a lower total footprint than DSELS, even though DSELS has a lower *oCFP* (as seen in Fig. 7).
+
+4.  **Demonstration of Framework Value:**  The figure demonstrates the value of the authors' proposed framework in combining eCFP and oCFP for more informed, sustainability-aware design decisions. It shows that a holistic approach is necessary.
+
+5.  **Impact of Design Choices:** The comparison between CSFF and C2SFF reinforces the importance of considering the application profile (switching activity and operating frequency). This ties back to Fig. 9, where the oCFP of these designs was analyzed under different conditions.
+
+**Overall Importance:**
+
+Fig. 10 is a key result in the paper. It visually and quantitatively demonstrates the need for a comprehensive sustainability assessment framework that considers *both* embodied and operational carbon footprints. It reveals that focusing solely on traditional performance metrics or individual carbon footprint components can be misleading when making design choices for sustainable VLSI circuits. The findings encourage designers to use the proposed framework to make more informed and environmentally responsible decisions.
+
+
+
+[Image page_9_image_2.png Analysis (by Gemini)]
+Here is a detailed analysis of the provided image and its context:
+
+**Visual Elements and Structure:**
+
+*   **Type:** Bar graph
+*   **X-axis:** Frequency (MHz), with two data points: 500 MHz and 3000 MHz.
+*   **Y-axis:** Footprint (mWh) - Represents the operational carbon footprint (oCFP).  The scale ranges from 0.0 to 2.5 mWh.
+*   **Bars:** There are two bars for each frequency, representing two different Approximate Adder architectures:
+    *   LCAFA3 (Low-Cost Approximate Full Adder 3): Indicated by diagonal lines inside bar
+    *   AMA1 (Approximate Mirror Adder 1): Indicated by dots inside bar
+*   **Data Labels:** Each bar has a numerical label indicating its height (the oCFP value in mWh).
+
+**Text within the Image:**
+
+*   "Footprint (mWh)" - Y-axis label.
+*   "Frequency (MHz)" - X-axis label.
+*   "LCAFA3" - Legend, represents the Low-Cost Approximate Full Adder 3,
+*   "AMA1" - Legend, represents the Approximate Mirror Adder 1.
+*   "500" - X-axis tick label.
+*   "3000" - X-axis tick label.
+*   "1.35" - Data label for LCAFA3 at 500MHz.
+*   "0.978" - Data label for AMA1 at 500MHz.
+*   "1.4" - Data label for LCAFA3 at 3000MHz.
+*   "2.52" - Data label for AMA1 at 3000MHz.
+
+**Significance of Visual Elements and Data:**
+
+*   The graph illustrates the oCFP of two different approximate adder architectures (LCAFA3 and AMA1) at two different operating frequencies (500 MHz and 3000 MHz).
+*   At 500 MHz, AMA1 has a smaller oCFP (0.978 mWh) than LCAFA3 (1.35 mWh).
+*   At 3000 MHz, LCAFA3 has a smaller oCFP (1.4 mWh) than AMA1 (2.52 mWh).
+*   The graph visually demonstrates that the optimal choice between AMA1 and LCAFA3 depends on the operating frequency.
+
+**Overall Context and Importance:**
+
+The image (Fig. 8) comes from a research paper focused on developing a framework for evaluating the sustainability of VLSI (Very-Large-Scale Integration) designs, specifically at the foundation cell level. The paper aims to move beyond traditional Power, Performance, and Area (PPA) metrics to include environmental impact in design decisions.
+
+The context provided explains that the researchers implemented and analyzed the LCAFA3 and AMA1 approximate adder architectures to compare their oCFP. The surrounding text emphasizes that:
+
+*   AMA1 has lower leakage, while LCAFA3 consumes less power per computation.
+*   At low frequencies, AMA1 is more sustainable.
+*   At high frequencies, LCAFA3 is more sustainable.
+
+The graph directly supports these claims by visually showing the differences in oCFP between the two architectures at different frequencies.  The data shows that while AMA1 is better at 500 MHz, LCAFA3 becomes significantly more efficient from a sustainability perspective at 3000 MHz.
+
+**Importance:**
+
+The image is important because it provides concrete evidence for the paper's argument that operating frequency significantly impacts the sustainability of different designs. This reinforces the need for a comprehensive sustainability framework that considers factors beyond just power consumption and area. The visual representation allows for easy comparison and understanding of the trade-offs involved in choosing between different approximate adder architectures for different applications. It highlights that a design choice that is optimal for one frequency may not be optimal for another, underscoring the importance of considering the intended use case.
+
+
+=== Page 10 ===
+CONCLUSION [11] “Meta2024SustainabilityReport,”Meta,2024edition,2024.Available:
+https://sustainability.atmeta.com/wp-content/uploads/2024/08/Meta-
+Traditionally, a semiconductor IC has been analyzed based
+2024-Sustainability-Report.pdf
+onthePower,Performance,andArea(PPA)Metrics.However, [12] “2023-24 Intel Corporate Responsibility Report,” Intel, 2024 edition,
+with the exponential increase in the number of ICT devices, 2024. Available: https://csrreportbuilder.intel.com/pdfbuilder/pdfs/CSR-
+2023-24-Full-Report.pdf
+there has been a steep increase in manufacturing and operat-
+[13] C.-F.Chien,J.-T.Peng,andH.-C.Yu,“Buildingenergysavingperfor-
+ing energy demand. Consequently, in the past two decades, manceindicesforcleanersemiconductormanufacturingandanempir-
+many novel contributions have been proposed to analyze the icalstudy,”Computers&IndustrialEngineering,vol.99,pp.448–457,
+Sep.2016,doi:https://doi.org/10.1016/j.cie.2015.11.004.
+sustainabilityofelectronicdevices.However,allofthemhave
+[14] I. . -Y. Liu, L. V. Winckel, L. Boakes, M. G. Bardon, C. Rolin
+either been focused on manufacturing-level improvements or and L. . -A˚. Ragnarsson, ”Modeling the Energy Consumption of
+have been limited to higher abstraction of an IC. They have Integrated Circuit Fab Infrastructure,” in IEEE Transactions on Semi-
+conductorManufacturing,vol.37,no.4,pp.422-427,Nov.2024,doi:
+not enabled designers of foundation libraries to contribute
+10.1109/TSM.2024.3408926.
+to the drive towards sustainability. In this work, we have [15] M.Czerniak,D.HackerandH.Schneider,”Reducingtheenvironmental
+proposed a sustainability framework that equips a designer impact of semiconductor manufacture,” 2016 China Semiconductor
+TechnologyInternationalConference(CSTIC),Shanghai,China,2016,
+with methods to analyze sustainability in the early stages of
+pp.1-3,doi:10.1109/CSTIC.2016.7464026.
+design implementation. [16] U.Guptaetal.,“ChasingCarbon:TheElusiveEnvironmentalFootprint
+The proposed framework is validated across many imple- of Computing,” IEEE Micro, vol. 42, no. 4, pp. 1–1, 2022, doi:
+https://doi.org/10.1109/MM.2022.3163226.
+mentations and architectures of sequential and combinatorial
+[17] ”Report of the world commission on environ-
+logic cells, such as Flipflops, Approximate Adders, and Level ment and development: Our common future,” 1987,
+Shifters. Here, the wide-scale applicability of this framework https://sustainabledevelopment.un.org/content/documents/5987our-
+common-future.pdf,(accessedMarch1,2025).
+was demonstrated across various application profiles. We also
+[18] A. Meddendorf et al., “EE-Toolbox-a modular assessment system
+show that the proposed framework offers new insights to for the environmental optimization of electronics,” Jan. 2000, doi:
+designers which the standard FoMs did not offer. Thus, the https://doi.org/10.1109/isee.2000.857643.
+[19] A. Middendorf, N. F. Nissen, L. Stobbe, O. Wittler and K. -D. Lang,
+framework equips them to make sustainability-aware deci-
+”Eco-reliabilityasanewapproachofmulti-criteriaoptimisation,”2012
+sions. ElectronicsGoesGreen2012+,Berlin,Germany,2012,pp.1-6.
+The framework can be easily extended and customized [20] D. Kline et al., ”Sustainable IC design and fabrication,” 2017 Eighth
+International Green and Sustainable Computing Conference (IGSC),
+according to the needs of the designer’s organization and
+Orlando,FL,USA,2017,pp.1-8,doi:10.1109/IGCC.2017.8323572.
+enable them in the journey of the VLSI industry towards net [21] M. S. Lundstrom, M. A. Alam,“Moore’s law: The journey ahead,”
+zero emissions. Science378,722-723,2022,DOI:10.1126/science.ade2191.
+[22] S.K.Moore,”KeepingMoore’slawgoingisgettingcomplicated,”IEEE
+REFERENCES Spectrum,May2023.
+[23] C. C. Sudarshan, N. Matkar, S. Vrudhula, S. S. Sapatnekar and
+[1] S.Hsieh,P.-Y.Lin,I-Hui.Lin,D.E.Beck,andC.-H.Lin,“Assessing V. A. Chhabria, ”ECO-CHIP: Estimation of Carbon Footprint of
+thecontributionofsemiconductorstothesustainabledevelopmentgoals Chiplet-based Architectures for Sustainable VLSI,” 2024 IEEE In-
+(SDGs) from 2017 to 2022,” Heliyon, vol. 9, no. 11, p. e21306, Nov. ternational Symposium on High-Performance Computer Architec-
+2023,doi:https://doi.org/10.1016/j.heliyon.2023.e21306. ture (HPCA), Edinburgh, United Kingdom, 2024, pp. 671-685, doi:
+[2] A.Hopfetal.,”EnergyEfficientSemiconductorManufacturing:Estab- 10.1109/HPCA57654.2024.00058.
+lishinganEcologicalOperatingCurve”,Proceedingsofthe2022Winter [24] C. Sandionigi, ”Eco-reliability: A new metric for the eco-design of
+SimulationConference,doi:10.1109/WSC57314.2022.10015333. electronic systems,” 2024 IEEE Conference on Technologies for Sus-
+[3] J. C. Hess, “Chip production’s ecological footprint: Mapping climate tainability (SusTech), Portland, OR, USA, 2024, pp. 230-236, doi:
+and environmental impact,” Interface, 2024 edition, 2024. Available: 10.1109/SusTech60925.2024.10553607.
+https://www.interface-eu.org/publications/chip-productions-ecological- [25] B. T. Murphy, ”Cost-size optima of monolithic integrated circuits,”,
+footprint(accessedFebruary25,2025). IEEE,vol.52,pp.1537-1545,1964,doi:10.1109/PROC.1964.3442.
+[4] ”Chipmaking’s next big thing guzzles as much power as entire [26] P. P. Ray, “Benchmarking, ethical alignment, and evaluation frame-
+countries,” https://www.tbsnews.net/bloomberg-special/chipmakings- work for conversational AI: Advancing responsible development
+next-big-thing-guzzles-much-power-entire-countries-484338, (accessed of ChatGPT,” BenchCouncil Transactions on Benchmarks, Stan-
+March1,2025). dards and Evaluations, vol. 3, no. 3, p. 100136, Sep. 2023, doi:
+[5] ”TSMCCouldAccountForNearly24%OfTaiwan’sElectricityUseBy https://doi.org/10.1016/j.tbench.2023.100136.
+2030 Points Out S&P,” https://wccftech.com/tsmcs-growing-electricity- [27] V. L. Le, J. Li, A. Chang and T. T. -H. Kim, ”A 0.4-V, 0.138-
+demand-could-stress-credit-in-2030-warns-sp/(accessedMarch1,2025) fJ/Cycle Single-Phase-Clocking Redundant-Transition-Free 24T Flip-
+[6] ”Year End Review 2024”, https://pib.gov.in/PressReleasePage.aspx? FlopWithChange-SensingSchemein40-nmCMOS,”inIEEEJournal
+PRID=2089243(accessedMarch1,2025) ofSolid-StateCircuits,vol.53,no.10,pp.2806-2817,Oct.2018,doi:
+[7] “ST Sustainability report 2024, 2023 performance” 10.1109/JSSC.2018.2863946.
+STMicroelectronics, 2024 edition, 2024. Available: [28] R. E. . -H. Yee, N. Y. . -J. Su, L. P. . -T. Wang, C. H. . -P.
+https://www.st.com/content/dam/aboutus/sustainability/pdf/st- WenandH.Chiueh,”Temperature-InsensitiveSoft-Error-TolerantFlip-
+sustainability-report-2024-en.pdf Flop Design For Automotive Electronics,” 2024 IEEE 42nd VLSI
+[8] “2024 Environmental Progress Report,” Test Symposium (VTS), Tempe, AZ, USA, 2024, pp. 1-7, doi:
+Apple, 2024 edition, 2024. Available: 10.1109/VTS60656.2024.10538664.
+https://www.apple.com/in/environment/pdf/Apple Environmental [29] J.Li,L.Xiao,L.Li,H.Li,H.LiuandC.Wang,”ALow-CostError-
+Progress Report 2024.pdf TolerantFlip-FlopAgainstSETandSEUforDependableDesigns,”in
+[9] “Google 2024 Environmental Report - Google Sus- IEEETransactionsonCircuitsandSystemsI:RegularPapers,vol.69,
+tainability,” Google, 2024 edition, 2024. Available: no.7,pp.2721-2729,July2022,doi:10.1109/TCSI.2022.3168082.
+https://www.gstatic.com/gumdrop/sustainability/google-2024- [30] A. Yan et al., ”Design of Low-Cost Approximate CMOS Full
+environmental-report.pdf Adders,” 2023 IEEE International Symposium on Circuits and Sys-
+[10] “TSMC2023SustainabilityReport,”TSMC,2023edition,2023.Avail- tems (ISCAS), Monterey, CA, USA, 2023, pp. 1-5, doi: 10.1109/IS-
+able:https://esg.tsmc.com/en-US/file/public/e-all 2023.pdf CAS46773.2023.10181531.
+
+=== Page 11 ===
+[31] M. Acharya, S. Basu, Biranchi Narayan Behera, and A. Chakrabarti,
+“ApproximateComputingBasedAdderDesignforDWTApplication,”
+Communicationsincomputerandinformationscience,pp.150–163,Jan.
+2019,doi:https://doi.org/10.1007/978-981-32-9767-8 13.
+[32] R.Balaji,R.K.Siddharth,S.Naik,Y.B.N.Kumar,M.H.Vasanthaand
+E. Bonizzoni, ”A 11-ns, 3.85-fJ, Deep Sub-threshold, Energy Efficient
+Level Shifter in 65-nm CMOS,” 2023 IEEE International Symposium
+onCircuitsandSystems(ISCAS),Monterey,CA,USA,2023,pp.1-5,
+doi:10.1109/ISCAS46773.2023.10181677.
+[33] W. Zhao, A. B. Alvarez and Y. Ha, ”A 65-nm 25.1-ns 30.7-fJ Robust
+Subthreshold Level Shifter With Wide Conversion Range,” in IEEE
+Transactions on Circuits and Systems II: Express Briefs, vol. 62, no.
+7,pp.671-675,July2015,doi:10.1109/TCSII.2015.2406354.
+[34] K. Kang and W. Jung, ”A Redundant-Transition-Free and Contention-
+FreeChange-SensingFlip-Flop,”inIEEETransactionsonCircuitsand
+Systems II: Express Briefs, vol. 71, no. 5, pp. 2559-2563, May 2024,
+doi:10.1109/TCSII.2024.3377714.
+

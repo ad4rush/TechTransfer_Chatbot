@@ -1,0 +1,1371 @@
+=== Page 1 ===
+Machine Learning in Analog Circuit
+Submitted by
+Bhavya Fulara (MT23164)
+Srasti Tiwari (MT23197)
+Under the supervision of
+Dr. Anuj Grover
+Indraprastha Institute of Information Technology, Delhi
+December 2024
+Submitted
+in partial fulfillment of the requirements for the degree of Master of Technology to
+Indraprastha Institute of Information Technology, Delhi
+December 2024
+©2024IndraprasthaInstituteofInformationTechnologyNewDelhi,Allrightsreserved
+
+[Image page_1_image_0.jpeg Analysis (by Gemini)]
+Here's an analysis of the image based on your instructions:
+
+**Visual Elements and Structure:**
+
+The image is a logo. It consists of five distinct visual elements:
+
+1.  **Vertical Bars (Left):** Four rectangular bars of varying shades of gray. The bars are arranged side-by-side, suggesting a progression or a series of distinct components. The first bar appears to be lightest in color, progressively darkening towards the third, with the fourth having similar tone to the third.
+2.  **Geometric Shape (Center):** A shape resembling an "I" and "I" stacked together in a dark gray color.
+3.  **Curved Shape (Right):** A blue-green quarter of a ring that intersects the center shape.
+
+**Text within the Image:**
+
+There is no legible text within the image itself. The image appears to be a stylized logo and any text is rendered as part of the logo design.
+
+**Context and Importance:**
+
+Based on the provided text from the research paper pages, the image likely represents the logo of the "Indraprastha Institute of Information Technology, Delhi" (IIIT-Delhi).
+
+*   **Page Context:** The image appears on the title page of a Master of Technology capstone project titled "Machine Learning in Analog Circuit."
+*   **Surrounding Pages:** The immediately surrounding pages (before and after) confirm the document is a submission to IIIT-Delhi. The certificate also explicitly mentions IIIT-Delhi.
+
+**Overall Importance:**
+
+The logo's significance stems from its association with IIIT-Delhi. In the context of this research paper, the logo serves to:
+
+*   **Identify the Affiliation:** Clearly show that the research work was conducted at and submitted to IIIT-Delhi.
+*   **Add Credibility:** Associate the research with a recognized institution, thereby lending it some initial credibility.
+*   **Establish Ownership:** Reinforce the institution's ownership of the work by including the copyright notice.
+
+In conclusion, the image is the IIIT-Delhi logo, functioning as a visual identifier and establishing the institutional context of the submitted research paper.
+
+
+=== Page 2 ===
+Certificate
+This is to certify that the capstone titled “Machine Learning in Analog Circuit”
+submitted by Bhavya Fulara & Srasti Tiwari for the partial fulfillment of the
+requirements for the degree of Master of Technology in Electronics And
+Communication is a record of the bonafide work carried out by them under my
+guidance and supervision in the VLSI Circuits & System Lab group at Indraprastha
+Institute of Information Technology, Delhi. This work has not been submitted
+anywhere else for the reward of any other degree.
+Dr. Anuj Grover
+Department Electronics And Communication Engineering
+Indraprastha Institute of Information Technology Delhi
+New Delhi 110 020
+1
+
+=== Page 3 ===
+Acknowledgment
+We extend our heartfelt gratitude to the Department of Electronics and Communication
+Engineering at the Indraprastha Institute of Information Technology, Delhi, for offering
+such a comprehensive and enriching curriculum in the Master’s program.
+We are especially thankful to Professor Dr. Anuj Grover, Associate Professor at the
+Indraprastha Institute of Information Technology, Delhi, for his invaluable support,
+expert guidance, insightful advice, and continuous encouragement throughout the
+course of this project.
+We also express our sincere appreciation to Ph.D. Scholar Mr. Ashutosh Singh for his
+unwavering guidance, and to our friends and group mates for their assistance and
+cooperation, both directly and indirectly, during the completion of this project. We are
+committed to utilizing the skills and knowledge gained from this experience in the most
+effective and impactful manner possible.
+2
+
+=== Page 4 ===
+List of Contents
+Title Page No.
+Abstract
+List of Figures
+1. Introduction…............................................................................. 6
+1.1 Introduction....................................................................................6
+1.2 Problem Statement......................................................................... 7
+2. Literature Review…................................................................... 8
+3. Design Analysis & Proposed Work……………………………16
+3.1 Implementation of Deep Learning in Analog Circuit Sizing........16
+3.1.1 Data Preparation................................................................16
+3.1.2 Model Design.....................................................................18
+3.2 Implementation of AutoCkt framework…………………………..21
+3.2.1 Proposed Framework.......................................................21
+3.2.2 Simulation Environment………………………………..24
+3.2.3 System-Level Integration……………………………….25
+3.2.4 Validation……………………………………………….25
+3.3 Implementation Of LUT using gm/Id method…………………...26
+3.3.1 Key Steps in LUT Implementation……………………..26
+3.3.2 Application in gm/ID Methodology…………………….27
+3.3.3 Advantages of LUT-Based Implementation…………….28
+4. Results & Analysis…................................................................. 29
+5. Conclusion And Future Enhancement…................................. 35
+References…................................................................................37
+3
+
+=== Page 5 ===
+Abstract
+Analog circuit design is a critical yet complex task, traditionally requiring
+significant manual effort and expert knowledge to balance performance metrics
+like gain, power consumption, and bandwidth. This report explores advancements
+in machine learning and deep learning techniques that automate and optimize
+analog circuit sizing, making the process more efficient and accessible.
+Approaches such as deep reinforcement learning, neural network surrogate
+models, and transfer learning demonstrate remarkable improvements in speed,
+accuracy, and adaptability. These methodologies reduce simulation costs, enhance
+design portability across technology nodes, and streamline the development of
+high-performance circuits. The work underscores the potential of machine learning
+to revolutionize the analog design process, paving the way for scalable and
+efficient electronic design automation.
+4
+
+=== Page 6 ===
+List of Figures
+Figure 2.1 RL Framework for analog IC sizing 8
+Figure 2.2 Optimization flow enhanced with differentiable surrogate models and
+NN-assisted design space transformation[2] 9
+Figure 2.3 Top level overview for AutoCkt 10
+Figure 2.4 Feedforward ANN with one hidden layer 11
+Figure 2.5 Design process of experiment 12
+Figure 3.1.1 Two-stage Opamp 17
+Figure 3.1.2 The RNN Model Structure 18
+Figure 3.1.3 Loss of RNN(loss v/s record_id) 20
+Figure 3.2.1 AutoCkt Framework 21
+Figure 3.2.1 Training and deployment process 22
+Figure 4.1.1 Scatter plot showing the predicted DC gain and GBW using DNN and
+RNN models 29
+Figure 4.1.2 Scatter plot showing the predicted Phase Margin and PSRR using DNN
+and RNN model 30
+Figure 4.1.3 Scatter plot of Size and CMRR with DNN and RNN model predicted 30
+Figure 4.1.4 Relative error with model 31
+Figure 4.2.1 Mean reward over number of environment steps 33
+Figure 4.2.2 Distribution of learned, reached, and not reached target design
+specifications 34
+5
+
+=== Page 7 ===
+CHAPTER-1
+INTRODUCTION
+1.1 Introduction
+Analog circuits form the backbone of many critical systems, bridging the gap
+between real-world signals and digital processing units. These circuits are widely
+used in communication systems, biomedical devices, and signal-processing
+applications. Despite their importance, the design and optimization of analog
+circuits remain a significant bottleneck in the semiconductor design process due to
+the intricate trade-offs between various performance metrics like gain, power, area,
+bandwidth, and noise.
+The conventional process for analog circuit design relies heavily on the expertise
+of designers and is largely manual and iterative. Designers often resort to
+simulation-driven methods, fine-tuning individual parameters through trial and
+error or relying on lookup tables. These methods are time-consuming,
+computationally expensive, and require substantial domain expertise.
+In recent years, the rapid advancements in machine learning (ML) have presented a
+paradigm shift in how analog circuits are designed. ML promises to transform
+analog circuit design from a labor-intensive process to an efficient, automated
+workflow by automating the exploration of design spaces, optimizing parameters,
+and enabling topology selection. This report explores how ML methodologies
+address the challenges in analog circuit design, focusing on deep reinforcement
+learning (DRL), neural network-based surrogate models, and other state-of-the-art
+approaches. Furthermore, we detail the implementation and validation of the
+AutoCkt framework, a DRL-based methodology for automated analog circuit
+sizing and topology selection. The model Deep Learning in Analog Circuit Sizing
+addresses the challenges of analog circuit sizing, which traditionally relies on
+manual expertise, making it time-consuming and inefficient. Leveraging deep
+learning techniques, the authors propose Recurrent Neural Network (RNN) and
+Deep Neural Network (DNN) models to automate the process, demonstrating
+improved accuracy and efficiency in predicting MOSFET sizes based on
+performance metrics. The Lookup table framework introduces the gm/ID
+methodology, a modern approach to analog circuit design that optimizes transistors
+6
+
+=== Page 8 ===
+using the transconductance-to-drain current ratio (gm/ID). This method improves
+efficiency, accuracy, and performance by leveraging precomputed lookup tables
+(LUTs), reducing the need for extensive simulations while meeting key metrics like
+power consumption and bandwidth.
+1.2 Problem Statement
+The design and optimization of analog circuits present several key challenges:
+● Complex and High-Dimensional Design Space: Analog circuits have
+multiple interdependent parameters, making the design space vast and
+complex. This multidimensionality increases the difficulty of identifying
+optimal configurations.
+● Non-Linear and Non-Convex Relationships: The relationship between
+design parameters and performance metrics is often highly non-linear and
+non-convex, making traditional optimization techniques less effective.
+● Sparse Rewards in Optimization: Analog circuit design optimization often
+lacks well-defined intermediate objectives. For instance, achieving acceptable
+performance may require near-perfect tuning of multiple parameters
+simultaneously, resulting in sparse rewards for optimization algorithms.
+● Computational Costs of Simulation: Accurate evaluation of circuit
+performance involves computationally expensive SPICE simulations, which
+hinder the feasibility of exhaustive search or brute-force optimization.
+● PVT Variations: Designs must remain robust against process, voltage, and
+temperature (PVT) variations, further complicating the design process.
+These challenges necessitate innovative solutions that can efficiently navigate the
+design space, minimize computational overhead, and ensure design robustness.
+7
+
+=== Page 9 ===
+CHAPTER-2
+LITERATURE REVIEW
+In the literature review section of our report, we explore various advancements in
+machine learning methodologies applied to analog circuit design. By reviewing
+research papers and conference articles, we aim to identify existing contributions,
+understand their significance, and highlight gaps in the field. This review sets the
+stage for positioning our work within the broader research landscape,
+demonstrating its importance and uniqueness.
+2.1 Deep Reinforcement Learning for Analog Circuit Sizing with an
+Electrical Design Space and Sparse Rewards:
+This study addresses the complexity of analog circuit sizing, which traditionally
+relies on expert knowledge to optimize performance parameters such as gain,
+power, and bandwidth. The authors propose using deep reinforcement learning
+(DRL) to automate this process, focusing on the electrical design space rather than
+the physical geometrical design. The method introduces a sparse reward structure
+and Hindsight Experience Replay (HER) to enhance learning efficiency. Results
+show that the DRL approach is nine times faster than traditional methods,
+achieving optimal circuit sizing in only 1–3 simulation steps. Furthermore, the
+methodology demonstrates technology portability, allowing trained models to
+adapt seamlessly across different semiconductor technologies[1].
+Figure 2.1 RL Frame work for analog IC sizing
+8
+
+[Image page_9_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, incorporating its visual elements, text, context, and importance:
+
+**Visual Elements and Structure:**
+
+The image is a block diagram illustrating a reinforcement learning (RL) framework for analog IC sizing. It consists of two primary components: an "Agent" and an "Environment".
+
+*   **Agent:** This component is further divided into "Policy π" and "Critic Q". Both are represented as neural networks with multiple layers. The "Policy π" network takes a state as input and outputs an action. The "Critic Q" network takes a state and action as input and outputs a Q-value (an estimate of the expected reward).
+*   **Environment:** This block encompasses the stages of analog circuit design. It's broken down into:
+    *   "Transformation DNN ρ":  Represented as another neural network, this likely transforms the agent's action (electrical behavior) into a geometric sizing. It has example inputs showing "w/l" and "f_eff."
+    *   "Geometric Sizing - Netlist": A simplified schematic diagram of an analog circuit, likely a transistor-level representation.
+    *   "Simulation Analyses": Shows a sample simulation output graph, representing circuit performance over a range of frequencies.
+
+**Text Visible Within the Image:**
+
+*   **Agent:** Includes labels "Policy π," "Loss," "Critic Q."
+*   **Environment:** Labels include "Transformation DNN ρ," "Geometric Sizing," "Netlist," and "Simulation Analyses".
+*   Arrows connecting the blocks are labeled with "Electrical Behavior," "State, Goal, Reward," and "Loss".
+
+**Context and Importance:**
+
+Based on the surrounding text, this image (Figure 2.1) illustrates a deep reinforcement learning (DRL) approach for automating analog circuit sizing. Specifically, it visualizes the methodology described in Section 2.1 of the literature review, where the authors propose using DRL to address the complexity of manual analog circuit sizing.
+
+Here's how the image relates to the context:
+
+*   **Problem:** The surrounding text discusses the challenges of analog circuit design, including the complex design space, non-linear relationships, sparse rewards, and high computational costs of simulations.
+*   **Solution:** The DRL framework in Figure 2.1 offers a potential solution. The "Agent" (Policy and Critic networks) learns to navigate the design space and optimize circuit parameters.
+*   **Workflow:** The agent interacts with the environment. The Agent outputs "Electrical Behavior", this is then fed into a "Transformation DNN" to create the "Netlist" of a given circuit in the "Geometric Sizing" stage. The "Simulation Analyses" then simulate the circuit performance based on this netlist. Based on the simulation, the "State, Goal, Reward" is fed back to the agent.
+*   **Significance:** The DRL approach automates the circuit sizing process, making it significantly faster than traditional expert-driven methods.
+
+**Importance:**
+
+The image is crucial because it visually represents the core concept of the DRL approach. It provides a simplified representation of how the agent learns to optimize circuit parameters based on the feedback from the environment, ultimately reducing the time and effort required for analog circuit design. It also highlights the potential of machine learning to address the challenges associated with traditional design methods. The fact that this method focuses on the electrical design space rather than physical geometry is key, and the diagram helps to visualize how that is achieved.
+
+
+
+=== Page 10 ===
+2.2 Differentiable Neural Network Surrogate Models for gm/ID-based Analog IC
+Sizing Optimization:
+This paper presents a novel approach leveraging neural network surrogate models
+to replace traditional simulators for analog circuit sizing. The surrogate models
+predict up to 11 performance metrics with high accuracy (less than 5% mean
+absolute percentage error) and are 3,400 times faster than simulators like SPICE.
+The study also highlights gradient-based optimization algorithms such as Adam
+and L-BFGS, which, when combined with the neural models, achieve rapid
+convergence. A key feature is technology migration, enabling optimized circuit
+designs to be reused across different semiconductor nodes without extensive
+retraining[2].
+Figure 2.2 : Optimization flow enhanced with differentiable surrogate models and
+NN-assisted design space transformation[2]
+9
+
+[Image page_10_image_0.png Analysis (by Gemini)]
+Here's a breakdown of the image analysis, based on the provided text and visual information:
+
+**Overall Context and Importance:**
+
+The image (Figure 2.2) depicts an optimization flow for analog integrated circuit (IC) sizing. This flow leverages differentiable surrogate models and neural network-assisted design space transformation, as stated in the caption. The surrounding text emphasizes that this approach aims to speed up the design process by replacing traditional, slower circuit simulators (like SPICE) with faster neural network surrogate models. These models predict circuit performance metrics, and gradient-based optimization algorithms help the process converge rapidly. The overall goal is to optimize circuit design for reuse across different semiconductor technologies, thus reducing retraining efforts. The figure illustrates how the system components interact to achieve this optimization.
+
+**Visual Elements and Structure:**
+
+*   **Boxes:** The image is primarily structured using boxes to represent different modules or processes in the optimization flow. These boxes denote key stages:
+    *   Optimization (containing Optimization Algorithm and Performance Evaluation)
+    *   Transformation
+    *   Performance Extraction
+*   **Cylinders:** Cylinders represent data storage or sources:
+    *   Specification
+    *   Surrogate Models
+    *   Primitive Device Models
+    *   Performance
+*   **Arrows:** Arrows indicate the flow of data and control between the modules. This visual representation helps trace the steps involved in the optimization process.
+*   **Dashed Box:** The Optimization process is enclosed by a dashed line which delineates this overall process.
+
+**Text Within the Image (and their significance):**
+
+*   **Specification:** (Above Cylinder) Represents the desired performance characteristics of the circuit. The data leaving the cylinder is "y* ∈ Pm'" which likely represents target performance parameters.
+*   **Surrogate Models:** (Above Cylinder) Neural network models trained to predict circuit performance, replacing the need for full-fledged circuit simulation. The data leaving the cylinder is "ζ", representing the output of the Surrogate Models.
+*   **Optimization:** A central module containing two sub-modules.
+    *   **Optimization Algorithm:** Implements optimization algorithms (e.g., Adam, GA, L-BFGS). The input is likely an initial guess, "x ∈ (Ɛ ∪ I)ⁿ" and outputs l ∈ ℝ, which could be the cost/loss of the circuit and is used for evaluation.
+    *   **Performance Evaluation:** Compares predicted performance with target specifications (c(y\*, y)). It also takes ζ as input from surrogate models.
+*   **Transformation:** Translates the optimized design parameters ("x\* ∈ (Ɛ ∪ I ∪ V)ⁿ'") into a set of primitive device parameters ("x' ∈ Gᵏ"). The individual transformations (ν\_MX, φ\_MX) likely refer to different transformation functions, each addressing a specific design aspect.
+*   **Performance Extraction:** Uses a circuit simulator to extract the performance metrics ("y' ∈ Pm'") of the transformed design.
+*   **Primitive Device Models:** Stores models for the individual devices used in the circuit. The output is represented by "ν, φ" which might be parameters.
+*   **Performance:** (Below Cylinder) Contains performance data extracted from the circuit simulation.
+
+**Image's Contribution to the Paper:**
+
+The image effectively illustrates the novel optimization flow described in the paper. It shows how neural network surrogate models are integrated into the traditional circuit design process, specifically to accelerate the performance evaluation step. The diagram visually represents the data flow and the interaction between different modules, making it easier to understand the proposed method's key components and their relationships. The diagram is a concise visual summary of the method that would otherwise take much longer to describe using words alone.
+
+
+
+=== Page 11 ===
+2.3 AutoCkt: Deep Reinforcement Learning for Analog Circuit Designs:
+AutoCkt introduces a reinforcement learning framework tailored for analog circuit
+design automation. The methodology achieves a 40× speedup over traditional
+optimization techniques like genetic algorithms by incorporating techniques such
+as sparse subsampling and transfer learning. The approach handles various circuit
+topologies and parasitic-aware layout designs. For instance, AutoCkt successfully
+designs two-stage op-amps with a 96.3% success rate and handles layout parasitics
+with layout-verified LVS-passed circuits within three days, demonstrating sample
+efficiency and robustness in real-world conditions[3].
+Figure 2.3 Top level overview for AutoCkt [3]
+10
+
+[Image page_11_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image you provided, based on your instructions and the surrounding text:
+
+**1. Visual Elements and Structure:**
+
+The image is a block diagram illustrating the AutoCkt framework for analog circuit design using reinforcement learning. The diagram is composed of the following elements:
+
+*   **Input Blocks:**
+    *   **Circuit Netlist:** A schematic representation of a circuit (likely a two-stage op-amp, given the surrounding text) drawn with standard circuit symbols.
+    *   **Simulation Testbench:** A representation of a simulation setup, including a sinusoidal source, an amplifier symbol, and an oscilloscope displaying a waveform.
+    *   **Target Design Specification:** A clipboard icon representing the desired specifications for the circuit's performance.
+
+*   **Processing Blocks:**
+    *   **Circuit Simulation Environment:** A rectangular box representing the environment used for simulating the circuit's performance. This box receives inputs from the circuit netlist and the simulation testbench.
+    *   **Observed Performance:** A graph representing the simulated performance parameters over time (e.g., gain, bandwidth). Two performance curves are depicted - one gradually decreases, while the other initially rises and then decreases.
+    *   **AutoCkt:** A larger rectangular box with a bold outline that visually dominates the diagram. It encapsulates the core reinforcement learning framework. The box is brightly coloured in green, indicating that it is the main element in the picture.
+
+*   **Connections:**
+    *   Arrows indicate the flow of information between the different blocks. Inputs from the netlist, testbench, and target specifications are fed into the "circuit simulation environment." The "observed performance" is then fed into the "AutoCkt" block, along with a feedback path from the AutoCkt block that modifies "netlist design parameters". Finally, the AutoCkt framework outputs "design parameters that meet specification."
+
+**2. Text within the Image (Transcription from OCR):**
+
+*   **Circuit netlist:** (Label associated with the circuit schematic)
+*   **Simulation testbench:** (Label associated with the simulation setup)
+*   **Target design specification:** (Label associated with the clipboard icon)
+*   **Netlist design parameters: Pn = \[W1, W2, ..., CL]** (Input to the "Circuit simulation environment")
+*   **Circuit simulation environment:** (Label for the simulation box)
+*   **Observed performance:** (Label for the performance graph)
+*   **AutoCkt:** (Label for the reinforcement learning framework)
+*   **Design parameters that meet specification: \[W1, W2, ..., CL]** (Output of the "AutoCkt" framework)
+
+**3. Image's Context and Importance:**
+
+Based on the text from page 10, Figure 2.3 is a "Top level overview for AutoCkt." The image visually represents the workflow of the AutoCkt framework. The framework takes a circuit netlist, a simulation testbench, and target design specifications as inputs. The circuit is simulated, and the observed performance is fed into the AutoCkt block, which is the heart of the reinforcement learning process. This framework then outputs design parameters (W1, W2,... CL) that meet the specified target performance.
+
+The surrounding text (page 10) states that AutoCkt achieves a 40x speedup compared to traditional optimization techniques and has a 96.3% success rate in designing two-stage op-amps. It also emphasizes the framework's ability to handle layout parasitics and generate LVS-passed circuits quickly. Therefore, the image is important because it provides a visual summary of a novel and efficient analog circuit design automation tool.
+
+Furthermore, comparing this to surrounding methodologies described, AutoCKT provides a unique approach compared to Differentiable Neural Network Surrogate Models (page 9), which focus on replacing SPICE simulators with faster neural network approximations. This contrasts with ESSAB (page 11), which combines ANNs with global optimization through infill sampling to improve efficiency. Compared to a DNN approach (page 11), AutoCKT is shown as being more accurate.
+
+The diagram clarifies how the various components interact within the AutoCkt methodology, emphasizing its role in automating the process of finding optimal design parameters for analog circuits.
+
+
+
+=== Page 12 ===
+2.4 An Efficient Analog Circuit Sizing Method Based on Machine Learning
+Assisted Global Optimization
+The study introduces the ESSAB method, which combines artificial neural
+networks (ANNs) with global optimization for analog circuit sizing. The
+innovation lies in an infill sampling criterion that selects promising designs for
+simulation, reducing computational overhead. ESSAB achieves a balance between
+efficiency and robustness, with less than 4% error across performance metrics. The
+results show that ESSAB outperforms traditional methods, significantly reducing
+the simulation count and maintaining high prediction accuracy. The methodology
+is validated across operational amplifiers and comparators, demonstrating its
+scalability for practical circuit designs [4].
+Figure 2.4 Feedforward ANN with one hidden layer[4]
+2.5 Application of Deep Learning in Analog Circuit Sizing:
+This paper proposes deep learning models, specifically deep neural networks
+(DNNs) and recurrent neural networks (RNNs), for automating analog circuit
+sizing tasks. By focusing on performance metrics like gain, bandwidth, and phase
+margin, the models achieve high accuracy in predicting transistor dimensions. The
+DNN outperforms the RNN, achieving 95.6% accuracy with reduced simulation
+costs. This approach demonstrates how deep learning can streamline design
+workflows by eliminating manual trial-and-error processes, particularly for circuits
+like operational amplifiers[5].
+11
+
+[Image page_12_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the provided image, considering the context and the surrounding text:
+
+**Visual Elements and Structure:**
+
+*   **Diagram:** The image is a diagram illustrating the structure of a feedforward artificial neural network (ANN) with one hidden layer.
+
+*   **Layers:** The diagram clearly depicts three distinct layers:
+    *   **Input Layer:** On the left, it shows 'n' input nodes represented by squares, labeled x1, x2, ..., xi, ..., xn. Each node receives an input feature. The number within each of these squares indicates the sequence (or id) of each node.
+    *   **Hidden Layer:** In the middle, it contains 'm' hidden nodes represented by light blue circles, labeled 1, 2, ..., j, ..., m. These nodes perform computations based on the inputs and weights. The number within each of these circles indicates the sequence (or id) of each node.
+    *   **Output Layer:** On the right, it has 'l' output nodes represented by light blue circles, labeled 1, 2, ..., k, ..., l. These nodes produce the final outputs of the network, y1, y2, ..., yk, ..., yl. The number within each of these circles indicates the sequence (or id) of each node.
+
+*   **Connections/Weights:** The nodes in adjacent layers are fully connected by lines. These lines represent the weighted connections between nodes. The diagram shows two example weights, "Wij" connecting the i-th input node to the j-th hidden node, and "Wjk" connecting the j-th hidden node to the k-th output node. These weights are critical components of the network, as they determine the strength of the connections between the neurons and are adjusted during the training process.
+
+*   **Dotted Lines:** The dotted lines within each layer (vertical ellipsis) indicate that there are more nodes than explicitly shown, signifying that the number of input, hidden, and output nodes can vary.
+
+**Text within the Image:**
+
+*   **Input Nodes:** x1, x2, xi, xn
+*   **Hidden Nodes:** 1, 2, j, m
+*   **Output Nodes:** y1, y2, yk, yl
+*   **Weights:** Wij, Wjk
+*   **Node Indices:** 1, 2, i, n, 1, 2, j, m, 1, 2, k, l (within the squares and circles)
+
+**Image Context and Importance:**
+
+*   **Page Context:** The image appears in a section discussing the "ESSAB" method, which uses artificial neural networks (ANNs) for analog circuit sizing. Specifically, the caption states "Figure 2.4 Feedforward ANN with one hidden layer[4]".
+
+*   **Importance:** The image visually represents the type of ANN used in the ESSAB method.  By showing a feedforward network with one hidden layer, the image helps the reader understand the model architecture used for predicting circuit characteristics or parameters. The text describes the goal of optimizing analog circuit design using machine learning, so the diagram illustrates the fundamental machine learning component (the ANN) being utilized. The infill sampling criterion selects promising designs for simulation, reducing computational overhead. ESSAB achieves a balance between efficiency and robustness, with less than 4% error across performance metrics.
+
+*   **Broader Context:** The surrounding sections discuss other machine learning methods like Deep Reinforcement Learning (AutoCkt) and Deep Learning (DNNs and RNNs) for analog circuit design. The image helps differentiate the ESSAB method by visually showing its reliance on a more basic feedforward ANN, compared to the potentially more complex architectures used in the other mentioned approaches. The paper also mentions how deep learning can streamline design workflows by eliminating manual trial-and-error processes, particularly for circuits like operational amplifiers.
+
+In summary, the image of the feedforward ANN provides a concrete visual representation of the model used in the ESSAB method, which is one of the machine learning techniques being investigated for analog circuit design optimization. The image contributes to the understanding of the method's underlying architecture, making it easier to grasp the concept of using machine learning for this task.
+
+
+
+=== Page 13 ===
+Figure 5 Design process of experiment.
+2.6 Machine Learning-Assisted Circuit Sizing for Low-Voltage Analog
+Circuits:
+This paper tackles the challenge of low-power analog circuit design under process
+variations. The authors propose a machine learning-assisted evolutionary algorithm
+(ML-Assisted EA) that integrates a force-directed yield estimation model. The
+methodology achieves a 94.35% reduction in simulations while maintaining a yield
+above 61.5% for low-voltage two-stage operational amplifiers. The combination of
+machine learning predictions and evolutionary optimization offers a reliable,
+resource-efficient approach for robust low-voltage circuit design[6].
+2.7 Review on Machine Learning for Analog Circuit Design:
+This review paper provides a comprehensive overview of machine learning
+techniques in analog circuit design, focusing on their applications in optimizing
+performance metrics such as power efficiency and delay. The paper discusses
+supervised and unsupervised learning techniques, regression methodologies, and
+the use of artificial neural networks for circuit design automation. Case studies
+demonstrate how ML reduces simulation costs and enhances design accuracy[7].
+12
+
+[Image page_13_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on the provided information:
+
+**Visual Elements and Structure:**
+
+The image is a flowchart illustrating the design process of an experiment, most likely related to machine learning.
+
+*   **Shapes:** It uses a combination of shapes:
+    *   Circles:  Used for "Start" and "Finish" points.
+    *   Rounded Rectangles: Represent processes or actions.
+    *   Diamond: Represents a decision point or condition check.
+    *   Arrows:  Indicate the flow of the process.
+*   **Structure:** The flowchart has a clear start and end point. The flow is generally top-to-bottom, with iterative loops based on a convergence check.
+
+**Text Within the Image:**
+
+Here's the text extracted from the shapes in the flowchart, following the flow:
+
+*   Start
+*   Generate large amount of data
+*   Collect performance specification
+*   Collect raw parameter
+*   Training model
+*   Predict target parameter
+*   Check convergence
+*   Converge
+*   Not converge
+*   Finish
+
+**Context and Importance:**
+
+*   **Overall Context:** The image, labeled as "Figure 5 Design process of experiment," represents the workflow for a machine learning-based design or optimization process. Given the surrounding text (sections 2.4-2.8 on pages 11-13), the experiment likely pertains to analog circuit sizing, and more specifically, the application of machine learning to automate and optimize that process.
+
+*   **Importance:** The flowchart clarifies the steps involved in using machine learning for circuit design. The surrounding sections discuss various machine learning approaches like ANNs, DNNs, RNNs, and reinforcement learning for circuit sizing. Figure 5 shows a common underlying structure for these methods:
+
+    1.  **Data Generation/Collection:** This is the first crucial step. Machine learning models need data to learn. The flowchart emphasizes the importance of generating a *large amount of data*. This aligns with challenges like simulation costs when using Neural Networks or training time when using DRL, as seen in the text.
+    2.  **Model Training:** A machine learning model (ANN, DNN, etc.) is trained on the collected data to learn the relationship between circuit parameters, specifications, and desired performance.
+    3.  **Prediction:** The trained model is used to predict target parameters or performance metrics.
+    4.  **Convergence Check:** An iterative loop checks if the predicted parameters meet the desired specifications and constraints (convergence). If not, the process returns to the training or data collection phase.  This iterative process aims to refine the design until satisfactory performance is achieved.
+
+*   **Relevance to the Surrounding Text:** The figure provides a visual representation of the methodologies described in sections 2.4-2.8. For example:
+    *   Section 2.4 (ESSAB): The "training model" step would involve training the ANN, and the "predict target parameter" step would use the ANN to predict promising designs.
+    *   Section 2.5 (Deep Learning): The "training model" step involves training the DNN or RNN, and the "predict target parameter" step uses these deep learning models to predict transistor dimensions.
+    *   The convergence loop acknowledges that the initial training/prediction cycle might not yield an optimal solution, thus requiring further iterations to achieve the desired performance.
+*   **Significance of specific elements:**
+    *   **Generate large amount of data:** This points to one of the main challenges in machine learning for circuit design, which the surrounding text also highlights: the need for extensive training data.  Methods like ESSAB (2.4) try to address this by using infill sampling to reduce simulation overhead. The table on page 13 summarizes some limitations of machine learning methods which reflect some of the challenges from the flowchart, for example DRL needs high training time and large data sets.
+
+In summary, Figure 5 visually represents the design process using machine learning for analog circuit design, emphasizing data generation, model training, prediction, and iterative refinement through convergence checks. Its importance lies in providing a clear overview of the workflow discussed in the surrounding sections and illustrating the key steps in leveraging machine learning for circuit optimization.
+
+
+
+=== Page 14 ===
+2.8 An Efficient Analog Circuit Sizing Method Using Precomputed Lookup
+Tables:
+This methodology introduces precomputed lookup tables (LUTs) to accelerate the
+design process. The LUTs store performance data for various device
+configurations, enabling fast evaluation during optimization. The authors compare
+optimization algorithms such as gradient-based solvers and genetic algorithms,
+highlighting LUTs' role in reducing simulation time while maintaining accuracy.
+The approach is particularly beneficial for tasks like designing CMOS
+amplifiers[8].
+Model/Methodology KeyContribution Strengths Limitations
+Deep Reinforcement Uses DRL to Adapts well to High training time, requires
+Learning(DRL) optimize analog complex design large datasets for effective
+circuits in sparse spaces, reduces training.
+reward reliance on human
+environments. expertise.
+Neural Network Implements Significantly Requires high-quality
+Surrogate Models surrogate modeling reduces simulation training data and careful
+for efficient sizing. costs (3,400× calibration.
+faster).
+AutoCkt (DRL and CombinesDRLand Automates Sparse rewards require
+TransferLearning) transferlearningfor end-to-end circuit careful tuning and
+topology selection, design, 40× fine-tuning of
+sizing, and design speedup over hyperparameters.
+automation. traditional
+methods.
+Surrogate Neural Implements neural Enables Limited by accuracy of the
+Networks for network-based gradient-based surrogate model and needs
+gm/ID-based surrogate modelsto optimization and extensivetraining.
+Optimization predict fasterconvergence.
+performance
+metrics.
+13
+
+=== Page 15 ===
+ESSAB (Global Combines ANNs Robust Computationally expensive
+Optimization with with global optimization across for large design spaces,high
+ANN) optimization for a wide design resourcerequirements.
+robust and efficient space, improves
+analog ICsizing. prediction
+accuracy.
+Deep Neural DNN applied to High accuracy Requires careful handling of
+Networks (DNN) automate transistor (95.6% success training data and overfitting
+sizing for analog rate), fast mitigation techniques.
+circuit design. predictions.
+Gaussian Processes Gaussian Processes Accurate Slow training time for large
+(GP) used as a surrogate performance datasets and
+model for prediction for computationally expensive.
+performance high-dimensional
+prediction inanalog spaces.
+ICdesign.
+Recurrent Neural RNN models used Effective for Training requires large
+Networks (RNN) to predict transistor handling sequential datasets, struggles with
+sizing based on data andimproving complexcircuits.
+performance design accuracy.
+metrics.
+Table 2.1Comparison ofimplementations studiedinliterature review
+The table compares various methodologies in analog circuit design, highlighting
+their strengths and limitations. DRL-based methods offer significant automation
+and optimization, though they require large datasets and high training times.
+Surrogate models and Gaussian Processes provide efficient performance
+predictions but rely on high-quality data.[16] AutoCkt combines DRL and transfer
+learning for fast circuit design but requires careful tuning. DNNs and RNNs excel
+in accuracy and sequential data handling, respectively, but face challenges like
+overfitting and complexity. Each methodology has its own strengths, with
+trade-offs in speed, accuracy, and computational cost.
+14
+
+=== Page 16 ===
+CHAPTER-3
+DESIGN ANALYSIS & PROPOSED WORK
+3.1 Implementation of Deep Learning in Analog Circuit Sizing
+The traditional design process heavily relies on the designer’s expertise, making it
+time-consuming and inefficient. Additionally, the vast search space for transistor
+dimensions and the complexity of performance dependencies make automation
+difficult. Existing methods like genetic algorithms and equation-based tools fail to
+generalize across different performance specifications.[8] To address these issues,we
+tried leveraging deep learning, which has shown potential in handling high-complexity
+problems. We developed two neural network models, a Recurrent Neural Network
+(RNN) and a Deep Neural Network (DNN), which predict MOSFET aspect ratios based
+on desired performance metrics like DC gain, bandwidth, and phase margin.[6] The
+RNN achieves a prediction accuracy of 92.6%, while the DNN achieves 95.6%.
+3.1.1 Data Preparation
+This section explains how the dataset for training and testing the deep learning models
+was created.
+Circuit Setup
+● The target circuit is a two-stage operational amplifier (opamp) comprising
+MOSFETs.
+● To reduce complexity, some parameters are fixed:
+○ Transistor channel length: 1µm (avoids short-channel effects).
+○ Other circuit elements:
+■ R =50 kΩ (bias resistor)
+0
+■ R =10 kΩ (nulling resistor)
+1
+■ Cc=200 fF (compensation capacitor)
+15
+
+=== Page 17 ===
+Figure 3.1.1 Two-stage Opamp
+Dataset Generation
+● Manual Preprocessing:
+○ Initial transistor sizes are manually tuned to ensure all MOSFETs operate
+in saturation.
+○ Benchmarks are created by defining feasible widths for each MOSFET.
+○ Symmetry constraints are applied to certain transistors (e.g.,,W =W ,
+2 3
+W =W , ).
+4 5
+○ A feasible set of initial widths is shown in Table 3.1.1.
+○
+Table 3.1.1
+● Data Augmentation:
+○ From each benchmark, 1,000 variations are generated by slightly
+oscillating transistor widths (±5% uniform distribution).
+○ Total dataset: 9,000 circuits for training, 900 circuits for testing.
+● Performance Metrics:
+16
+
+[Image page_17_image_0.png Analysis (by Gemini)]
+Here's a comprehensive analysis of the provided image within the context of the research paper:
+
+**Image Description**
+
+The image is a circuit diagram. It depicts a two-stage operational amplifier (opamp) built using MOSFETs, resistors, and a capacitor.
+
+*   **Components:** The circuit contains the following key components:
+    *   Eight MOSFETs, labeled M1 through M8.
+    *   Two resistors, labeled R0 and R1.
+    *   One capacitor, labeled C0.
+    *   Voltage rails labeled VDD and GND (ground).
+
+*   **Structure:** The circuit is structured as a two-stage amplifier. The first stage appears to be a differential amplifier configuration formed by the MOSFETs M1, M2, M3, M4, M5, and M6. The second stage appears to be a common source amplifier consisting of M7 and M8. Resistor R0 acts as a bias resistor. The capacitor C0 is labeled and connected with a resistor R1 for compensation purposes.
+
+*   **Textual Elements (Labels):**
+    *   "VDD" (Power Supply Voltage)
+    *   "GND" (Ground)
+    *   "M1" through "M8" (MOSFET labels)
+    *   "R0" and "R1" (Resistor labels)
+    *   "C0" (Capacitor label)
+
+**Context and Significance**
+
+*   **Overall Context:** The image, labeled "Figure 3.1.1 Two-stage Opamp," is directly related to the "Data Preparation" section in Chapter 3, "DESIGN ANALYSIS & PROPOSED WORK." The goal of this chapter is to implement deep learning in analog circuit sizing to automate and improve the traditional design process.
+
+*   **Importance:** The two-stage opamp is used as a test case for applying deep learning techniques for circuit design and sizing. This image shows the circuit schematic which the authors are focusing on in their research. The surrounding text describes the dataset generation process. It specifies that the opamp's initial transistor sizes are manually tuned to ensure MOSFETs operate in saturation. The figure illustrates the physical implementation of the circuit used for generating the dataset. The authors use this circuit to generate data by varying transistor widths (data augmentation) for training deep learning models (RNN and DNN) to predict MOSFET aspect ratios for desired performance metrics.
+
+*   **Relevance to Text:**
+    *   The text explicitly mentions the two-stage opamp as the "target circuit."
+    *   The image provides a visual representation of the components described in the text (resistors R0, R1, and compensation capacitor Cc are the same as C0 in the figure).
+    *   The manual preprocessing step of tuning the transistors for saturation can be visualized using the diagram.
+    *   The data augmentation process involves varying the widths of the transistors in this diagram, and the generated data is used to train the deep learning models.
+
+**In Summary**
+
+The image is a critical visual element that complements the text by providing a concrete representation of the two-stage opamp used as a case study for deep learning-based analog circuit sizing. It shows the circuit that is simulated and analyzed to generate data for training the deep learning models. Understanding the circuit is essential to understanding the overall research approach and the data preparation process.
+
+
+
+[Image page_17_image_1.png Analysis (by Gemini)]
+Here's a thorough analysis of the provided image, its elements, and its context within the research paper.
+
+**Image Analysis**
+
+*   **Visual Elements:** The image is a table with two columns. The left column is labeled "MOSFET" and the right column is labeled "Wi (µm)". The table has 8 rows, each corresponding to a different MOSFET (M1 to M8).
+*   **Structure:** The table provides a structured representation of the initial or feasible transistor widths used in the two-stage operational amplifier (opamp) circuit.
+*   **Text within the Image:**
+    *   Column Headers: "MOSFET", "Wi (µm)"
+    *   MOSFET Labels: M1, M2, M3, M4, M5, M6, M7, M8
+    *   Width Values (µm): {5}, {15}, {15}, {5, 20, 45}, {5, 20, 45}, {4, 5}, {70, 80, 90}, {12.7}
+*   **Significance:**
+    *   The table shows the initial widths (Wi) of the MOSFETs in micrometers (µm).
+    *   Notice that some MOSFETs have a single initial width value (e.g., M1 = 5 µm). Other MOSFETs have multiple values provided in { }, representing the feasible range used in creating the initial benchmarks, from which the initial starting point is taken.
+    *   The MOSFETs M4 and M5 have the same widths listed suggesting a symmetric relationship as described in the text.
+
+**Context and Importance**
+
+*   **Page Text Reference:**  The image is labeled as "Table 3.1.1" on page 16, and it is referenced in text: "A feasible set of initial widths is shown in Table 3.1.1."
+*   **Dataset Generation:** The table illustrates the initial widths used during the manual preprocessing stage of dataset generation.
+*   **Manual Preprocessing:** The page text states that initial transistor sizes are manually tuned to ensure MOSFETs operate in saturation. This table likely shows those tuned sizes, or the feasible benchmark values that will be used to create the initial sizes, from which the tuning will commence.
+*   **Symmetry Constraints:**  The text also mentions that symmetry constraints are applied (W2=W3, W4=W5). This symmetry is clearly reflected in the table by the equivalent widths of M2 and M3, and M4 and M5.
+*   **Data Augmentation:** The subsequent step is data augmentation, where transistor widths are slightly oscillated (±5%) to generate variations. The values in the table, therefore, represent the starting point around which the variations are created.
+*   **Importance:** The image is crucial for understanding how the dataset for training the deep learning models is generated. It provides the initial transistor widths, which are then varied to create a larger dataset. This ensures the robustness and generalizability of the trained models.
+*   **Overall Project Context:** The research aims to automate the analog circuit sizing process using deep learning, which traditionally is a time-consuming manual task. The dataset generation, as described in the text and visually represented by the image, is a key step in this process. The initial transistor sizes listed in the table serve as benchmarks and are essential to establish a solid base dataset.
+
+
+
+=== Page 18 ===
+○ DC gain (A ), gain-bandwidth product (GBW), phase margin (PM),
+0
+common-mode rejection ratio (CMRR), and power supply rejection ratio
+(PSRR).
+3.1.2 Model Design
+The paper describes the architecture, training processes, and optimization strategies for
+the RNN and DNN models. The input to our model is 5-dimensional vector and output
+is 6-dimensional vector:
+Recurrent Neural Network (RNN)
+● Structure:
+○ Two layers of Long Short-Term Memory (LSTM) units with a fully
+connected output layer.
+○ Time steps: 3 (to learn temporal dependencies).
+Figure 3.1.2 The RNN Model Structure
+● Data Preprocessing:
+Data preprocessing plays a critical role in ensuring the RNN model's stability and
+accuracy. The training data is first sorted using the L2 norm of the performance
+metrics, defined as:
+17
+
+[Image page_18_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image provided, based on its visual elements and the surrounding text:
+
+**Visual Element Breakdown**
+
+*   **Type:** The image is a mathematical expression or formula.
+*   **Structure:** The image shows an equation defining a vector named *s<sub>input</sub>*. This vector is enclosed in parentheses and contains five elements separated by commas. The entire expression is labeled as equation "(1)".
+*   **Significance:** This likely represents the input vector to a machine learning model (specifically, an RNN). The elements within the vector likely represent different performance metrics of an operational amplifier (opamp).
+
+**Text within the Image**
+
+The text within the image includes:
+
+*   `s<sub>input</sub>`
+*   `=`
+*   `( A<sub>0</sub>, GBW, PM, CMRR, PSRR )`
+*   `(1)`
+
+**Detailed Breakdown of the Text Elements**
+
+*   *s<sub>input</sub>*: This likely represents the input signal or vector.
+*   `A<sub>0</sub>`: This stands for DC Gain.
+*   `GBW`: This stands for Gain-Bandwidth Product.
+*   `PM`: This stands for Phase Margin.
+*   `CMRR`: This stands for Common-Mode Rejection Ratio.
+*   `PSRR`: This stands for Power Supply Rejection Ratio.
+*   `(1)`: This is the equation number.
+
+**Context and Importance**
+
+Based on the surrounding text:
+
+*   **Overall Context:** The research paper is about using Recurrent Neural Networks (RNNs) and Deep Neural Networks (DNNs) to design analog circuits, specifically operational amplifiers (opamps). The goal is likely to predict or optimize the performance of the opamp based on transistor sizes.
+*   **Specific Context:** The image is relevant to the "Model Design" section, specifically regarding the RNN model. The surrounding text indicates that the input to the RNN model is a 5-dimensional vector.
+*   **Importance:** The image is important because it defines the contents of this 5-dimensional input vector. The five elements (DC gain, GBW, PM, CMRR, and PSRR) are key performance metrics of the opamp. The model likely uses these metrics as input to predict optimal transistor sizes or other output parameters. The input is calculated using the L2 norm. The preceding text mentions the manual adjustments made to transistors, as well as defining feasible widths, and using symmetry constraints. This provides the baseline performance for a two-stage opamp model from "Figure 3.1.1 Two-stage Opamp". The data augmentation section states that 1,000 variations are generated, and using the L2 norm to sort the performance metrics provides a stable prediction from the RNN to design circuits with optimal MOSFETs.
+
+In summary, the image represents the input vector to an RNN model used for designing analog circuits. It defines the vector's elements as key performance metrics of an opamp, which are essential for the model's training and prediction capabilities.
+
+
+[Image page_18_image_1.png Error]
+No API key available for start.
+
+
+[Image page_18_image_2.png Error]
+No API key available for start.
+
+
+=== Page 19 ===
+where subscript post denotes the scaling with respect to the order of magnitude of
+each performance metric, i.e.,
+This sorting stabilizes predictions and organizes the data into meaningful
+sequences based on the magnitude of the metrics, such as DC gain or
+gain-bandwidth product. Additionally, the performance metrics are normalized to
+a standard range, ensuring equal contribution from each input and avoiding
+biases caused by differing magnitudes. Together, these preprocessing steps help
+the model train more effectively on the intricate relationships between circuit
+performance and MOSFET sizes.
+● Training:
+The training process for the RNN model focuses on optimizing its parameters to
+minimize prediction errors.[4] A small batch size of three is used, allowing the
+model to capture finer details in the data. To enhance generalization and prevent
+overfitting, dropout layers are included after the LSTM layers. The Root Mean
+Square Error (RMSE) serves as the loss function, as it emphasizes larger
+prediction errors, making it ideal for precision-dependent applications like analog
+circuit design. Training is guided by the ADAM optimizer, which combines the
+benefits of adaptive learning rate methods to effectively handle the complex
+dataset. Experiments reveal that increasing the width of the LSTM layers
+enhances the model's learning capacity. The final configuration with 4,096 units
+per LSTM layer strikes a balance between computational efficiency and
+prediction accuracy.
+18
+
+[Image page_19_image_0.png Error]
+No API key available for start.
+
+
+[Image page_19_image_1.png Error]
+No API key available for start.
+
+
+=== Page 20 ===
+Figure 3.1.3 Loss of RNN(loss v/s record_id)
+Deep Neural Network (DNN)
+● Structure:
+○ 17 fully connected layers:
+■ Input layer: 5 units (corresponding to the 5 performance metrics).
+■ Hidden layers: 1,024 units per layer.
+■ Output layer: 6 units (MOSFET aspect ratios).
+○ Activation function: ReLU.
+● Overfitting Prevention: The DNN model may experience overfitting as the
+number of layers increases, which can reduce its generalization capability. When
+overfitting occurs, the model performs poorly on the testing data. To mitigate
+overfitting, we incorporate an L2 regularization term into the total loss and
+introduce dropout layers before the output layer.
+● Training: The training process was carefully designed to refine the model’s
+performance. The network was trained for 200 epochs, meaning the entire dataset
+was passed through the model 200 times. This iterative process allowed the
+model to gradually minimize errors and optimize its predictions without
+excessive training that could lead to overfitting. The loss function used was the
+Root Mean Square Error (RMSE), which measures the average magnitude of
+prediction errors, emphasizing larger errors more heavily. This choice aligns well
+with the high precision requirements of analog circuit sizing. To optimize the
+network’s weights, the authors used the ADAM optimizer, a method that
+combines the benefits of adaptive learning rate algorithms like AdaGrad and
+RMSProp. To enhance the convergence process, an exponentially decaying
+learning rate was implemented, starting with a high learning rate that enables
+19
+
+[Image page_20_image_0.png Error]
+No API key available for start.
+
+
+=== Page 21 ===
+significant weight updates early in training and gradually reducing it to allow
+fine-tuning of the model. This combination of techniques ensured that the DNN
+achieved both high accuracy and robust generalization.
+3.2 Implementation of AutoCkt
+We implemented the AutoCkt framework, which uses DRL for analog circuit design
+automation.
+Figure 3.2.1 AutoCkt Framework
+The AutoCkt framework begins by providing initial circuit design parameters (e.g.,
+component values like transistor sizes, resistors, capacitors) and target specifications
+(such as gain, bandwidth, and power consumption) as inputs. These inputs are used by a
+reinforcement learning (RL) agent that interacts with a simulation environment to
+optimize the design. The agent takes actions (adjusting the circuit parameters) and
+receives feedback through a reward function, which evaluates how well the current
+design meets the predefined target specifications. As the agent learns over multiple
+iterations, it uses deep Q-learning, a form of deep reinforcement learning, to adjust its
+strategies and improve the design. The final outputs of the process are the optimized
+component values, which are validated by checking whether the resulting circuit meets
+the target specifications, such as desired gain and power efficiency. Additionally,
+performance metrics like sample efficiency (the number of simulations required for
+convergence) and generalization (how well the model performs on unseen designs) are
+20
+
+[Image page_21_image_0.png Error]
+No API key available for start.
+
+
+=== Page 22 ===
+calculated to assess the framework's success.[9] This iterative process ensures that the
+agent finds optimal designs while efficiently exploring the design space. The method
+demonstrates significant improvements in design time and sample efficiency,
+outperforming traditional optimization techniques such as genetic algorithms.
+3.2.1 Proposed Framework
+The framework is designed around Reinforcement Learning (RL) principles, where
+an agent iteratively improves its performance through trial and error. Here’s a detailed
+breakdown of its components:
+Figure 3.2.1 Training and deployment process
+A. Reinforcement Learning Agent
+The RL agent is central to AutoCkt and operates as follows:
+1. Parameter Space:
+○ Analog circuit parameters (e.g., transistor widths, resistor values) are
+treated as variables to optimize.
+○ These parameters, initially continuous, are discretized into grids to form a
+manageable action space.
+○ Example: A transistor width that varies continuously in [2,10] μm[2, 10] \,
+\mu m[2,10]μm is discretized into steps of 2 μm2 \, \mu m2μm.
+2. Design Specifications:
+○ Circuit performance metrics (e.g., gain, bandwidth, noise) form the design
+specifications.
+○ These metrics are normalized to a fixed range for uniform treatment by the
+RL agent.
+3. Actions:
+21
+
+[Image page_22_image_0.png Error]
+No API key available for start.
+
+
+=== Page 23 ===
+○ At each step, the agent decides whether to increment, decrement, or
+retain the value of each circuit parameter.
+○ Actions respect physical constraints (e.g., minimum transistor dimensions).
+4. State:
+○ The state consists of:
+■ Current parameter values.
+■ Observed circuit performance metrics.
+■ Target design specifications.
+5. Reward System:
+○ Rewards guide the agent towards target specifications:
+■ A positive reward is assigned for moving closer to the target.
+■ A penalty is imposed for deviations.
+○ Dense Reward Formula:
+R= { r, if r <-0.01
+{10+r, if r>=0.01
+where r quantifies the normalized deviation between observed and target
+specifications.
+6. Training:
+○ During training, the agent generates trajectories (sequences of actions and
+states).
+○ It accumulates rewards over trajectories and updates its neural network to
+maximize the expected cumulative reward.
+○ The agent is trained on 50 randomly chosen design specifications.
+B. Trajectory Generation
+● Initialization: Parameters are set to the mid-point of their ranges.
+● Action Execution: At each step, the agent adjusts parameters and observes the
+updated performance.
+● Stopping Criteria:
+○ Trajectory ends if all target specifications are met.
+○ A predefined maximum number of steps is reached if convergence is not
+achieved.
+22
+
+=== Page 24 ===
+C. Deployment
+● Once trained, the agent can be deployed on unseen specifications:
+○ The trained model generalizes to new design goals without retraining.
+○ It efficiently converges to target values using its learned understanding of
+the design space.[9]
+3.2.2 Simulation Environment
+The simulation environment provides a virtual testing ground where the RL agent
+evaluates its actions. AutoCkt interacts with multiple simulation tools to assess circuit
+performance.
+a. Schematic-Level Simulations
+● Tools like Spectre simulate circuits at the schematic level using predictive
+technology models.
+● These simulations are:
+○ Fast: Do not consider layout parasitics, allowing quick evaluations.
+○ Ideal for Training: Provide the agent with large volumes of data in a short
+time.
+b. Post-Layout Simulations
+● Post-layout simulations account for parasitics introduced during physical layout.
+● AutoCkt integrates with the Berkeley Analog Generator (BAG), which:
+○ Automates layout generation and extraction of parasitics.
+○ Interfaces seamlessly with simulation tools like Cadence for accurate
+performance analysis.
+● These simulations are:
+○ Time-Consuming: Layout parasitics increase simulation complexity.
+○ Critical for Deployment: Ensure real-world accuracy.
+c. Transfer Learning Across Environments
+● Training the RL agent on schematic simulations minimizes computational
+cost.[10]
+● During deployment, the agent adapts to post-layout simulations using transfer
+learning:
+23
+
+=== Page 25 ===
+○ The agent’s knowledge of design trade-offs remains applicable even in the
+presence of parasitics.
+○ This process significantly reduces retraining efforts and simulation times.
+3.2.3 System-Level Integration
+The entire framework is integrated into a feedback loop:
+1. Agent-Environment Interaction:
+○ The agent modifies parameters based on observed performance.
+○ The environment (simulator) evaluates the circuit and updates the agent
+with new states and rewards.
+2. Parallelization:
+○ Distributed simulation environments (e.g., using OpenAI Gym and Ray)
+allow parallel execution.[11]
+○ This speeds up training and deployment.
+3.2.4 Validation
+Validation is crucial for demonstrating the framework's effectiveness and ensuring that
+AutoCkt's results meet real-world standards.
+a. Validation Metrics
+● Accuracy: How well the designed circuits meet the target specifications.
+● Efficiency: Number of simulation steps or runtime required to converge.
+● Generalization: The ability to handle unseen specifications or circuit topologies.
+● Layout-Awareness: Ensuring post-layout designs meet specifications despite
+parasitic effects.
+b. Validation Process
+1. Schematic-Level Validation:
+○ Initial validation is performed using schematic simulations.
+○ The RL agent’s performance is evaluated based on its ability to meet
+normalized target specifications.
+2. Post-Layout Validation:
+○ The trained agent is deployed on layout-aware simulations.
+○ Designs are tested for real-world feasibility using BAG and Cadence tools.
+24
+
+=== Page 26 ===
+○ Metrics such as layout-versatile specifications, parasitic resilience, and
+LVS-passed designs are validated.
+3.3 Implementation Of LUT using gm/Id method
+The gm/ID methodology is a systematic approach to analog circuit design that uses the
+ratio of transconductance (gm) to drain current (ID) as a critical design parameter. This
+approach is especially useful in modern short-channel CMOS devices, where traditional
+square-law models fail to accurately predict performance due to advanced physical
+effects like velocity saturation, mobility degradation, and parasitic capacitance.
+Lookup Tables are precomputed repositories of data that relate specific parameters of a
+transistor (e.g., gm/IDg_m/I_Dgm /ID , VGSV_{GS}VGS , IDI_DID , etc.) across a wide
+range of conditions. These tables:
+● Eliminate the need for repetitive simulations.
+● Enable rapid parameter lookup and design optimization.
+● Provide precision and speed in exploring design spaces.
+3.3.1 Key Steps in LUT Implementation
+1. Parameter Definition:
+○ The LUT stores data about transistor performance metrics across different
+operational regions (weak, moderate, strong inversion).
+○ Common parameters included in the LUT are:
+■ gm/IDg_m/I_Dgm /ID : Efficiency of transconductance.
+■ VGSV_{GS}VGS : Gate-to-source voltage.
+■ IDI_DID : Drain current.
+■ Other relevant figures like current density, gain, and noise.
+2. Simulation Setup:
+○ Models for NMOS and PMOS transistors are defined.
+○ Parameters such as VSBV_{SB}VSB (substrate bias voltage),
+VDSV_{DS}VDS (drain-to-source voltage), and channel dimensions
+(W,LW, LW,L) are configured.
+3. Python-Based LUT Generator:
+○ Python scripts automate the generation and management of LUTs.
+25
+
+=== Page 27 ===
+○ Example workflow:
+■ Instantiate the LookupTableGenerator object with the
+required configuration.
+■ Input parameters like:
+■ Model paths and names (e.g., for NMOS/PMOS models).
+■ Voltage ranges for VGS,VSB,VDSV_{GS}, V_{SB},
+V_{DS}VGS ,VSB ,VDS .
+■ Width (WWW) and lengths (LLL) of transistors.
+■ Generate LUTs by invoking the build method of the generator.
+4. Interpolation Techniques:
+○ To achieve accurate results and minimize LUT size:
+■ Linear Interpolation is used for basic data points.
+■ Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) is
+applied for more precise interpolation.
+○ These techniques improve parameter accuracy while reducing
+computational overhead.
+5. Optimizations in LUT Generation:
+○ Precomputing data for all possible query vectors ensures the system avoids
+inefficiencies during runtime.[12]
+○ Enhanced interpolation methods allow for wider grid spacing, reducing
+memory requirements.
+3.3.2 Application in gm/ID Methodology
+LUTs are instrumental in:
+1. Design Flow Integration:
+○ Designers start with initial design specifications (e.g., target
+gm/IDg_m/I_Dgm /ID , gain, bandwidth).
+○ By querying LUTs, they can determine the required transistor dimensions
+(W,LW, LW,L) and biasing conditions.
+2. Systematic Design:
+○ Use LUTs to define the solution space for a design.
+○ Explore trade-offs by analyzing LUT data for different performance
+metrics.
+3. Design Validation:
+26
+
+=== Page 28 ===
+○ LUTs are also used in forward and inverse evaluations to confirm the
+feasibility of design choices.
+3.3.3 Advantages of LUT-Based Implementation
+● Speed: Enables millions of queries within seconds, reducing design iteration
+time.
+● Efficiency: Reduces dependence on repetitive simulations.
+● Scalability: The LUT framework supports a wide range of technologies and
+design contexts.
+● Precision: Advanced interpolation methods maintain accuracy while minimizing
+LUT size.
+By leveraging LUTs, the methodology simplifies the design process and ensures
+precision across modern CMOS technologies.[10] This work underscores its value for
+designing low-power, high-performance analog circuits.The gm/ID methodology,
+supported by LUTs, enhances the analog circuit design process by reducing design time
+and providing accurate trade-offs among key performance metrics. It establishes a
+systematic and efficient framework for high-performance analog circuits.
+27
+
+=== Page 29 ===
+CHAPTER-4
+RESULTS & ANALYSIS
+A comprehensive analysis of the implementations were conducted and presented
+here:
+4.1 Results for Deep Learning in Analog Circuit Sizing
+Framework
+4.1.1 Model Evaluation
+● Testing involved feeding the models' predicted MOSFET dimensions into a
+circuit simulator (ngspice) and comparing the simulated performance metrics to
+the ground truth.
+● Scatter Plots: We present two specification plots, Figures 4.1.1, 4.1.2, and 4.1.3.
+These scatter plots demonstrate that due to variations in model structure, the
+predictions made by the DNN are significantly more stable compared to those
+from the RNN. This is because the RNN relies more heavily on the data, leading
+to a wider range of predicted values than the DNN. Subsequently, we predicted
+the width using 900 examples [2]. To highlight the contrast in prediction results
+between the DNN and RNN more clearly, we focus on the width of M4, as
+depicted in Figure 4.1.3.
+Figure 4.1.1. Scatter plot showing the predicted DC gain and GBW using DNN and
+RNN models
+28
+
+[Image page_29_image_0.png Error]
+No API key available for start.
+
+
+=== Page 30 ===
+Figure 4.1.2 Scatter plot showing the predicted PM and PSRR using DNN and RNN
+models
+Figure 4.1.3 Scatter plot showing the predicted Size and CMRR using DNN and RNN
+models
+Relative Error:
+○ Errors were lower for DNN across all metrics (e.g., GBW, PM). The
+relative error of each specification are plotted in Fig. 4.1.4. We can see
+DNN has much less and better error distribution.
+29
+
+[Image page_30_image_0.png Error]
+No API key available for start.
+
+
+[Image page_30_image_1.png Error]
+No API key available for start.
+
+
+[Image page_30_image_2.png Error]
+No API key available for start.
+
+
+[Image page_30_image_3.png Error]
+No API key available for start.
+
+
+=== Page 31 ===
+Figure 4.1.4 Relative error DNN and RNN model predicted.
+4.1.2 Quantitative Comparison
+● Average Match Rate : We evaluate the accuracy of the predicted circuit
+specifications using the Average Match Rate, calculated as 1−Average Relative
+Error1 - \text{Average Relative Error}. This metric quantifies how closely the
+predicted values align with the ground truth across various performance metrics
+like DC gain and gain-bandwidth product.[14] The results show that the models
+achieve high match rates, confirming their effectiveness in accurately predicting
+specifications and generalizing to new data.
+Table 4.1.1 Model Match Rate
+● Prediction Accuracy for Individual Metrics:
+○ DNN consistently outperforms RNN, particularly for PSRR.
+4.1.3 Observations
+For the 900 test circuits, we provided the MOSFET parameters generated by the
+proposed model as input to NGSpice, which returned the actual performance values. We
+then compared these generated specifications to the ground truth. The test dataset was
+30
+
+[Image page_31_image_0.png Error]
+No API key available for start.
+
+
+[Image page_31_image_1.png Error]
+No API key available for start.
+
+
+=== Page 32 ===
+created using the same method as the training data, but without any sorting. The DNN
+model demonstrated better generalization, attributed to its deeper architecture and
+broader layers. On the other hand, the RNN may be better suited for datasets where
+sequential dependencies play a critical role.
+In conclusion, the study successfully applies deep learning to automate the sizing of
+analog circuits, specifically two-stage opamps.[16] By predicting MOSFET dimensions
+based on desired performance specifications, the proposed models streamline the design
+process and reduce dependence on manual expertise. While the current models are
+limited to specific circuit configurations, future work will focus on extending the
+dataset to include more circuit types and improving the models’ generalization
+capabilities, enabling broader applicability in analog circuit design.
+4.2 Results for AutoCkt
+Figure 4.2.1: Mean Reward Over Number of Environment Steps
+● This figure shows the mean reward obtained by the reinforcement learning (RL)
+agent during training for the two-stage operational amplifier.
+● The x-axis represents the number of environmental steps, while the y-axis
+represents the mean reward.
+● Initially, the reward starts at a lower value, indicating that the RL agent is
+exploring and has not yet optimized its actions.
+● As the training progresses, the mean reward increases, eventually stabilizing
+around zero. This indicates the agent successfully learned to meet the target
+specifications across the sampled design space.
+31
+
+=== Page 33 ===
+Fig 4.2.1 Mean reward over number of environment steps
+Figure 4.2.2: Distribution of Learned, Reached, and Not Reached Target
+Specifications
+● This figure visualizes the target specifications that the RL agent successfully
+achieved versus those it failed to reach for the two-stage operational amplifier.
+● The 3D plot shows three of the four design specifications (e.g., gain, bandwidth,
+bias current), while the 2D projections show pairwise combinations.
+● Points in the plot are color-coded to indicate:
+○ Learned specifications: Successfully reached by the agent.
+○ Not reached specifications: Points the agent could not meet, typically due
+to infeasibility.
+● Most target specifications are successfully reached.
+● The unreached points tend to align in specific regions, such as where the bias
+current is very low.[18] This suggests these specifications are likely infeasible
+under the given constraints.
+32
+
+[Image page_33_image_0.png Error]
+No API key available for start.
+
+
+=== Page 34 ===
+Fig 4.2.2 Distribution of learned, reached, and not reached target design specifications.
+Preliminary results from our implementation of AutoCkt indicate the following:
+1. Efficiency Gains:
+○ The DRL-based approach reduced the design cycle time significantly
+compared to manual tuning.
+○ Generalized to 96.3% of unseen specifications.
+○ 40× faster than traditional genetic algorithms.
+2. Performance Achievements:
+○ Designs generated by the framework met or exceeded target specifications
+for gain, bandwidth, and power consumption.
+3. Robustness:
+○ The designs demonstrated strong resilience to PVT variations, confirming
+the viability of the ML approach.
+Metrics Optimized:
+● Gain (200–400 V/V), bandwidth, phase margin, and power consumption.
+Challenges:
+● A larger action space with 10¹⁴ possible parameter combinations.
+33
+
+[Image page_34_image_0.png Error]
+No API key available for start.
+
+
+=== Page 35 ===
+CHAPTER 5
+CONCLUSION & FUTURE ENHANCEMENTS
+5.1 Conclusion
+Applying advanced techniques like machine learning (ML), deep
+reinforcement learning (DRL), and the gm/ID methodology in analog circuit
+design has significantly enhanced the efficiency and precision of the process.
+These approaches address traditional challenges such as the time-consuming
+manual tuning of circuit parameters, complexity in optimizing designs under
+varied conditions, and meeting tight time-to-market requirements.[3] With the
+increasing complexity of modern circuits, these methods provide efficient
+alternatives for automating key aspects of the design process, such as
+parameter optimization, topology selection, and exploring design spaces.
+In this project, we implemented the AutoCkt framework using DRL and
+incorporated methods from Deep Learning in Analog Circuit Sizing and the
+gm/ID methodology to optimize circuit performance. The use of precomputed
+lookup tables (LUTs), a central feature of the gm/ID methodology, enabled
+precise modeling across different operating regions of transistors.[20] LUTs
+streamlined the design process by providing accurate parameter relationships
+and reducing the reliance on repetitive simulations, significantly improving
+computational efficiency and design precision. The LUT approach was
+particularly effective in addressing power efficiency and gain-bandwidth
+trade-offs while simplifying the exploration of design spaces.
+Incorporating Deep Learning in Analog Circuit Sizing provided another layer
+of automation. Based on Recurrent Neural Networks (RNN) and Deep Neural
+Networks (DNN), the models demonstrated high prediction accuracy for
+MOSFET sizing by learning relationships between performance metrics and
+device parameters. This approach enabled faster optimization and robust
+performance even under varying conditions, such as changes in temperature
+and manufacturing variations.
+In conclusion, applying machine learning, especially deep reinforcement
+learning, to analog circuit design offers significant improvements over
+traditional methods. It speeds up the design process, improves circuit
+34
+
+=== Page 36 ===
+performance, and ensures that designs are robust against variations in
+real-world conditions. While challenges like sparse rewards and long training
+times remain, the results of this project show that ML can make analog circuit
+design more efficient and effective. As ML tools continue to improve, they
+will play an increasingly important role in the future of analog circuit design,
+and create better, faster, and more reliable circuits for various applications.
+35
+
+=== Page 37 ===
+5.2 Challenges and Future Enhancements
+● The integration of advanced methods like deep reinforcement learning
+(DRL), deep learning, and the gm/ID methodology in analog circuit design
+faces challenges such as sparse rewards in DRL, limited generalization to
+new designs, and long training times. Sparse rewards hinder effective
+learning, while generalization issues arise due to the dependency on specific
+training datasets. Long training times are a barrier due to computationally
+intensive simulations.
+● Future solutions include transfer learning to improve adaptability and reduce
+training time, hybrid methodologies combining ML and physics-based
+models for reliability and explainability, and end-to-end automation
+extending ML applications to layout and testing. Enhanced reward structures
+and more efficient surrogate models can further streamline the optimization
+process. These advancements aim to make ML-driven analog circuit design
+faster, more reliable, and broadly applicable.
+36
+
+=== Page 38 ===
+References
+[1]Uhlmann, Y., Essich, M., Bramlage, L., Scheible, J., & Curio, C. (2022). Deep Reinforcement
+Learning for Analog Circuit Sizing with an Electrical Design Space and Sparse Rewards.
+Proceedings of the 2022 ACM/IEEE Workshop on Machine Learning for CAD, 21–26.
+https://doi.org/10.1145/3551901.3556474
+[2]Y. Uhlmann, T. Moldenhauer and J. Scheible, "Differentiable Neural Network Surrogate Modelsfor
+gm/ID-based Analog IC Sizing Optimization" 2023 ACM/IEEE5thWorkshoponMachine Learning
+for CAD (MLCAD), Snowbird, UT, USA, 2023, pp. 1-6, doi:
+https://doi.org/10.1109/MLCAD58807.2023.10299834
+[3]K. Settaluri, A. Haj-Ali, Q. Huang, K. Hakhamaneshi and B. Nikolic, "AutoCkt: Deep
+Reinforcement Learning of Analog Circuit Designs," 2020 Design, Automation & Test in Europe
+Conference & Exhibition (DATE), Grenoble, France, 2020, pp. 490-495, doi:
+https://doi.org/10.23919/DATE48585.2020.9116200.
+[4]A. F. Budak, M. Gandara, W. Shi, D. Z.Pan,N. Sun andB. Liu, "AnEfficient AnalogCircuitSizing
+Method Based on Machine Learning Assisted Global Optimization," in IEEE Transactions on
+Computer-AidedDesignofIntegrated CircuitsandSystems,vol.41,no.5,pp.1209-1221, May2022,
+doi: https://doi.org/10.1109/TCAD.2021.3081405
+[5]Zhenyu Wang, Xiangzhong Luo, and Zheng Gong. 2018. Application of Deep Learning in Analog
+Circuit Sizing. In Proceedings of the 2018 2nd International Conference on Computer Science and
+Artificial Intelligence (CSAI '18). Association for Computing Machinery, New York, NY, USA,
+571–575.https://doi.org/10.1145/3297156.3297160
+[6]Ling-Yen Song, Chih-Yun Chou, Tung-Chieh Kuo, Chien-Nan Liu, and Juinn-Dar Huang. 2022.
+Machine Learning Assisted Circuit Sizing Approach for Low-Voltage AnalogCircuitswithEfficient
+Variation-Aware Optimization. ACM Trans. Des. Autom. Electron. Syst. 28, 2, Article 18 (March
+2023), 22pages. https://doi.org/10.1145/3567422
+[7] Patel, N. (2020). Review on machine learning for analog circuit design. Int J Eng Tech Res, 9,
+1024–1028
+[8] A. F. Budak, M.Gandara, W.Shi, D. Z.Pan,N. Sun andB. Liu, "AnEfficient AnalogCircuitSizing
+Method Based on Machine Learning Assisted Global Optimization," in IEEE Transactions on
+Computer-AidedDesignofIntegrated CircuitsandSystems,vol.41,no.5,pp.1209-1221, May2022,
+doi:https://doi.org/10.1109/TCAD.2021.3081405
+[9]M. Barros, J. Guilherme and N. Horta, "Analog circuits optimization based on evolutionary
+computation techniques", Integration the VLSI Journal, 2010, [online] doi:
+https://doi.org/10.1016/j.vlsi.2009.09.001
+[10] N. Jangkrajarng, S. Bhattacharya, R. Hartono and C. J. R. Shi, "IPRAIL - Intellectual property
+reuse-based analog IC layout automation", Integration the VLSI Journal, 2003, doi:
+https://doi.org/10.1016/j.vlsi.2003.08.004
+[11] L. Zhang, U. Kleine and Y. Jiang, "An automated design tool for analog layouts", IEEE
+37
+
+=== Page 39 ===
+Transactions on Very Large Scale Integration (VLSI) Systems, 2006, [online] Available:
+https://doi.org/10.1109/TVLSI.2006.878475
+[12] Y. R. AwadAllah, K. Y. Yasseen and H. Omran, "Design automation of cmos amplifiers using
+precomputed lookup tables: A comparative study of optimization algorithms", 2022 International
+Telecommunications Conference (ITC-Egypt), pp. 1-6, 2022 doi:
+https://doi.org/10.1109/ITC-Egypt55520.2022.9855670
+[13] H. Graeb, S. Zizala, J. Eckmueller and K. Antreich, "The sizing rules method for analog
+integrated circuit design," IEEE/ACM International Conference on Computer Aided Design.ICCAD
+2001. IEEE/ACM Digest of Technical Papers (Cat. No.01CH37281), San Jose, CA, USA, 2001, pp.
+343-349, doi: https://doi.org/10.1109/ICCAD.2001.968645
+[14] M. Fayazi, M. T. Taba, E. Afshari and R. Dreslinski, "AnGeL: Fully-Automated AnalogCircuit
+Generator Using a Neural Network Assisted Semi-Supervised Learning Approach," in IEEE
+Transactions on Circuits and Systems I: Regular Papers, vol. 70, no. 11, pp.4516-4529, Nov.2023,
+doi: https://doi.org/10.1109/TCSI.2023.3295737
+[15] Kishor Kunal, Tonmoy Dhar, Yaguang Li, Meghna Madhusudan, Jitesh Poojary, Arvind K.
+Sharma, Wenbin Xu, Steven M. Burns, Ramesh Harjani, Jiang Hu, ParijatMukherjee, andSachin S.
+Sapatnekar. 2020. Learning from Experience: Applying ML to Analog Circuit Design. In
+Proceedings of the 2020 International Symposium on Physical Design (ISPD '20). Association for
+Computing Machinery,New York, NY,USA,55.https://doi.org/10.1145/3372780.3378172
+[16] Li, S., & Li, L. (2021). Analog/Mixed-SignalCircuitSynthesisEnabled bytheAdvancements of
+Circuit Architectures and Machine LearningAlgorithms. IEEE TransactionsonCircuitsandSystems
+II: ExpressBriefs,68(2), 457-461.https://doi.org/10.1109/TCSII.2020.3020675
+[17] Chen, X., & Zhang, L. (2020). Review on Analog Circuit Optimization Using Deep Learning
+Algorithm. IEEEAccess,8,104262-104275. https://doi.org/10.1109/ACCESS.2020.2994364
+[18] F. Silveira, D. Flandre, and P. G. A. Jespers, “A g/sub m//I/sub D/based methodologyfor the
+design of CMOS analog circuits and its application to the synthesis of a silicon-on-insulator
+micropower OTA,” IEEE Journal of Solid-State Circuits, vol. 31, no. 9, pp. 1314–1319, Sep. 1996,
+doi: https://doi.org/10.1109/4.535416
+[19] D. M. Binkley, C. E. Hopper, S. D. Tucker, B. C. Moss, J. M. Roch[1] S. L. Pinjare, G.
+Nithya, V. S. Nagaraja, and A. Sthuthi, “A gm/ID Based Methodology for Designing Common
+Source Amplifier,” in 2018 2nd International Conference on Micro-Electronics and
+Telecommunication Engineering (ICMETE), Sep. 2018, pp. 304–307. doi:
+https://doi.org/10.1109/ICMETE.2018.00073
+[20] Ricardo Salem Zebulum, Marco A Pacheco, and Marley Vellasco. Synthesis of cmos
+operational amplifiers through genetic algorithms. In Integrated Circuit Design, 1998. Proceedings.
+XI Brazilian Symposium on, pages 125–128. IEEE, 1998. doi:
+https://doi.org/10.1109/SBCCI.1998.715425
+38
+

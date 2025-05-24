@@ -1,0 +1,2501 @@
+=== Page 1 ===
+A SENSE AMPLIFIER BASED BULK BUILT-IN CURRENT
+SENSOR FOR DETECTING LASER-INDUCED CURRENTS
+ATHESISSUBMITTEDINPARTIALFULFILLMENTOFTHE
+REQUIREMENTSFOR
+THEDEGREEOF
+M.Tech in Electronics and Communication Engineering
+BY
+DebjitBatabyal
+Electronics and Communication Engineering
+INDRAPRASTHAINSTITUTEOFINFORMATIONTECHNOLOGYDELHI
+NEWDELHI–110020
+July 2022
+
+[Image page_1_image_0.png Analysis (by Gemini)]
+Here's an analysis of the image based on the provided information:
+
+**Visual Elements and Structure:**
+
+The image is a logo. It comprises two distinct parts:
+
+1.  **Left side:** Three vertical bars of varying shades of gray. The bars are arranged side-by-side, creating a linear pattern.
+2.  **Right side:** A teal-colored stylized letter "D" or a half-circle shape with a vertical line extending downward from its top edge, creating a broken circle effect.
+
+**Text Visible Within the Image:**
+
+There is no readable text directly embedded *within* the image. The logo likely represents the name of an institution, where the image is displayed.
+
+**Context and Significance:**
+
+*   **Overall Context:** This image is likely the logo of the "Indraprastha Institute of Information Technology Delhi (IIIT Delhi)" as the thesis text is submitted to this institute. Logos often appear on title pages of academic documents to identify the institution with which the work is associated.
+*   **Importance:** The logo serves to brand the research and attribute it to IIIT Delhi. It provides instant recognition and connects the thesis to the institution's academic reputation. It also serves as a visual cue for readers familiar with the university. In this case, the cover page is the first impression of this thesis, thus the logo plays a role in forming an impression.
+
+In summary, the image is the IIIT Delhi logo, serving as a visual identifier and branding element for the research presented in the thesis. It is strategically placed on the title page to indicate the institutional affiliation of the work.
+
+
+
+=== Page 2 ===
+Acknowledgement
+I would like to thank my advisor, Dr. Anuj Grover, who has immensely supported
+and guided me throughout my thesis work. I would also like to thank my co-advisor
+Dr. Ashish Kumar from STMicroelectronics for his support and insightful guidance
+during my thesis. Additionally, I would also like thank my Parents, Brothers and
+Friends who had been a source of constant support throughout the course of this
+project. Special thanks to the IIIT Delhi for giving me such an amazing research
+environment.
+i
+
+=== Page 3 ===
+Abstract
+Soft errors can occur when integrated circuits (ICs) are subjected to hostile condi-
+tions in space, the upper atmosphere, or even on Earth. For more than four decades,
+researchers have been studying similar phenomena. Among the different existing
+effects, Single-Event Effects (SEEs) caused by ionizing particles may cause the af-
+fectedcircuittobehaveincorrectly. Sincethen,significantstudyhasbeendevotedto
+the understanding and mitigation of SEEs in order to cope with the repercussions of
+such events. In this context, pulsed lasers were used to simulate SEEs at the experi-
+menter’s bench. However, pulsed lasers can be used to introduce defects (as a result
+of SEEs) into the computations of security-dedicated Integrated circuits in order to
+get the secret information they may store. Fortunately, additional strategies devel-
+oped by the experts in the radiation community to minimize SEEs may be adopted
+to better deal with the issue of laser fault-injection. Monitoring the currents that
+occur with SEEs was a fruitful concept. The notion of Bulk Built-in Current Sen-
+sors (BBICS) was designed to monitor transient currents generated in the bulk of
+Integratedcircuitswhenstruckbyionizingparticlesorapulsedlaser.
+This thesis work presents a novel approach to detect laser induced faults. This
+method uses a combination of sense amplifiers that evaluates the sampled substrate
+current in a time-interleaved manner. The proposed method can detect low-energy
+laser injection in the nanosecond range that does not always necessarily result in
+Single Event Transient (SET) / Single Event Upset (SEU). A current as low as 20
+uAsustainedfor10nsundertypicaloperatingconditionscanbedetected. Itcanalso
+detecthigh-energylaserinjectioninthepicosecondrangethatwouldresultinSETor
+SEU.Thedesignshowsaleakageof42nAandconsumes41nW/MHzatworstcase.
+Thesimulationsandanalysisarebeingperformedat1.08VusingCMOS65nmLow
+StandbyPower(LSTP)process.
+ii
+
+=== Page 4 ===
+Research Papers under submission from this work
+1. A Sense Amplifier Based Bulk Built-In Current Sensor for Detecting Laser-
+InducedCurrents,VLSID(2023)
+iii
+
+=== Page 5 ===
+Contents
+1 Introduction 1
+1.1 LaserInteractionwithSiliconMatrix . . . . . . . . . . . . . . . . . 1
+1.2 SingleEventEffects(SEEs) . . . . . . . . . . . . . . . . . . . . . 2
+2 EstablishedWork 5
+2.1 BulkBuilt-InCurrentSensor(BBICS)Principles . . . . . . . . . . 5
+2.2 BBICSArchitecture . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2.3 LimitationsoftheBBICSArchitecture . . . . . . . . . . . . . . . 7
+3 ProposedArchitectureIteration-1 9
+3.1 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.2 CircuitDiagram . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.3 DesignComponents . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+3.4 DesignDecisions . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+3.5 MechanismofOperation . . . . . . . . . . . . . . . . . . . . . . . 12
+3.6 CharacterizationandSimulationResults . . . . . . . . . . . . . . . 13
+3.7 DesignValidation . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+3.8 DrawbacksoftheproposedArchitecture-Iteration1 . . . . . . . . 17
+4 ProposedArchitectureIteration-2 18
+4.1 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+4.2 CircuitDiagram . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+4.3 DesignComponents . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+4.4 DesignDecisions . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+4.5 MechanismofOperation . . . . . . . . . . . . . . . . . . . . . . . 21
+4.6 CharacterizationandSimulationResults . . . . . . . . . . . . . . . 21
+4.7 DesignValidation . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+4.8 DrawbacksoftheproposedArchitecture-Iteration1 . . . . . . . . 26
+5 FinalProposedArchitecture 28
+5.1 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+5.2 CircuitDiagram . . . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+5.3 DetectionCoverage . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+5.4 SimulationResults . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+5.5 PowerandLeakageEstimation . . . . . . . . . . . . . . . . . . . . 33
+5.6 ComparisonwithPreviousWorks . . . . . . . . . . . . . . . . . . 34
+5.7 LayoutDesign . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+6 OtherWorks-ProposedDesign2 37
+6.1 CircuitDiagram . . . . . . . . . . . . . . . . . . . . . . . . . . . 37
+6.2 DesignComponents . . . . . . . . . . . . . . . . . . . . . . . . . . 37
+6.3 DesignDecisions . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+6.4 MechanismofOperation . . . . . . . . . . . . . . . . . . . . . . . 38
+iv
+
+=== Page 6 ===
+6.5 SimukationResults . . . . . . . . . . . . . . . . . . . . . . . . . . 39
+7 Conclusion 42
+8 FutureWork 43
+9 References 44
+v
+
+=== Page 7 ===
+List of Tables
+3.1 VariationofMean/SigmaoftheSenseAmplifier . . . . . . . . . . . 13
+4.1 VariationofMean/SigmaoftheSenseAmplifier . . . . . . . . . . . 22
+vi
+
+=== Page 8 ===
+List of Figures
+1.1 LaserIntrusioninSiliconMatrix . . . . . . . . . . . . . . . . . . . 1
+1.2 TransientCurrentProfileduetolaserInjection . . . . . . . . . . . . 2
+1.3 TheeffectofinducedcurrentduringlaserintrusiononanInverter[4] 3
+1.4 ASingleEventTransientinanInverter[5] . . . . . . . . . . . . . . 3
+1.5 ASingleEventUpsetinaLatch[5] . . . . . . . . . . . . . . . . . 4
+2.1 PrincipleofSEEdetectionbyanBBICS[1][8] . . . . . . . . . . . 5
+2.2 PrincipleofSEEdetectionbyanBBICS[1] . . . . . . . . . . . . . 6
+2.3 Cross sectional view of an Inverter Monitored by BBICS showing
+thepathofphotocurrent[1] . . . . . . . . . . . . . . . . . . . . . . 8
+3.1 A Sense Amplifier based design (Iteration - 1) used to detect laser
+inducedtransientcurrent . . . . . . . . . . . . . . . . . . . . . . . 9
+3.2 LatchingCircuitusedwiththeSenseAmplifier . . . . . . . . . . . 10
+3.3 VariationofResistanceofNMOSusedforsamplingPhotocurrent . 12
+3.4 AcurrentpulseisinjectedtothePWELLnode . . . . . . . . . . . 14
+3.5 MinimumDetectableInjectedCurrentatPWELL . . . . . . . . . . 15
+3.6 MinimumDetectableInjectedCurrentforconfirmdetection . . . . 16
+3.7 MinimumDetectableInjectedCurrentforNodetection . . . . . . . 16
+4.1 A Sense Amplifier based design (Iteration - 2) used to detect laser
+inducedtransientcurrent . . . . . . . . . . . . . . . . . . . . . . . 18
+4.2 LatchingCircuitusedwiththeSenseAmplifier . . . . . . . . . . . 19
+4.3 AcurrentpulseisinjectedtothePWELLnode . . . . . . . . . . . 23
+4.4 MinimumDetectableInjectedCurrentatPWELL . . . . . . . . . . 24
+4.5 AcurrentpulseisinjectedtothePWELLnode . . . . . . . . . . . 25
+4.6 MinimumDetectableInjectedCurrentforNodetection . . . . . . . 25
+4.7 WindowMaskingEffectintheProposedArchitectureiteration-2 . 27
+5.1 TwodetectorsInterleavedinTimeDomain . . . . . . . . . . . . . . 28
+5.2 ADoubleexponentialcurrentsignalusedforthesimulations[2] . . 29
+5.3 A double exponential current signal is fed into the PWELL node
+duringtheprechargephaseoftheFirstDetector . . . . . . . . . . . 30
+5.4 MinimumDetectableInjectedCurrentatthePWELL . . . . . . . . 31
+5.5 MinimumDetectableInducedVoltageatthePWELL . . . . . . . . 31
+5.6 MinimumDetectableInjectedChargeatthePWELL . . . . . . . . 32
+5.7 LeakageCurrentoftheProposedDesign . . . . . . . . . . . . . . 33
+5.8 TotalPowerDissipationoftheProposedDesign . . . . . . . . . . 33
+5.9 Minimum Detectable Injected Current comparison with the estab-
+lishedwork . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34
+5.10 LayoutDesignoftheProposedDesign . . . . . . . . . . . . . . . . 35
+5.11 LayoutDesignoftheProposedDesign(Annotated) . . . . . . . . . 36
+5.12 CommonCentroidLayoutofNMOSM6andM7Transistors . . . . 36
+vii
+
+=== Page 9 ===
+6.1 ProposedArchitecture-2 . . . . . . . . . . . . . . . . . . . . . . . 37
+6.2 MechanismofOperationoftheProposedArchitecture-2 . . . . . . 39
+6.3 AdoubleexponentialsignalisinjectedatPWELLnode . . . . . . 39
+6.4 MinimumDetectableInjectedCurrentandChargeatthePWELL . 40
+6.5 MinimumDetectableInducedVoltageatthePWELL . . . . . . . . 40
+6.6 Comparison of Proposed Architecture - 1 and 2 showing Minimum
+DetectableCurrentatTT25oC . . . . . . . . . . . . . . . . . . . 41
+viii
+
+=== Page 10 ===
+Chapter 1
+Introduction
+InsecuredIntegratedSystems,hardwareattackscanbecarriedoutinvariousways,
+includingside-channelobservation(forexample,monitoringcomputingtime,energy
+usage, or electromagnetic radiation) and exploitation of incorrect behavior. Fault-
+basedattacksaimtoobtainsensitiveinformation,suchasasecretcryptographickey.
+To retrieve the encryption keys, techniques like Differential Fault Analysis (DFA)
+exploit the discrepancies between the faulty and correct output response of encryp-
+tion algorithms. The use of a laser is one of the most efficient methods of inducing
+defectsinacircuit.
+Lasershaveevolvedintooneofthemosteffectivetechniquesforbreachingthese-
+curity of integrated systems. The actual faults or defects introduced into the system
+are determined by various factors, including circuit technology node and laser prop-
+erties. Understanding the physical impacts is required to appropriately analyze the
+potential implications of a laser-based attack throughout the design cycle and apply
+efficientcounter-measures.
+1.1 LaserInteractionwithSiliconMatrix
+When a laser strikes a CMOS device, the photoelectric effect converts its energy
+into electrical current. If the photons released by the laser have enough energy, they
+will form electron/hole pairs as they pass through the silicon. As a result of the
+photoelectric effect, two processes move the charges generated by the laser, result-
+ing in a transitory current. In Fig. 1.1 [1], a reverse-biased PN junction is used to
+demonstratethesephenomena.
+Figure1.1: LaserIntrusioninSiliconMatrix
+1
+
+[Image page_10_image_0.png Analysis (by Gemini)]
+Here's an analysis of the provided image and its context within the research paper:
+
+**Image Analysis**
+
+*   **Visual Elements:** The image is a simplified diagram of a CMOS (Complementary Metal-Oxide-Semiconductor) device being targeted by a laser. It illustrates the physical interaction of the laser with the silicon matrix of the device. Key components are:
+
+    *   **Red Line:** Represents the path of the laser intrusion into the silicon.
+    *   **Grey Rectangular Area:** A doped region forming part of the CMOS structure, likely a P or N well.
+    *   **Contact (Vertical Line with Circle):**  A metal contact labeled as "Drain (Vdd)," representing the drain terminal of a transistor connected to the power supply voltage (Vdd).
+    *   **"+/-" Symbols:** Scattered red plus (+) and minus (-) signs, depicting the generation of electron-hole pairs within the silicon due to the photoelectric effect caused by the laser. The arrangement suggests a higher concentration of these pairs along the path of the laser beam.
+    *   **P-Substrate:** The light grey background representing the P-type substrate.
+    *   **Space Charge Region:** Indicates the depletion region at the PN junction.
+
+*   **Text:** The image contains the following labels:
+    *   "Laser Intrusion" (associated with the red line)
+    *   "Drain (Vdd)" (associated with the contact)
+    *   "Space Charge Region" (pointing to the area around the junction)
+    *   "P - Substrate (Gnd)" (identifying the substrate as P-type and connected to ground)
+
+*   **Structure:** The diagram is a cross-sectional view, showing a simplified representation of the silicon structure. The arrangement emphasizes the laser's point of impact and the resulting generation of electron-hole pairs within the semiconductor material. The depiction is not to-scale or representative of true topology.
+
+**Context and Significance**
+
+*   **Overall Context:** The image is part of an introduction to a research paper investigating hardware attacks on integrated systems, specifically laser-based fault injection. The paper focuses on understanding the physical effects of lasers on CMOS devices.
+
+*   **Importance:**
+    *   **Illustrating the Photoelectric Effect:** The primary importance of the image is to visually explain the fundamental principle behind laser-based fault injection.  It shows how a laser beam, when incident on silicon, generates electron-hole pairs due to the photoelectric effect.
+    *   **PN Junction and Charge Collection:** The diagram highlights the role of a reverse-biased PN junction in separating and collecting these charges.  The space charge region facilitates the drift of electrons and holes, creating a transient current.
+    *   **Fault Injection Mechanism:** The creation and movement of these charges can induce voltage changes and, consequently, faults in the circuit's operation. By illustrating this, the image explains how a laser can be used to deliberately introduce errors into a chip's computations, potentially leading to security vulnerabilities.
+
+*   **Connection to the Text:** The text on page 10 explicitly refers to "Fig. 1.1" and states that it demonstrates the phenomena of laser interaction with silicon, specifically the generation of electron-hole pairs at a reverse-biased PN junction. The surrounding text describes how these induced currents can be exploited to compromise the security of integrated systems.
+
+*   **Surrounding Text Context:**  The surrounding pages (as indicated by the table of contents snippets) suggest that the research continues into more detailed modeling and analysis of the induced currents and voltages, as well as proposed architectures and countermeasures to laser attacks. The image provides the foundation for understanding these more complex topics. The text further explains that if the induced current during the laser intrusion is large enough, it can briefly reverse the output of a logic circuit, thereby causing an error in computation. The text also explains that when a laser travels through the silicon matrix, it generates electron and hole pairs. In general, these electrical charges recombine with little discernible influence on IC computations. On the other hand, the electric field seen in reverse-biased PN junctions can split the electron-hole pairs, resulting in a transient parasitic current.
+
+In summary, Figure 1.1 is a critical visual aid for understanding the core mechanism behind laser fault injection attacks on integrated circuits. It provides a simplified, yet effective, depiction of the photoelectric effect and charge carrier generation in a CMOS device, serving as a foundation for the more in-depth analysis presented later in the research paper.
+
+
+
+=== Page 11 ===
+BiasingincreasestheregionofthespacechargeareaatthejunctionofthePandN
+regions. As the laser beam passes through the silicon and PN interface, electron and
+hole pairs are generated. The charges near the junction are then moved (attracted or
+repelled based on the polarity of charge) by the combined influence of the diffusion
+effect and the electric field. The charges away from the interface recombine without
+impactingthegeneratedcurrentatthejunction’sdrain[2].
+Diffusion Phase
+Charge
+Collection
+Phase
+tnerruC
+detareneG
+Time
+Figure1.2: TransientCurrentProfileduetolaserInjection
+The typical shape of transient current induced due to the laser fault injection is
+depicted in Fig. 1.2. The diffusion and the electric field effects can be distinguished
+from the transient current characteristics. The prompt charge collection creates a
+large current in a short time due to the electric field effect. The diffusion-induced
+current has a lower amplitude and lasts longer than the prompt collection phase.
+This is owing to the rate at which the diffusion phenomenon occurs in silicon. The
+transientcurrentcanberealizedfromthefollowingEquation[3].
+I(t) = [Q/τ −τ ]∗[e−t/τa −e−t/τ b]
+a b
+With Q being the total charge generated during the laser inrusion, ta is the collec-
+tion time which is depends on the process node, and the ion-track development time
+constantistb,whichisgenerallyindependentofprocessnode. Iftheinducedcurrent
+duringthelaserintrusionislargeenoughtothenitcanbrieflyreversetheoutputofa
+logiccircuit,therebycausinganerrorincomputation.
+1.2 SingleEventEffects(SEEs)
+When a laser travels through the silicon matrix, it generates electron and hole
+pairs. In general, these electrical charges recombine with little discernible influence
+on IC computations. On the other hand, the electric field seen in reverse-biased PN
+junctions can split the electron-hole pairs, resulting in a transient parasitic current.
+This generated transient current can change the voltage of the IC’s internal nodes,
+2
+
+=== Page 12 ===
+Figure1.3: TheeffectofinducedcurrentduringlaserintrusiononanInverter[4]
+resultingincomputationalerrors.
+Initially,pulsedlaserswereutilizedtosimulateSEEinintegratedcircuitsforradi-
+ation hardness measurement. Since then, they have also been used to cause failures
+insecurecircuitstoretrievesecretdatastoredinthatdevice.
+A Single Event Transient (SET) is caused by high-intensity laser fault intrusion
+in a combinational logic circuit. As depicted in Fig. 1.3, SET propagates down the
+data path and generates computational errors. A photocurrent induced by laser fault
+intrusionisrepresentedbyacurrentsource,asdepictedinFig. 1.4,whichcanbein-
+jectedviathereverse-biasedPNjunctionbetweentheNMOS’sN-typedrain(biased
+at VDD) and P-type substrate (GND). As a result, the output voltage of the inverter
+may decrease from ’1’ to ’0’ if the injected photocurrent exceeds the saturation cur-
+rent of the PMOS transistor. As a result, this outputs voltage transient, also known
+asSET(SingleEventTransient),maytravelthroughthecircuitlogic,causingerrors.
+Vdd Vdd Vdd Vdd
+i
+1 1 fault
+0
+~ 1
+i ~ 0 1
+0 0
+fault
+Figure1.4: ASingleEventTransientinanInverter[5]
+3
+
+[Image page_12_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on the provided text and context:
+
+**Overall Description:**
+
+The image is a cross-sectional diagram of a CMOS inverter circuit. It illustrates how a laser beam can induce a current transient (SET) within the inverter, leading to a change in the output voltage and potential computational errors.  The diagram depicts the physical structure of the inverter, including the NMOS and PMOS transistors, the P-substrate, N-well, metal interconnects (Metal 1), and MOS gates. The path of the laser beam and the resulting induced current are visually highlighted.
+
+**Visual Elements and Their Structure:**
+
+*   **NMOS and PMOS Transistors:** The diagram clearly shows the physical structure of the NMOS and PMOS transistors. The doping regions (N+, P+) are labeled within the P-substrate (for NMOS) and N-well (for PMOS).
+
+*   **P-substrate and N-well:** These are the foundational doped regions of the silicon substrate, providing the necessary environment for the transistors. The N-well houses the PMOS transistor.
+
+*   **Metal 1 and MOS Gate:** These represent the metallization layers used to make electrical connections. The blue hatched pattern represents Metal 1, used for connecting the circuit to Vdd and ground (Gnd). The red hatched pattern is the MOS gate.
+
+*   **Laser Beam:** A green vertical line represents the laser beam impinging on the NMOS transistor near the N+ drain region. This is the source of the fault injection.
+
+*   **Induced Charge Carriers:** Positive (+) and negative (-) signs are used to indicate the electron-hole pairs generated by the laser beam. These carriers are crucial to the photocurrent phenomenon.
+
+*   **Current Path (Red Arrows):** Red arrows trace the path of the induced photocurrent through the circuit. The path starts from the N+ region of the NMOS, goes into the P-substrate, travels to the N-well, and then reaches the PMOS transistor. A secondary current is shown going to a capacitor.
+
+*   **Capacitor (Cload):** A capacitor is shown connected to the output.
+
+**Textual Elements and Their Significance:**
+
+*   **"in = '0'":** Indicates the input voltage to the inverter is a logic low (0).
+*   **"out = '1' => '0'":** Shows the intended output voltage as logic high (1) transitioning to logic low (0) due to the laser-induced fault.
+*   **"to Gnd":** Indicates the connection point to ground (0V).
+*   **"to Vdd":** Indicates the connection point to the supply voltage (Vdd).
+*   **"NMOS", "PMOS":** Labels identifying the respective transistor types.
+*   **"P-substrate", "N-well":** Labels indicating the doped regions of the silicon.
+*   **"laser beam":** Labels the green laser beam.
+*   **"Metal 1", "MOS gate":** Labels denoting the different patterned layers.
+*   **"Cload":** This represents the load capacitance connected to the output of the inverter. The diagram shows the induced current discharging the load capacitance, which causes the output voltage to drop.
+
+**Context and Importance:**
+
+The image is Figure 1.3, referencing [4], and is presented in the context of Single Event Effects (SEEs) in integrated circuits, specifically Single Event Transients (SETs). The surrounding text explains that high-intensity laser fault intrusion into a combinational logic circuit can cause SETs, which then propagate and generate computational errors.
+
+*   **Laser-Induced Fault Injection:** The image visualizes the laser intrusion effect, demonstrating how it can generate electron-hole pairs near the reverse-biased PN junction in the NMOS transistor.
+*   **Photocurrent Generation:** The electron-hole pairs created by the laser beam are separated by the electric field in the PN junction, leading to a transient photocurrent. This photocurrent is represented by the red arrows.
+*   **Voltage Transient:** The injected photocurrent can reduce the output voltage of the inverter from a logic '1' to a logic '0', resulting in a SET.  The diagram shows the photocurrent flowing from the NMOS transistor through the substrate and affecting the output.
+*   **Error Propagation:** The surrounding text notes that this SET can then propagate through the circuit logic, potentially causing errors.
+
+The figure is important because it visually explains the mechanism by which laser fault injection can induce errors in an inverter circuit, a fundamental building block in digital logic. By understanding this mechanism, researchers can develop techniques to mitigate the effects of SETs and improve the reliability of integrated circuits in harsh environments.
+
+In summary, the image clearly illustrates how a laser beam can cause a Single Event Transient in an inverter by generating electron-hole pairs and inducing a photocurrent, ultimately leading to a change in the output voltage, and a potential for computational error.
+
+
+
+=== Page 13 ===
+Whenalaserattackoccursinamemoryelement,suchasalatchflipfloporalatch,
+the stored data is altered, causing a Single Event Upset (SEU), as depicted in Fig.
+1.5. Similarly, an SRAM cell’s core comprises two cross-coupled inverters. When a
+SEToccursinoneofthetwoinverters,itspreadstotheother,causingthecelltoenter
+its opposite steady state. Because the cell is stable, it does not revert to its original
+statewhenthetransitorycurrentdisappears,andthestoredvalueisflipped.
+Laser Injection Laser Injection
+1 0 1 1 0 1 0 1
+Q QBar Q QBar Q QBar Q QBar
+Stable State Laser Fault Fault Propagation Stable State
+(Data Corruption)
+Figure1.5: ASingleEventUpsetinaLatch[5]
+4
+
+=== Page 14 ===
+Chapter 2
+Established Work
+2.1 BulkBuilt-InCurrentSensor(BBICS)Principles
+Bulk currents produced during normal operation Integrated Circuits operation are
+intherangeoffewuA’s,butduringparticleorlaser-inducedfaults,bulkcurrentsare
+typically more than two orders of magnitude that cause a Single Event Transient on
+the corresponding gate output. Bulk Built-In Current Sensors (BBICS) are built to
+take advantage of this feature by monitoring bulk currents. As a result, they may
+identifyanomalouscurrentsduringalaserfaultintrusion. TheinclusionofaBBICS
+in between bulk (i.e., the P substrate) of NMOS transistors and the ground is repre-
+sented in Fig. 2.1. As a result, any transitory photocurrent will pass via the BBICS,
+asshown.
+Figure2.1: PrincipleofSEEdetectionbyanBBICS[1][8]
+The objective of the BBICS is to raise a warning flag, signaling that the circuit
+functionalitymaybedisrupted. ItshouldbenotedthattheBBICSmustalsoprovide
+bulk/body biasing for the transistor, as well as ground biasing in the case of NMOS.
+nBBICS is the term given to the BBICS that is used to monitor NMOS transistors.
+There are also pBBICS specialized for monitoring the PMOS transistors. Although
+pBBICS and nBBICS have distinct designs, they both rely on the same concept:
+monitoringbulkcurrents.
+2.2 BBICSArchitecture
+Over the years, many BBICS architectures have been developed that monitor the
+bulk current in the PWELL and NWELL, relying on the above-explained principle.
+Among various architectures, the most common architecture that is being used is
+depictedinFig. 2.2.
+5
+
+[Image page_14_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the provided image in the context of the research paper:
+
+**Overall Context and Importance:**
+
+The image, uncaptioned but referred to as Figure 2.1 in the text, illustrates the principle of Single Event Effect (SEE) detection using a Bulk Built-In Current Sensor (BBICS). The surrounding text explains that when a particle or laser strikes an integrated circuit, it can generate a significant bulk current, leading to a Single Event Transient (SET) or Single Event Upset (SEU). The BBICS is designed to detect these anomalous bulk currents, thus identifying potential faults. The figure shows how the BBICS is integrated within the circuit and how the photocurrent generated by a laser strike flows through it.
+
+**Visual Elements and Structure:**
+
+The image is a schematic diagram representing a simplified circuit. It contains the following elements:
+
+*   **Transistors:** An inverter circuit comprised of a PMOS transistor at the top connected to VDD and an NMOS transistor at the bottom connected to GND.
+*   **Input (IN) and Output (OUT) Ports:** Blue arrowhead indicates the input and output ports, labeled with "IN" and "OUT" respectively.
+*   **Voltage Sources:** VDD (positive voltage supply) and GND (ground) symbols are displayed.
+*   **nBBICS Block:** A rectangular block labeled "nBBICS" representing the bulk built-in current sensor.
+*   **Current Source:** A circle with an arrow depicts the direction of the photocurrent.
+*   **Current Path:** A red arrow labeled "Photocurrent" shows the path of the current generated by a laser strike. This path goes through the PMOS transistor (or near it, implying the strike location), through the circuit, through the nBBICS and then to ground.
+*   **Output Flag:** An output is labeled FLAG
+
+**Text Elements:**
+
+The image includes the following text labels:
+
+*   **VDD:** Represents the supply voltage.
+*   **IN:** Input port of the circuit.
+*   **OUT:** Output port of the circuit.
+*   **GND:** Represents ground.
+*   **nBBICS:** Bulk Built-In Current Sensor (specifically for NMOS transistors, as noted in the text).
+*   **Photocurrent:** Indicates the current generated by a laser strike (or particle strike).
+*   **'0':** Next to IN.
+*   **'1' --> '0':** Indicates a change in state at the output due to the photocurrent.
+*   **FLAG:** Output flag of the nBBICS
+
+**Significance:**
+
+*   The image demonstrates the physical placement and role of the nBBICS. It is connected between the NMOS transistor's bulk and ground.
+*   The "Photocurrent" arrow clearly shows how a laser-induced current travels through the circuit and is detected by the nBBICS.
+*   The "1' -> '0'" illustrates that the laser strike flips the output state, a typical effect of a Single Event Upset (SEU), as mentioned in the surrounding text from page 4.
+*   The "FLAG" is the signal that indicates that the circuit functionality may be disrupted.
+
+**In summary,** the image visually reinforces the principle of the BBICS as a tool for detecting laser-induced faults by monitoring the bulk current within an integrated circuit. The diagram provides a concrete representation of the concept described in the text. The text states "Figure 2.1: Principle of SEE detection by an BBICS", hence the image illustrates the principle of SEE (Single Event Effect) detection using a BBICS (Bulk Built-In Current Sensor).
+
+
+
+=== Page 15 ===
+Figure2.2: PrincipleofSEEdetectionbyanBBICS[1]
+AdoubleBBICSarchitectureisillustratedinFig. 2.2. Itskeyfeatureistheability
+tomonitorbothNMOSaswellasPMOStransistorsatthesametime. Thelogicofa
+warning flag is stored using two cross-coupled inverters: OUT node. In monitoring
+mode, OUT rises to a high level to signify the detection of any unexpected rise in
+the bulk current but remains low during the normal operating condition. The IN-
+PWELLandINNWELLnodesaretheBBICSconnectionpointsforbiasingcontacts
+ofNMOSandPMOSbulks,respectively. AtgroundandVDD,transistorsMN1and
+MP1areemployedtobiastheINPWELLandINNWELLnodes,respectively. Thus,
+itisensuredcorrectbiasingofthecorrespondingbulk[8].
+ThetransistorsMN1andMP1arealwaysintheONstate. Thedrainsoftransistors
+MN2 and MP2 are linked to the OUTA and OUTB nodes, respectively. The OUTA
+andOUTBnodesraisethealertflagintheeventofaSEE.ThankstotransistorsMP3
+andMN3,thesingleBBICSdesignalsoprovidesaresetmechanism(RESETinput).
+Finally, an OR gate and an inverter gate are inserted between OUTB and OUTA
+nodes. This helps accumulate various alarm flags by utilizing the INSENSOR input
+[].
+When the laser intrusion induces a bulk current, OUTB and OUTA change their
+stable states in the latch, and the sensor’s output (OUT) becomes ’1’. To detect a
+slight change in its input voltage, thus the latch must be extremely sensitive. Be-
+causethelatchretainsastateifatransitorybulkcurrentoccurs,itmustberesetafter
+eachacquisition.
+6
+
+[Image page_15_image_0.png Analysis (by Gemini)]
+Here's a comprehensive analysis of the image provided, based on the surrounding text and the visual information:
+
+**Overall Context and Importance:**
+
+The image (Figure 2.2) illustrates the principle of Single Event Effect (SEE) detection using a double Bulk Built-In Current Sensor (BBICS) architecture. The surrounding text explains that BBICS are used to monitor bulk currents in integrated circuits, specifically to detect anomalies caused by particle or laser-induced faults. The double BBICS architecture is designed to monitor both NMOS and PMOS transistors simultaneously, providing a warning flag when an SEE is detected. The text emphasizes that the BBICS also provides bulk/body biasing for the transistors.
+
+The image is important because it visually represents the most common BBICS architecture used in SEE detection. It helps readers understand the components of the circuit, how they are connected, and the flow of current during a fault event. The text accompanying the figure describes the functionality of each transistor and gate within the BBICS, explaining how the circuit detects an unexpected rise in bulk current and raises the alarm flag.
+
+**Visual Elements and Structure:**
+
+The image is a circuit diagram. Key elements include:
+
+*   **Transistors:** NMOS (MN1, MN2, MN3) and PMOS (MP1, MP2, MP3) transistors are depicted using standard circuit symbols.
+*   **Inverters:** Several inverters are present, symbolized by a triangle with a circle at the output. Two inverters are cross-coupled forming a latch.
+*   **OR Gate:** An OR gate is shown, indicating a logical OR operation.
+*   **Input/Output Nodes:**  Labels such as INPWELL, INNWELL, INSENSOR, RESET, RESETN, OUTA, OUTB, and OUT clearly indicate the input and output signals of the circuit.
+*   **Voltage Sources:** VDD represents the supply voltage.
+*   **Ground:** GND represents the ground connection.
+*   **Arrows:** Arrows are used to indicate the direction of current flow (Photocurrent) and changes in voltage levels ("up", '0', '1').
+*   **Connections:** Lines represent the electrical connections between the components.
+
+The structure of the diagram shows the interconnections between the transistors, gates, and nodes. The cross-coupled inverters forming a latch are centrally located. The transistors MN1 and MP1 are connected to INPWELL and INNWELL, respectively, providing biasing.
+
+**Text within the Image:**
+
+*   **Labels for nodes/terminals:** INPWELL, INNWELL, OUTA, OUTB, OUT, INSENSOR, RESET, RESETN
+*   **Transistor Designations:** MN1, MN2, MN3, MP1, MP2, MP3
+*   **Voltage and Ground:** VDD, GND
+*   **Current Direction:** "Photocurrent"
+*   **Voltage changes:** "up"
+*   **Logic levels:** "0", "1"
+
+**Significance of Visual Elements:**
+
+*   **INPWELL and INNWELL:** These nodes are the connection points to the bulk of NMOS and PMOS transistors, respectively. The BBICS monitors the current flowing through these nodes.
+*   **MN1 and MP1:** These transistors provide the necessary biasing to the bulk regions. They are always ON.
+*   **MN2 and MP2:** These transistors are crucial for detecting changes in bulk current. Their drains are connected to OUTA and OUTB, respectively.
+*   **OUTA and OUTB:** These nodes represent the internal states of the latch. The cross-coupled inverters ensure that the latch retains its state even if the bulk current is transitory.
+*   **OUT:** The final output of the sensor. It goes high ('1') to indicate the detection of an SEE.
+*   **RESET:** This input allows the latch to be reset after an SEE is detected.
+*   **INSENSOR:** This input, along with the OR gate, enables the accumulation of alarm flags from multiple sensors.
+*   **Photocurrent Arrow:** Visually highlights the path of the current generated due to the laser fault injection.
+*   **Arrows depicting "up", "0", "1":** Highlight the changes in voltage and signal states in the circuit during a detection event, providing a dynamic representation.
+
+**In Summary:**
+
+The image is a crucial visual aid for understanding the functionality of a double BBICS architecture for SEE detection. It complements the text by providing a detailed view of the circuit's components, connections, and operation. The labels and annotations in the image help in identifying and understanding the function of each element within the circuit. Together, the image and the surrounding text provide a comprehensive understanding of this crucial element of fault detection.
+
+
+
+=== Page 16 ===
+The sequence of events associated with the detection of abnormal rise in the bulk
+current by a single BBICS is highlighted in purple, as depicted in Fig. 2.2. The
+scenarioinwhicharadiativeorlaser-inducedSEEaimedatanNMOSisbeingmon-
+itored by the BBICS; a substantial bulk current will flow to the ground via MN1
+transistor. The red arrow in Fig. 3 denotes the direction of the Photocurrent. As a
+result, the voltage at the INPWELL node rises as denoted by the letter ’up’. Thus
+switchingthe MN2transistorto transition fromtheOFF totheON state,connecting
+node OUTA to the ground. Thus, the OUTB node will transition to logic 1 latching
+BBICS in alarm mode. Bulk currents in PMOS transistors exhibit a similar charac-
+teristic(duetotransistorsMP1andMP2).
+The sensitivity of the detector can be increased by skewing the core back-to-back
+connected inverters and also by employing MN2 and MP2 transistors in parallel.
+This would help in increasing the discharging or charging rate. Thus, during a laser
+attack,theOUTAnodecandischarge,ortheOUTBnodecanchargeatafasterrate.
+2.3 LimitationsoftheBBICSArchitecture
+During a laser fault injection, the magnitude of the total photocurrent generated
+depends on the laser properties, process node, and temperature. Various limitations
+oftheBBICSarchitecturearelistedasfollows:
+• At lower temperatures, the magnitude of the peak current generated would be
+lesser as a lesser number of electrons would be available in the conduction
+band. So, more energy would be required for the electrons to jump from the
+valance band to the conduction band. Thus, higher sensitivity would be re-
+quiredatalowertemperaturewhichisnotthecaseforthisarchitecture.
+• The threshold voltage of the sampling transistor MN1 would vary highly with
+process corner and temperature. This would result in varying resistance and a
+varyingamountofsampledvoltageatthegateoftheMN2transistor. Thus,the
+sensitivitywouldvaryhighlywiththetemperatureandprocesscorner.
+• ThethresholdvoltageofMN2wouldvaryhighlywithprocesscornerandtem-
+perature. The threshold voltage of MN2 would decrease with the increase in
+temperature. This would facilitate faster discharge of the OUTA node. Indi-
+catinglessersensitivityatalowertemperature.
+• To increase the sensitivity of the detector, the inverters in the latch can be
+skewed,butitmight result inspuriousdetectionathighertemperaturesduring
+normal operation. Also, this method would increase the leakage across the
+inverter.
+• Most importantly, for the detector to respond to any laser fault intrusion, the
+sampled voltage should rise above the threshold voltage of MN2. Also, the
+discharge rate of MN2 should surpass the ON current of PMOS, supporting
+the logic value at the OUTA node. This might not always happen. Since a
+7
+
+=== Page 17 ===
+laserfaultintrusionmaybuildupavoltagelesserthanthethresholdvoltageof
+MN2. Thiscanoccuriflaserattackstakeplaceinthepicosecondrange.
+• Photocurrents generated during the laser intrusion flowing to the ground from
+VDD can take two routes: through the BBICS tappings or to the chip GND.
+The broader arrow denotes the photocurrent’s lower resistive route. Thus, the
+photocurrent will preferentially follow this less resistant channel; as a result,
+dependingonthelocationofthelaserspot(inrelationtothebiasingcontacts),
+the photocurrent might flow partially via the PGN or BBICS taps, depend-
+ing on their resistance. Therefore, the laser-induced transient current flowing
+through the BBICS might be diminished, decreasing its capability to detect
+SEEorlaserattack. ThisphenomenonisdepictedinFig. 2.3below.
+Figure 2.3: Cross sectional view of an Inverter Monitored by BBICS showing the
+pathofphotocurrent[1]
+8
+
+[Image page_17_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, incorporating the surrounding text for context:
+
+**Overall Description:**
+
+The image (Figure 2.3) is a cross-sectional diagram illustrating the path of photocurrent generated by a laser intrusion within an inverter circuit, specifically focusing on how the Bulk Body Implanted Current Sensor (BBICS) monitors this current. It highlights potential limitations in detecting laser attacks using BBICS due to the routing of the photocurrent.
+
+**Visual Elements and Structure:**
+
+*   **Cross-sectional View:** The image presents a simplified cross-section of a semiconductor structure, likely silicon.
+*   **Regions:** It identifies key regions:
+    *   "Psubstrate": The base material, labeled as P-type substrate.
+    *   "Nwell": A region within the Psubstrate, doped to be N-type. The light blue area seems to illustrate the Nwell.
+*   **Circuit Elements:** The diagram depicts circuit elements within the Nwell:
+    *   "Logical gates": Includes a standard inverter circuit built using an NMOS and PMOS transistor. The gate input ("IN") and output ("OUT") are labeled. The transistors themselves are marked as "NMOS" and "PMOS".
+    *  "GND": A contact connected to ground.
+    *  "VDD": A contact for supply voltage.
+*   **Contacts and Tappings:** The figure shows different tappings connecting to the Nwell and Psubstrate, including:
+    *   "N BBICS": N-type BBICS tapping.
+    *   "P BBICS": P-type BBICS tapping.
+*   **Laser:** A red conical shape labeled "Laser" indicating the source of the laser attack.
+*   **Current Paths:** Red arrows ("Photocurrent") denote the path of the photocurrent generated by the laser. The thicker arrow represents the lower resistive path for the current.
+*   **Resistors:** Zigzag lines symbolize the resistive paths from the BBICS tappings.
+
+**Text Elements (Labels and Captions):**
+
+*   "GND": Ground.
+*   "VDD": Supply Voltage.
+*   "Logical gates": Identifies the inverter circuit.
+*   "IN": Input to the inverter.
+*   "OUT": Output of the inverter.
+*   "NMOS": N-channel MOSFET.
+*   "PMOS": P-channel MOSFET.
+*   "Nwell": N-doped well region.
+*   "Psubstrate": P-type substrate region.
+*   "Laser": Indicates the location of the laser attack.
+*   "Photocurrent": Label associated with the red arrows.
+*   "N BBICS": N-type BBICS connection.
+*   "P BBICS": P-type BBICS connection.
+*   "N+" and "P+": Heavily doped N-type and P-type regions, respectively, likely used for contacts.
+
+**Significance and Context:**
+
+The image illustrates a critical issue with using BBICS for detecting laser attacks, as described in the surrounding text:
+
+1.  **Photocurrent Routing:** When a laser strikes the substrate, it generates photocurrents. These photocurrents can flow to the ground through different paths: the BBICS tappings, or directly to the chip's ground (GND).
+2.  **Resistive Paths:** The path with the least resistance is preferred by the photocurrent. If the path through the chip's GND is less resistive than the path through the BBICS, a significant portion of the photocurrent will bypass the BBICS. The broader arrow signifies this lower-resistance path.
+3.  **Impact on Detection:** If the photocurrent bypasses the BBICS, the BBICS may not detect the laser attack effectively. The image is showing that the laser light is producing a flow from both the N BBICS and P BBICS towards the Psubstrate and Nwell, which can go towards the ground contact or the BBICS contacts.
+4.  **Dependency on Location:** This effect is dependent on the location of the laser spot relative to the BBICS tappings and other grounding points.
+
+The text emphasizes that the BBICS's ability to detect Single Event Effects (SEEs) or laser attacks can be diminished due to this bypassing phenomenon. Therefore, the image is essential for understanding a potential weakness in the BBICS architecture.
+
+The surrounding text also discussed the limitations of BBICS such as sensitivity variations with temperature and process corners and its design considerations. The image contextualizes one of these limitations in the physical design of a chip. The prior figure (Fig. 2.2) described how BBICS detects the laser intrusion, but this figure (Fig. 2.3) shows a circumstance where the detection can be foiled.
+
+
+
+=== Page 18 ===
+Chapter 3
+Proposed Architecture Iteration - 1
+3.1 Motivation
+TheexistingBBICSarchitecturesshowgoodenoughsensitivity,butstill,thereare
+someflawsthatneedtobeaddressed. ThethresholdvoltagesamplingNMOSwould
+varywithrespecttoprocessandtemperature. Thiswouldresultinavaryingvalueof
+sampled voltage owing to different sensitivity. Thus, some arrangements should be
+madetomitigatethisissue.
+OUTA node is driven by an always ON PMOS, which reduces the sensitivity to-
+wards a smaller transient current. This is because the discharging transistor needs to
+overcomethestrengthofanalways-ONdevice.
+3.2 CircuitDiagram
+Vdd
+PCH
+M1 M2
+Vdd Vdd
+M3
+BPCH BPCH
+M10 M11
+Vdd
+SEN SEN
+M5 M4
+CL CL
+SAF SAT
+M8 M9
+L1 L2
+M7 M6
+PWELL
+SEN M14
+M13
+M12
+R
+M15
+Figure3.1: ASenseAmplifierbaseddesign(Iteration-1)usedtodetectlaserinduced
+transientcurrent
+9
+
+=== Page 19 ===
+3.3 DesignComponents
+TheProposedArchitectureconsistsofasenseamplifieratitscore. Italsocontains
+pre-chargecircuits,avoltagesamplingunit,loadlines,dischargingunit,andalatch-
+ingcircuit. Thedesignisalsocomprisedofvarioussignalsthatfacilitatethesensing
+operation.
+Thefunctionalityofvariouspartsoftheproposeddesignisgivenasfollows:
+• Sampling Unit: The sampling unit here is a unsilicided P+ poly resistor (20
+KOhms) that helps to sample the transient current generated during a laser
+faultintrusionintheformofvoltage.
+• Loadlines: Loadlines(5fF)areconnectedtotheprechargeunitandthesense
+amplifier. They remains floating during the sensing phase. Any abnormal
+dischargeinloadlinesindicatesalaserfaultintrusion.
+• Precharge Circuits: The design contains two precharge circuits that precharge
+theloadlinesandinternalnodesofthesenseamplifierduringthereset/precharge
+phase.
+• Discharging Unit: The discharging unit comprises two NMOS in a stack that
+aredynamicallybodybiased,facilitatingthedischargeoftheloadlines.
+• SenseAmplifier: Itsensesthedischargesufferedbytheloadlinesduringthe
+SAF SAT
+Vdd Vdd
+M17 M18 M21 M22
+Vdd
+M19 M20
+Vdd
+M23 M24
+Vdd Vdd
+FLAG
+M25 M27
+M26 M28
+Figure3.2: LatchingCircuitusedwiththeSenseAmplifier
+10
+
+=== Page 20 ===
+sensing phase and dissolves the internal nodes into definite logic levels during
+theevaluationphaseoftheoperation.
+• Latching Circuit: It is connected to the internal nodes of the sense amplifier.
+Based on the logic levels of the internal nodes, it produces a FLag output that
+signifies whether there is a laser fault intrusion. The latching circuit used is
+depictedinFig. 3.2.
+Thelatchingcircuit consists ofinvertersconnectedtothe SAFandSATnodes
+thattransferthelogiclevelstotheconnectedPMOSandNMOS.Basedonthe
+logic levels, the Flag output is either charged or discharged by the PMOS and
+NMOS, respectively. The value of the Flag is then latched to the back-to-back
+connectedinverterstillthenextevaluationphase.
+TheOperation ofthe proposeddesigned isfulfilledby usingthe signalsdiscussed
+asfollows:
+• Precharge Signals: PCH and BPCH signals are taken low in every Precharge
+phase. PCH turns ON M1, M2, and M3 transistors that charge the internal
+nodes. BPCHturnsontheM10andM11transistorsthatchargetheloadlines.
+• Sense Enable Signal: SEN signal is taken to 1 during the evaluation phase of
+the operation, otherwise kept at 0. This ensures that Pass Gates M23 and M24
+areON.
+Duringthesensingphase,thepasstransistorsareturnedOFF,andfooterNMOS
+M14 is turned ON. This decouples the internal nodes from the load lines and
+internalnodes. Internalnodesareresolvedtodefinitelogiclevelsthroughpos-
+itivefeedbackastheyaredischargedtothegroundviaM14.
+3.4 DesignDecisions
+Various design decisions that are undertaken to optimize the sensitivity of the de-
+tectoraregivenasfollows:
+• Instead of using an always ON NMOS for sampling the transient photocur-
+rent, unsilicided P+ poly resistor is used. This is used to mitigate the effect
+of variation of the sampling transistor across different process corners. Also,
+this would help reduce the variation of the threshold voltage of NMOS with
+temperature. The variation of resistance across different process corners is
+depictedinFig. 3.3.
+• Dynamicbodybiasingisusedtomitigatethevariationofthethresholdvoltage
+of the discharging NMOSs (M12 and M15). This would help increase the
+dischargerateatslowcornersandlowtemperatures.
+• During the sensing phase, the load lines would be floating. Thus, there is no
+need to discharge them completely. Utilizing the sub-threshold conduction of
+M12andM15duringalaserintrusionwouldbesufficienttoraiseaFlag.
+11
+
+=== Page 21 ===
+10
+9
+8
+7
+6
+SS SF TT FS FF
+)
+K
+(
+rotsisnarT
+fo
+ecnatsiseR
+ON state Resistance
+of NMOS
+Process Corner
+Figure3.3: VariationofResistanceofNMOSusedforsamplingPhotocurrent
+FromtheFig. 3.3wecanseethatthevariationofON-Resistanceofanalways
+ON NMOS is +33% to -20% across the process. Where as the maximum
+variationofanunsilicidedP+polyresistoris±14%.
+3.5 MechanismofOperation
+The proposed architecture is a synchronous design. The circuit is governed by
+various signals coordinated with each other. Each monitoring cycle consists of three
+phases: Precharge, Sensing, and Evaluation. Various phases of operation are ex-
+plainedasfollows:
+• Precharge Phase: During this phase, PCH and BPCH signals are taken low.
+The load lines and the internal nodes of the sense amplifier are charged to
+VDD. During this phase, the sense enable signal is at logic 0. Thus the footer
+NMOSM14isOFF.
+• SensingPhase: Duringthesensingphase,theprechargesignalsaretakenhigh.
+Thus Load lines and internal nodes of the sense amplifier are floating. During
+this phase, any laser fault intrusion would lead to the discharge of the load
+line through the M12 and M15 transistors. Also. since the SEN signal is low
+(M8 and M9 are ON), any discharge in the load line would be reflected to the
+internalnodesofthesenseamplifier.
+• EvaluationPhase: Duringthisstate,theSenseEnablesignalistakenhigh. The
+precharge signals are kept high as well. The pass transistors M8 and M9 are
+turned OFF. This decouples the internal nodes from the load lines. Thus no
+furtherdischargeattheloadlineswillnotbereflectedtotheinternalnodes.
+12
+
+=== Page 22 ===
+The footer NMOS M14 is also turned ON, facilitating the discharge of the in-
+ternalnodes. Basedonthevoltageleveloftheinternalnodes,theyareresolved
+to definite logic levels through positive feedback. The latching circuit updates
+theFlagbasedonthelogicresolvedbythesenseamplifier.
+3.6 CharacterizationandSimulationResults
+To avoid any spurious detection, the sense amplifier is skewed sufficiently such
+that during no normal operation when there is no laser attack, the always Flag is at
+0. In order to do so, the size M6 is taken 2.5 / 0.18 and M7 is 0.5 / 0.18. So, during
+normal operation SAT node will always discharge since the drive strength of M6 is
+sufficientlygreaterthanM7.
+During a laser fault intrusion, the SAF node will discharge much more than SAT
+during the sensing phase. A positive detection response will be produced when the
+dischargeoftheLoadlineandSATnodeissufficientlygreatertoovercometheskew-
+nessofthesenseamplifier. Thesizingofthepulldowndevices(M6andM7)istaken
+such that during regular operation, the SAT node discharge with 3-sigma confidence
+intheworstcase.
+Process Temperature(C) Mean(mV) Sigma(mV) Mean/Sigma
+-40 45.13 11.86 3.8
+SS 25 67.9 11.2 6.02
+125 119.63 11.52 10.38
+-40 46.57 12.06 3.86
+TT 25 77.88 11.96 6.51
+125 121.15 11.62 10.42
+-40 46.51 12.42 3.74
+FF 25 78.29 12.23 6.4
+125 122.3 11.83 10.33
+-40 50.52 11.67 4.32
+FS 25 81.6 11.63 7.01
+125 125.68 11.45 10.97
+-40 41.05 12.46 3.29
+SF 25 72.8 12.29 6.41
+125 115.69 11.92 9.7
+Table3.1: VariationofMean/SigmaoftheSenseAmplifier
+Theoperatingfrequencyfordesignattheinitialphaseistakenas40MHz(T=25
+ns) for the proof of concept. The precharge phase is taken as 5ns, the sensing phase
+is13.75ns,andtheevaluationphaseis6ns. Toavoidanyabruptleakageoftheload
+lineL1duringaregularoperation,twoNMOSareusedinastack.
+Dynamic body biasing is used to enhance the sensitivity at cold and slow corners.
+13
+
+=== Page 23 ===
+This helps us to lower the threshold voltage of M12 and M15 transistors. LVT is
+used for M12 and M15. Also, M13 is used as an LVT device to balance the leakage
+duringregularoperation.
+To simulate the sensitivity of the circuit in the initial phase of design, a current
+pulse is used to simulate. This is only used to simulate the sensitivity of the design,
+later replaced by a double exponential current function depicted in the figure. At
+various corners, the current signal is injected at the PWELL node of the design, and
+values of voltage and current are recorded. The graph is given below, Fig. 3.4,
+depictstheoperationofthedesign.
+100 150 200 250 300 350
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+0
+4
+8
+12
+0.3
+0.2
+0.1
+0.0
+1.20
+1.05
+0.90
+0.75
+1.32
+0.88
+0.44
+0.00
+1.14
+0.76
+0.38
+0.00
+100 150 200 250 300 350
+) NES
+(
+V
+) HCP
+(
+V
+)
+otohP
+(
+I
+)
+LLEWP
+(
+V
+)
+2L
+,
+1L
+( V
+)
+TAS
+,
+FAS
+(
+V
+)
+GALF
+(
+V
+)V(
+)V(
+)Au(
+)V(
+)V(
+)V(
+)V(
+Time (ns)
+Figure3.4: AcurrentpulseisinjectedtothePWELLnode
+As illustrated in the figure, after the current pulse is injected, the load line L1
+discharges. In the evaluation phase, the SAF and SAT nodes are resolved to 0 and
+1, respectively. The latching circuit sets the Flag high by evaluating SAF and SAT
+nodes. As soon as the value of the injected pulse is reduced to 0, the Flag also goes
+tozero,indicatingaself-resettingmechanism.
+Similarly, a current pulse was injected into the PWELL node to test the design’s
+sensitivityatdifferenttemperaturesandcorners. Thevaluesofcurrentandvoltageat
+thePWELLnodearerecorded. Thesensitivityatvariousprocesscornersisrecorded
+intheFig. 3.5.
+14
+
+=== Page 24 ===
+17
+16
+15
+14
+13
+12
+11
+10
+9
+8
+7
+6
+5
+4
+40 25 125
+) Au
+( tnerruC
+detcejnI
+elbatceteD
+muminiM
+340
+320 SS TT
+FF SF
+300 FS
+280
+260
+240
+220
+200
+180
+160
+140
+120
+100
+80
+o
+Temperature ( C)
+) Vm
+( egatloV
+decudnI
+elbatceteD
+muminiM
+Figure3.5: MinimumDetectableInjectedCurrentatPWELL
+From the above figure, it can be deduced that the sensitivity at FF 125 C is high-
+est. ThisisbecausethethresholdvoltageofthetransistorwouldreduceatFF125C.
+Thus, the stack of NMOS M12 and M15 would leak more with lesser induced gate
+voltage. Similarly, the sensitivity of the SS -40 would be worst since the threshold
+voltage will increase at SS -40. Also, in general, the sensitivity is more at higher
+temperatures and lower at cold. This is because the leakage increases at higher tem-
+peraturesduetothresholdvoltagelowering.
+3.7 DesignValidation
+Tovalidatethedesignforthecaseoffalsedetection1000MonteCarlosimulations
+are run. This is done to check the minimum current for no detection and confirmed
+detection. The case of confirmed detection is depicted in Fig. 3.6. It can be inferred
+thatatlowertemperaturesandslowcorners,ittakesmorecurrentfordetection,indi-
+cating a lower sensitivity. Similarly, it is evident that the sensitivity is high at higher
+temperaturesandFastcorners.
+The case for no detection is also depicted in Fig. 3.7. From the figure, it can be
+inferred that the current requirement is significantly less at higher temperatures and
+fastcorners. Thus,suchadetectionsystemshouldalwaysbevalidatedathighertem-
+peratures and fast corners to avoid a false alarm. A minimum no detection margin
+should be maintained to avoid any false alarms and hence the robustness of the de-
+sign. For a given process and temperature, the region between the no detection and
+confirmed detection threshold is in the region of uncertainty. Any current injection
+betweenthisregionmaynotgetdetected.
+15
+
+=== Page 25 ===
+21
+20
+19
+18
+17
+16
+15
+14
+13
+12
+11
+10
+9
+8
+7
+6
+5
+40 25 125
+) Au
+(
+tnerruC
+detcejnI
+elbatceteD
+muminiM
+367.4
+350.0 SS TT
+332.5 FF SF
+315.0 FS
+297.5
+280.0
+262.5
+245.0
+227.5
+210.0
+192.5
+175.0
+157.5
+140.0
+122.5
+105.0
+8877..55
+o
+Temperature ( C)
+) Vm
+(
+egatloV
+decudnI
+elbatceteD
+muminiM
+Figure3.6: MinimumDetectableInjectedCurrentforconfirmdetection
+12
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+1
+40 25 125
+) Au
+(
+tnerruC
+detcejnI
+elbatceteD
+muminiM
+279.00
+SS TT 255.75
+FF SF
+232.50 FS
+209.25
+186.00
+162.75
+139.50
+116.25
+93.00
+69.75
+46.50
+23.25
+o
+Temperature ( C)
+) Vm
+(
+egatloV
+decudnI
+elbatceteD
+muminiM
+Figure3.7: MinimumDetectableInjectedCurrentforNodetection
+16
+
+=== Page 26 ===
+3.8 DrawbacksoftheproposedArchitecture-Iteration1
+Theproposedarchitecture(iteration-1)addressesandresolvesvariousdrawbacks
+of the established design. However, some issues still need to be addressed and re-
+solved. Variousdrawbacksoftheproposedarchitecture(iteration-1)areasfollows:
+• Theskewnessofthesenseamplifiervarieshighlywiththeprocessandtemper-
+ature. This results in varying sensitivity across the process and temperature.
+Thus, instead of skewing the sensitivity of the pulldown devices, some alter-
+natemethodsneedtobeused.
+• The sensitivity of the design with respect to temperature is not constant or
+favorable. This is due to the varying discharge rate of M12 and M15. Thus,
+thedischargerateshouldberegulatedatahighertemperature.
+• The value sampling resistance used is high. It should not be kept too high;
+else to current sunk would reduce. It should be kept comparable to the ON
+resistanceofanNMOSdevice.
+• Thesensitivityobtainedisgenerallyloweratcold,buttheamountofphotocur-
+rent generated would also be low. At higher temperatures, more photocurrent
+would be generated because electrons would require less energy to jump from
+thevalancebandtotheconductionband. Thus,thesensitivityshouldbehigher
+atalowertemperature.
+17
+
+=== Page 27 ===
+Chapter 4
+Proposed Architecture Iteration - 2
+4.1 Motivation
+Theproposeddesignintheiteration-1addressesvariousissuesoftheestablished
+work, but some design flaws also need to be addressed. The skewness of the sense
+amplifiervarieshighlywiththeprocessandtemperature. Thisresultsinvaryingsen-
+sitivityacrosstheprocessandtemperature. Thesensitivityofthedesignwithrespect
+totemperatureisnotconstantorfavorable. Thisisduetothevaryingdischargerate.
+The value sampling resistance used is high. It should be kept comparable to the ON
+resistanceofanNMOSdevice. Thesensitivityobtainedisloweratcold. Thoughthe
+amountofphotocurrentgeneratedwouldalsobelowatcold. Thus,thesensitivityof
+thedetectoratcoldshouldbeenhanced.
+4.2 CircuitDiagram
+Vdd
+PCH
+M1 M2
+Vdd Vdd
+M3
+BPCH BPCH
+M10 M11
+Vdd
+DEC DEC
+M5 M4
+CL CL
+SAF SAT
+M8 M9
+L1 L2
+M7 M6
+PWELL
+SEN M14
+M15 M16
+M13
+M12A M12B M12C
+R
+S1 S2 SEN
+VDD M12A’ M12B’ M12C’
+Figure4.1: ASenseAmplifierbaseddesign(Iteration-2)usedtodetectlaserinduced
+transientcurrent
+18
+
+=== Page 28 ===
+4.3 DesignComponents
+TheProposedArchitectureiteration-2alsoconsistsofasenseamplifieratitscore.
+It also contains pre-charge circuits, a voltage sampling unit, load lines, discharging
+unit, and a latching circuit. The design is also comprised of various signals that
+facilitatethesensingoperation.
+The functionality of various parts of the proposed design is given as follows (al-
+readydiscussedsectionsareomitted):
+• Sampling Unit: The sampling unit used here is a P+ Poly High Resistor (12
+KOhms)thathelpstosamplethetransientcurrentgeneratedduringalaserfault
+intrusion in the form of voltage. The sampling resistance used in this case is
+alsonottoohighandiscomparabletotheONresistanceofanNMOS.
+• Discharging Unit: In this case, the discharging unit comprises 3 stacks of
+NMOSs between the load line (L1) and GND. The first NMOS transistor in
+each stack that is dynamically body biased facilitates the faster discharge of
+the load lines. The second NMOS in the stack is regulated by signals (S1, S2,
+andVDD)tocontrolthedischargerateasperrequirement.
+• MOSCAP: MOS capacitance (M15 and M16) selectively inject charge to the
+internalnodesofthesenseamplifier. Thisisusedtocreateanimbalance.
+SAF SAT
+Vdd Vdd
+M17 M18 M21 M22
+Vdd
+M19 M20
+Vdd
+M23 M24
+Vdd Vdd
+FLAG
+M25 M27
+M26 M28
+Figure4.2: LatchingCircuitusedwiththeSenseAmplifier
+19
+
+=== Page 29 ===
+TheOperationoftheproposeddesignisfulfilledbyusingthesignalsdiscussedas
+follows:
+• Precharge Signals: PCH and BPCH signals are taken to 0 in every Precharge
+phase. PCH turns ON M1, M2, and M3 transistors that charge the internal
+nodes. BPCHturnsontheM10andM11transistorsthatchargetheloadlines.
+• Sense Enable Signal: SEN signal is taken high during the evaluation phase of
+theoperation. Itiskeptlowduringtheprechargeandevaluationphase. During
+the sensing phase, the footer NMOS M14 is turned ON. Internal nodes are re-
+solvedtodefinitelogiclevelsthroughpositivefeedbackastheyaredischarged
+tothegroundviaM14.
+• DEC signal: DEC signal is taken to 0 during the sensing phase. This ensures
+that Pass transistors M23 and M24 are ON. DEC signal is high during the
+precharge and the evaluation phase. Thus, ensuring the load lines are decou-
+pledfromtheinternalnodesofthesenseamplifier.
+DEC signal must be taken high slightly before the SEN signal goes to 1. This
+is to ensure the injected charge is only fed to the internal nodes of the sense
+amplifierandnottotheloadlines.
+• S1 and S2: These are the signals controlled by the operating temperature. S1
+issethighassoonastemperaturefallsbelow25degreesCelsius. S2issethigh
+assoonastemperaturefallsbelow0degreesCelsius.
+Thesesignalshelpstoregulatethedischargerateoftheloadline(L1)duringa
+laserfaultintrusion
+4.4 DesignDecisions
+Variousdesigndecisionthatisundertakentooptimizethesensitivityofthedetec-
+torisgivenasfollows:
+• Insteadofusinghighsamplingresistance,lowersamplingresistancecompara-
+bletotheONresistanceoftheNMOSdeviceisused.
+• Temperature-sensitive signals are used to mitigate the varying discharge rate
+of L1. This would help increase the discharge rate at cold when the threshold
+voltageofthedeviceincreases.
+• Instead of skewing the pulldown, devices of sense amplifier charge injection
+are used to create imbalance. This would reduce the process and temperature
+variation.
+20
+
+=== Page 30 ===
+4.5 MechanismofOperation
+The proposed architecture is a synchronous design. The circuit is governed by
+various signals coordinated with each other. Each monitoring cycle consists of three
+phases namely: Precharge Phase, Sensing Phase and Evaluation Phase. Various
+phasesofoperationareexplainedasfollows:
+• PrechargePhase: DuringthisphasePCHandBPCHsignalsaretakenlow. The
+load lines and the internal nodes of the sense amplifier are charged to VDD.
+During this phase the sense enable signal is at logic 0. Thus the footer NMOS
+M14 is OFF. Also DEC signal is kept high that decouples the internal nodes
+fromthesenseamplifier.
+• SensingPhase: Duringthesensingphasetheprechargesignalsaretakenhigh.
+Thus Load lines and internal nodes of the sense amplifier are in the floating
+state. During this phase any laser fault intrusion would lead to the discharge
+of load line through the discharging unit. Also. Durinn this phase the DEC
+signal is low so (M8 and M9 are ON), any discharge in the load line would be
+reflectedtotheinternalnodesofthesenseamplifier.
+• EvaluationPhase: DuringthisstatetheSenseEnablesignalistakenhigh. The
+PCH and DEC signals are kept high as well. The pass transistors M8 and M9
+are turned OFF. This decouples the internal nodes from the bitlines. Thus no
+furtherdischargeattheloadlineswillnotbereflectedtotheinternalsnodes.
+The footer NMOS M14 is also turned ON. This facilitate the discharge of the
+internalnodes. Basedonvoltageleveloftheinternalnodestheyareresolvedto
+definite logic levels through a positive feedback. The latching circuit updates
+theFlagbasedonthelogicresolvedbythesenseamplifier.
+4.6 CharacterizationandSimulationResults
+In order to avoid any spurious detection the sense amplifier is skewed sufficiently
+suchthatnofalsealarmistriggeredduringnormaloperation. Whenthereisnolaser
+attack always Flag is at 0. In order to do so, MOSCAPs are used inject charge at the
+SAFnodeofthesenseamplifier. Thechargeisinjectedduringtheonsetofevaluation
+phase. This would increase the voltage at SAF node by 200 - 250 mV. Thus, SAT
+nodealwaysdischargesduringthenormaloperation.
+DuringalaserfaultintrusionSAFnodewilldischargemuchmorethanSATduring
+thesensingphase. Apositivedetectionresponsewillbeproducedwhenthedischarge
+of the Load line and SAF node is sufficiently greater to over come the skewness of
+thesenseamplifierduetochargeinjection. ThesizingofMOSCAP(M15andM16)
+are taken such that during normal operation the SAT node discharge with atleast 3-
+sigma confidence at worst case. Also, to maintain similar sensitivity as the previous
+iteration.
+21
+
+=== Page 31 ===
+Process Temperature(C) Mean(mV) Sigma(mV) Mean/Sigma
+-40 43.16 9.25 4.66
+SS 25 43.64 9.32 4.68
+125 41.81 9.39 4.45
+-40 45.43 9.43 4.81
+TT 25 45.21 9.48 4.76
+125 44.34 9.56 4.63
+-40 48.30 9.59 5.03
+FF 25 48.16 9.65 4.99
+125 47.24 9.78 4.83
+-40 45.86 9.36 4.89
+SF 25 45.95 9.43 4.87
+125 45.48 9.56 4.75
+-40 45.02 9.46 4.75
+FS 25 44.61 9.5 4.69
+125 43.49 9.6 4.53
+Table4.1: VariationofMean/SigmaoftheSenseAmplifier
+ItcanbeinferredfromthetablethatthesenseamplifierusedhasconstantMean/Sigma
+value. The amount of charge injected to the SAF will be same across process and
+temperature. Thus, the sense amplifier would have same sensitivity with change in
+processandtemperature.
+To enhance the sensitivity at cold and slow corners dynamic body biasing is used.
+This help us to lower the threshold voltage of M12A, M12B and M12C transistors.
+Also, LVT devices are used for M12A, M12B and M12C. Also, M13 is taken as a
+LVTdevicetobalanceouttheleakageduringthenormaloperation.
+The operating frequency for design is taken as 100 MHz (T = 10 ns) for the proof
+of concept. The precharge phase is taken as 1.5ns, the sensing phase is 2.5 ns and
+evaluationphaseis5.9ns.
+To simulate the sensitivity of the circuit in the initial phase of the design a current
+pulse is used to simulate. This is only used to simulate the sensitivity of the design,
+later replaced by an double exponential current function depicted in figure. At vari-
+ouscornersthecurrentsignalisinjectedatthePWELLnodeofthedesignandvalues
+ofvoltageandcurrentrecorded. ThegraphgivenbelowFig. 22depictstheoperation
+ofthedesign.
+As illustrated in the figure after current pulse is injected the load line L1 dis-
+charges. In the evaluation phase the SAF and SAT nodes are resolved to 0 and 1
+respectively. ThelatchingcircuitsetstheflaghighbyevaluatingSAFandSATnode.
+As soon as the value of the injected pulse reduced to 0 the Flag also goes to zero,
+indicatingaselfresetingmechanism.
+22
+
+=== Page 32 ===
+50 75 100 125 150 175
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.1
+0.0
+0.0
+0
+7
+14
+21
+0.261
+0.174
+0.087
+0.000
+1.08
+0.96
+0.84
+0.72
+1.26
+0.84
+0.42
+0.00
+1.14
+0.76
+0.38
+0.00
+50 75 100 125 150 175
+)HCP(
+V
+)NES(
+V
+)CED(
+V
+)1S(
+V
+)2S(
+V
+)otohP(
+I
+)LLEWP(
+V
+)2L,1L(
+V
+)TAS,FAS(
+V
+) GALF
+(
+V
+)V(
+)V(
+)V(
+)V(
+)V(
+)Au(
+)V(
+)V(
+)V(
+)V(
+Time (ns)
+Figure4.3: AcurrentpulseisinjectedtothePWELLnode
+Also whenever DEC signal is taken high a rise in voltage is observed at the SAF
+node due to charge injection. A rise in voltage is observed in the SAT node as well
+duetothegatedraincouplingcapacitance.
+To test the sensitivity of the design at different temperature and corners a current
+pulseinjectedinthePWELLnode. ThevaluesofcurrentandvoltageatthePWELL
+nodeisrecorded. Thesensitivityatvariousprocesscornersisrecordedinthetable.
+From the above table it can be inferred that the sensitivity at across temperature
+for a given corner is almost constant. This is due to the fact that at cold signal S1
+and S2 would facilitate the discharge of L1. Thus the lower sensitivity at cold is
+mitigated by the use of S1 and S2. A constant sensitivity can be achieved by using
+morenumberoftemperaturesensitivesignals.
+23
+
+=== Page 33 ===
+24
+23
+22
+21
+20
+19
+18
+17
+16
+15
+14
+13
+12
+11
+10
+9
+8
+7
+-40 25 125
+)
+Au
+(
+tnerruC
+detcejnI
+elbatceteD
+muminiM
+288
+276 SS TT FF
+264 SF FS
+252
+240
+228
+216
+204
+192
+180
+168
+156
+144
+132
+120
+108
+96
+84
+o
+Temperature ( C)
+)
+Vm
+(
+egatloV
+decudnI
+elbatceteD
+muminiM
+Figure4.4: MinimumDetectableInjectedCurrentatPWELL
+4.7 DesignValidation
+To validate the design for the case of false detection, 1000 Monte Carlo simu-
+lations are run. This is done to check the minimum current for no detection and
+confirmed detection. The case of confirmed detection is depicted in Fig. 4.5. It can
+beinferredthatsensitivityisalmostthesameacrossthetemperatureforagivencor-
+ner. In general, slow corners demand more current due to the increased threshold
+voltageofthetransistors.
+The case for no detection is also depicted in Fig. 4.6. From the figure, it can be
+inferredthatatfastcorners,thecurrentrequirementisverylower. Thus,thedetection
+systemshouldalwaysbevalidatedatfastcornerstoavoidafalsealarm. Aminimum
+no detection margin should be maintained to avoid any false alarms and hence the
+robustness of the design. For a given process and temperature, the region between
+the no detection and confirmed detection threshold in the region of uncertainty. Any
+currentinjectionbetweenthisregionmaynotgetdetected.
+24
+
+=== Page 34 ===
+32
+31
+30
+29
+28
+27
+26
+25
+24
+23
+22
+21
+20
+19
+18
+17
+16
+15
+14
+13
+12
+-40 25 125
+)
+Au
+(
+tnerruC
+detcejnI
+elbatceteD
+muminiM
+336.64
+326.12 SS TT FF
+315.60
+SF FS
+305.08
+294.56
+284.04
+273.52
+263.00
+252.48
+241.96
+231.44
+220.92
+210.40
+199.88
+189.36
+178.84
+168.32
+157.80
+147.28
+136.76
+126.24
+o
+Temperature ( C)
+)
+Vm
+(
+egatloV
+decudnI
+elbatceteD
+muminiM
+Figure4.5: AcurrentpulseisinjectedtothePWELLnode
+16
+15
+14
+13
+12
+11
+10
+9
+8
+7
+6
+5
+4
+3
+2
+-40 25 125
+)
+Au
+(
+tnerruC
+detcejnI
+elbatceteD
+muminiM
+223.20
+209.25 SS TT
+FF SF
+195.30
+FS
+181.35
+167.40
+153.45
+139.50
+125.55
+111.60
+97.65
+83.70
+69.75
+55.80
+41.85
+27.90
+o
+Temperature ( C)
+)
+Vm
+(
+egatloV
+decudnI
+elbatceteD
+muminiM
+Figure4.6: MinimumDetectableInjectedCurrentforNodetection
+25
+
+=== Page 35 ===
+4.8 DrawbacksoftheproposedArchitecture-Iteration1
+The proposed architecture (iteration - 2) addresses and resolves various design
+drawbacks in iteration - 1. However, some issues still need to be addressed and re-
+solved. Variousdrawbacksoftheproposedarchitecture(iteration-2)areasfollows:
+• Window Masking: When a laser intrusion takes place during the precharge or
+evaluation phase of operation (DEC signal is at 1), then the design will not
+be able to detect the transient current. During this phase, the load lines are
+decoupled from the internal nodes of the sense amplifier. So, any discharge in
+load line L1 will not be transparent to the internal nodes. So, a method should
+bedevelopedtoavoidthewindowmaskingeffect. Thewindowmaskingeffect
+is depicted in Fig. Here a double exponential signal is injected when the DEC
+signal is high. We can observe that though we have injected current, it still
+doesn’tgetdetected.
+26
+
+=== Page 36 ===
+60 70 80 90 100 110 120 130
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.65
+1.10
+0.55
+0.00
+0.0
+0
+16
+32
+48
+0.45
+0.30
+0.15
+0.00
+1.10
+0.99
+0.88
+0.77
+1.05
+0.70
+0.35
+0.00
+0.008
+0.000
+0.008
+0.016
+60 70 80 90 100 110 120 130
+)HCP(V
+)NES(V
+)CED(V
+)1S(V
+)2S(V
+)otohP(I
+)LLEWP(V
+)BLB,LB(V
+)TAS,FAS(V
+)GALF(V
+)V(
+)V(
+)V(
+)V(
+)V(
+)Au(
+)V(
+)V(
+)V(
+)V(
+Time (ns)
+Figure4.7: WindowMaskingEffectintheProposedArchitectureiteration-2
+27
+
+=== Page 37 ===
+Chapter 5
+Final Proposed Architecture
+5.1 Motivation
+Thearchitectureproposedinthepreviouschapterismoresensitivetocold. Also,it
+mitigatesvariousotherissuesinthepreviousdesigns. ButitsuffersfromtheWindow
+Masking Effect. This would result in laser intrusions not getting detected when the
+DECsignalis1. Thus,thisissueneedstobeworkedupon.
+5.2 CircuitDiagram
+Detector - 1
+Precharge
+Circuit
+Sensing Unit
+Flag1
+Discharging Latching
+Unit Circuit
+PWELL
+Detector - 2
+Voltage
+FLAG
+Sampler
+Precharge
+Circuit
+Sensing Unit
+Flag2
+Discharging Latching
+Unit Circuit
+Figure5.1: TwodetectorsInterleavedinTimeDomain
+28
+
+=== Page 38 ===
+5.3 DetectionCoverage
+Two detectors are used in parallel with sampled voltage as input to mitigate the
+window masking effect. The detectors are interleaved in the time domain. They are
+interleavedinsuchafashionthatthesensingandprechargephaseofthefirstdetector
+coincide with the evaluation phase of the second detector. Thus, always one of the
+detectors would always be in the evaluation phase, and the design would never fail
+to detect an intrusion within its sensitivity range. The flag output of the detectors is
+OR-edtogethertoasingleFLAGoutput. Thiswouldincreasethedetectioncoverage
+andmakethedecisionmorerobust.
+A double exponential signal is injected into the PWELL node of the voltage sam-
+pling unit (sampling resistor) to simulate the operation. The double exponential sig-
+nalcanberealizedinthefollowingway:
+−t −t
+I p(t) = I o[eτF −eτR] (5.1)
+Figure5.2: ADoubleexponentialcurrentsignalusedforthesimulations[2]
+Thevariousparametersoftheinjectedcurrentpulsearegivenasfollows:
+• I : PeakCurrent
+o
+• τ : RiseTimeConstant
+R
+• τ : FallTimeConstant
+F
+• T : PulseWidth
+P
+AcurrentpulsewasinjectedintotheproposeddesigninFig. duringtheprecharge
+phase of the detector to simulate the possibility of window masking, as depicted in
+Fig. 5.3.
+29
+
+[Image page_38_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, incorporating the provided text and context:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a line graph.
+*   **Axes:**
+    *   X-axis: Represents time in picoseconds (ps), ranging from approximately 0 to 400 ps. The data points 100.0, 200.0, 300.0 and 400.0 are marked along the x-axis.
+    *   Y-axis: Represents the normalized current (I / Ipeak), ranging from 0 to 1. Values 0, 0.1, 0.5, 0.9, 1 are marked along the y-axis.
+*   **Curve:** A single curve represents the double exponential current signal. The curve rises sharply to a peak and then decays more slowly. The graph captures the shape and characteristics of the injected current pulse.
+*   **Labels:** The graph includes labels indicating key parameters of the current pulse:
+    *   T<sub>R</sub>: Rise Time
+    *   T<sub>F</sub>: Fall Time
+    *   T<sub>P</sub>: Pulse Width.
+    *   Arrows and horizontal lines point from the y-axis to the curve, indicating the pulse width at the 0.5 level and the fall time at the 0.1 level.
+
+**Text within the Image:**
+
+*   **(I / Ipeak)**: The normalized current on the y-axis.
+*   **time (ps)**: The time on the x-axis, measured in picoseconds.
+*   **1.0, 0.9, 0.5, 0.1, 0**: Values on the y-axis.
+*   **100.0, 200.0, 300.0, 400.0**: Values on the x-axis.
+*   **TR, TF, TP**: Labels indicating the Rise Time, Fall Time, and Pulse Width, respectively.
+
+**Context and Importance:**
+
+The image, Figure 5.3, visually represents the double exponential current signal that is injected into the PWELL node during the precharge phase of the first detector. This injection is a simulation intended to mimic the potential impact of a laser intrusion and to test the circuit's susceptibility to "window masking."
+
+*   **Mitigation of Window Masking:** The text on page 29 explains that the two detectors are interleaved to avoid this window masking effect. The purpose of injecting this signal during the precharge phase is to see if the detector can still detect the signal, even when it's most vulnerable.
+*   **Parameters of the Current Pulse:** The text on page 29 lists the parameters of the injected current pulse (Io, τR, τF, TP), which correspond to the features visualized in the graph (Peak Current, Rise Time Constant, Fall Time Constant, Pulse Width). The graph provides a visual representation of how these parameters affect the shape of the current pulse.
+*   **Overall Context:** The surrounding text reveals the purpose of this architecture is to mitigate the window masking effect of an earlier design (described in Chapter 4). This is a critical point of improvement, as the previous design was vulnerable to missing laser intrusions under certain conditions. This image is a validation of the new design's ability to detect signals even during the precharge phase.
+*   **Figure 5.2 Reference:** Equation (5.1) and the text refers to Figure 5.2, which seems to show the idealized form of this pulse. Figure 5.3 shows a simulation of that pulse.
+*   **Figure 5.1 Reference:** The figure is related to the circuit design from Figure 5.1, where the proposed detector architecture includes two detectors interleaved in the time domain. The double exponential current pulse is injected into the PWELL node of the voltage sampling unit in that circuit.
+
+In summary, Figure 5.3 is a crucial visual representation of the simulation results, demonstrating the characteristics of the injected signal used to test and validate the improved detector design's robustness against window masking. It directly correlates the injected current pulse parameters (defined in the text) with the simulated waveform. The graph is thus a key component in understanding the success of the improved design.
+
+
+
+=== Page 39 ===
+40 60 80 100 120 140 160
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.05
+0.70
+0.35
+0.00
+1.1
+0.67
+0.00
+0.67
+0
+16
+32
+48
+0.36
+0.24
+0.12
+0.00
+1.122
+1.088
+1.054
+1.020
+1.17
+0.78
+0.39
+0.00
+1.088
+1.024
+0.960
+1.29
+0.86
+0.43
+0.00
+1.14
+0.76
+0.38
+0.00
+1.29
+0.86
+0.43
+0.00
+40 60 80 100 120 140 160
+,1FAS(V
+,2LB(V
+,2FAS(V
+,1GALF(V
+)1H
+)C VP ((V
+)1N
+)E VS ((V
+)1C
+)E VD ((V
+)2H
+)C VP
+((V
+)2N
+)E VS ((V
+)2C
+)E VD ((V
+)1
+)S V( (V
+)2
+)S V(
+(V
+)o )t Aoh
+uP ((I
+)LLE
+)VW
+(P(V
+)1BLB
+)V,1 (LB(V
+)1
+)T VA (S
+)2
+)B VL
+(B
+)2
+)T VA (S
+)2G
+)VA
+(LF
+)GA
+)VL
+(F(V
+Time (ns)
+Figure 5.3: A double exponential current signal is fed into the PWELL node during
+theprechargephaseoftheFirstDetector
+30
+
+=== Page 40 ===
+From the figure, it can be inferred that the first detector didn’t produce an output
+flagduetothewindowmasking. Butsincetheseconddetectorwasintheevaluation
+phase,itproducedapositivedetection.
+5.4 SimulationResults
+Tosimulatethesensitivityofthedetectordoubleexponentialsignalisinjectedinto
+thePWELLnode. Therisetimeofthesignalistakenas5ps. Thefalltimeisvaried
+from20psto2ns. Thevaluesofminimumdetectablecurrentandchargeandvoltage
+inducedatPWELLisrecordedatvariousprocessandtemperatures.
+160
+SS, -40
+140 TT, 25
+TT, 125
+120 FF, -40
+100
+80
+60
+40
+20
+0 500 1000 1500 2000
+)
+Au
+(
+tnerruC
+detcejnI
+elbatceteD
+muminiM
+Fall Time ( ps )
+Figure5.4: MinimumDetectableInjectedCurrentatthePWELL
+800
+700
+600
+500
+400
+300
+200
+0 500 1000 1500 2000
+)
+Vm
+(
+egatloV
+decudnI
+elbatceteD
+muminiM
+SS, -40
+TT, 25
+TT, 125
+FF, -40
+Fall Time ( ps )
+Figure5.5: MinimumDetectableInducedVoltageatthePWELL
+31
+
+=== Page 41 ===
+ItisobservedfromFig. 5.4thatasfalltimeincreases,thepeakcurrentrequiredfor
+detection decreases. This is because, as the fall time increases, the sampled voltage
+remains at the PWELL node for a longer period of time. As a result, the Load
+line discharges for a prolonged duration. Similarly, for the same reason minimum
+detectablevoltagealsoreduceswithanincreaseinthefalltime.
+35
+SS, -40
+30 TT, 25
+TT, 125
+25 FF, -40
+20
+15
+10
+5
+0
+0 500 1000 1500 2000
+)
+Cf
+(
+egrahC
+detcejnI
+elbatceteD
+muminIM
+Fall Time ( ps )
+Figure5.6: MinimumDetectableInjectedChargeatthePWELL
+From the figure, it can be inferred that the critical charge increases with the in-
+crease in the fall time. The minimum charge required for detection depends on the
+topologyoftheinjectedcurrent.
+32
+
+=== Page 42 ===
+5.5 PowerandLeakageEstimation
+The design sensitivity towards photocurrent is achieved with leakage and total
+powerconsumptionundercontrol. Toavoidleakage,HVT(HighThresholdVoltage)
+devicesareused(StackedLVTisusedonlyforDischargingUnit).
+40
+30
+20
+10
+0
+-40 25 80 125 -40 25 80 125 -40 25 80 125 -40 25 80 125 -40 25 80 125
+SS TT FF SF FS
+)An(
+egakaeL
+-40
+25
+80
+125
+Figure5.7: LeakageCurrentoftheProposedDesign
+45
+40
+35
+30
+-40 25 80 125 -40 25 80 125 -40 25 80 125 -40 25 80 125 -40 25 80 125
+SS TT FF SF FS
+)
+zHM
+/
+Wn
+(
+noitapissiD
+rewoP
+latoT
+-40
+25
+80
+125
+Figure5.8: TotalPowerDissipationoftheProposedDesign
+33
+
+=== Page 43 ===
+At typical operating conditions, the leakage is less than 6 uA. At works case FF
+125, the leakage is 42 nA. The leakage is measured when the DEC signal is 1, and
+there is no output or input signal transient. The leakage is contributed by the load
+lines and the internal nodes of the sense amplifier. Total power at typical operating
+conditionsisabout37nW/MHz.
+5.6 ComparisonwithPreviousWorks
+The current demanded by the detector to produce a FLAG is lower at shorter fall
+timesthaninpreviousworks. Thisissimplybecausetheschemereliesonthepartial
+discharge of a floating node, unlike previous architectures where a constantly driven
+nodeisattemptedtocharge/dischargethroughatransistor. Fig. 5.9showsthecurrent
+sensitivity of different BBICS architectures compared with the proposed design. At
+shorter fall times, the compared architectures fail to produce any output. Also, at
+a larger fall time, the current requirement doesn’t reduce as some minimum voltage
+greaterthanthethresholdvoltageofcharging/dischargingtransistortobemaintained
+toturnONtransistor.
+220
+200
+180
+160
+140
+120
+100
+80
+60
+40
+0 50 100 150 200 250 300
+)Au(
+tnerruC
+elbatceteD
+muminiM
+bbics
+t1hbbics
+zbbics
+t10hbbics
+Proposed Design
+SS, -40
+Proposed Design
+TT, 25
+Fall Time (ps)
+Figure 5.9: Minimum Detectable Injected Current comparison with the established
+work
+34
+
+=== Page 44 ===
+5.7 LayoutDesign
+Alongwithpowerandperformance,anestimateoftheareaandphysicaldesignis
+alsoessentialforanycircuitimplementation. Theproposedmethodologyconsistsof
+twoSenseAmplifiersinterleavedinthetimedomainforcontinuousdetection. Inthe
+physicaldesign,thecircuitissegmentedintofiveparts:
+• SenseAmplifier-1
+• SenseAmplifier-2
+• SamplingUnit-UnisilicidedP+PolyResistor
+• DynamicallyBiasedSetofNMOSs
+• LowerNMOSsintheStacksA,BandC
+The complete physical design implementation of the proposed design is depicted
+in Fig. 5.10. Also, an annotated version of the layout is also displaced in Fig. 5.11.
+The two Sense Amplifiers are laid on the two sides of the layout. The sampling
+resistor is put in the middle of the two sense amplifiers. The dynamically biased
+transistors and Lower NMOSs in Stacks A, B, and Care are below the sampling
+resistor. AlsothelayoutisshieldedbyM3metallayertoavoidanylaserintrusionin
+thedetectionarrangement.
+Figure5.10: LayoutDesignoftheProposedDesign
+35
+
+[Image page_44_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the provided image based on your instructions:
+
+**Image Analysis:**
+
+The image (Fig. 5.10) is a layout design representation of an integrated circuit.  It showcases the physical arrangement of different components and layers within the silicon. These layouts are essential for fabrication and verification of the intended functionality of the design. The layout uses different colors and patterns to denote different layers of materials used in IC fabrication (e.g., polysilicon, metal layers, diffusion areas, contacts, vias). The diagram isn't directly human-readable in terms of logical functionality without knowing the design rules and schematic of the circuit.
+
+**Visual Elements and Structure:**
+
+*   **Overall Structure:** The layout is organized into distinct sections. It appears symmetrical, with mirrored structures on the left and right. The central region has distinct structures as well.
+*   **Sense Amplifiers (Likely):** Based on the description, the mirrored structures on the left and right sides are most likely the two sense amplifiers, "SenseAmplifier-1" and "SenseAmplifier-2." These appear as complex arrangements of rectangles and interconnects.
+*   **Sampling Unit/Resistor (Likely):** The central section of the layout, located at the top and middle, probably contains the "Sampling Unit - Unisilicided P+ Poly Resistor."
+*   **Dynamically Biased NMOSs and Lower NMOSs (Likely):** The remaining components, NMOS transistors at the bottom and between the sense amplifiers, are most probably "Dynamically Biased Set of NMOSs" and "Lower NMOSs in the Stacks A, B, and C".
+*   **Layers:** The layout uses a variety of colored rectangles.
+    *   Red/Pink: Likely polysilicon, often used for transistor gates and resistors.
+    *   Blue: Probably metal layers used for interconnects.
+    *   Green: Most likely diffusion areas for transistors, and possibly contacts/vias.
+    *   Cyan: Seems to represent N-well regions.
+    *   Yellow: Likely defines various implant regions.
+
+**Text Within the Image:**
+
+There is NO readable text directly within the image.
+
+**Context and Importance:**
+
+*   **Layout Design is Crucial:** The surrounding text explicitly states that along with power and performance, area and physical design are "essential for any circuit implementation." This underscores the importance of this layout diagram.
+*   **Physical Implementation:** Fig. 5.10 shows the *complete* physical implementation of the proposed design. This suggests that the layout is a significant deliverable of the research project, demonstrating that the proposed circuit can be realized in silicon.
+*   **Continuous Detection:** The document indicates that the methodology uses "two Sense Amplifiers interleaved in the time domain for continuous detection." This explains the presence of the two sense amplifier blocks in the layout and gives a sense of its function.
+*   **Details Provided:** The text provides information about the components of the design and how they are implemented within the layout:
+    *   Sense Amplifiers are on either side.
+    *   Sampling resistor is in the middle.
+    *   Dynamically biased transistors and Lower NMOSs are below the sampling resistor.
+*   **Shielding:** "Also the layout is shielded by M3 metal layer to avoid any laser intrusion in the detection arrangement." The presence of shielding indicates the circuit is sensitive to outside interference and highlights the attention to detail in the physical implementation to improve the performance of the design.
+
+**Overall Importance:**
+
+The image is vital because it represents the final physical implementation of the proposed circuit. It demonstrates that the theoretical design can be translated into a manufacturable layout. The detailed descriptions of the different components in the text, coupled with the image, provide a clear understanding of how the proposed design is realized in silicon. It's also implied in that a properly designed layout is a factor in the circuit’s performance, power consumption, and reliability.
+
+
+
+=== Page 45 ===
+To make the capacitance equal at the SAT and SAF nodes common centroid is
+made for NMOS M6 and M7. The transistors are broken into four fingers and are
+structurally matched to achieve the proper matching, as depicted in Fig. 5.12. The
+commoncentroidisalsoisolatedusingaguardringtoavoidanysubstratenoise.
+Figure5.11: LayoutDesignoftheProposedDesign(Annotated)
+Figure5.12: CommonCentroidLayoutofNMOSM6andM7Transistors
+To implement the dynamic body biasing, Deep Nwell is made inside the N-Well,
+andusingcropfunctioninvirtuosopropertiesoftheN-WELLisremovedtoforman
+isolatedP-Well.
+36
+
+[Image page_45_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, incorporating the surrounding text and relevant contextual information:
+
+**Image Description:**
+
+The image (Fig. 5.11, according to the page text) is a detailed layout design of a proposed circuit. It's an annotated version, meaning key components are labeled directly on the layout itself.  It consists of five sections, laid out and surrounded by thick black lines. The sections are arranged horizontally and vertically in the image.
+
+*   **Sense Amp - 1:** The left-most block. It is a complex arrangement of what appear to be transistors, resistors, and interconnects. The structures are defined by different colored shapes and lines, indicative of the various layers in the fabrication process (e.g., polysilicon, metal layers, diffusion). This is a dense, intricate design.
+*   **Unsilicided P+ Poly Resistor:** Located at the top center. It is a rectangular, red-shaded area. This is the sampling unit, as mentioned in the text.
+*   **Sense Amp - 2:** The right-most block. It mirrors Sense Amp-1 and shares similar complex transistor and interconnect structures.
+*   **Dynamically Biased Set of NMOSs:** Located directly below the sampling resistor in the center of the image. It contains multiple NMOS transistors and associated interconnects.
+*   **Lower NMOSs in the Stacks A, B, and C:** The bottom center block. This section has a row of NMOS transistors.
+
+**Text Within the Image:**
+
+*   "Sense Amp - 1"
+*   "Unsilicided P+ Poly Resistor"
+*   "Sense Amp - 2"
+*   "Dynamically Biased Set of NMOSs"
+*   "Lower NMOSs in the Stacks A, B and C"
+
+**Significance & Context:**
+
+1.  **Overall Circuit Layout:** The figure shows the physical implementation of a circuit designed for a specific purpose. The surrounding text tells us that the circuit is segmented into five key parts, as represented by the image.
+2.  **Interleaved Sense Amplifiers:** The layout visually represents the arrangement of the two Sense Amplifiers placed on either side of the layout. This confirms the text stating the two sense amplifiers are interleaved in the time domain for continuous detection.
+3.  **Sampling Resistor Placement:** The "Unsilicided P+ Poly Resistor" is placed in the middle, visually confirming the description in the text.
+4.  **Dynamically Biased Transistors:**  The placement of the "Dynamically Biased Set of NMOSs" and the "Lower NMOSs in Stacks A, B, and C" below the sampling resistor is also consistent with the description in the text.
+5.  **Physical Design Importance:** The surrounding text makes it clear that the physical design is critical to the overall performance of the circuit. Area, power consumption, and vulnerability to laser intrusion are all considerations. The use of a metal shield (M3 metal layer), mentioned in the text, isn't visible in this particular figure but gives context to the overall design philosophy.
+
+**Importance**
+
+This figure illustrates the translation of a circuit schematic into a physical layout. This is a crucial step in IC design. It shows the actual area occupied by the circuit and how different blocks are interconnected. It is important because the layout directly impacts performance, power consumption, and susceptibility to errors (like laser-induced faults). The descriptions around this image show that careful segmentation, placement, and shielding are important to the overall performance of this IC. The text also emphasizes that this annotated layout is important for providing insight into the circuit design and implementation.
+
+
+
+[Image page_45_image_1.png Error]
+No API key available for start.
+
+
+=== Page 46 ===
+Chapter 6
+Other Works - Proposed Design 2
+6.1 CircuitDiagram
+Vdd
+Vdd
+Vdd
+M1 M10
+M8 M4 M5
+M2 I
+Q QB
+M9
+C
+M3 M6 M7
+PWELL
+R I
+Figure6.1: ProposedArchitecture-2
+6.2 DesignComponents
+ThefunctionalityofvariouspartsoftheProposeddesignaregivenasfollows:
+• M1 and M2 Transistors supply current to the always ON stack to maintain a
+voltagecontinuouslyattheInode.
+• M3isadiodewhoseM3istiedtogiveaconstantvoltagedropattheInode. It
+also prevents any backflow of current when current is injected via PWELL (to
+simulatealaserfault).
+• Also, parallel to the diode, a capacitance is attached that facilitates the quick
+riseinvoltageattheInodewheneverthereisalaserfaultintrusion.
+• Sampling Unit: Here a resistance of 12 KOhms is used to sample the voltage.
+InsteadofusinganNMOSandconstantP+PolyHighResistorisusedtoavoid
+anyvariationduetoprocessandtemperature.
+• M4, M6, and M5, M7 consist of a back-to-back connected inverter. Inverters
+are skewed to facilitate the flipping action whenever a voltage rise occurs at
+37
+
+=== Page 47 ===
+PWELL.NMOSM6issourceaswellasbodybiased. NMOSM7isalsobody
+biased.
+• Half latch: M8 and M9 transistors form an inverter whose output is connected
+tothegateofM10.
+6.3 DesignDecisions
+Variousdesigndecisionsundertakentooptimizethedetector’ssensitivityaregiven
+asfollows:
+• M1 and M2 are taken as HVT devices. Also, their length is increased to limit
+thealwaysONcurrentofthestacktoGND.
+• Inclusionofcapacitorparalleltodiodefacilitatestheimmediateriseinvoltage
+whenthevoltageatPWELLincreases.
+• The back-to-back connected inverters are skewed to make it unstable and ease
+theflippingaction. ThelengthofM5andM7areincreasedtopreventleakage.
+• Thelengthoftransistorsinthehalflatchisalsoincreasedtoreduceleakage.
+6.4 MechanismofOperation
+Theproposedarchitectureisanasynchronousdesign. Variousphasesofoperation
+areexplainedasfollows:
+• Normal Operation: During regular operation, the I node is set below the trip
+pointoftheback-to-backconnectedinverters(around420mV).Thisisachieved
+bysizingthePMOSM1,M2,anddiodeM3.
+Q node is initialized to 0, and the QB node is set to 1. Q node is used as flag
+Output. Qgoinghighindicatesalaserfaultinjection. Duringno-faultPWELL
+nodeisat0(sampledvoltage).
+• FaultDetection: Whenthereislaserfaultinjection,therewouldbeanincrease
+in the PWELL voltage. Incoming photocurrent would only flow through the
+sampling resistor; since it would not flow through the diode in the opposite
+direction.
+The sharp increase in voltage at the PWELL node is reflected in the I node
+through the capacitor. The jump in voltage at the I node is reflected at the Q
+node,whichinitiatestheflippingaction. AsthevoltageattheQnodeincreases,
+theM7transistorturnsONanddischargestheQBARnode. TheHalflatchalso
+turns M10 ON, charging the Q node to a full logic 1, indicating a laser fault
+injection.
+The behavior of the circuit during the fault detection case is illustrated in Fig.
+6.2.
+38
+
+=== Page 48 ===
+Vdd
+Vdd
+Vdd
+M1 M10
+M8 M4 M5
+M2 I
+Q QB
+M9
+C
+M3 M6 M7
+PWELL
+R I
+Figure6.2: MechanismofOperationoftheProposedArchitecture-2
+6.5 SimukationResults
+AdoubleexponentialsignalisinjectedatthePWELLnodewitharisetimeof5ps
+andafalltimeof2nstoillustratethecircuit’sfunctionality,asdepictedinFig. 6.3.
+960 970 980 990 1000 1010 1020 1030 1040
+0
+16
+32
+48
+0.45
+0.30
+0.15
+0.00
+0.72
+0.60
+0.48
+0.36
+1.05
+0.84
+0.63
+0.42
+1.29
+0.86
+0.43
+0.00
+960 970 980 990 1000 1010 1020 1030 1040
+)otohP(I
+)LLEWP(V
+)I(V
+)Q(V
+)BQ(V
+)Au(
+)V(
+)V(
+)V(
+)V(
+Time (ns)
+Figure6.3: AdoubleexponentialsignalisinjectedatPWELLnode
+39
+
+=== Page 49 ===
+Tosimulatethesensitivityofthedetectordoubleexponentialsignalisinjectedinto
+the PWELL node. The rise time of the signal is taken as 5 ps, and The fall time is
+varied from 60ps to 2ns. The values of minimum detectable current and charge and
+voltage induced at PWELL is recorded at various process and temperatures. All the
+simulationsareperformedatTT25C.
+160
+150
+140
+130
+120
+110
+100
+90
+80
+70
+Current
+60
+Charge
+50
+40
+30
+20
+10
+0
+0 500 1000 1500 2000
+Fall Time ( ps )
+)
+Au
+(
+tnerruC
+detcejnI
+elbatceteD
+muminiM
+20
+19
+18
+17
+16
+15
+14
+13
+12
+11
+10
+9
+8
+7
+6
+5
+4
+)
+Cf
+(
+egrahC
+detcejnI
+elbatceteD
+muminiM
+Figure6.4: MinimumDetectableInjectedCurrentandChargeatthePWELL
+850
+PWELL VOLTAGE at TT 25 C
+800
+NODE I VOLTAGE at TT 25 C
+750
+700
+650
+600
+550
+500
+450
+400
+350
+300
+250
+200
+150
+0 500 1000 1500 2000
+Fall Time (ps)
+)
+Vm
+(
+LLEWP
+ta
+egatloV
+elbatceteD
+muminiM
+850
+800
+750
+700
+650
+600
+550
+500
+450
+400
+350
+300
+250
+200
+150
+)
+Vm
+(
+I
+EDON
+Figure6.5: MinimumDetectableInducedVoltageatthePWELL
+40
+
+=== Page 50 ===
+It is observed from Fig. that as fall time increases, the peak current required for
+detection decreases. This is because, as the fall time increases, the sampled voltage
+remains at the PWELL node for longer. As a result, the Load line discharges for a
+prolonged duration. Similarly, for the same reason minimum detectable voltage also
+reduceswithanincreaseinthefalltime.
+From the figure, it can be inferred that the critical charge increases with the in-
+crease in the fall time. The minimum charge required for detection depends on the
+topologyoftheinjectedcurrent.
+The total leakage of the design during its regular operation at TT 25 C is 280 nA.
+Totalpowerconsumptionduringnormalconditionsis302nW.
+In Fig. 6.6, the sensitivity of both the Proposed design is depicted. Clearly, the
+sensitivityoftheproposeddesign-2stillneedsfurtherenhancement. Also,atavery
+low fall time ( 60 ps), the proposed design - 2 is unable to detect the photocurrent
+injection. ThisisbecausethevoltageatPWELLcannotrisesufficientlyatlowerfall
+time.
+160
+150
+140
+130
+120
+110
+100
+90
+80
+70
+60
+50
+40
+30
+0 20 40 60 80 100 120 140 160 180 200 220 240 260 280 300 320
+)
+Au
+(
+LLEWP
+ta
+detcejnI
+tnerruC
+elbatceteD
+muminiM
+Proposed Design 1
+Proposed Design 2
+Fall Time ( ps )
+Figure 6.6: Comparison of Proposed Architecture - 1 and 2 showing Minimum De-
+tectableCurrentatTT25oC
+41
+
+=== Page 51 ===
+Chapter 7
+Conclusion
+Inthiswork,wehaveproposedacircuitandmethodtodetectside-channelattacks
+in secure ICs. The Conventional methods to detect laser-induced currents are also
+discussedinbrief. Thedesignisimplementedandoptimizedforleakage,power,and
+sensitivity. It is characterized and simulated using the 65nm LSTP (Low Standby
+Power)Processat1.08V.Tobenchmarktheperformanceoftheproposeddesign,itis
+simulatedwithexponentialcurrentsignals,andminimumdetectablecurrent,voltage,
+and the charge is recorded. The proposed method has evolved in various iterations.
+Each iteration is explained with its contribution (improvement over the previous)
+and drawbacks. The conventional approach to detect laser-induced current lacks
+sensitivity for a shorter current pulse and has high leakage current. The proposed
+methodis1.5x-2.4xmoresensitivetowardthecurrentpulsewithafalltimeof100ps
+andbelow. Thedesignbeingsynchronoushasagreaterdegreeofcontrol. Theworst
+leakage recorded is 42 nA, and power is 41 nW/MHz. Due to the higher sensitivity
+oftheproposeddesign,lesserrepetitionofthearrangementisrequiredintheSoC.
+42
+
+=== Page 52 ===
+Chapter 8
+Future Work
+The proposed design - 2 doesn’t show good sensitivity as compared to the Design
+- 1 towards shorter pulse and lower injected photocurrent. The goal is improve the
+sensitivity of the design. Also, the leakage of the design should also be reduced
+during normal operating condition. The improved sensitivity and lower leakage of
+thedesigncanprovetobeabettersolutionintermsofarea.
+43
+
+=== Page 53 ===
+Chapter 9
+References
+1. C.Champeix,N.Borrel,J.-M.Dutertre,B.Robisson,M.LisartandA.Sarafi-
+anos,”ExperimentalvalidationofaBulkBuilt-InCurrentSensorfordetecting
+laser-induced currents,” 2015 IEEE 21st International On-Line Testing Sym-
+posium(IOLTS),2015,pp. 150-155,doi: 10.1109/IOLTS.2015.7229849.
+2. A. Simionovski and G. I. Wirth, ”A Bulk Built-in Current Sensor for SET
+detectionwithdynamicmemorycell,”2012IEEE3rdLatinAmericanSympo-
+sium on Circuits and Systems (LASCAS), 2012, pp. 1-4, doi: 10.1109/LAS-
+CAS.2012.6180338.
+3. R. P. Bastos, J. -M. Dutertre and F. S. Torres, ”Comparison of bulk built-in
+current sensors in terms of transient-fault detection sensitivity,” 2014 5th Eu-
+ropean Workshop on CMOS Variability (VARI), 2014, pp. 1-6, doi: 10.1109/
+VARI.2014.6957089.
+4. R. P. Bastos, F. S. Torres, J. -. Dutertre, M. -. Flottes, G. Di Natale and
+B. Rouzeyre, ”A single built-in sensor to check pull-up and pull-down CMOS
+networksagainsttransientfaults,”201323rdInternationalWorkshoponPower
+and Timing Modeling, Optimization and Simulation (PATMOS), 2013, pp.
+157-163,doi: 10.1109/PATMOS.2013.6662169.
+5. M. Lacruche et al., ”Laser fault injection into SRAM cells: Picosecond versus
+nanosecond pulses,” 2015 IEEE 21st International On-Line Testing Sympo-
+sium(IOLTS),2015,pp. 13-18,doi: 10.1109/IOLTS.2015.7229820.
+6. Z.Zhang,T.Wang,L.ChenandJ.Yang,”AnewBulkBuilt-InCurrentSensing
+circuit for single-event transient detection,” CCECE 2010, 2010, pp. 1-4, doi:
+10.1109/CCECE.2010.5575124.
+7. R. P. Bastos, F. S. Torres, J. . -M. Dutertre, M. . -L. Flottes, G. Di Natale and
+B.Rouzeyre,”Abulkbuilt-insensorfordetectionoffaultattacks,”2013IEEE
+International Symposium on Hardware-Oriented Security and Trust (HOST),
+2013,pp. 51-54,doi: 10.1109/HST.2013.6581565.
+8. C.Champeixetal.,”Lasertestingofadouble-accessBBICSarchitecturewith
+improvedSEEdetectioncapabilities,”201616thEuropeanConferenceonRa-
+diationandItsEffectsonComponentsandSystems(RADECS),2016,pp. 1-4,
+doi: 10.1109/RADECS.2016.8093172.
+9. D.Zooker,A.Fish,O.KerenandY.Weizman,”CompactSub-VtOpticalSen-
+sor for the Detection of Fault Injection in Hardware Security Applications,”
+2019 10th IFIP International Conference on New Technologies, Mobility and
+Security(NTMS),2019,pp. 1-5,doi: 10.1109/NTMS.2019.8763825.
+44
+
+=== Page 54 ===
+10. Jean-MaxDutertre,RodrigoPossamaiBastos,OlivierPotin,Marie-LiseFlottes,
+Bruno Rouzeyre, et al.. Sensitivity tuning of a bulk built-in current sensor for
+optimal transient-fault detection. Microelectronics Reliability, Elsevier, 2013,
+European Symposium on Reliability of Electron Devices, Failure Physics and
+Analysis, 53 (9), pp.1320-1324. ff10.1016/j.microrel.2013.07.069ff. ffemse-
+01100723
+45
+

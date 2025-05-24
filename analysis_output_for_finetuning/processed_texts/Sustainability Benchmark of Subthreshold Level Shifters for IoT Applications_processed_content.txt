@@ -1,0 +1,1630 @@
+=== Page 1 ===
+Sustainability Benchmark of Subthreshold Level
+Shifters for IoT Applications
+Abhishek Jain, Anuj Grover
+Dept. of Electronics and Communication Engineering
+Indraprastha Institute of Information Technology Delhi
+New Delhi 110020, India
+{abhishek23208, anuj}@iiitd.ac.in
+Abstract—The advancement of semiconductor technology has
+intensified the demand for ultra-low-power ICs, especially in
+energy-constrained IoT applications. With continued scaling,
+the subthreshold operation has become a promising approach
+for minimizing power consumption. In advanced SoCs utilizing
+dynamicvoltageandfrequencyscaling(DVFS),LevelShiftersare
+essential for interfacing domains operating at different voltage
+levels. When one of the voltage islands functions at a sub-
+threshold voltage, specialized Subthreshold Level Shifters (SLS) Fig.1. LevelShifterreferenceblockdiagram
+are employed to ensure reliable signal transition. Various SLS
+architectures are available in the industry, each evaluated based
+on conventional PPA (Power, Performance, and Area) metrics while minimizing power consumption, propagation delay, and
+to determine their suitability for different applications. Beyond areaoverhead.SubthresholdLevelShifters(SLS),designedfor
+PPA, the integration of a sustainability evaluation paradigm
+ultra-low-power applications, play a crucial role in such sce-
+broadenstheanalysisbyassessingthefabricationandoperational
+nariosbybridgingvoltagetransitionsbetweenthesubthreshold
+impact of a design, ensuring long-term efficiency and a reduced
+carbon footprint. In this work, a set of SLS architectures has andnominalvoltageislands[5].Fig.1illustratesanSLSblock
+beenbenchmarkedusinganovelsustainability-focusedevaluation diagram that transitions signals from low voltage (VDDL =
+paradigm in 65nm Low Standby Power technology. This bench- 0.3V) to high voltage (VDDH = 1.2V).
+mark paradigm enables designers to choose the most efficient
+This work implements and benchmarks a curated set of
+and sustainable SLS architecture among the available ones.
+conventionalandadvancedSLSarchitecturesusingaproposed
+Index Terms—Level Shifter, Subthreshold, Sustainability met-
+ric, Low-power design, Embodied footprint, Operation footprint sustainability-driven evaluation paradigm. This approach en-
+ables the evaluation of each design’s efficiency by extending
+beyondconventionalPPAmetricstoincludeitsenvironmental
+I. INTRODUCTION impact, accounting for both its fabrication and operational as-
+pects.Thus,enablingdesignerstodeterminethemostefficient
+In the VLSI industry, ICs are primarily evaluated on the
+and sustainable SLS architecture for specific applications by
+basis of the power, performance, and area (PPA) trade-off,
+using the proposed Power, Performance, Area, and Sustain-
+which determines design efficiency and reliability. Achieving
+ability (PPAS) evaluation paradigm.
+an optimal balance is particularly challenging for low-power
+A key advantage of this approach is that it facilitates the
+designs [1]. Beyond PPA, the growing emphasis on sustain-
+consideration of sustainability-aware decisions in the early
+ability requires assessing the environmental impact of an IC
+phase of the chip design flow. This may result in a reduced
+from its fabrication to its operation [2].
+carbon footprint for the SoC that incorporates sustainability-
+The sustainability focus is particularly crucial in domains
+assessed Level Shifter cells. Furthermore, the SLS layout
+such as the Internet of Things (IoT) and wearable devices,
+implementationsdesignedinthisworkadoptauniquedouble-
+where the subthreshold operation has emerged as an effective
+row standard cell format rather than the common single-
+approach to achieve significant power reduction [3], [4].
+row format, thus optimizing area efficiency and reducing the
+However, circuits operating in this regime face challenges
+manufacturing footprint. This work is conducted using 65nm
+such as low drive strength, high propagation delays, and
+LowStandby Power technologyfrom STMicroelectronicsand
+increased sensitivity to variations. These limitations become
+implemented in the Cadence Virtuoso design environment.
+more critical when low-voltage domain circuits interface with
+nominal supply voltage blocks. II. LOW-POWERANDSUSTAINABILITYCONSIDERATIONS
+To bridge this multi-voltage domain communication, Level
+INSUBTHRESHOLDLEVELSHIFTER(SLS)
+Shifters are employed, which ensure smooth signal transi- The following sections discuss low-power design strategies
+tion between different voltage domains. Their effectiveness and the significance of subthreshold operation in reducing
+is determined by their ability to support large voltage shifts power consumption. Additionally, the sustainability aspects
+
+[Image page_1_image_0.png Analysis (by Gemini)]
+Here is a detailed analysis of the image you provided, based on the information given.
+
+**Visual Elements:**
+
+*   **Diagram:** The image is a block diagram illustrating the basic function of a Level Shifter.
+*   **Blocks:** Three rectangular blocks represent "Voltage Island 1," "Level Shifter," and "Voltage Island 2."
+*   **Connections:**
+    *   Voltage Island 1 is connected to the Level Shifter via an orange arrow, indicating signal flow.
+    *   Similarly, the Level Shifter is connected to Voltage Island 2 via an orange arrow.
+    *   Vertical blue lines connect the voltage islands and the level shifter to horizontal red lines representing power supply rails.
+*   **Color Coding:** The voltage supply rails are in red, the connection lines are blue, the signal flow is orange, and the level shifter block is lime green.
+
+**Text within the Image:**
+
+*   "Voltage Island 1"
+*   "Level Shifter"
+*   "Voltage Island 2"
+*   "VDDL = 0.3V" (over Voltage Island 1 and Level Shifter)
+*   "VDDH = 1.2V" (over Level Shifter and Voltage Island 2)
+
+**Structure:**
+
+The diagram shows a sequential arrangement of blocks: Voltage Island 1, then the Level Shifter, then Voltage Island 2. Power supply connections (VDDL and VDDH) are shown for each block. The arrows indicate the unidirectional signal flow.
+
+**Significance:**
+
+The diagram illustrates the fundamental role of a Level Shifter in connecting voltage domains with different operating voltages. Specifically, it shows the shift from a low voltage (VDDL = 0.3V) to a high voltage (VDDH = 1.2V).
+
+**Image Context and Importance:**
+
+The image, labeled as "Fig. 1. LevelShifterreferenceblockdiagram," is presented in a research paper focusing on the sustainability of Subthreshold Level Shifters (SLS) for IoT applications. Based on the surrounding text, the image is crucial because:
+
+*   **Defining SLS role:** It visually defines the function of a Level Shifter in bridging the voltage gap between a subthreshold voltage domain (VDDL = 0.3V) and a nominal voltage domain (VDDH = 1.2V).
+*   **Setting the stage:** It serves as a reference point for the subsequent discussion of various SLS architectures and their evaluation based on a sustainability-focused paradigm.
+*   **Highlighting Importance:** The text emphasizes the growing need for low-power design techniques and the importance of Level Shifters in IoT applications. The figure graphically demonstrates this need. The level shifter allows circuits to communicate even when the power supply levels are significantly different, which is critical for circuits to communicate with different voltage specifications.
+
+
+
+=== Page 2 ===
+of design choices are discussed, emphasizing how low-power footprint, which considers the energy usage and emissions
+techniques, including subthreshold operation, influence the produced throughout the functional life of the hardware [10].
+environmental and operational footprint of SLS architectures. Existing methods for sustainability evaluation generally
+workatahigherabstractionlevel,aimingtoassessthecarbon
+A. Low-Power Design footprint of an IC/product after it has been manufactured.
+However, a method to help designers assess sustainability at
+In today’s advanced technology processes, efficient power
+the early stages of the chip design process, i.e., at individual
+management is a critical design aspect apart from achieving
+computing logic cell selection (here, Level Shifter), is still
+high performance. Reducing power dissipation without com-
+not available. To tackle this challenge, this work presents a
+promising functionality is essential for enhancing operational
+designer-centric paradigm for evaluating an individual SLS
+lifespan and reliability. Hence, designers often resort to low-
+cell’s carbon footprint arising from both its manufacturing
+power design techniques in IC development, such as multi-
+and operational phases. Section IV provides insights into the
+threshold devices, power gating, etc [6]. Level Shifter is
+proposed sustainability evaluation paradigm, validates it on
+one such technique, which is being deployed in most of the
+theselectedSLSarchitectures,andpresentsthecorresponding
+advanced IC designs, especially in domains like IoT.
+results and analysis. However, before that, the following
+Level Shifters facilitate the interface between multiple volt-
+section introduces the set of selected SLS architectures.
+age domains, as some regions within an IC may operate at
+lower voltages to reduce power consumption, while others
+III. LEVELSHIFTER
+require higher voltages to support performance-intensive op-
+Priortodelvingintothedetailsoftheproposedparadigm,a
+erations [7]. In particular, when a voltage island functions in
+thorough understanding of Level Shifters is necessary, which
+the low-power Subthreshold region, specialized Subthreshold
+forms its basis. So, this section gives a brief overview of
+Level Shifters (SLS) play a crucial role in ensuring reliable
+Level Shifters and their importance in advanced IC. It further
+signal transitions while optimizing energy efficiency.
+provides detailed post-layout observations of existing Figures
+ofMeritforSLSarchitectures,servingasabasisforapplying
+B. Subthreshold Operation for Power Efficiency
+and evaluating the proposed PPAS paradigm in Section IV.
+As discussed in the previous section, designers often im-
+LevelShiftersarealow-powerdesigntechniquethatenables
+plement low-power design techniques for advanced IC devel-
+signal transitions between lower and higher voltage domains
+opment. Hence, the subthreshold operation has become a po-
+orvice-versa,ensuringcommunicationacrossdifferentvoltage
+tential technique for them to achieve low-power consumption
+islands in a multi-voltage SOC. This is essential to avoid
+inmoderncircuitswhilemaintainingefficientperformance.In
+data corruption in mixed-voltage environments and maintain
+thesubthresholdregion,devicesoperateatvoltageslowerthan
+signal integrity [7]. When a voltage island operates in the
+theirthresholdvoltage(VT),allowingthemtotransitionusing
+subthreshold region, dedicated SLS are utilized to maintain
+leakage current without the requirement of a strong inversion
+signal integrity and facilitate seamless voltage transitions.
+channel.Inthisregion,thedraincurrentfollowsanexponential
+dependence on gate voltage, thus consuming low-power. [8]. A. Subthreshold Level Shifter Architectures
+ThisworkimplementsandevaluatessixdifferentSLSarchi-
+C. Sustainability Considerations in Low-Power VLSI Design
+tectures using the proposed sustainable benchmark paradigm.
+Understanding the sustainability aspect is essential for These architectures are designed to shift voltage from sub-
+choosing an efficient and reliable circuit architecture in the threshold VDDL (0.3V) to nominal VDDH (1.2V) (as shown
+current ecological era. Sustainability emphasizes developing in Fig. 1) and are simulated at an operating frequency of 1
+reliable products while minimizing their long-term environ- MHz with an external load of 100 fF in 65nm technology.
+mental impact [9]. However, rather than developing a new Fig. 2 illustrates conventional SLS, while Fig. 3 depicts
+sustainable architecture, this work proposes a sustainability advanced SLS. The SLS architectures are detailed below.
+evaluation paradigm to quantify and benchmark the environ-
+mental impact of various existing SLS architectures. This will
+allow designers to make sustainable design choices.
+In VLSI industries, sustainability is generally assessed at
+thechip/productlevelbyusingstandardizedmethodslikeLife
+Cycle Assessment (LCA) and the Greenhouse Gas (GHG)
+Emission Protocol. LCA evaluates the environmental impact
+of hardware components by quantifying their carbon emis-
+sions/footprint, while GHG classifies them into categories of
+Scope1,Scope2,andScope3.Thecarbonfootprint(CFP)is (a) (b)
+generally divided into two key types: (a) Embodied footprint,
+Fig. 2. (a) Cross-coupled Level Shifter (CCLS) [11] (b) Wilson Current
+which accounts for the emissions resulting from semiconduc- Mirror Level Shifter (WCMLS) [11]. CCLS and WCMLS are conventional
+tor fabrication & its infrastructure setup, and (b) Operational Levelshiftersthatareimplementedinthiswork.
+
+[Image page_2_image_0.jpeg Analysis (by Gemini)]
+Here is a thorough analysis of the image you provided.
+
+**Visual Elements and Structure:**
+
+The image is a circuit diagram of a "Low-Power Subthreshold to Above-Threshold Voltage Level Shifter (LPSVTLS)."  It consists of the following main components:
+
+*   **NMOS Transistors:** Two NMOS transistors are present at the bottom left and bottom right, forming part of the input and switching circuitry.
+*   **PMOS Transistors:** Two PMOS transistors are located at the top, acting as pull-up devices. They are connected in a cross-coupled manner.
+*   **Inverters:** There is an inverter at the bottom center, powered by VDDL.  Another inverter is on the right side of the diagram, serving as an output buffer, powered by VDDH.
+*   **Nodes/Interconnections:** The components are interconnected, with nodes labeled Q1 and Q2. These nodes connect to the output inverter.
+
+**Text Within the Image:**
+
+*   **VDDH:**  This label appears twice, indicating the high-voltage supply rail.
+*   **VDDL:** This label indicates the low-voltage supply rail.
+*   **IN:** This label marks the input signal to the level shifter.
+*   **OUT:** This label indicates the output signal of the level shifter.
+*   **Q1, Q2:** Labels for intermediate nodes in the circuit.
+
+**Context and Importance:**
+
+Based on the surrounding text and the paper's focus, the image depicts one of the level shifter architectures being analyzed for its sustainability. The surrounding text provides the following:
+
+*   **Level Shifters:** The paper focuses on level shifters, particularly those used in subthreshold operation to interface between low-voltage and high-voltage domains. They are essential for communication in mixed-voltage systems.
+*   **Subthreshold Operation:** The paper discusses the importance of subthreshold operation for low-power design, especially in IoT applications. The level shifter is specifically designed to interface between a subthreshold voltage (VDDL = 0.3V) and a higher voltage (VDDH = 1.2V).
+*   **Sustainability:** The paper emphasizes the need to assess the sustainability of IC designs, considering both manufacturing (embodied footprint) and operational phases.  The circuit diagram is relevant because the paper aims to benchmark different level shifter architectures based on a "Power, Performance, Area, and Sustainability (PPAS)" evaluation paradigm.
+*   **LPSVTLS:** The text refers to "Low-Power Subthreshold to Above-Threshold Voltage Level Shifter (LPSVTLS) [14]," connecting it to the circuit in the image. It indicates that this architecture, referred to as LPSVTLS, follows the CCLS principle but adds Dynamic Current Generators to speed up the output transitions and reduce static power.
+
+**Overall Importance:**
+
+The circuit diagram is crucial because it visually represents one of the candidate architectures whose power consumption, performance, area, and sustainability (environmental impact) are being compared in the research. Understanding the structure of this specific level shifter architecture is essential for interpreting the experimental results and the trade-offs between performance and sustainability that the paper aims to highlight. The level shifter's ability to provide fast and reliable voltage transitions, while minimizing power consumption and environmental impact, directly affects its suitability for energy-constrained IoT applications.
+
+
+
+[Image page_2_image_1.jpeg Analysis (by Gemini)]
+Here's an analysis of the provided image based on your instructions:
+
+**Visual Elements and Structure:**
+
+The image is a circuit diagram of a Level Shifter architecture, specifically referencing the circuit described in section 5) Low-Power Subthreshold to Above-Threshold Voltage Level Shifter (LPSVTLS) [14] of the provided document. Here is a breakdown:
+
+*   **Transistors:** The diagram contains several MOSFET transistors, which are the basic building blocks of the circuit. Both PMOS (P-channel MOSFET) and NMOS (N-channel MOSFET) transistors are present. The transistor symbols include the gate, source, and drain terminals.
+*   **Inverters:** The diagram includes multiple inverter circuits, which are logic gates that invert the input signal (high to low, or low to high). Inverters are typically formed by a PMOS and an NMOS transistor.
+*   **Power Supplies:** It shows connections for two power supplies: VDDH (high voltage) and VDDL (low voltage). These are labeled.
+*   **Input and Output:** It has an input labeled "IN" and an output labeled "OUT."
+*   **Nodes:** The points Q1 and Q2 are marked which are intermediate nodes in the circuit.
+
+**Text within the Image:**
+
+*   **VDDH:** Indicates the high voltage supply.
+*   **VDDL:** Indicates the low voltage supply.
+*   **IN:**  The input terminal of the level shifter.
+*   **OUT:** The output terminal of the level shifter.
+*   **Q1:** Node Q1 in the circuit
+*   **Q2:** Node Q2 in the circuit
+
+**Context and Importance (based on provided text):**
+
+*   **Overall Context:** The image represents the circuit diagram of the LPSVTLS (Low-Power Subthreshold to Above-Threshold Voltage Level Shifter) architecture. It's used in scenarios where signals need to be translated between different voltage domains within an IC, particularly between a subthreshold voltage domain (low voltage) and a nominal voltage domain (higher voltage).
+*   **Importance:** Level shifters are critical in modern IC designs, especially in IoT devices, where power efficiency is paramount. Subthreshold operation is employed to minimize power consumption, but it requires level shifters to interface with other parts of the circuit that operate at higher voltages. The LPSVTLS architecture, as described in the surrounding text, is designed to provide this level shifting functionality with low power consumption and improved transition speed by using dynamic current generators.
+*   **Sustainability Considerations:** The paper emphasizes the importance of considering sustainability in the design of ICs. By evaluating the environmental impact (carbon footprint) of different level shifter architectures, designers can make informed choices to minimize the long-term environmental impact of their designs.
+
+In summary, the image illustrates a circuit diagram of the LPSVTLS. The paper aims to provide a sustainability benchmark for such circuits by considering both power consumption and environmental impact in the design process.
+
+
+
+=== Page 3 ===
+(a) (b) (c) (d)
+Fig.3. (a)DeepSub-thresholdEnergyEfficientLevelShifter(DSELS)[12](b)RobustSubthresholdLevelShifterwithWideConversionRange(RSWCRLS)
+[13] (c) Low-Power Subthreshold to Above-Threshold Voltage Level Shifter (LPSVTLS) [14] (d) Ultra-Wide-Range Energy-Efficient Level Shifter with
+CCLS/CMLSHybridStructure(C3MLS)[11].DSELS,RSWCRLS,LPSVTLS,andC3MLSareadvancedSLSthatareimplementedinthiswork.
+1) Cross-coupled Level Shifter (CCLS) [11]: CCLS also which subsequently transfers ‘VDDH - V ’ to its source
+Tn
+known as Differential Cascode Voltage Switch, incorporates terminal i.e. at node Z or Zb.
+cross-coupled pull-up (PU) PMOS transistors pair to form a In this architecture, precise transistor sizing is crucial as
+feedback mechanism for driving the output nodes to stable it directly impacts the threshold voltage (VT), which subse-
+signallevels(asshowninFig.2(a)).Toovercomethefeedback quentlydeterminestheinputvoltageofthePMCCPMOSgate,
+effectformodifyingthecontentontheoutputnodes,thepull- expressed as ’VDDH - V ’ supplied from the PNCC NMOS
+Tn
+down (PD) NMOS needs to be sufficiently strong. Enhancing sourcei.e.atnodeZorZb.Furthermore,here,theoutputstage
+NMOS drive strength through larger device sizing or LVT is designed with an inverter controlled by two separate inputs
+variantsincreasesareausageorrequiresadditionalfabrication (split-input buffer), thus providing controlled leakage and
+steps, both contributing to a higher embodied footprint. energy efficiency. DSTEELS occupies less area and has very
+The feedback network minimizes leakage by stabilizing the low dynamic and static power consumption. However, this
+output nodes at stable logic levels, ensuring low static power designfacessignalintegrityissuesduetofloatingnodesZand
+dissipation. However, it demands a high contention current, Zb, which can affect circuit performance through intra-metal
+leading to increased dynamic power consumption. parasitic observed in post-layout extraction and fabrication.
+2) Wilson Current Mirror Level Shifter (WCMLS) [11]: 4) RobustSubthresholdLevelShifterWithWideConversion
+Current Mirror Level Shifter (CMLS) uses a current mirror Range (RSWCRLS) [13]: In this design, the CCLS config-
+mechanism to replicate a stable reference current across its uration has been modified to reduce current contention by
+branches, ensuring uniform current flow between varying using an NMOS-diode-based current limiter in the pull-up
+voltagedomains.Thisapproachenablesreliablevoltagetrans- network on both branches, thus enhancing the level-shifting
+lation while preserving signal integrity across SLS transistors. performance and increasing the robustness. Introducing a
+Unlike CCLS, CMLS does not have a cross-coupled feed- current limiter in the cross-coupled PU network weakens its
+backnetwork,preventingtransitionalconflictsbetweenPDand pull-up strength by limiting and stabilizing the current.
+PUMOS.Thus,thereisnoneedforanoversizedNMOShere However,theNMOS-diode-basedcurrentlimiterintroduces
+likeinCCLS.Thisreducescontention,leadingtolowerpower a voltage drop at the internal nodes Q1 and Q2, preventing
+consumption.However,here,standbypowerremainshighdue them from achieving full-swing operation. Hence, the output
+to continuous static current flow through one of the circuit inverter connected to those internal nodes might face a high
+branches, determined by the input voltage level. A current- short-circuitcurrent.Toovercomethisissue,theinternalnodes
+limiting MOS can be introduced in the reference branch at are connected to a stacked high-threshold voltage (HVT)
+the Q1 node to improve current stability, thus forming Wilson inverter configuration, as shown in Fig. 3(b).
+CurrentMirrorLevelShifter(WCMLS),asshowninFig.2(b). 5) Low-Power Subthreshold to Above-Threshold Voltage
+3) Deep Sub-threshold Energy Efficient Level Shifter Level Shifter (LPSVTLS) [14]: This architecture follows the
+(DSELS)[12]: ThisarchitecturebuildsontheCCLSfeedback CCLSprinciplewhileincorporatingDynamicCurrentGenera-
+principle but incorporates a self-adaptive pull-up network torsinthePUnetworktoimprovetheoutputtransitionspeed.
+to improve the speed of switching. It employs a multi-VT Itactivatesautomaticallyduringinputvoltageleveltransitions.
+transistor strategy to enhance level-shifting efficiency while Enhancing the transition speed reduces the propagation delay.
+minimizing area, as illustrated in Fig. 3(a). A unique feature A key advantage of this architecture is that the dynamic
+of this architecture is that it uses a PMOS-NMOS cross- current generators activate only during voltage transitions and
+coupled (PNCC) current limiter, which significantly limits remaininactiveotherwise,therebysignificantlyreducingstatic
+the current contention and leakage by developing a feedback powerdissipation.Additionally,thecurrentgeneratorregulates
+loop. For proper operation, the PNCC PMOS must operate in the strength of the PU network by controlling the branch
+the subthreshold region (V < V ) to regulate sufficient current, enabling the PD network to effectively modulate the
+GSp Tp
+current flow, enabling the activation of the PNCC NMOS, output for reliable level shifting. For this design, maintaining
+
+[Image page_3_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image you sent, incorporating the provided text and context:
+
+**Image Description**
+
+The image consists of a composite figure labeled "Fig. 3. (a) Deep Sub-threshold Energy Efficient Level Shifter (DSELS) [12] (b) Robust Subthreshold Level Shifter with Wide Conversion Range (RSWCRLS) [13] (c) Low-Power Subthreshold to Above-Threshold Voltage Level Shifter (LPSVTLS) [14] (d) Ultra-Wide-Range Energy-Efficient Level Shifter with CCLS/CMLS Hybrid Structure (C3MLS) [11]."
+
+It presents four sub-figures, each representing a different level shifter (SLS) circuit architecture:
+
+*   **(a) DSELS:** This likely shows the circuit diagram for the Deep Sub-threshold Energy Efficient Level Shifter.
+*   **(b) RSWCRLS:** This likely shows the circuit diagram for the Robust Subthreshold Level Shifter with Wide Conversion Range.
+*   **(c) LPSVTLS:** This likely shows the circuit diagram for the Low-Power Subthreshold to Above-Threshold Voltage Level Shifter.
+*   **(d) C3MLS:** This likely shows the circuit diagram for the Ultra-Wide-Range Energy-Efficient Level Shifter with CCLS/CMLS Hybrid Structure.
+
+The architectures are more advanced SLS implementations compared to Fig. 2.
+
+**Text Within the Image (and Associated with the Image)**
+
+*   "Fig. 3. (a) Deep Sub-threshold Energy Efficient Level Shifter (DSELS) [12] (b) Robust Subthreshold Level Shifter with Wide Conversion Range (RSWCRLS) [13] (c) Low-Power Subthreshold to Above-Threshold Voltage Level Shifter (LPSVTLS) [14] (d) Ultra-Wide-Range Energy-Efficient Level Shifter with CCLS/CMLS Hybrid Structure (C3MLS) [11]."
+*   The labels (a), (b), (c), and (d) designating each sub-figure.
+*   The name of each circuit architecture (DSELS, RSWCRLS, LPSVTLS, C3MLS)
+
+**Significance and Context**
+
+*   **Level Shifters (SLS):** The paper focuses on Level Shifters, which are circuits that enable communication between different voltage domains within an integrated circuit (IC). This is crucial for modern low-power design where different parts of a chip operate at different voltages to save energy. Specifically, the architectures shift voltage from sub-threshold VDDL (0.3V) to nominal VDDH (1.2V).
+*   **Subthreshold Operation:** The paper emphasizes subthreshold operation as a key technique for low-power design. This means the transistors operate at voltages below their threshold voltage, using leakage current to switch.
+*   **Sustainable Design:**  The overall goal of the paper is to evaluate the *sustainability* of different SLS architectures. This includes considering the energy consumed *during operation* (dynamic and static power) and the *embodied energy* (environmental impact of manufacturing, influenced by the number of fabrication masks required).
+*   **Image Importance:** Fig. 3 is important because it visually presents the more advanced level shifter architectures that are being investigated in the paper. The description of each architecture in the text, coupled with the diagrams, allows the reader to understand the trade-offs (power, speed, area, robustness) of each design.
+*   **Relationship to Other Figures:** The text explicitly mentions that the diagrams in Fig. 3 are considered "advanced SLS" compared to "conventional SLS" illustrated in Fig. 2.
+*   **Paper Focus:** By examining these architectures, the paper aims to establish a method for designers to assess the sustainability of their choices early in the design process (at the level of individual logic cells, like these level shifters).
+
+**Detailed Analysis of the Circuits (Based on Textual Descriptions)**
+
+While I can't provide a detailed circuit analysis without seeing the actual schematics in the image, here's what the text reveals about the function and design choices of each level shifter:
+
+*   **DSELS:** Uses a "PMOS-NMOS cross-coupled (PNCC) current limiter," a "multi-VT transistor strategy" for efficiency, and a "self-adaptive pull-up network" for faster switching. The key feature is the PNCC limiter for current contention and leakage reduction. It also uses a "split-input buffer" to provide controlled leakage and energy efficiency. Has signal integrity issues due to floating nodes Z and Zb.
+
+*   **RSWCRLS:** Modifies the CCLS configuration to reduce current contention by using an "NMOS-diode-based current limiter" in the pull-up network. It also incorporates a "stacked high-threshold voltage (HVT) inverter configuration" to overcome issues caused by voltage drop at internal nodes Q1 and Q2.
+
+*   **LPSVTLS:** Follows the CCLS principle but incorporates "Dynamic Current Generators" in the PU network to improve output transition speed. These generators are only active during transitions, reducing static power.
+
+*   **C3MLS:** A hybrid design combining the strengths of CCLS and CMLS. It uses dynamic current generators to minimize static power. It leverages "high-threshold voltage (HVT) pull-up devices" to limit the strength of the PU network.
+
+In conclusion, Fig. 3 is a crucial visual component of the paper, showcasing the advanced level shifter architectures that are being evaluated for their sustainability characteristics. The text provides key insights into the design principles and trade-offs of each architecture.
+
+Let me know if you'd like me to elaborate on any specific aspect!
+
+
+
+[Image page_3_image_1.jpeg Analysis (by Gemini)]
+Here is a thorough analysis of the provided image, based on the context of the research paper:
+
+**Image Analysis**
+
+*   **Visual Elements:** The image is a circuit diagram. It depicts a level shifter, which is a circuit used to convert a voltage signal from one voltage domain to another. The diagram shows transistors (both PMOS and NMOS), an inverter, and voltage sources.
+
+    *   The transistors are represented with the standard symbols. PMOS transistors have a circle at the gate.
+    *   The inverter is represented by a triangle with a circle at the output.
+    *   The voltage sources are labeled as Vddh (high voltage) and Vddl (low voltage).
+*   **Structure:** The circuit shows a cross-coupled structure, characteristic of many level shifters. There are pull-up PMOS transistors connected to Vddh, and pull-down NMOS transistors. An input signal IN and its complement (likely generated by the inverter) drive the NMOS transistors. The output, labeled OUT, is driven by another set of transistors connected to Vddh. Intermediate nodes are labeled X, Xb, Y, Yb, Z, Zb.
+*   **Text/Labels:** The following text is visible in the image:
+
+    *   `Vddh` (High voltage supply)
+    *   `Vddl` (Low voltage supply)
+    *   `IN` (Input)
+    *   `OUT` (Output)
+    *   `X`, `Xb` (Complementary signals, likely related to the input)
+    *   `Y`, `Yb` (Complementary signals, likely at an intermediate stage)
+    *   `Z`, `Zb` (Complementary signals, likely at an intermediate stage)
+
+**Context and Importance**
+
+The image is from a research paper focused on evaluating the sustainability of different level shifter architectures, especially for subthreshold operation. The page's surrounding text makes the following clear:
+
+*   **Level Shifters:**  Level shifters are essential for interfacing between different voltage domains within integrated circuits (ICs). This is important for low-power design, where some parts of the IC operate at lower voltages to save energy, while other parts need higher voltages for performance.
+*   **Subthreshold Operation:** The paper specifically investigates level shifters operating in the *subthreshold* region (where the voltage is below the threshold voltage of the transistors). This is a low-power technique, but requires careful level shifter design to ensure reliable signal transitions.
+*   **Sustainability:** The overall aim of the paper is to assess the *sustainability* of different level shifter designs. This includes considering the carbon footprint of both manufacturing (embodied footprint) and operation (operational footprint). The paper aims to provide designers with a way to choose more environmentally friendly level shifter architectures.
+*   **Figure 3 and the Image:** The figure is labeled as part of "Fig. 3" and not explicitly named in the text. The text around it refers to several "advanced SLS" designs, implying this image represents the specific circuit architecture being discussed in the context of evaluating sustainable design choices. The text describes circuits like DSELS, RSWCRLS, LPSVTLS, and C3MLS, which are implemented and evaluated in the work.
+
+**Specific Importance of This Image**
+
+The image likely represents a specific level shifter architecture used in the study, possibly one of the "advanced SLS" architectures mentioned in the figure caption.  It shows the transistor-level implementation details. Understanding this circuit diagram is crucial for understanding the following related parts of the paper:
+
+1.  **Power Consumption:** The circuit's structure directly affects its power consumption. Cross-coupled structures, current mirrors, and dynamic current generators are all mentioned as features impacting dynamic and static power.
+2.  **Performance:** The transistor sizing, voltage threshold variants (LVT, SVT, HVT), and the use of techniques like dynamic current generators all influence the speed and robustness of the level shifter.
+3.  **Area Overhead:** The complexity of the circuit (number of transistors) impacts the area it occupies on the chip. More complex designs may require larger areas.
+4.  **Fabrication Complexity:** The use of multiple threshold voltage transistors (which requires additional fabrication masks) affects the manufacturing carbon footprint.
+
+In conclusion, the image is a core element of the research paper, illustrating the implementation of a level shifter whose performance, power consumption, area, and fabrication details are crucial for evaluating its overall sustainability. The image helps understand the specific circuit techniques used and connects to the paper's broader goal of sustainable VLSI design.
+
+
+
+[Image page_3_image_2.jpeg Analysis (by Gemini)]
+Here's a breakdown of the image based on your instructions:
+
+**Visual Elements and Structure:**
+
+*   **Circuit Diagram:** The image shows a circuit diagram of an electronic circuit.
+*   **Transistors:** The circuit uses several NMOS and PMOS transistors. PMOS transistors are denoted by a circle on the gate.
+*   **Inverter:** There's a symbol representing an inverter, which is a logic gate that inverts the input signal.
+*   **Connections:** Lines show the connections between the different components.
+*   **Power and Ground:** Symbols for power supply (Vddh, Vddl) and ground are shown.
+
+**Text within the Image:**
+
+*   **Vddh:** Label indicating a high-voltage power supply.
+*   **Vddl:** Label indicating a low-voltage power supply.
+*   **IN:** Label indicating the input signal to the circuit.
+*   **OUT:** Label indicating the output signal from the circuit.
+*   **Q1:** Label for an internal node in the circuit.
+*   **Q2:** Label for another internal node in the circuit.
+
+**Context and Importance:**
+
+*   **Level Shifter:** The image appears to depict a "Robust Subthreshold Level Shifter with Wide Conversion Range (RSWCRLS)" based on the text "Fig.3. ... (b)RobustSubthresholdLevelShifterwithWideConversionRange(RSWCRLS) [13] ...".
+*   **Purpose of Level Shifters:** The text from the surrounding pages indicates that level shifters are used to interface between different voltage domains in an integrated circuit (IC). This is important because some parts of the IC might operate at lower voltages for power efficiency, while others need higher voltages for performance.
+*   **Subthreshold Operation:** The surrounding text mentions "subthreshold operation." This means the transistors in the level shifter are designed to operate at voltages below their threshold voltage (Vt), which reduces power consumption.
+*   **Description of the RSWCRLS Design:** According to the text, the RSWCRLS is a modified version of the "Cross-Coupled Level Shifter (CCLS)." It uses an NMOS-diode-based current limiter to reduce current contention in the pull-up network, improving level-shifting performance.
+*   **Problem and Solution:** The current limiter can cause a voltage drop at the internal nodes Q1 and Q2, potentially leading to high short-circuit current in the output inverter. The solution is to use a stacked high-threshold voltage (HVT) inverter at the output. This is visible in the image with the series of transistors before the OUT label.
+*   **Relevance to Sustainability:** The research paper aims to evaluate the "sustainability" of different level shifter architectures. This involves considering both the energy consumption during operation and the environmental impact of manufacturing. The design choices in the RSWCRLS, such as the use of a current limiter and HVT transistors, would likely affect both its energy efficiency and its manufacturing complexity (and therefore its carbon footprint).
+
+In summary, the image shows the circuit diagram of a Robust Subthreshold Level Shifter with Wide Conversion Range (RSWCRLS). This level shifter is designed for low-power operation by using subthreshold techniques. The RSWCRLS design is intended to improve performance and robustness, with specific features to address potential drawbacks of its design. It is crucial to the research paper as an example of the different designs that will be analysed based on sustainability.
+
+
+
+[Image page_3_image_3.jpeg Analysis (by Gemini)]
+Here's a comprehensive analysis of the image based on the provided information:
+
+**Image Description**
+
+The image is a circuit diagram. It shows a schematic representation of an electronic circuit, most likely a level shifter. The key elements in the diagram are:
+
+*   **Transistors:** Both PMOS (indicated by the circle on the gate) and NMOS transistors are visible. They are arranged in a specific configuration that is typical for level shifters.
+*   **Inverters:** There are standard inverter symbols present, likely to improve signal transitions.
+*   **Power Supplies:** Power supply lines are labeled as "Vddh" (high voltage) and "Vddl" (low voltage). There are also ground connections.
+*   **Input/Output signals:** Signals are labeled with "IN", "INb" (likely IN-bar, the complement of IN), "Q1", "Q2" and "OUT".
+*   **Connections:** Lines indicating connections between components.
+
+**Text within the Image:**
+
+The following text labels are visible in the diagram:
+
+*   Vddh
+*   Vddl
+*   IN
+*   INb
+*   Q1
+*   Q2
+*   OUT
+
+**Image Context and Significance:**
+
+The image is labeled as part of Fig. 3, so this particular figure is one of four advanced level shifters that are discussed in the paper. The surrounding text indicates the paper discusses subthreshold level shifters (SLS) and their energy efficiency for IC (Integrated Circuit) design.
+
+Specifically, this diagram is most likely for "Robust Subthreshold Level Shifter With Wide Conversion Range (RSWCRLS)" [13], because the description in the text describes an inverter (the one with the Vddl) and it mentions transistors Q1 and Q2 (the nodes), all of which are in the diagram.
+
+Level shifters, as described in the text, are crucial components that allow circuits to operate in different voltage domains within an IC. This is vital for energy efficiency, as some parts of the chip can operate at lower voltages to conserve power, while others can run at higher voltages for performance. The specific architecture in the diagram aims to translate a low-voltage input signal (subthreshold, "Vddl") to a higher voltage output ("Vddh").
+
+**Importance:**
+
+The image's importance stems from the paper's focus on sustainable VLSI design. By illustrating the circuit architecture of a level shifter, the image helps readers understand:
+
+*   The complexity of level shifter designs.
+*   The role of various components in achieving voltage level translation.
+*   The design trade-offs involved (e.g., area usage, power consumption, performance).
+
+The study uses these circuit diagrams as a basis for analyzing the sustainability impact (carbon footprint) of different SLS architectures. It allows designers to evaluate their choices not just on performance metrics, but also on environmental impact.
+
+**In summary,** the image is a circuit diagram of a level shifter used in subthreshold design, with an emphasis on power efficiency and environmental impact. The diagram is likely the circuit diagram for "Robust Subthreshold Level Shifter With Wide Conversion Range (RSWCRLS)". It is crucial to the paper because it visualizes the circuit architecture for which the sustainability evaluation paradigm is applied.
+
+
+
+[Image page_3_image_4.jpeg Analysis (by Gemini)]
+Here's a thorough analysis of the image, based on your request and the provided context.
+
+**Image Analysis**
+
+*   **Visual Elements:** The image is a circuit diagram. It depicts transistors (both PMOS and NMOS), inverters, voltage sources, and ground connections, all interconnected in a specific topology. The circuit diagram uses standard symbols for electronic components. Specifically, these are the major components that are clearly depicted:
+
+    *   **Transistors:** NMOS transistors are characterized by the lack of a "bubble" on their gate connections, whereas PMOS transistors have a "bubble". The gates, sources and drains are indicated by lines.
+    *   **Inverters:** Inverters are represented by the triangle with a small circle at the output.
+    *   **Voltage Sources:** The voltage sources (Vddh and Vddl) are clearly labeled with a voltage level indicated above the respective shapes.
+    *   **Ground:** The ground is depicted by three horizontal lines arranged in descending order of length.
+*   **Structure:** The structure shows a differential circuit topology. It includes the following major structural characteristics:
+
+    *   **Cross-Coupled PMOS Transistors:** A pair of PMOS transistors are cross-coupled, forming a feedback mechanism. This is a key feature in many level shifter designs.
+
+    *   **Input Stage:** NMOS transistors are connected to the inputs, often with inverters to provide complementary signals.
+
+    *   **Output Stage:** An inverter is used to provide the final output signal, potentially with an additional stage to improve drive strength.
+
+    *   **Voltage Domains:** The circuit interfaces between two voltage domains: a low voltage (Vddl) and a high voltage (Vddh).
+*   **Text within the Image:** The following labels are present:
+
+    *   Vddh: High voltage supply.
+    *   Vddl: Low voltage supply.
+    *   IN: Input signal.
+    *   INb: Inverted input signal.
+    *   OUT: Output signal.
+    *   Q1, Q2: Internal nodes within the circuit.
+    *   HNb: H is probably high, and Nb is probably inverted high
+
+*   **Significance:** The circuit diagram represents the transistor-level implementation of a level shifter. Level shifters are circuits that translate voltage levels between different voltage domains within an integrated circuit. They are essential for interfacing between low-power subthreshold logic and higher voltage logic.
+    The cross-coupled structure is commonly used in level shifters to provide a strong pull-up and stable output voltages.
+    The presence of both NMOS and PMOS transistors indicates a CMOS (Complementary Metal-Oxide-Semiconductor) implementation.
+
+**Overall Context and Importance**
+
+*   **Image Context:** The image corresponds to Fig.3 in the research paper, more specifically the RSWCRLS circuit. The paper discusses various level shifter architectures, including conventional and advanced designs, to improve sustainability. The figure serves to visually represent the detailed transistor-level implementation of the RSWCRLS. It is designed to transition from a sub-threshold VDDL (0.3V) to a nominal VDDH (1.2V)
+*   **Importance:**
+
+    *   **Low-Power Design:** The research paper emphasizes the importance of low-power design techniques for enhancing the operational lifespan and reliability of integrated circuits. Level shifters are identified as a crucial component in modern IC designs, particularly in domains like IoT, where low-power operation is essential.
+    *   **Subthreshold Operation:** The paper highlights subthreshold operation as a method for achieving low-power consumption. Subthreshold level shifters are designed to operate at voltages lower than the threshold voltage of the transistors, enabling efficient signal transitions.
+    *   **Sustainability:** The research focuses on evaluating the sustainability of different level shifter architectures by quantifying their environmental impact. The paper introduces a designer-centric paradigm for assessing the carbon footprint of individual level shifter cells, considering both manufacturing and operational phases. The circuit diagram in Fig. 3 is therefore part of a larger effort to benchmark level shifters based on their sustainability.
+    *   **Robustness and Wide Conversion Range** This Level shifter architecture, RSWCRLS, is designed to enhance level-shifting performance and increasing the robustness. It does this by including an NMOS diode based current limiter in the pull-up network on both branches.
+
+In summary, the image is a crucial element of the research paper because it shows the detailed transistor-level implementation of the RSWCRLS circuit. This circuit is analyzed for its power consumption and environmental impact in the context of designing sustainable and energy-efficient ICs.
+
+
+
+=== Page 4 ===
+TABLEI
+POSTLAYOUTSIMULATIONOBSERVATIONSFORKEYFIGUREOFMERITS(FOM)OFLEVELSHIFTER
+VTtypesusedc
+DesignVersiona Levelshifter Cellwidth %Variations
+No.ofextra Dynamic Static Total Propagation Area
+[M1[O +Mnly 2M GN1] D- ]I
+–II
+usc eo dn bfig (u Cr Cat /Cio Mn
+)
+NMOS PMOS masksusedd Power(nW) EPT(fJ) Power(nW) Power(nW) Delay(ns) (µm2) t( rn ao c. ko sf
+)
+fo (r σD /µel )ay
+I LVT LVT 105 210 63.7 169 10.5 19.76 19 11.0%(1.15/10.44)
+CCLS[11] II CC SVT SVT 2 107 214 31.6 139 10.8 17.68 17 10.9%(1.18/10.82)
+I LVT LVT 109 218 506 615 15.1 9.36 9 34.7%(6.82/19.64)
+CMLS[11] II CM SVT SVT 2 108 217 493 602 15.3 9.36 9 30.1%(5.42/18.02)
+I LVT LVT 8.54 17.1 4.13 12.7 33.7 12.48 12 32.2%(11.96/37.1)
+SVT SVT
+DSELS[12] II CC 3 7.6 15.2 2.07 9.67 29.9 11.44 11 30.1%(9.83/32.69)
+HVT
+I LVT LVT 5.16 10.3 11.1 16.3 13.4 10.4 10 16.8%(2.47/14.73)
+RSWCRLS[13] II CC 4 5 10 11.8 16.8 13.3 9.36 9 16.7%(2.42/14.53)
+HVT HVT
+I LVT LVT 26.7 53.4 3.75 30.5 14.7 17.68 17 202.9%(230.3/113.5)
+LPSVTLS[14] II CC+CM SVT SVT 2 28.8 57.6 5.38 34.2 15.1 15.6 15 345.0%(896.4/259.8)
+I LVT LVT 15.1 30.3 10.6 25.7 15.9 13.52 13 28.0%(5.14/18.35)
+SVT SVT
+C3MLS[11] II CC+CM 3 14.8 29.7 12.2 27 15.3 11.44 11 27.7%(4.9/17.66)
+HVT
+a“DesignVersion”representsthedifferentversionsoflayoutimplementationsfortheparticularSLSdesignarchitecture.Moredetailsabout’VersionI’and’VersionII’aregiveninFig.4.
+b“Levelshifterconfigurationused”representswhetheraCross-coupled(CC)orCurrentmirror(CM)basedconfigurationisusedintheLevelshifterarchitecture,asitaffectsthepowerconsumption.
+cSTMicroelectronics65nmtechnologyprovidesthefollowingVTdevicevariants:HighVT(HVT),StandardVT(SVT),andLowVT(LVT).
+d“No.ofextramasks”representstheextranumberofopticalmasksrequiredascomparedtoabasicdesignwhilefabricatingthedesignonasiliconwafer.AnextraVTusagerequiresanadditionalmask.
+a symmetrical layout is critical for preserving signal integrity, with dual supplies, VDDL and VDDH, power is computed
+althoughitresultsingreaterareaoverhead.Theschematicfor separately for each and then aggregated.
+this architecture is illustrated in Fig. 3(c). 2) Static Power: It arises primarily from leakage currents
+6) Ultra-Wide-Range Energy-Efficient Level Shifter With indevices,commonlycalledleakagepower.Here,theaverage
+CCLS/CMLS Hybrid Structure (C3MLS) [11]: This architec- static power consumed by the SLS circuits is computed
+tureenablesultra-widevoltagerangelevelshiftingbyleverag- separately for VDDL & VDDH and then aggregated.
+ingthestrengthsofbothCCLSandCMLStopologies.Itmiti- 3) No. of fabrication masks used: Certain SLS leverage a
+gatesthelimitationsofonebyincorporatingtheadvantagesof multi-thresholddeviceapproachtoenhanceperformancewhile
+the other. While CCLS minimizes static power consumption maintainingareaefficiency.Incorporatingthisstrategyrequires
+but experiences high contention, CMLS reduces contention additional lithographic steps (masks) beyond the conventional
+butexhibitshigherstaticpowerconsumption.Byincorporating process flow, contributing to a higher CFP.
+CMLScircuitryalongsideCCLSinbothbranches(asshownin
+Fig.3(d)),thisdesignenhancesperformancewhileoptimizing
+overall power dissipation.
+Similarly to LPSVTLS, this design also incorporates dy-
+namic current generators, thus effectively minimizing static
+power consumption. A key feature of this architecture is
+the use of high-threshold voltage (HVT) pull-up devices to
+limit the strength of the PU network, thus ensuring efficient
+transitionsforupdatingnodesQ1&Q2.Thisapproachensures
+reliable voltage shifting even with minimal transistor sizing.
+B. Post-Layout Analysis for key Figure of Merits
+Section III-A provided an overview of the selected set of
+SLS. This section presents their simulation results, highlight-
+ing post-layout observations for each architecture’s key FOM
+as summarized in Table I. These observations were taken for
+(a) (b)
+level shifting from 0.3V (VDDL) to 1.2V (VDDH) at TT
+corner and 25 °C. The significance and methodologies for Fig.4. (a)VersionIlayout(b)VersionIIlayout.ConventionsforSLSLayout
+evaluatingsomeofthekeySLSFOMsaredetailedasfollows: implementation using a two-row format, equivalent to twice the height of
+standard13-Track(13T)configuration(i.e.,26T).Thedesignincorporatesa
+1) DynamicPower: Itisconsumedduringacircuit’sactive shared ground (Gnd) supply rail positioned between two power supply rails
+operation and is influenced by factors such as switching —VDDH(1.2V)andVDDL(0.3V).EachSLSlayouthasbeenimplemented
+factor(α),operatingvoltage,accumulatedchargeinswitching in two variations: Version I, where the layout is designed exclusively using
+theMetal1(M1)layer,andVersionII,inwhichthecommonGndsupplyrail
+currentpeak,andfrequencyofoperation(f op).Foranalysis,a isimplementedusingMetal2(M2),whiletheremaininginterconnectionsare
+αof0.5andf of1MHzwereused.Aslevelshiftersoperate routedthroughM1
+op
+
+[Image page_4_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on the context you provided:
+
+**Visual Elements and Structure:**
+
+*   The image is a layout diagram of a standard cell used in integrated circuit (IC) design. Specifically, it shows the layout conventions for a Level Shifter (SLS) architecture.
+*   The layout is organized in a two-row format, effectively twice the height of a standard 13-track (13T) cell configuration, making it a 26T cell.
+*   The diagram includes power supply rails: VDDH (high voltage), VDDL (low voltage), and a shared ground (Gnd) rail positioned between them. These are denoted by labels within the diagram.
+*   There are distinct colored areas, likely representing different metal layers, active regions, or other design elements within the cell.  These areas are often rectangular and show how the different components are connected within the physical layout.
+*   The diagram includes arrows and numerical labels that indicate the dimensions of the cell, notably the "26T" height.
+
+**Text Visible within the Image:**
+
+*   VDDH (High voltage power supply) - appears multiple times.
+*   VDDL (Low voltage power supply) - appears multiple times.
+*   Gnd (Ground)
+*   26 T (Indicates the height of the cell)
+
+**Context and Importance:**
+
+*   **Post-Layout Analysis:** The image comes from a research paper evaluating the performance of different Level Shifter (SLS) designs. These level shifters are crucial components in mixed-voltage systems, allowing reliable communication between circuits operating at different voltage levels.
+*   **Layout Considerations:** The paper highlights the importance of the physical layout in determining the performance of the SLS. Factors like cell area, parasitic capacitance, and signal integrity are all significantly influenced by the layout. The image illustrates the standard layout adopted for the analysis.
+*   **Metal Layer Routing:** The image is tied to the "Version I" layout, which is detailed in the text surrounding the image. The layout utilizes only Metal1 (M1) for interconnections. The surrounding text also mentions "Version II" layouts, which use Metal2 (M2) for the ground supply rail to potentially reduce track usage and improve performance.
+*   **Area Optimization:** The image shows how a shared ground supply rail positioned between VDDH and VDDL is used to improve area efficiency. This contributes to the overall cell density of the integrated circuit.
+
+**Overall Significance:**
+
+The image is a key element in the paper because it visually represents the physical design of the Level Shifter cells being analyzed. It provides the foundation of the layout to compare and analyze in the simulation results shown in TABLE I. By showing this layout, the authors are emphasizing the importance of physical design and layout for critical parameters like power consumption, propagation delay, and area efficiency. The comparison between "Version I" and "Version II" layouts is also important as it evaluates the impact of different metal layer routing strategies on the overall performance of the level shifter circuits.
+
+
+
+[Image page_4_image_1.png Analysis (by Gemini)]
+Here's an analysis of the provided image and its context within the research paper:
+
+**Image Analysis**
+
+*   **Type:** The image is a layout diagram of an integrated circuit, likely a level shifter.
+*   **Visual Elements:**
+    *   **Colors:** The layout uses different colors to represent various layers of the integrated circuit, most likely different metals, polysilicon, diffusion regions, and vias.  While the specific layer represented by each color is not explicitly stated in the surrounding text, common conventions suggest green might be polysilicon, yellow might be a metal layer, and different cross-hatched patterns suggest different types of vias.
+    *   **Shapes:** Rectangular shapes are used to represent transistors and interconnects.
+    *   **Labels:**  The image contains labels indicating power supply rails and ground.
+    *   **Arrow:** An arrow points to a small encircled area.
+
+*   **Text Within Image:**
+    *   "VDDH": Indicates the high-voltage power supply rail.
+    *   "VDDL": Indicates the low-voltage power supply rail.
+    *   "Gnd": Indicates the ground rail.
+    *   "M1-M2 via": A text label associated with an arrow pointing to a small, encircled square feature, indicating a via (a vertical electrical connection) between Metal 1 and Metal 2 layers.
+    *   "DDH":
+    *   "DDL"
+
+*   **Structure:** The diagram shows a symmetrical layout. Power supply rails (VDDH and VDDL) are located on top and bottom of the circuit. A ground rail (Gnd) is centrally located between VDDH and VDDL. The diagram highlights different areas of the level shifter circuit layout with specific voltage sources. The use of M1-M2 vias shows the connection between different metal layers.
+
+**Context and Importance**
+
+*   **Figure Number and Caption:** The image is labeled as part of "Fig. 4. (a)VersionIlayout(b)VersionIIlayout.ConventionsforSLSLayout implementation using a two-row format, equivalent to twice the height of standard13-Track(13T)configuration(i.e.,26T).Thedesignincorporates a shared ground (Gnd) supply rail positioned between two power supply rails —VDDH(1.2V)andVDDL(0.3V).EachSLSlayouthasbeenimplemented in two variations: Version I, where the layout is designed exclusively using theMetal1(M1)layer,andVersionII,inwhichthecommonGndsupplyrail isimplementedusingMetal2(M2),whiletheremaininginterconnectionsare routedthroughM1" in the research paper.
+*   **Purpose:** This figure illustrates the design conventions used for the level shifter (SLS) layouts. Specifically, it demonstrates the two layout versions: Version I (all routing in Metal 1) and Version II (ground rail in Metal 2, other routing in Metal 1).
+*   **Significance:** The figure is important because it visually explains how the different layouts are implemented and how they relate to cell width (tracks). The use of M2 for the ground rail is a key design choice explored in the paper.  The surrounding text emphasizes the importance of a symmetrical layout for signal integrity. The placement of the ground rail is also crucial for power distribution and noise reduction.
+*   **Relevance to Table I:** Table I presents performance data for different level shifter architectures. The "Design Version" column (I or II) directly corresponds to the layout versions depicted in Fig. 4.  Therefore, the figure helps the reader understand the physical implementation of the designs being compared in the table. The text also notes that these design choices also affect the embodied carbon footprint (CFP)
+*   **Level Shifter Operation:** The level shifters being analyzed are designed to convert a low-voltage signal (e.g., 0.3V) to a higher voltage (e.g., 1.2V). This is crucial in mixed-voltage systems where different parts of the circuit operate at different voltage levels.
+
+In summary, the image is a crucial visual aid for understanding the layout design choices made in the research. It allows the reader to visualize how the level shifters are physically implemented, which is necessary for interpreting the performance data presented in Table I and the discussion of embodied carbon footprint. The layout variations (Version I and Version II) are a central theme of the paper, and the figure clearly illustrates this aspect.
+
+
+
+[Image page_4_image_2.png Analysis (by Gemini)]
+Here's a detailed analysis of the image and its context within the provided research paper extract:
+
+**Image Analysis:**
+
+*   **Visual Elements:** The image is a legend or key. It consists of colored and patterned shapes paired with text labels. The purpose is to define the visual representation of different materials or components used in the layout diagrams of integrated circuits (specifically, level shifters).
+
+*   **Structure:** The image is structured as two rows of paired elements. Each pair contains a colored/patterned square or shape and a text label explaining what that visual element represents in the circuit layout.
+
+*   **Text within the Image:** The following text labels are visible:
+    *   "Oxide Diffusion"
+    *   "Polysilicon"
+    *   "M1"
+    *   "M2"
+    *   "N+ doped"
+    *   "P+ doped"
+    *   "Contact"
+
+*   **Significance:** This legend explains how different components or regions are represented in the layout diagrams shown in figures 5, 6, and 7. For example, regions of oxide diffusion are indicated with a green and black checkerboard pattern. It clarifies the physical composition and connectivity of the different level shifter designs being studied.
+
+**Context and Importance:**
+
+*   **Overall Context:** The paper focuses on the design, analysis, and comparison of various level shifter (SLS) architectures. Level shifters are circuits that translate voltage levels between different power domains, a common requirement in modern integrated circuits. The paper aims to evaluate these different SLS designs by comparing their power consumption, speed, area, and robustness.
+*   **Importance:**  The text extract introduces a table of post-layout simulation results (Table I) highlighting key figures of merit for different SLS designs. It discusses the significance of dynamic power, static power, the number of fabrication masks used, and area. The analysis mentions that the layouts are designed in two versions: Version I, using only Metal1(M1) for routing, and Version II, which incorporates Metal2(M2) for the ground rail. This image is essential because it provides the reader with a key to understanding the layout diagrams of the level shifter architectures that are analyzed. Figures 5, 6 and 7 are examples of these level shifters' layouts. Without this key, it would be impossible to understand the composition of the layouts.
+
+In summary, this legend is crucial for interpreting the layout diagrams of the level shifter circuits being studied in the paper. It explains the different layers and components used in the physical implementation of these circuits, allowing the reader to understand the architectural choices and their impact on performance.
+
+
+=== Page 5 ===
+(a) (b) (a) (b)
+Fig. 5. (a) CCLS Version I (b) CCLS Version II. Layout variations of the Fig. 7. (a) DSELS Version I (b) DSELS Version II. Layout variations of
+CCLSarchitecture:VersionI–RoutingconfinedtoM1,requiring19vertical the DSELS architecture: Version I – Routing confined to M1, requiring 12
+tracks(19T),andVersionII–IncorporatingGNDrailinM2whilekeeping vertical tracks (12T), and Version II – Incorporating GND rail in M2 while
+restoftheroutinginM1,reducingtrackusageto17T. keepingrestoftheroutinginM1,reducingtrackusageto11T.
+4) σ/µ variations for propagation delay: Monte Carlo remaining interconnections are routed through M1 as shown
+analysisisessentialforassessingfabrication-inducedvariabil- in Fig. 4(b). As illustrated in Fig. 4(b), the M2 Gnd rail is
+ity in post-layout designs. electrically connected to the M1 Gnd supply through M1-M2
+vias, ensuring proper conductivity.
+5) Area: In this paper, the SLS layouts have been de-
+The SLS architecture layouts have been designed in dif-
+signed in a unique double-row format, equivalent to twice
+ferent versions to analyze the effect of circuit performance,
+the height of the 13-Track (13T) standard cell configuration
+cell density, parasitics, and congestion on the sustainability
+(in STM’s 65nm library). This approach utilizes a shared
+evaluation. The designed SLS layouts are discussed below.
+ground (Gnd) supply rail between two power supply rails
+a) CCLS: CCLS architecture layout uses additional
+(VDDH and VDDL) that run across the ’26T’ perimeter
+‘VTL N’ and ‘VTL P’ CAD layers, i.e., two extra masks are
+boundary to enhance area efficiency. The technique has been
+required to manufacture it. Its Version I has a 19T cell width,
+implementedintwovariations:(a)VersionI,wherethelayout
+whereas Version II reduces the width to 17T by utilizing an
+isdesignedexclusivelyusingtheMetal1(M1)layerasshown
+M2 track, as shown in Fig. 5.
+in Fig. 4(a), and (b) Version II, in which the common Gnd
+supply rail is implemented using Metal 2 (M2), while the b) CMLS: CMLS architecture layout uses additional
+‘VTL N’ and ‘VTL P’ CAD layers, i.e., two extra masks are
+required to manufacture it. Its Version I has a 9T cell width,
+whereas Version II also has a width of 9T even after utilizing
+an M2 track, as shown in Fig. 6.
+c) DSELS: DSELS architecture layout uses additional
+‘VTL N’, ‘VTL P’, and ‘VTH P’ CAD layers, i.e., three
+extra masks are required to manufacture it. Its Version I has a
+12T cell width, whereas Version II reduces the width to 11T
+by utilizing an M2 track, as shown in Fig. 7.
+d) RSWCRLS: RSWCRLS architecture layout uses ad-
+ditional ‘VTL N’, ‘VTL P’, ‘VTH N’, and ‘VTH P’ CAD
+layers, i.e., four extra masks are required to manufacture it.
+Its Version I has a 10T cell width, whereas Version II reduces
+the width to 9T by utilizing an M2 track, as shown in Fig. 8.
+e) LPSVTLS: LPSVTLS architecture layout uses addi-
+tional ‘VTL N’ and ‘VTL P’ CAD layers, i.e., two extra
+masks are required to manufacture it. Its Version I has a 17T
+(a) (b)
+cell width, whereas Version II reduces the width to 15T by
+Fig. 6. (a) CMLS Version I (b) CMLS Version II. Layout variations of the utilizing an M2 track, as shown in Fig. 9.
+CMLSarchitecture:VersionI–RoutingconfinedtoM1,requiring9vertical
+tracks (9T), and Version II – Incorporating GND rail in M2 while keeping f) C3MLS: C3MLS architecture layout uses additional
+restoftheroutinginM1,didn’tresultintrackreduction. ‘VTL N’, ‘VTL P’, and ‘VTH P’ CAD layers, i.e., three
+
+[Image page_5_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on your provided text and the image itself:
+
+**Overall Context and Importance**
+
+The image is part of a research paper investigating the sustainability of different Level Shifter (SLS) architectures. Level shifters are crucial components in mixed-voltage integrated circuits, especially for low-power IoT applications. The paper aims to evaluate and compare various SLS layouts to determine the most efficient and sustainable designs.
+
+**Visual Elements and Structure**
+
+The image shows a layout of the CCLS architecture, specifically Version I. Layouts are visualizations of the physical arrangement of transistors and interconnects on a silicon chip.  The image is a top-down view of the circuit layout using different colors and patterns to represent different layers of the chip fabrication process.  The layout is designed in a "double-row" format and the tracks are in the vertical orientation. The figure also shows labeled VDDH (high voltage power supply rail), VDDL (low voltage power supply rail), and GND (ground). Transistors are visible as patterns of green and red. Metal interconnects are visible (likely M1, metal 1).
+
+**Text within the Image (Labels)**
+
+The following text is visible in the image:
+
+*   **"VDDH"**: High voltage power supply rail.
+*   **"VDDL"**: Low voltage power supply rail.
+*   **"Gnd"**: Ground.
+*   **"S"**: Likely indicating the Source terminal of transistors.
+*   **"P"**: Likely indicating the P type of transistors.
+*   **"Out"**: Output signal.
+*   **"26 T"**: Indicated with a yellow arrow, representing the cell height as 26 tracks.
+*   **"19 T"**: Indicates with a white arrow, representing the cell width as 19 tracks.
+
+**Image Significance**
+
+The image's significance stems from its representation of the CCLS layout. As noted in the text, there are two variations (Version I and Version II) being analyzed. Version I, depicted in the image, uses only the Metal 1 (M1) layer for routing. By visually representing the layout, the image helps the reader understand:
+
+*   **Area Efficiency:** The image visually demonstrates how the components are arranged within the 26T height and 19T width, allowing for a better understanding of its area utilization.
+*   **Routing Complexity:** The image illustrates how all connections are routed solely through the M1 layer in Version I.
+*   **Layer Utilization:** The emphasis on M1 routing in Version I compared to the M2 utilization in Version II.
+*   **Double-row format:**  The arrangement with shared ground rail between power rails.
+*   **Masking factor:** Showing the CAD layers of 'VTL N' and 'VTL P' and how these correspond to masking factor which affect fabrication energy and therefore sustainability of SLS architectures.
+
+**Connecting Image to Text on the Page**
+
+The text on the page directly references Fig. 5, stating that it shows the layout variations of the CCLS architecture. It explicitly mentions that Version I has a 19T cell width, while Version II reduces the width to 17T by using an M2 track. The image visually confirms the 19T width of Version I.
+
+**Connecting Image to Surrounding Text**
+
+*   **Table I:** This table presents post-layout simulation results and includes the CCLS architecture. The table lists the cell width, power consumption, propagation delay, area, and variation for propagation delay. The image provides a visual representation of the layout to which those simulation results apply.
+*   **Fig 4:** The text mentions "SLS Layout implementation using a two-row format". The current image visually confirms this.
+
+**In summary,** the image is a critical component of the research paper, providing a visual representation of the CCLS architecture's layout. It helps the reader understand the design's area utilization, routing complexity, and layer usage, which are all crucial factors in the paper's analysis of sustainability. By comparing the layout images with the simulation results presented in the tables, the reader can gain a deeper understanding of the trade-offs between different design choices and their impact on overall circuit performance and sustainability.
+
+
+
+[Image page_5_image_1.png Analysis (by Gemini)]
+Here's an analysis of the image, incorporating the surrounding text for context:
+
+**Image Analysis**
+
+*   **Visual Elements:**
+    *   The image is a layout diagram of a circuit, likely a standard cell for integrated circuit design. Different colors and patterns represent different layers of the silicon wafer, such as metal layers, polysilicon, diffusion regions, and vias.
+    *   There are distinct rectangular regions, suggesting transistors or other active components.
+    *   The power rails (VDDH and VDDL) and ground (Gnd) are explicitly marked, running horizontally along the top and bottom and also in the middle, indicating a structured power distribution scheme.
+    *   Letters 's' and 'p' likely denote source and drain terminals of transistors.
+    *  The numbers and letters along with the arrows at the bottom show the measurement of cell with with 17T (17 Tracks)
+*   **Structure:**
+    *   The layout has a clear, repetitive structure, characteristic of standard cell designs. The use of parallel tracks is evident.
+    *   The transistors are arranged in a well-defined manner, suggesting a systematic placement strategy.
+    *   The connections between different components appear to be routed using metal layers.
+*   **Text within the Image:**
+    *   **VDDH:** High-voltage power rail.
+    *   **VDDL:** Low-voltage power rail.
+    *   **Gnd:** Ground rail.
+    *   **s, p:** Possible source and drain regions.
+    *   **17T:** Cell width, likely indicating 17 tracks of standard cell height.
+    *   **PPS:** Possibly denoting Pull-Up Stage
+    *   **N, KN, K**: In areas where the transistors are, these labels can refer to the type of transistor (N-type)
+
+**Context and Importance**
+
+*   **Overall Context:**
+    *   The image represents the Version II layout of the CCLS (Cross-Coupled Level Shifter) architecture as described in the paper. The "17T" marking indicates the cell width, which is a key parameter for area efficiency.
+    *   The surrounding text explains that Version II uses Metal 2 (M2) for the ground rail, whereas the remaining connections are made in Metal 1 (M1).
+*   **Importance based on the text:**
+    *   The paper aims to analyze different level shifter (SLS) architectures, focusing on the trade-offs between circuit performance, cell density, parasitics, congestion, and sustainability.
+    *   The CCLS architecture is one of the level shifters being investigated, and the image shows a specific layout optimization technique: moving the ground rail to M2 to reduce the cell width from 19T (Version I) to 17T (Version II).
+    *   The reduction in cell width, as illustrated by the image, is directly related to improving area efficiency and potentially reducing congestion during SoC (System on Chip) integration.
+    *   The "Mask Factor" mentioned in the sustainability section refers to the environmental impact of manufacturing complexity, influenced by the number of masks used to create the layers.
+
+**In summary:** The image illustrates a key optimization technique used in the CCLS level shifter design. By moving the ground rail to a different metal layer (M2), the layout can be made more compact (17T vs. 19T). The paper examines several of these layout and structural improvements and their effect on factors of sustainability, such as area, masks, congestion, etc.
+
+
+
+[Image page_5_image_2.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, incorporating the provided text and surrounding context:
+
+**Overall Image Description**
+
+The image is a detailed layout diagram of an integrated circuit cell. It showcases the arrangement of different layers and components within the cell. Yellow arrows with corresponding "26T" and "9T" signify the dimension of the cell.  It includes labeling for supply rails (VDDH, VDDL, Gnd), input/output (Out), and other cell components.
+
+**Visual Elements and Structure**
+
+*   **Layout Diagram:** The core of the image is a color-coded layout representing different materials and features of the integrated circuit.  Different colors are used to represent different layers like metal, polysilicon, diffusion regions (for transistors), and vias (connections between layers).
+*   **Transistors:** Areas shaded in green likely represent transistors (both NMOS and PMOS). Transistor regions are visible with labels like ‘S’ likely indicating the Source terminal, and ‘Gnd’ likely representing the Gate terminal connected to the ground.
+*   **Metal Layers:**  Red lines depict metal interconnects that route signals and power within the cell.  The wider, darker colored areas likely indicate power and ground rails.
+*   **Vias:** Vias, essential for connecting different metal layers, are likely represented by smaller X symbols within the layout.
+*   **Annotation Arrows:** Yellow arrows with text "26T" and "9T" indicate the height and width of the cell respectively, measured in 'tracks' (T).
+
+**Text Within the Image**
+
+The following text is visible within the image:
+
+*   VDDH:  High-voltage power supply rail. Repeated along the top of the cell.
+*   VDDL: Low-voltage power supply rail. Repeated along the bottom of the cell.
+*   Gnd: Ground rail. Seen running through the middle of the cell.
+*   Out: Output signal terminal.
+*   26T: Annotation indicating the height of the cell is 26 tracks.
+*   9T: Annotation indicating the width of the cell is 9 tracks.
+*   S: Possibly Source node of a transistor.
+*   P: Labeling for a component, perhaps a PMOS transistor.
+
+**Image Context and Importance**
+
+Based on the provided text from page 5, this image most likely represents the layout for "CMLS Version I".
+
+*   **CMLS Architecture:** The text describes different SLS architectures. Specifically, "CMLS" is mentioned.
+*   **Layout Variations:** The page mentions two layout variations (Version I and Version II) for each SLS architecture.
+*   **Fig. 6 Reference**: The text states that Figure 6 shows "CMLS Version I".
+*   **Tracks (T):** The text mentions the "CMLS" architecture's Version I has a 9T cell width, as seen from the yellow arrow.
+*   **Metal Layers:** The text explains that Version I designs utilize only Metal1 (M1) for routing.
+*   **Importance:** This image is crucial because it visually demonstrates the physical implementation of the CMLS architecture.  It highlights how the cell is laid out, the routing strategy, and the area it occupies.  The comparison between Version I and Version II (likely shown in another figure, but described in the text) allows for analyzing the area reduction achieved by incorporating a GND rail in M2.
+
+**Importance in the Research Paper**
+
+This figure, in conjunction with the others (Figs. 5, 7, 8, 9, 10), is critical for the paper's analysis of various level shifter (SLS) architectures.  The images, alongside the Table I data and the descriptions in the text, allow the reader to:
+
+*   **Visualize the Layouts:** Understand the physical arrangement of transistors, interconnects, and power rails.
+*   **Compare Different Architectures:** Analyze the area, routing complexity, and track usage of different SLS designs.
+*   **Evaluate the Impact of Design Choices:** See how using Metal2 (M2) for the ground rail affects cell size and congestion.
+*   **Assess Sustainability:** The images help in understanding the "Congestion factor" mentioned in equation (1), providing visual evidence for the impact of routing strategies on overall SOC efficiency and thus affecting sustainability.
+
+In summary, this image is a key component of the research paper, providing visual support for the analysis of level shifter architectures and their impact on circuit performance, area, and ultimately, sustainability.
+
+
+
+[Image page_5_image_3.png Analysis (by Gemini)]
+Here's an analysis of the image based on the provided information:
+
+**Visual Elements:**
+
+*   **Layout Diagram:** The image is a detailed layout diagram of a microelectronic circuit. It shows the arrangement of different layers and components within a standard cell. The colors represent different materials or layers used in fabrication (e.g., metal, polysilicon, contacts, vias).
+*   **Rectangular Structure:** The overall structure is rectangular, reflecting the standard cell layout format.
+*   **Layered Structure:** The image clearly shows a layered structure, indicating the different fabrication layers involved in creating the circuit. We can see interconnected rectangles and shapes forming transistors, wires, and contacts.
+*   **Power and Ground Rails:** The image shows power (VDDH, VDDL) and ground (Gnd) rails running along the edges, providing power distribution to the circuit.
+*   **Labels:** The diagram includes labels indicating components and signals like "VDDH", "VDDL", "Gnd", "Out" and "pupd" , as well as the width measurement "9T".
+
+**Text within the Image:**
+
+*   **VDDH:** High voltage power supply rail
+*   **VDDL:** Low voltage power supply rail
+*   **Gnd:** Ground connection
+*   **Out:** Output signal
+*   **9T:** Indicates a cell width of 9 tracks
+
+**Context and Importance:**
+
+*   **CMLS Architecture:** Based on the surrounding text mentioning "Fig. 6. (a) CMLS Version I (b) CMLS Version II. Layout variations of the CMLS architecture", this image likely represents the layout of the CMLS (Crossed Mirror Level Shifter) architecture.
+*   **Version I or II:**  The text mentions Version I and II of CMLS, and it also says both have 9T cell widths so this diagram likely relates to either the I or II variant of the CMLS design.
+*   **Layout Optimization:** The figure illustrates how the routing and arrangement of components are implemented to achieve a compact cell size. The different versions are being compared based on their area efficiency and routing complexity.
+*   **Metal Layer Routing:**  The surrounding text describes how Version I routes everything within Metal 1, while Version II incorporates Metal 2 for the GND rail.
+*   **Level Shifter Design:** The diagrams show specific layout choices made when implementing a level shifter. These choices have a direct impact on performance (delay), power consumption, and area. The research aims to find a good balance between these parameters in the context of sustainable low-power IoT devices.
+*   **Track Usage:** The "9T" marking indicates a cell width of 9 tracks.
+
+**Overall Significance:**
+
+The image is significant because it visually represents the physical implementation of a specific level shifter architecture. Understanding the layout helps in analyzing the circuit's performance characteristics (parasitics, congestion), area efficiency, and manufacturing complexity. The comparison of different layout versions (Version I vs. Version II) highlights design trade-offs and optimization strategies aimed at improving sustainability. It contributes to the broader goal of designing energy-efficient and environmentally friendly circuits for low-power applications.
+
+
+
+[Image page_5_image_4.png Analysis (by Gemini)]
+Here's an analysis of the provided image and its context within the research paper:
+
+**Image Description**
+
+The image is a layout diagram of an integrated circuit (IC) cell. It shows a top-down view of the different layers of the circuit, represented by different colors and patterns. The diagram is rectangular and features various labeled components, metal routing lines, and power/ground rails.
+
+**Visual Elements and Structure**
+
+*   **Layers:** The layout uses different colors and patterns to represent different layers of the IC fabrication process. Common layers include metal layers (likely M1 and M2), polysilicon, and diffusion regions. The specific color coding isn't detailed, but we can infer the existence of at least two metal layers.
+*   **Routing:** The most prominent visual feature is the metal routing, which is a network of lines connecting different components of the circuit. These lines are used to carry signals and power throughout the cell.
+*   **Power/Ground Rails:**  The top and bottom edges of the layout appear to have power rails (VDDH and VDDL) and ground rails (Gnd). These are wider metal lines that provide power and ground connections to the circuit.
+*   **Components:**  Rectangular shapes likely represent transistors and other circuit components. These are interconnected via the metal routing. The labels "Out," suggest the output signal node(s) are present in the layout.
+*   **Dimensions:**  Yellow and white arrows are indicating cell dimensions. One measures "26T" vertically and another arrow states "12 T" horizontally.
+
+**Text Visible in the Image**
+
+*   VDDH: Indicates a high-voltage power supply rail.
+*   VDDL: Indicates a low-voltage power supply rail.
+*   Gnd: Indicates the ground rail.
+*   Out: Output signal nodes
+*   26 T, 12 T: The dimensions of the layout.
+
+**Context and Importance**
+
+*   **Fig. 5** The image is part of Figure 5, which showcases two versions of the CCLS (Cross-Coupled Level Shifter) architecture layout. "Fig. 5. (a) CCLS Version I (b) CCLS Version II". The surrounding text describes how Version I is routed exclusively using the Metal 1 (M1) layer, while Version II incorporates a Gnd rail in M2, reducing track usage. This version (12T wide) is the DSELS Version I.
+*   **Level Shifter Design:** The image shows the physical layout of a level shifter, which is a circuit that converts voltage levels between different voltage domains. This is crucial in low-power systems where different parts of the chip operate at different voltages to save power.
+*   **SLS Architectures** The document describes the design and layout of several SLS architectures: CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, and C3MLS.
+*   **Track Usage:** The text indicates that these SLS layouts are designed in a double-row format, equivalent to twice the height of a 13-track standard cell configuration. The "T" unit refers to the number of vertical tracks used for routing, which is a measure of cell density and routing congestion.
+*   **Metal Layers:** The description mentions using M1 and M2 layers for routing and power/ground rails. The transition from M1-only routing to incorporating M2 for the ground rail is a key aspect of the design variations.
+*   **Area Efficiency:** The goal of these different versions is to analyze the effect of circuit performance, cell density, parasitics, and congestion on the sustainability evaluation.
+*   **Sustainability:** The surrounding text focuses on the sustainability of different SLS architectures, specifically in the context of low-power IoT applications. The use of different routing strategies (M1 vs. M2) affects area, congestion, and manufacturing complexity, which in turn influence the "embodied footprint" of the design, meaning the energy consumption and emissions during fabrication.
+
+**Overall Importance**
+
+The image is significant because it provides a visual representation of the physical layout of a level shifter cell. It allows researchers and engineers to understand the physical implementation of the circuit and how different design choices, such as routing layers and ground rail placement, affect the area, density, and overall sustainability of the design. This is critical for optimizing the design of low-power circuits for IoT applications and minimizing their environmental impact.
+
+In summary, this figure visually highlights the key difference between design approaches: restricting routing to Metal 1 versus incorporating Metal 2 for ground rails to improve area efficiency. It relates directly to the research paper's focus on sustainability, as these layout choices influence manufacturing complexity and environmental impact.
+
+
+
+[Image page_5_image_5.png Analysis (by Gemini)]
+Here's an analysis of the image based on the surrounding text and the image itself:
+
+**Overall Context:**
+
+This image (specifically Fig. 7(b), based on the page text) depicts the layout of the "DSELS Version II" architecture, a type of level shifter circuit, in STM's 65nm technology. The research focuses on evaluating the sustainability of different level shifter (SLS) architectures. This image visualizes one of the design variations that explores different routing strategies using different metal layers to optimize area, performance, and ultimately, the "embodied footprint" which is a sustainability metric.
+
+**Visual Elements and Their Structure:**
+
+*   **Layout Diagram:** The primary element is a top-down layout diagram of the DSELS Version II level shifter circuit. The diagram shows the physical arrangement of various components and interconnects within the integrated circuit.
+*   **Color Coding:** Different colors are used to represent different layers of the chip. Common layers include:
+    *   Metal Layers (likely different colors for Metal1, Metal2, etc.). Metal layers are used for routing interconnects. The red color likely represents the interconnections between the layers.
+    *   Polysilicon:  Used for transistor gates.
+    *   Diffusion Areas: Form the source and drain regions of transistors.
+    *   Via layers:  Represent connections between different metal layers.
+*   **Power/Ground Rails:**  There are clearly marked power rails (VDDH and VDDL) and a ground rail (Gnd). These rails supply power to the circuit.
+*   **Inputs and Outputs:**  The layout indicates input (likely X, Y) and output (Out) terminals.
+*   **Double-Row Format:** The layout adheres to the double-row format mentioned in the surrounding text. This involves arranging the circuit elements in two rows, sharing a ground rail between the power rails.
+*   **Track Representation:** The image provides a horizontal arrow labelled "11 T", indicating that the design's width occupies 11 vertical tracks. This is a crucial metric for area efficiency.
+
+**Text within the Image:**
+
+The visible text labels within the image are:
+
+*   **VDDH:** Indicates the High-Voltage power rail.
+*   **VDDL:** Indicates the Low-Voltage power rail.
+*   **Gnd:** Indicates the Ground rail.
+*   **Xb, X, Y:** Representing Input signals.
+*   **Out:**  Representing the output signal.
+*   **11 T:** Indicates the width of the cell in terms of number of Tracks.
+*   **plus/pus**: Indicates a P-type transistor.
+
+**Significance:**
+
+*   **Version II vs. Version I:** Based on the text and other figure descriptions, Version II incorporates the GND rail in the Metal2 layer while the rest of the routing is confined to Metal1. This change aims to reduce track usage. Version I (Fig. 7(a) and the surrounding text) uses only Metal1.
+*   **Area Optimization:** The design goal is to reduce the cell width (number of tracks). By moving the ground rail to M2, the design achieves a smaller width compared to Version I (which is 12T, according to the text describing Figure 7(a)).
+*   **Sustainability Implications:** The layout choices directly affect the sustainability metrics discussed in Section IV of the paper. A smaller area (fewer tracks) generally reduces the "embodied footprint." However, using M2 for the ground rail may increase the "congestion factor," affecting the overall system-level routing efficiency and fabrication complexity, which can impact sustainability.
+*   **Masks:** The "DSELS" architecture requires three extra masks ('VTL N', 'VTL P', and 'VTH P' CAD layers). This information is also pertinent to the sustainability assessment, as extra masks contribute to a higher embodied footprint.
+*   **Performance and Trade-offs:** While the text focuses on area reduction and sustainability, the different versions of layouts also impact the circuit's performance (propagation delay, power consumption). Table I contains data on different versions for different level shifters and their performance.
+
+In summary, this image provides a visual representation of the DSELS Version II layout, highlighting the physical arrangement of circuit elements and the track usage. The image is important because it illustrates the design choices made to optimize area and, indirectly, the sustainability of the level shifter architecture.
+
+
+
+=== Page 6 ===
+(a) (b) (a) (b)
+Fig.8. (a)RSWCRLSVersionI(b)RSWCRLSVersionII.Layoutvariations Fig. 10. (a) C3MLS Version I (b) C3MLS Version II. Layout variations of
+oftheRSWCRLSarchitecture:VersionI–RoutingconfinedtoM1,requiring the C3MLS architecture: Version I – Routing confined to M1, requiring 13
+10verticaltracks(10T),andVersionII–IncorporatingGNDrailinM2while vertical tracks (13T), and Version II – Incorporating GND rail in M2 while
+keepingrestoftheroutinginM1,reducingtrackusageto9T. keepingrestoftheroutinginM1,reducingtrackusageto11T.
+extra masks are required to manufacture it. Its Version I has a operational CFP. The metrics estimate CFP in energy units
+13T cell width, whereas Version II reduces the width to 11T (mWh), which can be further converted into equivalent CO2
+by utilizing an M2 track, as shown in Fig. 10. emissions. The defined metrics are as follows.
+1) Embodied footprint: The embodied footprint of a VLSI
+IV. SUSTAINABILITYASSESSMENTINSLSDESIGNS
+design accounts for the energy consumption and emissions
+This section discusses the proposed approach to evalu-
+generatedduringsemiconductormanufacturing,encompassing
+ate sustainability, enabling designers to assess the long-term
+the raw material extraction, transportation, chip fabrication
+efficiency of various SLS architectures early in the design
+stages, etc. Eq. (1) assesses the environmental impact of SLS
+flow. This allows for a well-informed selection of the most
+manufacturing by estimating the energy consumed during its
+sustainable option available for seamless integration into SoC
+fabrication, providing a basis for the evaluation.
+implementations for low-power IoT applications.
+A. Proposed sustainability evaluation metrics
+Embodied footprint=k×Area×Mask factor
+The proposed set of metrics can help to evaluate a Level (1)
+×Congestion factor
+shifter’s architectural sustainability in terms of embodied and
+a) k: It is a constant that represents the average fabri-
+cation energy consumed per µm2 area in a given technology
+node. In this analysis, data corresponding to the 65nm tech-
+nology node has been utilized [15].
+b) Area: RepresentsthelayoutareaoftheSLScellunder
+sustainability analysis, measured in µm2 unit.
+c) Mask factor: As discussed in Section III-B3, the
+use of additional masks increases energy consumption during
+the fabrication process and, therefore, impacts sustainability.
+‘Mask factor’signifiesthepercentageimpactofanadditional
+mask usage on fabrication energy consumption [15]. Table I
+outlines the additional mask details for the SLS designs.
+d) Congestion factor: InLevelShifterstandardcelllay-
+out design, utilizing tracks from upper metal layers (such as
+M2 in this work) contributes to increased congestion at the
+(a) (b) system level, hence affecting overall SoC routing efficiency.
+This added congestion introduces fabrication complexities,
+Fig.9. (a)LPSVTLSVersionI(b)LPSVTLSVersionII.Layoutvariations
+leading to higher energy consumption during manufacturing,
+oftheLPSVTLSarchitecture:VersionI–RoutingconfinedtoM1,requiring
+17verticaltracks(17T),andVersionII–IncorporatingGNDrailinM2while which, in turn, affects sustainability. To account for this
+keepingrestoftheroutinginM1,reducingtrackusageto15T. impact, the congestion factor is incorporated into Eq. (1).
+
+[Image page_6_image_0.png Analysis (by Gemini)]
+Here's a breakdown of the image and its context within the research paper, based on the information you provided:
+
+**Image Analysis:**
+
+*   **Type:** The image is a layout diagram of an integrated circuit standard cell. It shows the physical arrangement of different layers used in the fabrication process.
+
+*   **Visual Elements and Structure:**
+    *   The image shows a rectangular structure with a lot of colored areas.
+    *   Different colors likely represent different layers of the integrated circuit. The arrangement suggests a complex interconnected network of transistors and wires.
+    *   There are labels for "VDDH," "VDDL," and "Gnd," indicating power and ground supply rails.
+    *   An yellow arrow and text on the side indicate the height of the standard cell as "26T" (26 tracks).
+    *   An arrow across the bottom of the figure indicates the width of the cell as "10 T"
+
+*   **Text within the Image:**
+    *   VDDH: High-voltage power supply rail.
+    *   VDDL: Low-voltage power supply rail.
+    *   Gnd: Ground connection.
+    *   26 T: Indicates height of the cell is 26 tracks.
+    *   10 T: Indicates width of the cell is 10 tracks.
+
+**Context and Importance:**
+
+*   **Overall Context:** The image represents the layout of a standard cell used in the design of a level shifter (SLS) circuit. The paper is investigating the sustainability of different SLS architectures, focusing on the embodied and operational footprint.
+*   **Specific Significance:**
+    *   This image specifically shows either the RSWCRLS or C3MLS version I or II architecture.
+    *   The image illustrates the physical dimensions of the cell in terms of tracks (T). The use of different metal layers for routing and the placement of power/ground rails are key design considerations being evaluated in the paper.
+    *   The layout's area, congestion, and the number of masks required for fabrication directly impact the embodied footprint (manufacturing energy consumption) of the SLS. The image provides visual information to understand these factors.
+    *   The document specifies that, SLS layouts have been designed in a unique double-row format, equivalent to twice the height of the 13-Track (13T) standard cell configuration (in STM’s 65nm library).
+
+**Importance within the Research Paper:**
+
+*   **Visual Representation:**  The image visually demonstrates the differences in layout density and routing complexity between different SLS architectures (and their versions).
+*   **Supporting Evidence:** It serves as a visual aid to support claims about area efficiency, congestion, and the impact of using additional metal layers for routing.
+*   **Basis for Analysis:** The image's features (area, routing complexity, placement of power/ground) are used to calculate and compare the embodied footprint of the different SLS designs.
+
+In summary, the image is a crucial component of the research paper, providing a visual representation of the SLS cell layout and serving as the basis for analyzing its sustainability from a manufacturing perspective. The paper uses these layouts to estimate metrics like embodied footprint and operational footprint, which are then used to benchmark different SLS designs.
+
+
+[Image page_6_image_1.png Analysis (by Gemini)]
+Here's an analysis of the image provided, based on your instructions and the surrounding text:
+
+**Image Analysis**
+
+*   **Visual Elements:**
+
+    *   The image shows a detailed layout of a VLSI (Very Large Scale Integration) circuit. It's a top-down view, likely representing the physical arrangement of transistors and interconnects on a silicon chip.
+    *   Different colors likely represent different layers in the fabrication process (e.g., metal layers for routing, polysilicon for transistor gates, diffusion regions).
+    *   We can see the structure of transistors (source, drain, gate), and how they are connected using metal wires (the red lines).
+    *   There are labels for power supplies (VDDH, VDDL, Gnd).
+    *   An arrow with "9T" indicates the cell width.
+
+*   **Text Visible:**
+
+    *   VDDH: High voltage power supply rail.
+    *   VDDL: Low voltage power supply rail.
+    *   Gnd: Ground connection.
+    *   Out: Output terminal
+    *   9T: Cell width, indicating 9 tracks.
+
+*   **Structure:**
+
+    *   The layout appears to be organized into three sections vertically, with distinct blocks. The middle section is labeled "Gnd," indicating the ground rail.
+    *   Power supply rails (VDDH and VDDL) are at the top and bottom respectively.
+
+**Context and Significance (based on surrounding text)**
+
+*   **Overall Context:** The image is a layout of one version of a "RSWCRLS" (Reduced Swing Cascode Restored Level Shifter) circuit, specifically Version II, which is a type of level shifter designed for subthreshold logic. Level shifters are crucial in low-power designs because they translate voltage levels between different parts of a circuit operating at different voltages. Subthreshold logic aims to reduce power consumption by operating transistors with voltages below their threshold voltage.
+
+*   **Importance:** The image is important because it illustrates the physical implementation of the RSWCRLS circuit. This allows the researchers to analyze and compare its area, track usage, and layout characteristics with other level shifter designs. The paper is focused on assessing the sustainability of different level shifter architectures, and the layout contributes significantly to the embodied footprint (energy consumption during manufacturing).
+
+*   **Connection to Text:**
+
+    *   The text directly refers to Figure 8, which this image belongs to.
+    *   The text states that the RSWCRLS architecture uses additional ‘VTL N’, ‘VTL P’, ‘VTH N’, and ‘VTH P’ CAD layers, i.e., four extra masks are required to manufacture it.
+    *   The text mentions that Version I has a 10T cell width, whereas Version II reduces the width to 9T by utilizing an M2 track. The "9T" label on the image confirms that this is indeed Version II. The use of M2 for the ground rail is a key feature described in the text, and it's visible as the wider, purple "Gnd" rail in the image.
+    *   The surrounding text discusses the impact of using upper metal layers (like M2) on routing congestion at the SoC level. While it allows for a denser layout, it can reduce available routing resources for other signals, potentially increasing fabrication complexity and energy consumption.
+    *   The embodied footprint metric, described in the paper, is directly related to layout area, mask count, and congestion. This image is a visual representation of the area component of that metric.
+
+In summary, the image is a crucial visual aid in understanding the physical characteristics of the RSWCRLS level shifter design. Its layout details are directly linked to the sustainability analysis presented in the research paper.
+
+
+[Image page_6_image_2.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on the provided information:
+
+**Image Description**
+
+The image is a layout diagram of a VLSI (Very-Large-Scale Integration) standard cell. It depicts the physical arrangement of transistors and interconnects within a level shifter circuit. The diagram uses different colors and patterns to represent various layers of the integrated circuit:
+
+*   **Red:**  Likely represents metal interconnects (probably Metal1, M1).
+*   **Green:** Likely represents polysilicon (gate material).
+*   **Purple:** Likely represents a higher metal layer, or the substrate.
+*   **White:** Dielectric material
+*   **Crossed Boxes:** Likely via connections between metal layers.
+
+The layout shows transistors (likely PMOS and NMOS), connected to form logic gates. Supply rails (VDDH, VDDL, and GND) are clearly labeled. The dimensions of the cell are marked with arrows and text:  "26T" (vertical height) and "17 T" (horizontal width).
+
+**Text within the Image**
+
+Here is the text visible in the image:
+
+*   VDDH (multiple instances): High-voltage power supply rail.
+*   VDDL (multiple instances): Low-voltage power supply rail.
+*   Gnd (multiple instances): Ground rail.
+*   26 T: Vertical dimension of the cell, likely indicating 26 tracks.
+*   17 T: Horizontal dimension of the cell, likely indicating 17 tracks.
+*   Q1, Q2: Transistor designators
+*   Out: Output terminal
+*   pnd, pu: Possibly NMOS and PMOS indicators
+*   VHVL
+*   L<
+
+**Context and Significance**
+
+The image represents the layout of the "LPSVTLS Version I" Level Shifter architecture, referenced in Figure 9(a) of the research paper. This type of image is crucial for understanding the physical implementation and area efficiency of different Level Shifter designs.
+
+Here's a breakdown of the context and significance:
+
+*   **Level Shifters:** Level shifters are essential circuits in systems with multiple voltage domains, such as low-power IoT devices. They convert signals from one voltage level to another, enabling communication between different parts of the system.
+*   **Layout Variations:** The research paper compares different layout variations (Version I and Version II) of various Level Shifter architectures (CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, and C3MLS).  The goal is to evaluate the impact of these variations on sustainability metrics.
+*   **Track Usage and Area:** The image shows "17T" (17 tracks) width and "26T" high, indicating the cell's dimensions in terms of standard cell tracks. Reducing track usage is a primary objective, as it directly impacts cell area.
+*   **Metal Layer Routing:** The text from surrounding pages indicates that Version I designs primarily use Metal1 (M1) for routing. Version II designs incorporate a GND rail in Metal2 (M2) to potentially reduce track usage and cell width.
+*   **Sustainability Assessment:** The paper focuses on assessing the "embodied footprint" of these designs.  The embodied footprint is a measure of the energy consumed and emissions generated during the chip manufacturing process. Area is a key factor in determining the embodied footprint (Eq. 1): `Embodied footprint = k × Area × Mask factor × Congestion factor`
+*   **Trade-offs:**  The use of M2 for routing can reduce area but may increase congestion at the SoC level, potentially increasing fabrication complexities. The paper aims to quantify these trade-offs.
+*   **Additional Masks:** The design 'LPSVTLS' uses additional ‘VTL N’ and ‘VTL P’ CAD layers, i.e., two extra masks are required to manufacture it.
+
+**Overall Importance**
+
+The image, in conjunction with the surrounding text, is vital for understanding the research methodology. It illustrates how layout optimizations are being explored to minimize the environmental impact of Level Shifter designs.  By comparing different layouts and quantifying their embodied footprints, the researchers aim to provide guidance for selecting the most sustainable Level Shifter architectures for low-power applications. The physical layout details provide insight into the real-world constraints and trade-offs involved in VLSI design for sustainability.
+
+
+
+[Image page_6_image_3.png Analysis (by Gemini)]
+Here's an analysis of the image based on the provided information:
+
+**Image Description**
+
+The image is a detailed layout diagram of a semiconductor circuit, likely representing a standard cell.  It's a top-down view showing the arrangement of various layers and components within the cell.
+
+*   **Color Coding:** Different colors represent different layers of the integrated circuit, such as metal layers for routing (often red), polysilicon for transistor gates (often green), and other layers related to doping regions, contacts, etc. The purple areas likely represent the power rails.
+*   **Geometric Shapes:** Rectangles, lines, and other shapes represent the physical arrangement of transistors, wires, and contacts within the cell.
+*   **Labels:** There are text labels indicating voltage supplies like "VDDH" (high voltage), "VDDL" (low voltage), "Gnd" (ground), and functional components such as "Out". Transistor labels Q1, Q2, Ab. Also, "pnd" and "pS" are visible.
+*   **Size Indicator:** A horizontal double-headed arrow at the bottom shows the cell width is "15 T".
+
+**Text within the Image:**
+
+*   "VDDH": High voltage power supply.
+*   "VDDL": Low voltage power supply.
+*   "Gnd": Ground.
+*   "Out": Output.
+*   "Q1, Q2": Transistor labels.
+*   "Ab": label.
+* "pnd, pS": doping regions
+*   "15 T": Cell width indicator (15 tracks).
+
+**Context and Importance**
+
+The image is a layout variation of LPSVTLS Version II.  It is Figure 9(b) according to the text, representing the LPSVTLS (Low Power Super Threshold Level Shifter) architecture. This particular version of the layout uses Metal 2 (M2) for the ground rail.
+
+*   **Overall Research Focus:** The research paper focuses on sustainability assessment in SLS (Level Shifter) designs for low-power IoT applications. The researchers are trying to evaluate and optimize the environmental impact of these circuits during manufacturing (embodied footprint) and operation (operational footprint).
+*   **Layout Variations:**  The paper explores different layout techniques, specifically comparing versions that confine routing to Metal 1 (M1) versus versions that incorporate Metal 2 (M2) for the ground rail.
+*   **Track Reduction:** The caption specifically mentions that incorporating the GND rail in M2 reduces the track usage. The initial version requires 17 tracks, while the M2 version requires 15 tracks.
+*   **Sustainability Metrics:** The layout variations are being analyzed for their impact on sustainability. Using M2 can reduce the cell area, potentially improving sustainability (reduced embodied footprint). However, it can also introduce congestion at the system level, which may increase energy consumption and offset the benefits. The paper analyzes the trade-offs using the "Embodied footprint" metric, considering area, mask usage, and congestion.
+*   **Mask Usage:**  The surrounding text mentions that this LPSVTLS architecture layout uses additional ‘VTL N’ and ‘VTL P’ CAD layers, i.e., two extra masks are required to manufacture it.
+
+**Significance**
+
+The image is important because it visually demonstrates the layout modifications being studied. It allows readers to see how using a higher metal layer (M2) for the ground rail can physically reduce the cell width and track usage.  This visual representation is crucial for understanding the trade-offs being evaluated and how layout choices can impact the overall sustainability of the SLS design. The image is part of a comparative analysis, showing different versions of the architecture and how specific design decisions affect area, congestion, and, ultimately, the embodied footprint. The paper aims to give designers tools to make informed decisions about designing more sustainable chips early in the design process.
+
+
+
+[Image page_6_image_4.png Analysis (by Gemini)]
+Here's a detailed analysis of the image you provided, incorporating the surrounding text and context:
+
+**Overall Image Description:**
+
+The image is a detailed layout of a VLSI (Very-Large-Scale Integration) circuit.  It depicts the physical arrangement of transistors, metal interconnects, and other components within a standard cell.  It appears to represent the design of a Level Shifter (SLS), specifically for low-power applications.
+
+**Visual Elements and Structure:**
+
+*   **Layout Representation:** The dominant visual element is the intricate layout itself.  Different colors represent different layers of the integrated circuit:
+    *   Red (likely Metal 1): This shows the initial routing layer
+    *   Other colors (green, purple, blue) represent different layers of silicon, polysilicon, metal 2, vias, or other mask layers, defining transistors and interconnections.
+    *   Cross-hatching in some areas, is likely to represent contacts or vias (connections between different metal layers).
+*   **Transistors:** The transistors are represented by the intersections of polygons of different colours.
+*   **Power Rails:** The top and bottom edges of the cell are demarcated by wider lines, likely representing the power supply rails (VDDH and VDDL, Ground).
+*   **Dimensions:** A large yellow arrow with the text "26 T" shows the height of the cell. The width of the cell is labelled at the bottom as "13 T".  "T" refers to the track height within the specific technology node (65nm in this case).
+
+**Text within the Image:**
+
+*   **VDDH:**  Labels for High-Voltage Power Supply rails, at the top of the layout.
+*   **VDDL:** Labels for Low-Voltage Power Supply rails, at the bottom of the layout.
+*   **Gnd:** Labels the ground connections.
+*   **Out:** Labels an output node
+*   **A, Ab:** Designates the input ports for the high-to-low level conversion
+*   **26 T, 13 T:** Dimensions of the layout. The layout is 26 tracks high and 13 tracks wide.
+*   **Transistor Labels:** Labels Q1, Q2, etc. within boxes representing the transistors, which seem to be n-type (labelled n) and p-type (labelled p).
+
+**Context and Importance (based on provided text):**
+
+*   **Level Shifter (SLS) Design:** The layout represents a Level Shifter circuit. Level shifters are crucial in mixed-voltage systems, allowing communication between circuits operating at different voltage levels. This is important in low-power IoT devices where different parts of the system might be powered at different voltages to save energy.
+*   **Sustainability Analysis:** The paper's focus is on evaluating the "sustainability" of different SLS architectures. The layout represents a specific instantiation of an SLS design that will be analyzed for its embodied footprint (energy consumed during manufacturing) and operational footprint (energy consumed during operation).
+*   **Double-Row Format:** The text mentions that the SLS layouts are designed in a "double-row format" with a shared ground rail. This is evident in the image, with the ground rail running between the VDDH and VDDL rails, and the 26T height suggesting the double row design.
+*   **M1 vs. M2 Routing:** The text describes two versions of each SLS architecture: Version I, where routing is confined to Metal 1 (M1), and Version II, where the ground rail is implemented using Metal 2 (M2), with other routing remaining in M1. The layout in the image potentially represents either Version I or Version II. Given the complexity of the traces, and the ground running through the middle, it's likely a version I design.
+*   **Track Height (T):** The use of "T" (track height) as a unit of measurement highlights the importance of cell density and routing efficiency in the design.
+*   **Embodied Footprint:** The paper uses an equation to estimate the embodied footprint of the SLS design, and includes Area, Mask Factor and Congestion Factor as variables.
+*   **Congestion Factor:** As upper metal layers introduce congestion, it reduces the overall SoC routing efficiency. It leads to higher energy consumption during manufacturing.
+
+**Overall Significance:**
+
+This image provides a visual representation of the physical implementation of a level shifter, which is essential for the study's goal of evaluating the "sustainability" (environmental impact) of different design choices. The detailed layout allows for accurate calculation of area, routing congestion, and ultimately, the embodied footprint of the circuit. By comparing different layout variations, the paper aims to identify the most sustainable SLS architecture for low-power IoT applications.
+
+
+[Image page_6_image_5.png Analysis (by Gemini)]
+Here's an analysis of the image based on the provided context:
+
+**Image Description:**
+
+The image shows a detailed layout diagram of a "C3MLS Version II" subthreshold level shifter (SLS) standard cell. It's a top-down view of the integrated circuit layout, illustrating the physical arrangement of transistors, interconnects, and power/ground rails. The cell is annotated with labels indicating key components and signals.
+
+**Visual Elements:**
+
+*   **Layout Diagram:** The primary element is the detailed layout of the C3MLS Version II cell.  It uses different colors and patterns to represent different layers of the integrated circuit, including:
+    *   Transistors:  Likely represented by green boxes indicating the active areas, with gate connections shown.
+    *   Metal Interconnects: Red lines show the routing of signals and power within the cell.
+    *   Power Rails:  VDDH (high voltage) and VDDL (low voltage) are power supply rails, likely in purple.
+    *   Ground Rail: A Ground rail (Gnd) is a return path for the power.
+*   **Labels:** Text labels annotate various parts of the layout:
+    *   `VDDH`: indicates the high-voltage power rail.
+    *   `VDDL`: indicates the low-voltage power rail.
+    *   `Gnd`: indicates the Ground rail.
+    *   `Out`: indicates the output signal.
+    *   `Q1`, `Q2`: Transistor labels.
+    *   `Ab`: Label for transistor terminal.
+    *   `G`: Label for transistor terminal.
+    *   `S`: Label for transistor terminal.
+    *   `D`: Label for transistor terminal.
+*   **Dimensions:** An "11 T" arrow indicates the width of the cell layout, signifying that the cell occupies 11 vertical tracks.
+
+**Text within the Image:**
+
+The following text is visible in the image:
+
+*   `VDDH` (multiple instances): High voltage power supply.
+*   `VDDL`: Low voltage power supply.
+*   `Gnd`: Ground connection.
+*   `Out`: Output signal.
+*   `Q1`, `Q2`: Transistor labels.
+*   `Ab`: Transistor terminal.
+*   `G`: Transistor terminal.
+*   `S`: Transistor terminal.
+*   `D`: Transistor terminal.
+*   `11T`:  Cell width expressed in terms of the number of vertical tracks.
+
+**Context and Significance:**
+
+This image is part of a research paper evaluating the sustainability of different Level Shifter (SLS) architectures.  Specifically, it shows the layout of "C3MLS Version II".
+
+Based on the surrounding text, the image's importance lies in these key aspects:
+
+1.  **Layout Variation:** It exemplifies the second version of the C3MLS architecture, where the Ground (GND) rail is implemented using the Metal 2 (M2) layer. The first version, C3MLS Version I, likely confines all routing to Metal 1 (M1).
+2.  **Area Optimization:** The text indicates that incorporating the GND rail in M2 allows for a reduction in the number of vertical tracks required, from 13T in Version I to 11T in Version II.  This translates to a smaller cell area.
+3.  **Sustainability Assessment:** The paper proposes metrics to evaluate the "embodied footprint" of VLSI designs, which accounts for the energy consumption and emissions during manufacturing.  The layout area (as depicted in the image) is a direct input to this metric.  The use of M2 for routing, while reducing area, might increase congestion at the SoC level, impacting sustainability.
+4.  **Trade-offs:**  The paper explores the trade-offs between different layout strategies. Version II uses an M2 track. While this reduces cell width, it could potentially increase congestion and fabrication complexity (as detailed in the paper), which could affect sustainability.
+
+**Overall Importance:**
+
+The image is crucial for understanding the physical implementation of the C3MLS Level Shifter and its impact on the proposed sustainability metrics.  By visualizing the layout, the reader can appreciate how design choices (like using M2 for the GND rail) influence area, congestion, and ultimately, the embodied footprint of the design. The paper uses these layouts as a basis for comparing different architectures and assessing their overall environmental impact.
+
+
+
+=== Page 7 ===
+2) Operational footprint metric: The operational footprint
+of a VLSI design reflects the total energy consumption and
+associated emissions throughout its functional life. Eq. (2)
+captures the operational impact of a SLS by evaluating the
+energy consumption of the dynamic and leakage components
+over the intended operating lifetime of an application (T ).
+total
+Operational footprint=(Dynamic power+Leakage power)
+×T
+total
+(2)
+Here,foroperationalfootprintanalysis,theoperatinglifeof
+aSLSdesignisclassifiedintoActive,Standby,andSwitched-
+off zones, represented as ratios of the total operating duration
+(T ). These ratios are given by Tactive, Tstandby, and Tswitchedoff, Fig.11. EmbodiedfootprintforVersionIandIIofCCLS,CMLS,DSELS,
+total Ttotal Ttotal Ttotal RSWCRLS,LPSVTLS,andC3MLSSubthresholdLevelshifters
+respectively. Dynamic power is consumed only during active
+operation; thus, Eq. (3) accounts for the active ratio of the
+total operating time. In contrast, leakage power is drawn in the SoC, thus leading to increased congestion and fabrication
+bothactiveandstandbymodes,soEq.(4)considersthetiming complexity. As a result, the Embodied footprint may increase.
+ratios for both modes. These impacts are validated by analyzing the ’Embodied
+T footprint’ metric proposed in Eq. (1) on the selected set of
+Dynamic power=Q ×α×V ×f × active (3)
+dyn active op T SLS as shown in Fig. 11. The following observations can be
+total
+derived from Table I and Fig. 11.
+(cid:16) T (cid:17)
+Leakage power= I active×V active× Tactive • Versions I and II of the conventional CCLS exhibit the
+(cid:16) t Total (cid:17) (4) highest Embodied footprint among all the SLS designs,
++ I standby×V standby× Tstandby as they occupy the largest layout area. Hence, CCLS is
+total
+the least sustainable choice in terms of manufacturing.
+In Eq. (3) and (4),
+• Versions I and II of the conventional CMLS exhibit the
+a) Q : Represents the dynamic charge consumed dur-
+dyn least Embodied footprint among all the SLS designs, as
+ing the switching operation of the SLS.
+they have the densest layout. Hence, CMLS is the most
+b) α: Represents switching factor based on application.
+sustainable choice in terms of manufacturing.
+c) V : Represents active mode operation voltage.
+active • Versions I and II of the conventional CMLS share the
+d) V : Represents standby mode operation voltage.
+standby same area. However, due to additional M2 track usage
+e) f : Represents frequency of operation.
+op in Version II, congestion increases, raising its Embodied
+f) I : Represents the current drawn from the voltage
+active footprint to 0.62 mWh, making it comparatively less
+source in the active mode of operation (V ).
+active sustainable. For all other designs, Version II has a lower
+g) I : Representsthecurrentdrawnfromthevoltage
+standby Embodied footprint and greater sustainability than Ver-
+source in the standby mode of operation (V ).
+standby sionI,asitsdecreasedareahasamoresignificantimpact
+B. Sustainability Benchmark: Trends and Observations on the embodied/manufacturing footprint, outweighing
+the minimal effect of increased congestion from the
+SectionIV-Aprovidedadetaileddiscussionoftheproposed
+incorporation of an additional M2 track.
+metrics and their significance. Here, these metrics are applied
+tobenchmarktheselectedSLSdesigns,evaluatinghowdiffer- • Versions II of CMLS and RSWCRLS share the same
+area and congestion impact. However, additional VT
+ent design choices impact sustainability. For SLS analysis in
+IoTapplications,here Tactive, Tstandby,and Tswitchedoff areconsidered mask usage in RSWCRLS results in a higher Embodied
+Ttotal Ttotal Ttotal footprint compared to CMLS.
+5%, 25%, and 70% respectively.
+1) Embodied footprint: This section evaluates the frame- 2) Operational footprint: This section evaluates the frame-
+work’s adaptability in analyzing the effects of layout area work’s adaptability in analyzing the impact of operating
+optimization and additional metal utilization on sustainability. performance and lifetime reliability on sustainability. As dis-
+In Industry, Level Shifter standard cell layouts are usu- cussed in Section IV-A2, the Operational footprint of an SLS
+ally designed using the lowest routing layer available in a designdependsonitsdynamicandleakagecharacteristics.The
+technology (here, M1). This can result in increased area dynamic power consumption further depends on α and f of
+op
+consumption. Therefore, utilizing upper routing layers may the usage application, and hence depending upon the chosen
+allow designers to achieve a denser layout. However, this application, the Operational footprint may vary.
+approach can introduce challenges at the SoC level. Utilizing In Fig. 12, the above impact is validated on the SLS
+uppermetallayersfordesigningastandardcelllayoutreduces architectures by evaluating their Operational footprint for an
+the available routing resources for cell interconnects within IOT application with α = 0.3 and f = 100 MHz according
+op
+
+[Image page_7_image_0.png Analysis (by Gemini)]
+Here's a breakdown of the image and its context within the research paper:
+
+**1. Visual Elements and Structure:**
+
+*   **Type:** The image is a bar graph (also known as a bar chart).
+*   **Axes:**
+    *   The x-axis represents the "Design Name," with the following categories: CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, and C3MLS. These appear to be different types of Subthreshold Level Shifters (SLS).
+    *   The y-axis represents "Footprint (mWh)," with values ranging from 0.0 to 1.6 mWh.
+*   **Bars:** For each design name on the x-axis, there are two bars. One represents "Version I" and the other "Version II" of that design. The bars are colored light blue with black borders. Version I bars have diagonal stripes, while Version II bars have a pattern of small circles inside.
+*   **Data Labels:** Above each bar is a numerical value representing the exact footprint (in mWh) for that version of the design.
+*   **Legend:** A legend in the upper right corner clarifies that striped bars represent "Version I" and dotted bars represent "Version II."
+*   **Title:** Lacking, but this is figure 12 and given surrounding text it is titled "Operational footprint for Version I and II of CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, and C3MLSSubthresholdLevelshifters"
+
+**2. Textual Elements:**
+
+*   **Axis Labels:** "Footprint (mWh)" and "Design Name"
+*   **Category Labels:** CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, C3MLS
+*   **Data Values:** 1.282, 1.175, 0.607, 0.622, 0.843, 0.792, 0.730, 0.674, 1.147, 1.037, 0.913, 0.792
+*   **Legend:** "Design Versions", "Version I", "Version II"
+
+**3. Data Extraction:**
+
+The graph shows the operational footprint (in mWh) for different versions of six subthreshold level shifter (SLS) designs:
+
+*   CCLS: Version I - 1.282, Version II - 1.175
+*   CMLS: Version I - 0.607, Version II - 0.622
+*   DSELS: Version I - 0.843, Version II - 0.792
+*   RSWCRLS: Version I - 0.730, Version II - 0.674
+*   LPSVTLS: Version I - 1.147, Version II - 1.037
+*   C3MLS: Version I - 0.913, Version II - 0.792
+
+**4. Context and Importance:**
+
+*   **Overall Goal:** The research aims to evaluate the sustainability of different SLS designs. This image (Fig. 12) focuses on the "Operational footprint," which is defined as the energy consumption and associated emissions of a VLSI design throughout its functional life. This footprint is calculated using dynamic and leakage power over the operating lifetime.
+*   **Surrounding Text:** The surrounding text explains that the operational footprint depends on the dynamic and leakage characteristics of the SLS design. The dynamic power consumption depends on the switching factor (α) and operating frequency (f) of the application. The text states that the impact illustrated in this graph is validated on SLS architectures by evaluating their operational footprint for an IoT application with α = 0.3 and f = 100 MHz.
+*   **Key Findings (from surrounding text):**
+    *   "Versions I and II of the conventional CMLS exhibit the highest Operational footprint among all the SLS designs. Hence, it is the least sustainable choice in this case." (Meaning, based on operational footprint alone).
+    *   "Versions I and II of RSWCRLS exhibit the least Operational footprint among all the SLS designs. Hence, it is the most sustainable choice in this case."
+
+**5. Image Significance:**
+
+The image visually presents a comparison of the operational footprints of different SLS designs, highlighting the differences between Version I and Version II of each design. This visualization allows for a clear understanding of which designs are more sustainable from an operational energy consumption perspective. It helps validate the proposed "operational footprint" metric and demonstrates that layout efficiency (area) doesn't necessarily correlate directly with sustainability.  For example, the text states that CMLS has the least embodied footprint, but the *highest* total footprint due to a high operational footprint. Thus it shows that RSWCRLS exhibits the *least* operational footprint among all the SLS designs. Thus the operational footprint varies by application and may mean a different design is the most sustainable option depending on usage conditions and requirements.
+
+
+
+=== Page 8 ===
+• CMLS,whichhadtheleastEmbodiedFootprint,nowhas
+the highest Total Footprint.
+CONCLUSION
+In modern multi-voltage domain ICs, Level Shifters have
+become essential for enabling mixed-voltage communication,
+especially Subthreshold Level Shifters in ultra-low-power ap-
+plications. While many advanced SLS designs are available,
+the conventional PPA metric is still used to determine effi-
+ciency, even in this ecological era. To address this, we pro-
+posedandvalidatedasustainabilityevaluationandbenchmark-
+ingparadigmtoidentifythemostefficientandenvironmentally
+friendly SLS architecture. Additionally, a unique double-row
+layout implementation was presented to examine SLS area
+Fig.12. OperationalfootprintforVersionIandIIofCCLS,CMLS,DSELS,
+RSWCRLS,LPSVTLS,andC3MLSSubthresholdLevelshifters efficiency and its impact on sustainability.
+REFERENCES
+to Eq. (2). Observations from Fig. 12 are as follows. [1] M.Yinetal.,“Power,performance,andareaevaluationacross180nm-
+28nmtechnologynodesbasedonbenchmarkcircuits,”IEICEElectron-
+• Operational footprint of an SLS design can’t be judged ics Express, vol. 21, no. 9, pp. 20240194–20240194, Apr. 2024, doi:
+only on the basis of its layout efficiency, as it might https://doi.org/10.1587/elex.21.20240194.
+dependuponseveralotherperformanceparameters.How- [2] A. Hopf, A. Ismail, H. Ehm, D. Schneider and G. Reinhart, ”Energy-
+EfficientSemiconductorManufacturing:EstablishinganEcologicalOp-
+ever, it can be estimated using the proposed metric. No-
+eratingCurve,”2022WinterSimulationConference(WSC),Singapore,
+tably, Operational Footprint varies by application, mean- 2022,pp.3453-3464,doi:10.1109/WSC57314.2022.10015333.
+ingadifferentdesignmaybethemostsustainableoption [3] I.Lee,D.SylvesterandD.Blaauw,”ASubthresholdVoltageReference
+With Scalable Output Voltage for Low-Power IoT Systems,” in IEEE
+dependingonspecificusageconditionsandrequirements.
+JournalofSolid-StateCircuits,vol.52,no.5,pp.1443-1449,May2017,
+• Versions I and II of the conventional CMLS exhibit the doi:10.1109/JSSC.2017.2654326.
+highest Operational footprint among all the SLS designs. [4] B. H. Calhoun, J. Bolus, S. Khanna, A. D. Jurik, A. C. Weaver and
+T.N.Blalock,”Sub-thresholdoperationandcross-hierarchydesignfor
+Hence, it is the least sustainable choice in this case.
+ultralowpowerwearablesensors,”2009ISCAS,Taipei,Taiwan,2009,
+• Versions I and II of RSWCRLS exhibit the least Opera- pp.1437-1440,doi:10.1109/ISCAS.2009.5118036.
+tional footprint among all the SLS designs. Hence, it is [5] T.-H.Chen,J.Chen,andL.T.Clark,“SubthresholdtoAboveThreshold
+LevelShifterDesign,”JournalofLowPowerElectronics,vol.2,no.2,
+the most sustainable choice in this case.
+pp.251–258,Aug.2006,doi:https://doi.org/10.1166/jolpe.2006.071.
+3) Total footprint: In Fig. 11 and Fig. 12, an individual [6] AbdellatifBellaouarandM.Elmasry,Low-PowerDigitalVLSIDesign.
+SpringerScience&BusinessMedia,2012.
+assessment of manufacturing and operational impact was ob-
+[7] SanjayChuriwalaandS.Garg,PrinciplesofVLSIRTLDesign.Springer
+served.However,thissectionevaluatestheframework’sadapt- Nature,2011.doi:https://doi.org/10.1007/978-1-4419-9296-3.
+ability in analyzing their combined effect on sustainability (as [8] B.Razavi,DesignofAnalogCMOS:Integratedcircuits,2nded.,2017.
+[9] ”Report of the world commission on environ-
+shown in Fig. 13). Following insights can be drawn from it.
+ment and development: Our common future,” 1987,
+• RSWCRLS has the least Total footprint among all SLS https://sustainabledevelopment.un.org/content/documents/5987our-
+common-future.pdf,(accessedMarch1,2025).
+designs, making it the most sustainable option overall.
+[10] U.Guptaetal.,“ChasingCarbon:TheElusiveEnvironmentalFootprint
+of Computing,” IEEE Micro, vol. 42, no. 4, pp. 1–1, 2022, doi:
+https://doi.org/10.1109/MM.2022.3163226.
+[11] C.HuangandH.Jiao,”C3MLS:AnUltra-Wide-RangeEnergy-Efficient
+LevelShifterWithCCLS/CMLSHybridStructure,”inIEEEJournalof
+Solid-State Circuits, vol. 58, no. 10, pp. 2685-2695, Oct. 2023, doi:
+10.1109/JSSC.2023.3266221.
+[12] R.Balaji,R.K.Siddharth,S.Naik,Y.B.N.Kumar,M.H.Vasanthaand
+E. Bonizzoni, ”A 11-ns, 3.85-fJ, Deep Sub-threshold, Energy Efficient
+Level Shifter in 65-nm CMOS,” 2023 IEEE International Symposium
+onCircuitsandSystems(ISCAS),Monterey,CA,USA,2023,pp.1-5,
+doi:10.1109/ISCAS46773.2023.10181677.
+[13] W. Zhao, A. B. Alvarez and Y. Ha, ”A 65-nm 25.1-ns 30.7-fJ Robust
+Subthreshold Level Shifter With Wide Conversion Range,” in IEEE
+Transactions on Circuits and Systems II: Express Briefs, vol. 62, no.
+7,pp.671-675,July2015,doi:10.1109/TCSII.2015.2406354.
+[14] S. R. Hosseini, M. Saberi and R. Lotfi, ”A Low-Power Subthreshold
+to Above-Threshold Voltage Level Shifter,” in IEEE Transactions on
+Circuits and Systems II: Express Briefs, vol. 61, no. 10, pp. 753-757,
+Oct.2014,doi:10.1109/TCSII.2014.2345295.
+[15] D. Kline et al., ”Sustainable IC design and fabrication,” 2017 Eighth
+International Green and Sustainable Computing Conference (IGSC),
+Orlando,FL,USA,2017,pp.1-8,doi:10.1109/IGCC.2017.8323572.
+Fig. 13. Total footprint for Version I and II of CCLS, CMLS, DSELS,
+RSWCRLS,LPSVTLS,andC3MLSSubthresholdLevelshifters
+
+[Image page_8_image_0.png Analysis (by Gemini)]
+Here's a comprehensive analysis of the provided image, integrating its visual elements with the surrounding text from the research paper:
+
+**Overall Image Description**
+
+The image, labeled as "Fig. 12," is a bar graph comparing the operational footprint (measured in mWh) of various Subthreshold Level Shifter (SLS) designs. It presents data for two versions (Version I and Version II) of each design. The x-axis represents the "Design Name," and the y-axis shows "Footprint (mWh)." The graph uses different fill patterns for the bars to distinguish between Version I (diagonal lines) and Version II (circles) of each design.
+
+**Visual Elements and Structure**
+
+*   **Type:** Bar graph
+*   **X-axis:** Design Name (CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, C3MLS)
+*   **Y-axis:** Footprint (mWh), ranging from 0 to 10.
+*   **Bars:** Each design has two bars representing Version I and Version II.
+*   **Fill Patterns:** Different fill patterns are used for each version (diagonal lines for Version I, circles for Version II).
+*   **Data Labels:** Numerical values are placed above each bar, indicating the precise footprint value.
+*   **Legend:** A legend in the upper right corner clarifies which fill pattern corresponds to each design version ("Design Versions," "Version I," "Version II").
+
+**Text within the Image:**
+
+*   **Title:** None within the image itself (title appears in the caption: "Fig.12. Operational footprint for Version I and II of CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, and C3MLS Subthreshold Level shifters")
+*   **Axis Labels:** "Footprint (mWh)" (y-axis), "Design Name" (x-axis)
+*   **Design Names:** CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, C3MLS
+*   **Data Labels:** 6.716 (CCLS, Version I), 6.633 (CCLS, Version II), 9.567 (CMLS, Version I), 9.460 (CMLS, Version II), 0.545 (DSELS, Version I), 0.476 (DSELS, Version II), 0.384 (RSWCRLS, Version I), 0.381 (RSWCRLS, Version II), 1.630 (LPSVTLS, Version I), 1.763 (LPSVTLS, Version II), 0.998 (C3MLS, Version I), 0.965 (C3MLS, Version II).
+*   **Legend labels:** "Design Versions", "Version I", "Version II".
+
+**Context and Importance:**
+
+This image is part of a research paper focused on evaluating the sustainability of different Subthreshold Level Shifter (SLS) designs. The study proposes a novel "sustainability evaluation and benchmarking paradigm" to identify environmentally friendly SLS architectures.
+
+Specifically, Fig. 12 visualizes the "operational footprint" of these designs, which is the total energy consumption and associated emissions throughout the functional life of an SLS. The surrounding text details how the operational footprint is calculated, considering dynamic and leakage power over the operating lifetime.
+
+The image is important because it visually compares the operational impact of different SLS designs. It demonstrates that the choice of SLS architecture significantly influences the overall energy consumption. Key observations are:
+
+*   Conventional CMLS designs (Versions I and II) have the highest operational footprint, making them the least sustainable in this case.
+*   RSWCRLS designs (Versions I and II) have the least operational footprint, making them the most sustainable in this case.
+*   The operational footprint is not just based on layout and depends on other parameters, and varies depending on the usage conditions.
+
+The researchers are arguing that the traditional "PPA (Power, Performance, Area)" metric is insufficient for determining efficiency in an "ecological era." They are advocating for a more comprehensive sustainability assessment, which considers both the "embodied footprint" (manufacturing impact) and the "operational footprint" (usage impact). Fig. 12 directly supports their argument by showing the significant differences in the operational footprint between different SLS designs.
+
+The comparison of Version I and Version II for each design shows the impact of layout optimization techniques (such as using upper metal layers) on the operational footprint.
+
+In conclusion, Fig. 12 is a key visual element of the research paper, providing empirical evidence for the proposed sustainability evaluation paradigm and demonstrating the importance of considering the operational footprint when selecting SLS architectures.
+
+
+
+[Image page_8_image_1.png Analysis (by Gemini)]
+Here's a detailed analysis of the image you provided:
+
+**Overall Description**
+
+The image is a bar graph comparing the "Total Footprint" of different subthreshold level shifter (SLS) designs. Footprint is measured in mWh (milliwatt-hours). The graph presents data for two versions (I and II) of each design, broken down into "Embodied" and "Operational" footprints.
+
+**Visual Elements and Structure**
+
+*   **Type:** Bar Graph
+*   **Axes:**
+    *   X-axis: "Design Name" (CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, C3MLS)
+    *   Y-axis: "Total Footprint (mWh)" ranging from 0 to 14 mWh.
+*   **Bars:** Each design (CCLS, CMLS, etc.) has two sets of paired bars, one for Version I and one for Version II. Each bar is further divided into two components:
+    *   "Embodied Footprint": Represented by light blue bars with diagonal lines.
+    *   "Operational Footprint": Represented by light green bars with dots. The embodied footprint is at the bottom and the operational footprint is stacked on top of the embodied footprint, visually representing the Total Footprint
+*   **Labels:**  Numerical values are placed above each bar, indicating the total footprint in mWh.
+*   **Legend:** Located at the top of the graph, clearly distinguishing the "Embodied" and "Operational" components for both Version I and Version II designs.
+
+**Text within the Image**
+
+*   **Title:** "Footprint Type" (Legend title)
+*   **Axis Labels:**
+    *   "Total Footprint (mWh)"
+    *   "Design Name"
+*   **Design Names:** "CCLS", "CMLS", "DSELS", "RSWCRLS", "LPSVTLS", "C3MLS"
+*   **Footprint Type Labels (in the legend):** "Embodied (Version I)", "Operational (Version I)", "Embodied (Version II)", "Operational (Version II)"
+*   **Data Values:** Numerical values above each bar, such as "7.998", "7.808", "10.174", "10.082", "1.388", "1.268", "1.114", "1.055", "2.777", "2.800", "1.911", "1.757"
+
+**Context and Importance**
+
+The image is labeled "Fig. 12. Operational footprint for Version I and II of CCLS, CMLS, DSELS, RSWCRLS, LPSVTLS, and C3MLS Subthreshold Levelshifters". However, the image shows the Total Footprint, not just the Operational footprint. The surrounding text explains that the researchers are investigating a sustainability evaluation and benchmarking paradigm for subthreshold level shifters (SLS) which are used in modern multi-voltage domain ICs.  The paper introduces a novel metric to assess the environmental impact of these designs, moving beyond just Power, Performance, and Area (PPA).
+
+*   **Importance:** The graph provides a visual comparison of the total environmental footprint of different SLS designs, breaking it down into manufacturing (embodied) and operational aspects.  This allows designers to identify the most sustainable choices for a given application, considering the complete lifecycle impact.
+
+*   **Key Findings (based on surrounding text):**
+    *   The graph likely validates the framework's ability to analyze the combined effect of manufacturing and operational impact on sustainability.
+    *   RSWCRLS has the least Total footprint among all SLS designs, making it the most sustainable option overall.
+    *   The text mentions that CMLS had the least Embodied Footprint, but this graph (Fig. 13) shows CMLS having a high Total Footprint, meaning that it has a significant operational impact.
+    *   Earlier in the document RSWCRLS was also listed as having the least operational footprint
+
+In summary, this image (Figure 13) is crucial to the research because it quantifies the environmental impact of different level shifter designs and highlights the importance of considering both embodied and operational footprints in sustainability assessments. The text reinforces these observations, drawing conclusions about the sustainability of specific designs based on the data presented.
+
+
+

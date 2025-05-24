@@ -1,0 +1,819 @@
+=== Page 1 ===
+SecurityVision: Real-Time Video Anomaly Detection using WatchTower and I3D
+Features
+Keshav Chhabra
+IIIT Delhi
+keshav22247@iiitd.ac.in
+Adarsh Jha
+IIIT Delhi
+adarsh22024@iiitd.ac.in
+Kartikeya Malik
+IIIT Delhi
+kartikeya22243@iiitd.ac.in
+Akshat Kothari
+IIIT Delhi
+askhat22053@iiitd.ac.in
+Abstract
+Automated surveillance systems are increasingly vi-
+tal for public safety, requiring robust methods for de-
+tecting anomalous events in real-time video feeds.
+This
+project, ”SecurityVision,” presents a system leveraging ad-
+vanced deep learning techniques for video anomaly de-
+tection.
+We utilize I3D features combined with a modi-
+fied Self-Supervised Sparse Representation (WatchTower)
+model, based on S3R. The system processes video input,
+identifies anomalous segments based on deviations from
+learned normal patterns, and presents alerts and visualiza-
+tions through a web-based dashboard. This report details
+the problem, methodology, implementation, evaluation, and
+future directions of the SecurityVision system.
+1. Problem Statement
+Overview: The proliferation of CCTV surveillance neces-
+sitates automated systems capable of detecting unusual or
+threatening activities, such as fights, assaults, or other secu-
+rity breaches, which often go unnoticed in manual monitor-
+ing. AI-driven solutions are crucial for analyzing the vast
+amount of video data generated and providing timely alerts.
+Scope of the Problem:
+• Input: Video feeds from CCTV cameras or uploaded
+video files.
+• Output:
+Real-time or near-real-time identification of
+anomalous video segments, anomaly scores, and alerts.
+• User: Security personnel, system administrators monitor-
+ing surveillance feeds.
+• User Interface: A web-based dashboard for monitoring
+feeds, visualizing detected anomalies, reviewing events,
+and managing alerts.
+2. Related Work
+Video anomaly detection (VAD) research has explored var-
+ious approaches. Early methods often relied on trajectory
+analysis or handcrafted features. Deep learning methods
+have shown significant promise.
+• Feature Modeling: Approaches like SlowFast Networks
+[6] analyze motion and appearance features at differ-
+ent temporal speeds for action recognition, adaptable to
+anomaly detection. I3D (Inflated 3D ConvNet) [1] effec-
+tively captures spatiotemporal information using 3D con-
+volutions and is a common backbone for VAD.
+• Weakly-supervised VAD: Methods like the one pro-
+posed by Sultani et al. [2] utilize multiple instance learn-
+ing (MIL) to train models using only video-level labels
+(normal/anomaly).
+• Dictionary Learning for VAD: Recent works explore
+dictionary learning to model normality.
+S3R (Self-
+Supervised Sparse Representation) [4], the basis for our
+WatchTower model, learns a task-specific dictionary for
+normal events and uses sparsity in reconstruction to iden-
+tify anomalies. It employs enNormal and deNormal mod-
+ules to separate and analyze normal/anomalous compo-
+nents. Linformer [3] provides a method for efficient self-
+attention with linear complexity, applicable for optimiz-
+ing Transformer-based components.
+Our work builds upon the strengths of feature modeling
+(I3D) and dictionary learning (S3R/WatchTower), poten-
+tially incorporating Linformer for computational efficiency.
+3. Methodology
+Our system employs a pipeline approach combining feature
+extraction and a specialized anomaly detection model.
+
+
+=== Page 2 ===
+3.1. Feature Extraction
+We utilize pre-trained Inflated 3D ConvNet (I3D) models
+[1], specifically variants with ResNet-50 backbones (e.g.,
+‘i3d r50 kinetics.pth’), to extract robust spatiotemporal fea-
+tures (2048 dimensions) from input video segments. These
+features capture appearance and motion information crucial
+for distinguishing normal activities from anomalies.
+3.2. Anomaly Detection Model: WatchTower
+We adapt the Self-Supervised Sparse Representation (S3R)
+framework [4], which we refer to as WatchTower in our im-
+plementation, for anomaly detection. The core idea is to
+learn a dictionary representing normal event patterns from
+training data (UCF-Crime normal videos). Anomalies are
+detected as deviations that cannot be sparsely reconstructed
+using this dictionary.
+Key WatchTower (based on S3R) components adapted in
+our system:
+• Task-Specific
+Dictionary:
+A
+dictionary
+learned
+from
+normal
+video
+features
+(I3D)
+of
+the
+UCF-
+Crime
+dataset
+using
+Orthogonal
+Matching
+Pur-
+suit
+(OMP).
+The
+dictionary
+file
+used
+is
+‘ucf-
+crime dictionaries.taskaware.omp.100iters.50pct.npy‘.
+• enNormal Module (potentially with Linformer): This
+module reconstructs the normal component of an input
+feature snippet using the learned dictionary. Efficiency
+improvements like Linformer-based attention may be in-
+corporated.
+• deNormal Module: This module aims to filter out the
+normal components, potentially highlighting the residual
+anomalous parts.
+• Anomaly Scoring: Features are passed through embed-
+ding layers (Aggregate, Dropout) and classifiers. The fi-
+nal anomaly score for a video segment indicates the like-
+lihood of it being anomalous.
+The model checkpoint used is ‘ucf-crime s3r i3d best.pth‘
+(referred to as WatchTower checkpoint), trained specifically
+for UCF-Crime using I3D features.
+The system processes video, extracts I3D features for
+temporal segments, feeds features to the WatchTower
+model, calculates anomaly scores, and presents results via a
+web interface.
+4. Datasets & Evaluation Metrics
+Dataset:
+• UCF-Crime [2]: A large-scale dataset containing long,
+untrimmed surveillance videos featuring 13 real-world
+anomalies (e.g., Fighting, Assault, Burglary, Explosion)
+and normal activities. We use the standard training/testing
+splits and I3D features provided alongside the S3R
+methodology for training our WatchTower model.
+Evaluation Metrics:
+Figure 1. Detailed architecture of the WatchTower anomaly de-
+tection model. The layer-by-layer structure is based on the S3R
+implementation.
+• Anomaly Scoring: Frame-wise ROC-AUC (Area Under
+the Receiver Operating Characteristic Curve) score is the
+primary metric for evaluating anomaly detection perfor-
+mance on datasets like UCF-Crime.
+5. Implementation & User Interface
+Implementation Details:
+• Backend: Python with Flask framework.
+• Machine Learning: PyTorch for model implementation
+and inference (‘torch‘ 1.6.0, ‘torchvision‘).
+OpenCV
+(‘opencv-python‘) for video processing. Key training pa-
+rameters include a learning rate of 0.001 and dropout rate
+of 0.7.
+• Models/Checkpoints:
+Uses
+pre-trained
+I3D
+models
+(e.g.,‘i3d r50 kinetics.pth‘)
+and
+the
+WatchTower/S3R
+checkpoint
+(‘ucf-
+crime s3r i3d best.pth‘). A task-aware dictionary (‘ucf-
+crime dictionaries.taskaware.omp.100iters.50pct.npy‘) is
+loaded.
+• Dependencies: Key libraries include ‘numpy‘ (1.19.2),
+‘PyYAML‘, ‘einops‘, ‘sqlalchemy‘. The training envi-
+ronment utilized CUDA 10.1.
+User Interface Design:
+• Web-based Dashboard: Built using HTML, CSS (Boot-
+strap), and JavaScript. Displays live feed (if camera ac-
+cess is enabled), system status, uptime, and recent anoma-
+lies.
+• Anomaly Visualization: When an anomaly is detected
+above a threshold (e.g., 0.6 in ‘ml model.py‘), visual and
+audio alerts are triggered. A replay feature shows the seg-
+
+
+[Image page_2_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, integrating the context from the provided research paper:
+
+**Overall Description:**
+
+Figure 1 is a detailed diagram of the WatchTower anomaly detection model's architecture. It illustrates the flow of data through the model's various layers and modules, highlighting key components and their specific operations. The diagram is structured in a layered, top-down fashion, starting with the input features and progressing through embedding, normalization, projection, and classification stages. Color-coding and labels provide clarity about each layer's function.
+
+**Visual Elements and Structure:**
+
+*   **Boxes/Rectangles:**  Each layer or module within the model is represented by a rectangle. The color of the rectangle corresponds to a category in the legend (Video Branch, Macro Branch, en/deNormal, Classifiers, Dropout).
+*   **Arrows:** Arrows indicate the direction of data flow between the layers. They connect the output of one layer to the input of the next.
+*   **Text Labels:** Each rectangle contains text describing the operation or function performed by that layer.
+*   **Legend:**  A legend in the upper-right corner explains the color coding scheme, associating colors with module types (Video Branch, Macro Branch, en/deNormal Modules, Classifiers, and Dropout layers).
+
+**Detailed Layer Analysis (Top to Bottom):**
+
+1.  **Input Features:**
+
+    *   Shape: Rectangle, Blue.
+    *   Text: "Input Features (2048)"
+    *   Significance: This is the starting point. The model takes input features with a dimensionality of 2048, which, based on the surrounding text, are the I3D features extracted from video segments. These features represent the appearance and motion information of the video.
+2.  **Video Embedding & Macro Embedding:**
+
+    *   Shape: Rectangles, green and cyan (light blue) respectively.
+    *   Text (Both):
+        *   "Aggregate"
+        *   "conv\_1-4: Conv1d + GN + ReLU"
+        *   "conv\_5: Conv1d + GN + ReLU"
+        *   "non\_local: NonLocalBlock1D"
+    *   Significance:  These layers are responsible for embedding the input features into a higher-level representation. They likely involve convolutional layers (Conv1d) followed by Group Normalization (GN) and ReLU activation functions. The "NonLocalBlock1D" suggests the use of self-attention mechanisms to capture long-range dependencies in the temporal data. The division into "Video Embedding" and "Macro Embedding" branches suggests a potential separation or parallel processing of different feature types or scales.
+3.  **Dropout:**
+
+    *   Shape: Rectangles, pink.
+    *   Text: "Dropout(p=0.7)"
+    *   Significance: Dropout is a regularization technique that randomly sets a fraction (here, p=0.7) of the input units to zero during training. This helps prevent overfitting and improves the model's generalization ability.
+4.  **enNormal Module:**
+
+    *   Shape: Rectangle, Yellow.
+    *   Text: "enNormal" and "Query, Cache, Value Embeddings (Linear Transformations)"
+    *   Significance: Based on the surrounding text, this module reconstructs the normal component of the input feature snippet using a learned dictionary. The "Query, Cache, Value Embeddings" indicates that linear transformations are applied to the input features to produce embeddings for query, cache, and value vectors, which are then used for calculating attention scores. This relates to the Self-Supervised Sparse Representation (S3R) framework.
+5.  **deNormal Module:**
+
+    *   Shape: Rectangle, Orange.
+    *   Text: "deNormal" and "Channel Attention (MLP: 2048->128->2048)"
+    *   Significance: As explained in the text, this module filters out the normal components from the input, highlighting the residual anomalous parts.  "Channel Attention" suggests a mechanism to weight the importance of different feature channels. The MLP (Multilayer Perceptron) with the size transformation 2048->128->2048 indicates a dimensionality reduction followed by an expansion to re-emphasize potentially anomalous features.
+6.  **Video Projection & Macro Projection:**
+
+    *   Shape: Rectangles, purple.
+    *   Text (Both): "Conv1d + GN + ReLU"
+    *   Significance: These layers project the features into a space suitable for classification. They use a convolutional layer (Conv1d) followed by Group Normalization (GN) and ReLU activation. Similar to the embedding layers, there are separate projections for the Video and Macro branches.
+7.  **Video Classifier & Macro Classifier:**
+
+    *   Shape: Rectangles, red.
+    *   Text:
+        *   Video Classifier: "Linear(2048->512->128->1)", "Sigmoid"
+        *   Macro Classifier: "GlobalStatistics", "Linear(2048->512->128->1)"
+    *   Significance: These are the final classification layers. They take the projected features and output a score indicating the likelihood of the video segment being anomalous.  The "Linear(2048->512->128->1)" indicates fully connected layers that reduce the dimensionality of the input. "Sigmoid" refers to the sigmoid activation function, which outputs a value between 0 and 1, representing the anomaly score. The Macro Classifier uses "GlobalStatistics", which may be a specific module or operation that pools feature information across the entire Macro branch before the linear transformation.
+
+**Context and Importance:**
+
+The image (Figure 1) is crucial to understanding the "Anomaly Detection Model: WatchTower," which is the core component of the "SecurityVision" system presented in the research paper. The surrounding text describes the WatchTower model as an adaptation of the Self-Supervised Sparse Representation (S3R) framework for anomaly detection.
+
+The diagram visually represents how the model processes I3D features extracted from video to identify anomalous events. Understanding the architecture is essential for comprehending how the system learns normal event patterns, filters out normal components, and calculates anomaly scores.  The details in the diagram, such as the use of convolutional layers, normalization techniques, dropout, attention mechanisms, and specific layer dimensions, provide insights into the model's design choices and how it attempts to achieve robust anomaly detection.
+
+The detailed architecture allows the reader to understand the layer-by-layer transformations of the input video features and the interactions between the Video and Macro branches. The separation of processing into these two streams is a key aspect that the image effectively illustrates, and whose significance is highlighted in the paper. The fact that it's based on S3R is important and the labels "enNormal" and "deNormal" emphasize this connection, along with the explanation of how it utilizes the learned dictionary. The image's caption directly reinforces that the architecture is based on the S3R implementation.
+
+
+
+=== Page 3 ===
+ment leading up to the alert.
+• Controls: Users can pause/resume surveillance.
+Figure 2. SecurityVision Web Interface (Dashboard View).
+Figure 3. SecurityVision Web Interface (Anomaly Alert).
+6. Results and Analysis
+The S3R model, upon which our WatchTower implementa-
+tion is based, achieves state-of-the-art or competitive perfor-
+mance on standard video anomaly detection benchmarks.
+Performance on UCF-Crime: The S3R methodology
+using I3D features reports a frame-level AUC of 85.99% on
+the UCF-Crime dataset [4]. Our WatchTower model aims
+to replicate or build upon this performance.
+Observations:
+• The reported AUC of ∼86% indicates a strong capabil-
+ity of the S3R/WatchTower model with I3D features to
+Table 1. Reported S3R Performance on UCF-Crime
+Dataset
+Method
+Feature
+AUC (%)
+UCF-Crime
+S3R
+I3D
+85.99
+*Result
+based on the WatchTower implementation details [4].
+Figure 4. Training loss curve for the WatchTower model on the
+UCF-Crime dataset.
+distinguish anomalous frames from normal frames in the
+challenging UCF-Crime dataset.
+• The use of dictionary learning allows the model to effec-
+tively capture the manifold of normal events.
+• Real-time performance depends on feature extraction
+speed, model inference time, and the processing strategy
+(e.g., processing every Nth frame). Further optimization
+might be needed for true real-time deployment on con-
+strained hardware.
+7. Compute Requirements
+Training and deploying deep learning models for video
+analysis requires significant computational resources.
+• Training:
+Training the WatchTower model and po-
+tentially the I3D feature extractor requires GPUs (e.g.,
+NVIDIA RTX series) with sufficient memory (e.g., RTX
+2080 Ti used in experiments), especially for large datasets
+like UCF-Crime. Dictionary learning itself can also be
+computationally intensive.
+• Inference:
+Real-time inference benefits greatly from
+GPU acceleration. Our current system checks for CUDA
+availability (tested with CUDA 10.1) and uses it if possi-
+ble. CPU inference is possible but significantly slower.
+• Edge Computing:
+For deployment on edge devices,
+model optimization techniques like quantization and
+hardware acceleration are crucial but need careful eval-
+uation.
+• Memory/Storage:
+Handling video streams and fea-
+tures requires adequate RAM and potentially fast storage
+(SSDs).
+• Software Environment: The system relies on Python
+(3.6 tested), PyTorch (1.6.0 tested), Flask, and associated
+
+
+[Image page_3_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, incorporating its visual elements, text, and contextual significance within the research paper:
+
+**Overall Description:**
+
+The image, labeled as "Figure 2. SecurityVision Web Interface (Dashboard View)", depicts the dashboard view of a web interface for the SecurityVision system. The interface has a dark theme and presents key information about the system's status, anomaly detection activity, and capabilities. The layout is clean and organized, with distinct sections for different types of information.
+
+**Visual Elements and Structure:**
+
+1.  **Header:** The top of the interface displays the title "Video Surveillance" and navigation links to "Dashboard" and "Surveillance".
+2.  **Central Graphic:** A large purple camera icon is prominently displayed in the center, followed by the title "Security" and subtitle "Advanced anomaly detection".
+3.  **Start Button:** A dark button labeled "Start" is centered below the title, presumably to initiate or resume the video surveillance process.
+4.  **Anomaly Detection Summary:** A section labeled "Anomalies Detected" indicates the total number of anomalies detected: "31". It's labeled as "Total Anomalies" underneath. An orange warning triangle icon is displayed next to the label.
+5.  **Last Activity:** A section labeled "Last Activity" displays the timestamp of the most recent anomaly detection: "2025-04-22 23:02:05". The text "Most recent anomaly" is present beneath the timestamp. A clock icon is displayed next to the label.
+6.  **Status:** A "Status" section indicates that the system is "Ready", with a green circle icon displayed next to the label.
+7.  **Information:** This lower section is divided into two columns:
+    *   **AI Model:**  This section describes the AI model used. It states that the system is "Using WatchTower model for anomaly detection" and is "Based on UCF-Crime dataset pretraining with advanced feature extraction capabilities." A blue "information" icon is displayed next to the label.
+    *   **System Capabilities:** This section lists several system capabilities as bullet points:
+        *   Real-time video analysis
+        *   Sparse representation for anomaly detection
+        *   Automatic alarm system on detection
+        *   Backward-timer for anomaly review
+        A blue gear icon is displayed next to the label.
+8.  **Footer:** A footer contains the text "Video Surveillance System © 2025".
+
+**Text Extracted from the Image:**
+
+*   Video Surveillance
+*   Dashboard
+*   Surveillance
+*   Security
+*   Advanced anomaly detection
+*   Start
+*   Anomalies Detected
+*   31
+*   Total anomalies
+*   Last Activity
+*   2025-04-22 23:02:05
+*   Most recent anomaly
+*   Status
+*   Ready
+*   AI Model
+*   Using WatchTower model for anomaly detection.
+*   Based on UCF-Crime dataset pretraining with advanced feature extraction capabilities.
+*   System Capabilities
+*   Real-time video analysis
+*   Sparse representation for anomaly detection
+*   Automatic alarm system on detection
+*   Backward-timer for anomaly review
+*   Video Surveillance System © 2025
+
+**Context and Importance:**
+
+Within the research paper, this image serves as a visual representation of the SecurityVision system's user interface. The surrounding text emphasizes the following aspects of the system, which are reflected in the dashboard:
+
+*   **Real-Time Anomaly Detection:** The dashboard provides a status indicator to show if the system is ready and displays the time of the last anomaly detected. This aligns with the paper's goal of developing a real-time video anomaly detection system.
+*   **WatchTower Model:** The "AI Model" section explicitly states the use of the WatchTower model, which is a core component of the system, based on S3R methodology detailed in the methodology section. The reference to UCF-Crime dataset pretraining is crucial because the paper validates the system on this dataset.
+*   **Key Capabilities:** The "System Capabilities" section lists the main functionalities of the system, such as real-time analysis, sparse representation (referring to the underlying S3R model), automatic alarms, and a backward-timer for reviewing detected events. This helps the reader understand what the system offers.
+*   **User Interface:** The figure gives context to the user interface aspects of the implementation mentioned in section 5. It provides visual confirmation that the implementation resulted in a usable web application that could provide alerts.
+*   **Monitoring and Visualization:** The dashboard design shows that the system is designed for monitoring and visualization of detected anomalies. The visual and audio alerts mentioned in the surrounding text are likely triggered based on the anomaly detection scores calculated by the WatchTower model.
+
+The image is important because it provides a concrete illustration of the system described in the paper. It ties together the abstract concepts and algorithms with a user-facing application, making the research more accessible and understandable. The dashboard view allows the reader to visualize how the system would be used in a real-world surveillance setting.  The specific details displayed, like the number of anomalies and the last activity timestamp, highlight the practical application and functionality of the SecurityVision system.
+
+
+
+[Image page_3_image_1.png Analysis (by Gemini)]
+Here's a detailed analysis of the provided image within the context of the research paper:
+
+**Overall Description**
+
+The image (Figure 2 in the paper) depicts the web interface dashboard of the "SecurityVision" system.  It shows the state of the surveillance system, including its status, uptime, live feed (if available), monitoring status for anomalies, and a log of recent anomalies. The dashboard is designed to provide a user-friendly visual overview of the system's real-time operation.
+
+**Visual Elements and Structure**
+
+The dashboard is divided into several sections, each displaying specific information:
+
+*   **Header**: At the top, it displays "Video Surveillance" and contains navigation links: "Dashboard" and "Surveillance" on the top right.
+
+*   **Main Title:**  "Surveillance Mode" indicates the primary function of the interface.
+
+*   **Status**: This section displays the current status of the system. It shows:
+    *   "Status" label
+    *   "2 Frames Processed" indicating the number of frames analyzed so far
+    *   An icon indicating the section.
+
+*   **Uptime**:  This shows how long the system has been running:
+    *   "Uptime" label
+    *   "00:00:10 System running time" displaying the running time in HH:MM:SS format
+    *   An icon indicating the section.
+
+*   **Monitoring Status**: This section informs the user about any detected anomalies:
+    *   "Monitoring Status" label
+    *   A green checkmark icon indicates that no anomalies have been detected.
+    *   The text "No anomalies detected" reinforces this status.
+    *   An icon indicating the section.
+
+*   **Live Feed**: This section is intended to display the live video feed from the camera.  However, in this particular snapshot:
+    *   "Live Feed" label is present
+    *   The feed area is black with a "Camera not available" message.
+    *   A button labelled "Start Camera" is provided to initiate the feed.
+    *   A settings control with left and right arrows. The value is set to "1.00".
+
+*   **Recent Anomalies**: This section logs any anomalies detected by the system.
+    *   "Recent Anomalies" label
+    *   A checkmark icon, similar to "Monitoring Status," indicates that no anomalies have been recorded yet.
+    *   The text "No anomalies recorded yet" further confirms this.
+
+*   **Pause/Resume Surveillance**:  A horizontal bar contains the following items:
+    * A yellow circle followed by "Surveillance Paused"
+    * A green button saying "Resume Surveillance"
+    * A link "Dashboard" with a house icon.
+
+**Text within the Image**
+
+The text elements in the image are primarily labels and status messages, including:
+
+*   "Video Surveillance"
+*   "Surveillance Mode"
+*   "Status"
+*   "Frames Processed"
+*   "2"
+*   "Uptime"
+*   "00:00:10"
+*   "System running time"
+*   "Monitoring Status"
+*   "No anomalies detected"
+*   "Live Feed"
+*   "Camera not available"
+*   "Start Camera"
+*   "Recent Anomalies"
+*   "No anomalies recorded yet"
+* "Surveillance Paused"
+* "Resume Surveillance"
+* "Dashboard"
+
+**Context and Importance**
+
+Based on the surrounding text and the paper as a whole, the image is crucial for demonstrating the user interface of the SecurityVision system. Specifically:
+
+*   **User Interface Design:**  The surrounding text mentions the web-based dashboard built using HTML, CSS (Bootstrap), and JavaScript. The image provides a visual representation of this interface, allowing the reader to understand how a user interacts with the system.
+*   **Real-time Monitoring:** The dashboard's elements (status, uptime, live feed, monitoring status, recent anomalies) highlight the system's capability for real-time monitoring of surveillance feeds. The "Live Feed" section is intended to show the live video stream.
+*   **Anomaly Visualization:** The image, particularly the "Monitoring Status" and "Recent Anomalies" sections, shows how the system communicates the presence (or absence) of detected anomalies to the user.
+*   **Alerting:** The text mentions that visual and audio alerts are triggered when an anomaly is detected above a threshold. While the image doesn't show an alert state, it provides the context for understanding where such alerts would be displayed (presumably in the "Recent Anomalies" section or as an overlay on the "Live Feed").
+*   **User Controls:** The text indicates controls for pausing/resuming surveillance.  The "Surveillance Paused" with a yellow bullet and "Resume Surveillance" green button are visible at the top providing immediate control to the user.
+*   **System Status:** The "Status" and "Uptime" elements are important for tracking the operational health of the SecurityVision system.
+
+The fact that the "Camera not available" message is displayed is also interesting. This could be due to the camera not being connected, or some other issue preventing the live feed from being displayed.  This shows the potential real-world situation that users can experience.
+
+In essence, Figure 2 gives a visual overview of the SecurityVision's front-end, illustrating the practical application of the I3D and WatchTower-based anomaly detection system.
+
+
+
+[Image page_3_image_2.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, considering its visual elements, text, context within the provided research paper, and overall significance:
+
+**Image Description and Analysis**
+
+The image is a line graph titled "Training Loss vs. Step." It visualizes the training progress of the WatchTower model on the UCF-Crime dataset.
+
+*   **Axes:**
+    *   *X-axis:* Labeled "Step," representing the number of training iterations or steps. The axis spans from 0 to 3000.
+    *   *Y-axis:* Labeled "Training Loss," representing the value of the loss function during training.  The axis spans from approximately 0.4 to 1.8.
+
+*   **Data Points and Line:**
+    *   Blue data points are plotted on the graph, connected by a blue line, showing the trend of training loss over steps.
+    *   The line graph shows a rapid decrease in training loss initially, indicating that the model learns quickly in the early stages of training. The loss decreases significantly from approximately 1.8 to around 0.8 within the first few hundred steps.
+    *   After the initial rapid decrease, the loss continues to decrease but at a slower rate.  The graph shows some fluctuations, indicating periods of instability or difficulty in learning.
+    *   The loss plateaus around 0.35 after roughly 2500 steps.
+
+*   **Grid:** A light gray grid is present in the background, aiding in reading the values on the axes.
+
+*   **Overall Trend:** The graph illustrates the typical trend of decreasing loss over training steps.  The initial rapid decrease is followed by a gradual plateau, suggesting that the model is converging.
+
+**Text within the Image:**
+
+The following text is present in the image:
+
+*   **Title:** "Training Loss vs. Step"
+*   **X-axis Label:** "Step"
+*   **Y-axis Label:** "Training Loss"
+
+**Context and Significance within the Research Paper**
+
+The image is labeled as "Figure 4. Training loss curve for the WatchTower model on the UCF-Crime dataset."  Based on the surrounding text, the following points highlight the importance of the image:
+
+*   **Model Training Performance:** The graph demonstrates the training behavior of the WatchTower model, which is a modified S3R model. The training loss curve provides insights into how well the model is learning to distinguish anomalous frames from normal frames in the UCF-Crime dataset.
+*   **Dataset Relevance:** The reference to the UCF-Crime dataset confirms that the graph specifically visualizes the training performance on that dataset, a benchmark for video anomaly detection.
+*   **S3R Performance Connection:** The text mentions that the WatchTower implementation aims to replicate or build upon the reported AUC of 85.99% of S3R with I3D features on UCF-Crime. Therefore, the training loss curve offers a qualitative assessment of how the training process contributes to achieving a high AUC.  A well-behaved training loss curve that decreases and plateaus is indicative of successful training.
+*   **Observations Correlation:** The text states the AUC reported indicates a strong capability. The curve helps to visually validate that claim by showing the training process is heading in the right direction.
+*   **Computational Requirements:** The surrounding text discusses the computational resources needed for training. The training loss curve implicitly represents the cost of training and the number of steps needed to reach a certain level of performance, providing practical insights for resource allocation.
+
+**Overall Significance within the Document:**
+
+The figure is a crucial part of the "Results and Analysis" section. It provides visual evidence to support the claims regarding the WatchTower model's performance.  Specifically:
+
+*   **Validation of the Approach:** The decreasing loss curve validates the methodology of using the WatchTower model and I3D features for anomaly detection.
+*   **Comparison Point:**  While the graph doesn't directly show the AUC score, it provides context for interpreting the reported AUC of 85.99%.  The graph would ideally show the training progress leading to that performance level.
+*   **Parameter Tuning:**  The training loss curve can inform decisions about hyperparameter tuning (learning rate, dropout rate) to optimize the training process.  Erratic curves might suggest the need for adjustment.
+*   **Model Convergence:** The flat portion of the curve indicates that the training has reached a point of diminishing returns, which may be helpful in determining when to stop the training process.
+
+In summary, Figure 4 provides a visual representation of the WatchTower model's training progress on the UCF-Crime dataset.  It is a key piece of evidence supporting the effectiveness of the proposed approach for video anomaly detection and provides insights into the training behavior of the model.
+
+
+
+=== Page 4 ===
+libraries.
+While initial development might be feasible on moder-
+ate hardware, scaling up for robust real-time deployment
+across multiple streams likely necessitates more powerful
+resources.
+8. Individual Tasks
+Table 2. Team Member Responsibilities
+Team Member
+Assigned Tasks
+Keshav Chhabra
+Data
+preprocessing,
+model
+training
+(WatchTower/S3R
+adaptation), evaluation.
+Kartikeya Malik
+User
+interface
+design
+(Flask/HTML/JS),
+API
+in-
+tegration, deployment setup.
+Adarsh Jha
+Model
+training
+(Watch-
+Tower/S3R
+adaptation),
+Linformer
+integration
+anal-
+ysis, evaluation.
+Akshat Kothari
+Dataset handling (UCF-Crime
+features), documentation, per-
+formance analysis, results re-
+porting.
+9. Future Work
+Building upon the current SecurityVision system utilizing
+WatchTower with I3D features, future work can focus on
+several areas:
+1. Explore more efficient feature extractors: I3D hap-
+pens to be a computationally heavy model. Exploring
+alternatives like MobileViT [7] could offer better perfor-
+mance/cost trade-offs, potentially enabling edge-device
+inference.
+2. Online learning: Since the dictionary representing nor-
+mality is built offline, implementing online or continual
+learning approaches [8] could allow the model to adapt
+to specific deployment environments and evolving nor-
+mal patterns over time.
+3. Multiple Cameras: Utilizing synchronized feeds from
+multiple cameras via multi-view learning techniques [9]
+could provide richer context, handle occlusions better,
+and potentially increase detection robustness.
+By addressing these points, we aim to enhance SecurityVi-
+sion into a more robust, efficient, and versatile real-time
+anomaly detection system suitable for practical surveillance
+applications.
+10. Code Repository
+The
+source
+code
+for
+this
+project
+is
+available
+on
+GitHub:
+https : / / github . com / kv -
+248/SecurityVision
+References
+[1] Joao Carreira and Andrew Zisserman.
+Quo vadis, action
+recognition? a new model and the kinetics dataset. In Pro-
+ceedings of the IEEE Conference on Computer Vision and
+Pattern Recognition (CVPR), pages 6299–6308, 2017. 2, 3
+[2] Waqas Sultani, Chen Chen, and Mubarak Shah. Real-world
+anomaly detection in surveillance videos.
+In Proceedings
+of the IEEE Conference on Computer Vision and Pattern
+Recognition (CVPR), pages 6479–6488, 2018. 2, 3
+[3] Sinong Wang, Belinda Z. Li, Madian Khabsa, Han Fang, and
+Hao Ma. Linformer: Self-attention with linear complexity.
+arXiv preprint arXiv:2006.04768, 2020. 2
+[4] Jhih-Ciang Wu, He-Yen Hsieh, Ding-Jie Chen, Chiou-Shann
+Fuh, and Tyng-Luh Liu. Self-Supervised Sparse Representa-
+tion for Video Anomaly Detection. In European Conference
+on Computer Vision (ECCV), pages 105–121, 2022. 2, 3, 4
+[5] Mahmudul Hasan, Jonghyun Choi, Jan Neumann, Amit K.
+Roy-Chowdhury, and Larry S. Davis. Learning temporal reg-
+ularity in video sequences. In Proceedings of the IEEE con-
+ference on computer vision and pattern recognition (CVPR),
+pages 733–742, 2016.
+[6] Christoph Feichtenhofer, Haoqi Fan, Jitendra Malik, and
+Kaiming He. Slowfast networks for video recognition. In
+Proceedings of the IEEE/CVF international conference on
+computer vision (ICCV), pages 6202–6211, 2019. 2
+[7] Sachin Mehta and Mohammad Rastegari. Mobilevit: light-
+weight, general-purpose, and mobile-friendly vision trans-
+former. arXiv preprint arXiv:2110.02178, 2021. 5
+[8] Wenju Cai, Michael B. Zaremba, Ashton B. Thickstun, Ja-
+son Kuen, Richard T. Chen, Kuan-Hui Lee, G´abor Bart´ok,
+Duncan T. Howcroft, Ashok Ravichandran, and Stephan
+Mandt.
+Lifelong anomaly detection via rehearsal-aided
+pseudo-residual learning. arXiv preprint arXiv:2306.04195,
+2023. 5
+[9] Zilong Zhang, Zhongdao Liu, Chen Change Loy, and Dahua
+Lin. Cross-view action recognition via viewpoint decompo-
+sition and recovery. In Proceedings of the IEEE/CVF Confer-
+ence on Computer Vision and Pattern Recognition (CVPR),
+pages 7084–7093, 2019. 5
+
+
+=== Page 5 ===
+A. Timing Analysis Screenshots
+(a) Before optimization
+(b) After optimization
+Figure 5.
+Component-wise timing analysis of our inference
+pipeline.
+B. System architecture
+Figure 6. System architecture
+
+
+[Image page_5_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image and its context within the provided research paper:
+
+**Image Description**
+
+The image appears to be a screenshot of a text-based output, likely from a terminal or console. It presents a timing analysis of an inference pipeline, broken down into component-wise execution times. The background is dark, with light-colored text. The text is aligned to the left. The screenshot shows the time in seconds for each component of the WatchTower anomaly detection model before optimization.
+
+**Visual Elements and Structure**
+
+*   **Text-based Output:** The image consists solely of text.
+*   **Alignment:** All text is left-aligned, organized in a list-like format.
+*   **Header:** A header line "--- Timing Analysis (seconds) ---" indicates the purpose of the output.
+*   **Component Breakdown:** Subsequent lines detail the timing for various components, with labels on the left and numerical values (in seconds) on the right.
+*   **Total Inference Time:** The final line displays the total inference time for the pipeline.
+
+**Textual Content and Data Points**
+
+The following text and numerical values are visible in the image:
+
+*   `--- Timing Analysis (seconds) ---`
+*   `enNormal:` `0.962678`
+*   `video_embedding:` `0.053841`
+*   `macro_embedding:` `0.027548`
+*   `deNormal:` `0.001727`
+*   `classifier:` `0.009585`
+*   `total_inference:` `1.085437`
+
+**Interpretation of Textual Content**
+
+*   `enNormal`: Likely refers to the `enNormal` module of the WatchTower anomaly detection model. This component reconstructs the normal component of an input feature snippet. The time taken to do this is 0.962678 seconds.
+*   `video_embedding`: This probably refers to the process of embedding or converting the video data into a feature vector representation suitable for further processing. The time taken to do this is 0.053841 seconds.
+*   `macro_embedding`: This likely refers to the process of embedding a larger context from the video data. The time taken to do this is 0.027548 seconds.
+*   `deNormal`: This refers to the `deNormal` module, which filters out the normal components, highlighting potential anomalies. The time taken to do this is 0.001727 seconds.
+*   `classifier`:  Indicates the time taken by the classification component to determine if the video segment is anomalous. The time taken to do this is 0.009585 seconds.
+*   `total_inference`: The overall time required to process a single video segment through the entire inference pipeline (1.085437 seconds).
+
+**Context and Significance**
+
+The image is part of Figure 5, titled "Component-wise timing analysis of our inference pipeline." This figure is further divided into (a) "Before optimization" and (b) "After optimization."  Based on this, we can infer that the image shows the timing analysis *before* any optimization efforts were applied to the pipeline.  A corresponding image (likely showing lower times) would exist in the "After optimization" section.
+
+The importance of this image lies in its ability to:
+
+1.  **Identify Bottlenecks:**  The timing analysis pinpoints the most time-consuming components of the inference pipeline. In this case, the `enNormal` module is the clear bottleneck, taking up the vast majority of the total inference time.
+2.  **Guide Optimization:** This information directly informs optimization efforts. The researchers can focus their attention on speeding up the `enNormal` module to achieve the most significant overall performance improvement.  The paper mentions potential incorporation of Linformer to help with this module.
+3.  **Quantify Improvement:** By comparing the "Before optimization" and "After optimization" results, the researchers can quantitatively demonstrate the effectiveness of their optimization techniques.
+4.  **Assess Real-time Feasibility:** The `total_inference` time is crucial for evaluating whether the system can operate in real-time or near real-time, as stated in the problem statement.
+
+**Overall Context from the Document**
+
+The document describes a system called "SecurityVision" for real-time video anomaly detection.  The system uses I3D features extracted from video segments and a modified Self-Supervised Sparse Representation (S3R) model, named WatchTower, for anomaly detection. The goal is to identify unusual or threatening activities in surveillance video feeds.
+
+The paper discusses the methodology, implementation details, and evaluation of the SecurityVision system. The timing analysis presented in Figure 5 is a critical part of the results and analysis section, demonstrating the efficiency of the inference pipeline. The authors likely aim to show that their system is not only accurate but also fast enough for practical deployment in real-world surveillance scenarios. The mention of edge computing in section 7 further highlights the importance of optimization for real-time performance on potentially resource-constrained devices.
+
+
+
+[Image page_5_image_1.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, considering the context provided:
+
+**Overall Description**
+
+The image is a screenshot of a text-based output from a terminal or console window. It displays timing analysis data, specifically the time taken (in seconds) for various components of the SecurityVision anomaly detection inference pipeline.  It likely represents the performance of the pipeline *before* any optimization strategies were applied. This is indicated by "(a) Before optimization" within the figure caption from the research paper.  The screenshot is rendered with a dark background, typical of terminal windows, and uses a monospace font. The use of dashes at the top and bottom visually separates the data.
+
+**Visual Elements and Structure**
+
+*   **Text:** The primary visual element is the text itself. It's a structured list of component names and their corresponding timing values.
+*   **Color Scheme:** Dark background with light-colored text (likely white or light grey). This is common for console outputs to reduce eye strain.
+*   **Layout:**  The data is presented in a simple key-value format, with each line representing a different component and its execution time. The alignment of the values is likely due to monospace font usage.
+*   **Absence of Visualizations:** There are no graphs, charts, or diagrams within this specific image.
+
+**Textual Content and Significance**
+
+The following text is visible in the image:
+
+*   `--- Timing Analysis (seconds) ---`:  This is the title, indicating that the data presented below represents the time taken for different operations within the system, measured in seconds. The dashes provide visual separation.
+*   `enNormal: 0.814171`: Shows the time taken by the "enNormal" module (as described in the paper) to reconstruct the normal component of the input feature snippet. This is the most time-consuming component.
+*   `video_embedding: 0.067756`: Represents the time taken to embed the video data into a feature vector. This step likely involves the I3D feature extraction.
+*   `macro_embedding: 0.019474`: The time for embedding at a macro level. This step's specific function would require further context, but it is faster than video embedding in the pipeline.
+*   `deNormal: 0.001290`: Indicates the time taken by the "deNormal" module to filter out the normal components, highlighting the anomalous parts. This is a fast operation.
+*   `classifier: 0.001736`:  The time taken by the classifier to determine if the video segment is anomalous based on the processed features. Also a fast operation.
+*   `total_inference: 0.905373`: The total time for one complete inference cycle. This is the sum of the individual component times.
+*   `-----------------------------`: Ending separator dashes to provide visual grouping.
+
+**Context and Importance**
+
+*   **Location in the Paper:** This image appears in the "Results and Analysis" section of the paper, specifically under the "Timing Analysis Screenshots" subsection. It's labelled as "(a) Before optimization" in Figure 5.
+*   **Surrounding Text Context:** The figure is captioned "Component-wise timing analysis of our inference pipeline." The image is presented alongside another one, "(b) After optimization," to show the effect of optimization techniques on the performance of the individual components. The analysis of the timing data helps identify the bottlenecks in the system.
+*   **Relevance to the Paper:** The SecurityVision project focuses on real-time video anomaly detection. Timing is crucial for real-time performance.  The timing analysis reveals that the `enNormal` module is the most computationally expensive part of the pipeline. The optimization strategies would be aimed at reducing the time taken by this component, or other means of processing the features more quickly. The overall inference time being close to one second suggests a frame rate of about 1 frame/second, which may or may not be adequate for true "real-time" performance. Understanding the time taken by each stage is key to improving the system's efficiency for deployment. The researchers likely used this data to guide their optimization efforts. They might have focused on optimizing the "enNormal" module or explored alternative, faster methods for reconstructing normal components of the video features.
+
+**In Summary**
+
+The image presents quantitative data about the performance of the anomaly detection pipeline *before* optimization.  It's an important piece of the "Results and Analysis" section because it provides evidence of the initial state of the system and helps motivate and justify the optimization strategies described elsewhere in the paper. The individual timing measurements shed light on the computational bottlenecks within the pipeline, allowing for targeted improvement efforts.
+
+
+
+[Image page_5_image_2.jpeg Analysis (by Gemini)]
+Here's a detailed analysis of the image provided, considering its visual elements, text, and context within the research paper:
+
+**Overall Description**
+
+The image is a flowchart representing the system architecture of the "SecurityVision" project, as indicated by the surrounding text, specifically Figure 6. It visually illustrates the steps involved in processing a video stream from a CCTV camera to detect anomalies, trigger alerts, and store relevant information for review.
+
+**Visual Elements and Structure**
+
+The flowchart is structured from top to bottom, representing the sequential flow of data and processing.
+
+*   **Shapes:** The flowchart utilizes several geometric shapes:
+    *   **Rectangles:** Represent processes or modules within the system. They are filled with different colors indicating distinct categories of operations (e.g., input, preprocessing, analysis, output).
+    *   **Diamond:** Represents a decision point in the workflow.
+*   **Colors:** Color-coding is used to distinguish different stages of the process.
+    *   **Blue:** Represents input/output points (CCTV Camera Video Stream and Dashboard).
+    *   **Green:** Represents initial video processing steps.
+    *   **Yellow:** Represents steps involving data transfer or preprocessing.
+    *   **Purple:** Represents core analysis modules (feature extraction, anomaly detection).
+    *   **Red:** Represents actions taken when an anomaly is detected.
+    *   **Gray:** Represents steps for processing when no anomaly is found.
+*   **Arrows:** Arrows indicate the direction of data flow and the sequence of operations. Lines extending from the decision point (diamond) are labeled "Yes" or "No" to indicate the flow based on the outcome of the anomaly detection process.
+*   **Layout:** The flowchart is well-organized, with clear spacing between elements, making it easy to follow the flow of operations.
+
+**Text within the Image**
+
+The text within the image labels each step in the flowchart, providing a concise description of the operation:
+
+*   **CCTV Camera Video Stream:** The starting point, representing the input video source.
+*   **Video Input Layer:** An initial layer likely responsible for handling and managing the incoming video stream.
+*   **Frame Extraction with Canvas:**  Indicates extraction of individual frames from the video stream, possibly using a Canvas element (suggesting a web-based or browser-based implementation).
+*   **Send Frame to Backend via HTTP POST:** This shows how frames are transferred to a backend server for processing. The use of HTTP POST suggests a client-server architecture.
+*   **Frame Buffering:** Likely a temporary storage location for frames before further processing.
+*   **Preprocessing Resize and Normalize:** Image preprocessing steps to standardize the input data for the anomaly detection model.
+*   **Feature Extraction using I3D or others:**  The core step where relevant features are extracted from the video frames. "I3D" refers to Inflated 3D ConvNets, a deep learning model for video feature extraction, which the document mentions prominently. The "or others" suggests the system can accommodate alternative feature extraction methods.
+*   **Anomaly Detection:** The process of identifying anomalous events based on the extracted features. This is likely where the WatchTower model is implemented.
+*   **Anomaly Detected?:**  A decision point based on the output of the anomaly detection module.
+*   **Trigger Alert in UI:**  If an anomaly is detected, an alert is triggered in the user interface.
+*   **Store Snippet and Save to DB:** If an anomaly is detected, the corresponding video segment is saved to a database.
+*   **Dashboard for Review:** The user interface where security personnel can review the video feed and detected anomalies.
+*   **Process Next Frame:** If no anomaly is detected, the system proceeds to process the next frame in the video stream.
+
+**Context and Significance**
+
+*   **System Architecture:** The flowchart serves as a visual representation of the SecurityVision system architecture, as mentioned in the caption of Figure 6. It helps the reader understand the sequence of steps involved in the anomaly detection process.
+*   **I3D Feature Extraction:** The mention of I3D reinforces its importance as a key component in the feature extraction stage. This is consistent with the paper's discussion of I3D models in the Methodology section (3.1).
+*   **WatchTower Model Integration:** While the "Anomaly Detection" block doesn't explicitly mention WatchTower, it's implied as WatchTower is the core anomaly detection model used in the system.
+*   **Real-Time Processing:** The "Process Next Frame" branch emphasizes the real-time nature of the system, indicating continuous processing of the video stream.
+*   **User Interface:** The inclusion of "Dashboard for Review" highlights the importance of a user-friendly interface for security personnel to monitor and review detected anomalies. This is consistent with the Implementation & User Interface section (5) of the paper.
+*   **Data Storage:** Storing anomalous snippets in the database is critical for later analysis, auditing, and potential use in retraining the model to improve its accuracy.
+
+**Importance**
+
+The image is vital to the paper as it provides a clear and concise visual overview of the SecurityVision system. It allows readers to quickly grasp the overall workflow and understand how the different components of the system interact to achieve real-time video anomaly detection. By visualizing the architecture, the diagram makes the system more accessible and understandable than a purely textual description would.
+
+
+

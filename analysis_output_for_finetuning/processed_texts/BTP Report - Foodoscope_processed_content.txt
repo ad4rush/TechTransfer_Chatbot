@@ -1,0 +1,347 @@
+=== Page 1 ===
+FoodoScope - Entrepreneurial Venture in
+Computational Gastronomy and Creativity
+Student name: Kumar Gurusahai
+Roll number: 2021261
+BTP report submitted in partial fulfillment of the requirements for the Degree of B.Tech.
+(BTPReport,n.d.)in Computer Science & Mathematics on 13th of December, 2024
+BTP Track:Entrepreneurship Track
+BTP Advisor
+Dr.Ganesh Bagler
+Indraprastha Institute ofInformation Technology
+New Delhi
+
+=== Page 2 ===
+Student’s Declaration
+Iherebydeclarethattheworkpresentedinthereportentitled“FoodoScope-EntrepreneurialVenturein
+ComputationalGastronomy”submittedbymeforthepartialfulfillmentoftherequirementsforthe
+degreeofBachelorofTechnologyinComputerScience&AppliedMathematicsatIndraprasthaInstitute
+ofInformationTechnology,Delhi,isanauthenticrecordofmyworkcarriedoutundertheguidanceofDr.
+GaneshBagler.Dueacknowledgmentshavebeengiveninthereportforallmaterialused.Thisworkhas
+notbeensubmittedelsewherefortherewardofanyotherdegree.
+KumarGurusahai Place&Date:IIITD,NewDelhi,13/12/2024
+(Studentsname)
+Certificate
+Thisistocertifythattheabovestatementmadebythecandidateiscorrecttothebestofmyknowledge.
+.............................. Place&Date:.............................
+(Dr.GaneshBagler)
+
+=== Page 3 ===
+Abstract
+ThisreportchroniclesthedevelopmentofFoodoscope,aninitiativeattheforefrontofComputational
+Gastronomythatbridgesacademicresearchandmarketinnovation.ComputationalGastronomyleverages
+data-driventechnologieslikeAItorevolutionizefoodexploration,fromflavorpairingtohealth-centric
+recipes.Foodoscope,builtonDr.GaneshBagler’sgroundbreakingAPIs(e.g.,RecipeDB,FlavorDB),
+focusesonbrandbuilding,communityengagement,andcommercialization.
+KeymilestonesincludetheForkITHackathon,whichshowcasedthepotentialofcomputational
+gastronomythroughparticipant-driveninnovations,andpreparationsfortheComputational
+GastronomySymposium(#GastroSym2024),alandmarkeventbringingtogetherchefs,researchers,
+andtechnologists.Theprojectunderscorestheimportanceofinterdisciplinarycollaboration,strong
+branding,andevent-drivengrowthinestablishingFoodoscopeasaleaderinthefield.Futureplans
+involveexpandingoutreach,refiningthebusinessmodel,andfosteringinnovationthroughcontinued
+communityengagementandpartnerships.
+
+=== Page 4 ===
+Acknowledgments
+Wewouldliketoexpressoursinceregratitudetoouradvisor,Dr.GaneshBagler,Professorinthe
+ComplexSystemsLabatthe DepartmentofComputationalBiologyatIIITDelhi,fortheirinvaluable
+guidance,constantsupport,andinsightfulsuggestionsthroughoutthisentrepreneurshipproject.Their
+expertiseandencouragementwereinstrumentalinshapingthiswork.
+Wearegratefultoourprojectcollaborators,theindependentprojectstudents,fortheirvaluable
+contributionsandcollaborativeefforts.Theircontributionshavesignificantlyenrichedthisresearch.
+WeacknowledgeIIITDelhiforprovidingthenecessaryfacilitiesandresourcestosupportthisventure.
+Finally,Iwouldliketothankeveryonewhovolunteered;theirparticipationwasinvaluableinmakingthis
+researchpossible.
+
+=== Page 5 ===
+Contents
+1 Introduction
+1.1 What is Computational Gastronomy?
+1.2 Why Foodoscope?
+1.3 Where Are We Headed?
+1.4 Aim of the Project
+2 Methodology
+3 Journey through the Project
+4 Key Takeaways
+5 Our Plan for the Next Semester
+
+=== Page 6 ===
+1 Introduction
+1.1 What is Computational Gastronomy?
+ComputationalGastronomyisanemergingfieldthatleveragesdata-driventechniquestoexplorefoodand
+cooking,traditionallyconsideredartisticendeavors.Bycombiningdatascienceandartificialintelligence,
+thisfieldmakesfoodcomputable,enablingnovelanalyses,discoveries,andinnovationsintheculinary
+world.
+1.2 Why Foodoscope?
+Dr.GaneshBagler'spioneeringworkinComputationalGastronomyhasresultedinthecreationofunique
+databasesandAPIssuchasRecipeDB,FlavorDB,SpiceRx,andDietRx.Thesetoolsunlock
+unprecedentedopportunitiestoexploretherelationshipsbetweeningredients,flavors,andhealthimpacts.
+TheFoodoscopeinitiativeaimstotranslatethisresearchintoamarketablebusiness,offeringdevelopers,
+researchers,andentrepreneursaplatformtoinnovateandcommercializecomputationalgastronomy
+applications.
+1.3 Where Are We Headed?
+ThroughFoodoscope,thegoalistocreateabrandthatbridgesthegapbetweenacademicresearchand
+marketviability.Theprojectfocusesonbuildingastrongsocialmediapresence,engagingthedeveloper
+communitythrougheventslikehackathons,andhostinghigh-profilesymposiumstospotlightthe
+potentialofcomputationalgastronomy.
+1.4 Aim of the Project
+TheprimaryaimistoestablishFoodoscopeasacomprehensiveplatformthatleveragesDr.Bagler’s
+databasesandAPIsformarketableapplications,fosteringinnovationinfoodtechnology.Thisinvolves
+brandbuilding,communityengagement,andcreatingarobustbusinessstrategy.
+2 Methodology and Plan
+EstablishingFoodoscopeasabrandinvolvedextensiveiterationsandbrainstormingtoidentifythemost
+effectivepathforward.Initially,weexploredmultiplestrategiesforpositioningFoodoscope,including
+academiccollaborations,developer-centricoutreach,anddirect-to-consumerapplications.After
+evaluatingtheseoptions,wedeterminedthatcreatingarecognizablebrandwithastrongdigitalpresence
+wouldbethemostimpactfulapproach.
+Toachievethis,thefirststepwasregisteringFoodoscopeasaformalbusinessentity,layingthe
+groundworkforfutureexpansion.Followingthis,wedevelopedaprofessionallogoandcohesive
+brandingstrategy,ensuringthatFoodoscopeprojectedcredibilityandinnovation.Wealsolauncheda
+
+=== Page 7 ===
+dedicatedInstagramhandle(“Foodoscope_api”),whichbecameahubforengagingaudienceswith
+interactivecontent,suchasquizzes,AMAsessions,andupdatesonourinitiatives.
+Oneofthekeymilestoneswasorganizingthe“ForkITHackathon,”a19-hourovernighteventin
+collaborationwithIIITDelhi’sCoSyLabandE-Cell.Thiseventrequiredmeticulousplanning,from
+conceptualizingthehackathon’sthemetoexecutingpre-eventactivitiesthatbuiltanticipation.We
+achievedanimpressiveregistrationsandmanagedlogisticssuchasfunding,refreshments,and
+accommodationsforparticipants.Duringthehackathon,participantsgainedexclusiveaccesstoAPIslike
+RecipeDBandFlavorDB,allowingthemtoinnovateincomputationalgastronomy.Theeventculminated
+inashowcaseofcreativeandtechnicallyrobustprojects,strengtheningFoodoscope’scommunityties.
+Simultaneously,preparationsbeganfortheComputationalGastronomySymposium,scheduledfor
+December14,2024.Thishigh-profileeventisdesignedtospotlightFoodoscope’scontributionstothe
+fieldwhilefosteringconnectionswithresearchers,industryleaders,andinvestors.RunningPR
+campaigns,managinglogistics,andcuratingimpactfulthemesforthesymposiumhavebeenintegralto
+positioningFoodoscopeasaleaderincomputationalgastronomy.
+3 Journey through the Project
+3.1 Logo Design, Brand Image, and Wikipedia Content
+Akeyaspectofthisprojectwascreatingastrongbrandidentity.OurteampreparedtheFoodoscopelogo
+anddevelopedacohesivebrandimagethatwouldresonatewithbothtechnicalandnon-technical
+audiences.Weensuredthebrandingwasprofessional,innovative,andreflectiveofcomputational
+gastronomy'stransformativepotential.
+Inparallel,weworkedonimprovingtheWikipediapageofFoodoscope.Thisinvolvedreiteratingthe
+content,updatinginformationaboutthecompany’sobjectives,andhighlightingitscontributionsto
+computationalgastronomy.ByleveragingplatformslikeWikipedia,weaimedtoexpandawarenessof
+Foodoscope'sofferingsandestablishcredibilityintheindustry.
+3.2 Company Registration Process
+OurteaminitiatedthecompanyregistrationprocesstoformalizeFoodoscopeasabusinessentity.
+Thisinvolvedresearchingtheappropriatebusinessstructure,initiatingthenecessarylegaldocumentation,
+andensuringcompliancewithallregulatoryrequirements.
+3.3 Building an Online Brand Image
+Atthebeginningoftheproject,Foodoscopelackedanonlinebrandimage.Toaddressthis,Itookthe
+leadindevelopingarobustonlinepresencebyfocusingonkeyplatformslikeInstagramandLinkedIn.
+OurteamcuratedengagingcontenttoshowcaseFoodoscope'svision,researchoutputs,andupcoming
+events.Thisincluded:
+
+=== Page 8 ===
+● Interactivepostslikequizzes,infographics,andAMAsessions.
+● Pre-eventstotheSymposiumandthehackathonwithinteractivequizzes,increasingthe
+awarenessoftheproduct.
+● AnnouncementsforeventsliketheForkITHackathonandtheComputationalGastronomy
+Symposium.
+● ArticlesandupdatestohighlightFoodoscope’scontributionstothecomputationalgastronomy
+space.
+Throughtargetedefforts,wewereabletoincreasebrandrecognition,attractalargeraudience,and
+establishFoodoscopeasathoughtleaderincomputationalgastronomy.
+3.4 Content Writing and Knowledge Dissemination
+Tofurtherspreadawarenessofcomputationalgastronomyanditsbusinessapplications,Iworkedwiththe
+teamtoproduceinformativearticlesandWikipediacontent.Theseeffortsemphasizedthe
+transformativeimpactofFoodoscope’sAPIs,helpingestablishitsvaluepropositioninthemarket.By
+leveragingbothsocialandknowledge-sharingplatforms,weextendedFoodoscope’sreachtoaglobal
+audienceofresearchers,developers,andfoodenthusiasts.
+3.5 Business Model Definition
+AcriticalcomponentoftheprojectwasdefiningthebusinessmodelforFoodoscope.Afterdetailed
+analysisandbrainstormingsessions,IfinalizedthatFoodoscope’sAPIserviceswouldbetargetedtoward
+businesses.ThesebusinessescouldleverageFoodoscope’stoolstodevelopapplicationsfor:
+● Health-focusedreciperecommendations.
+● Flavorpairingandculinaryinnovations.
+● Sustainableanddata-drivenfoodsolutions.
+ThebusinessmodelalignswiththescalabilityandmarketpotentialofAPIservices,ensuringFoodoscope
+deliversvaluetoadiversesetofstakeholders.
+
+=== Page 9 ===
+3.6 TAM, SAM, and SOM for Foodoscope
+TAM(TotalAddressableMarket)
+● Description:Theglobalopportunityforfood-techAPIsolutionsisimmense,withthemarket
+currentlyintheresearchstage.Foodoscopeaimstoexplorethisspace,leveragingadvancements
+inAIandAPI-basedintegrationstoaddressemergingneedsinfoodresearchandinnovation.
+● Value:$500Millionannually.
+● KeyAssumptions:
+○ TheTAMrepresentsaglobalmarketforAPI-basedfood-techsolutions.
+○ ThereisincreasingdemandforAI-driventoolsinfoodresearchandculinaryinnovation.
+SAM(ServiceableAvailableMarket)
+● Description:SAMfocusesonthespecifictargetregionsandusecaseswhereFoodoscopecan
+effectivelyestablishitspresenceanddelivervalue.Thisincludeshealth-techapplications,flavor
+pairingtools,culinaryR&D,andacademicresearchinstitutions.
+● Value:$50Millionannually.
+● KeyAssumptions:
+○ Foodoscope’sprimarygeographicfocusisIndia,representinganemergingmarketwith
+significantpotential.
+○ ThetargetedusecasesarealignedwithFoodoscope’sstrengths,includingniche
+research-drivenapplications.
+○ SAMassumesFoodoscopecancapture10%oftheglobalTAMbyfocusingonthese
+regionsandspecializedmarkets.
+
+[Image page_9_image_0.png Analysis (by Gemini)]
+Here is a thorough analysis of the provided image based on your instructions:
+
+**Visual Elements and Structure:**
+
+The image is a diagram illustrating the market opportunity for Foodoscope using the concepts of TAM (Total Addressable Market), SAM (Serviceable Available Market), and SOM (Serviceable Obtainable Market).
+
+*   **Circles:** The diagram utilizes three overlapping circles of varying sizes and colors to represent TAM, SAM, and SOM. The circles are nested, reflecting the hierarchical relationship between the market segments. The largest circle is bright green, representing TAM; a medium circle in a muted light-green color overlaps the TAM circle, representing SAM; and the smallest circle defined by a black outline overlapping the SAM circle, representing SOM.
+*   **Text Boxes:** Descriptive text boxes are placed around the circles. Each box is associated with a specific market segment (TAM, SAM, SOM) and contains a definition, value estimate, and key assumptions.
+*   **Title:** The title "Market Opportunity" is placed at the top of the diagram in pink font, providing an overall context for the information presented.
+
+**Text within the Image:**
+
+Here's a breakdown of the text elements within the image:
+
+*   **Title:** "Market Opportunity"
+*   **Total Addressable Market (TAM):**
+    *   "TAM includes global demand but focuses on exploratory solutions in AI-driven food research."
+    *   "Value: $500 Million annually."
+*   **Serviceable Available Market (SAM):**
+    *   "Target regions and specific use cases where Foodoscope has potential reach. SAM assumes Foodoscope can service 10% of TAM in focused regions with niche research-driven markets."
+    *   "Value: $50 Million annually."
+*   **Serviceable Obtainable Market (SOM):**
+    *   "Realistically achievable market share for Foodoscope within India. Value: $1 Million annually."
+    *   "SOM assumes Foodoscope can achieve 2% of SAM over the next 3-5 years."
+
+**Significance:**
+
+The diagram visually represents Foodoscope's market strategy.
+
+*   **Hierarchical Market Segmentation:** The overlapping circles visually depict the narrowing down of the market, from the broad global TAM to the realistically obtainable SOM.
+*   **Value Proposition:** Each segment is associated with a specific value estimate, indicating the potential revenue for Foodoscope.
+*   **Strategic Focus:** The diagram emphasizes Foodoscope's phased approach to market entry, starting with SOM in India, expanding to SAM in focused regions and use cases, and eventually addressing the broader global TAM.
+
+**Context and Importance:**
+
+Based on the provided text, the image illustrates the business model definition for Foodoscope, a company offering API services targeted towards businesses in the food-tech sector. It’s a visual summary of the market analysis discussed in Section 3.6 of the research paper.
+
+*   **Market Entry Strategy:** The text emphasizes a phased approach: starting with the SOM in India and gradually expanding. The diagram reinforces this strategy visually.
+*   **Computational Gastronomy:** This diagram illustrates the potential market size and strategy related to Foodoscope's contribution to the computational gastronomy space (mentioned in surrounding pages).
+*   **Funding and Investment:** Understanding the TAM, SAM, and SOM is crucial for attracting investors and securing funding. This diagram provides a clear overview of the market potential to potential stakeholders.
+
+In essence, the image is a concise and informative visual representation of Foodoscope's market opportunity, business model, and strategic approach to market entry and growth, which helps to understand the scale and scope of Foodoscope's operations.
+
+
+
+=== Page 10 ===
+SOM(ServiceableObtainableMarket)
+● Description:SOMrepresentstherealisticallyachievablemarketshareforFoodoscopewithinits
+primarymarket,India.Thisestimateisbasedonearly-stageadoptionandstrategicpartnerships.
+● Value:$1Millionannually.
+● KeyAssumptions:
+○ Foodoscope’sinitialfocuswillbeonAPIservicestailoredforIndianstartups,health-tech
+companies,andresearchlaboratories.
+○ Targetedpartnershipswithresearchorganizationsandfood-techinitiativeswilldrive
+earlyadoption.
+○ SOMassumesthatFoodoscopecanachieve2%oftheSAMoverthenext3-5years.
+Foodoscope’sphasedapproachtomarketentry—beginningwithSOM,scalingtoSAM,andeventually
+addressingthebroaderTAM—positionsitforsustainablegrowthintheAI-drivenfood-techecosystem.
+3.7 Foodoscope Fork IT Hackathon 2024
+TheFoodoscopeForkITChallenge2024,heldonNovember15-16,wasaresoundingsuccess,bringing
+together160participantsand40volunteerstoinnovateincomputationalgastronomyusingRecipeDBand
+FlavorDBAPIs.This19-hourhackathon,organizedincollaborationwithIIITDelhi’sCoSyLaband
+E-Cell,offeredaplatformfordeveloperstocreategroundbreakingprojectsinadynamicand
+collaborativeenvironment.
+3.7.1 Pre-Event Preparations
+Theevent’ssuccesswasrootedinmeticulousplanningandexecution.Pre-eventactivitiesincluded:
+● ManagingemailcommunicationsandtheUnstopregistrationplatform,ensuringclearandtimely
+disseminationofinformation.
+● RunningInstagramquizzesandAMAsessionstoengageparticipantsandbuildexcitement.
+● Collaboratingwithdesignerstocreatepromotionalmaterials,includingbanners,posters,and
+digitalassets.
+3.7.2 Event Execution
+Thehackathonbeganat3:00pmonNovember15,withteamsdivingintotheirprojectsafteraninspiring
+keynoteaddress.ParticipantsleveragedexclusiveaccesstoFoodoscopeAPIsthroughouttheeventto
+buildinnovativeapplications.Asteadysupplyofrefreshmentsandwell-coordinatedlogisticsensureda
+comfortableexperienceforall.
+Highlightsincluded:
+● Midnightcheckpointstoreviewprogressandoffermentorship.
+● Networkingopportunitieswithresearchersandindustryexperts.
+● Showcasepresentationswheretopteamsdemonstratedtheirinnovativesolutions.
+
+=== Page 11 ===
+3.7.3 Budget and Finances
+Theevent’sbudgetof₹180,000coveredexpensessuchastheprizepool(₹90,000),participant
+accommodations,food,promotionalmaterials,andvolunteersupport.Prudentfinancialmanagement
+ensuredtheeventremainedwithinbudgetwhiledeliveringahigh-qualityexperience.
+3.7.4 Outcomes
+1. ParticipationandEngagement:
+○ 350paidregistrationsdemonstratedthecommunity’senthusiasm.
+○ Highlevelsofcreativityandtechnicalproficiencywereevidentintheprojects.
+2. ProjectShowcase:
+○ OutstandingprojectswillbepresentedattheComputationalGastronomySymposium,
+amplifyingtheirimpact.
+3. CommunityBuilding:
+○ Strengthenedtieswiththedevelopercommunityandfosterednewcollaborations.
+3.7.5 Lessons Learned
+1. Effectivecommunicationthroughemailsandsocialmediachannelswaskeytodriving
+registrationsandensuringsmoothoperations.
+2. Hands-onmentorshipandawell-structuredschedulekeptparticipantsmotivatedandontrack.
+3. Theimportanceofmeticulousbudgetingandresourceallocationcannotbeoverstated.
+Byhandlingemails,managingtheUnstopplatform,overseeingfinances,andleadinga40-memberteam,
+wesuccessfullyexecutedtheFoodoscopeForkITHackathon.Theeventhassetahighstandardforfuture
+initiatives,reinforcingFoodoscope’sroleasaleaderincomputationalgastronomy.
+3.8 Planning and Execution of the Computational Gastronomy
+Symposium
+TheComputationalGastronomySymposium(#GastroSym2024)ismeticulouslybeingplannedtobea
+landmarkevent,showcasingthefusionofculinaryartsandcutting-edgetechnology.Herearethekey
+stepsandhighlights:
+1. SpeakerSelectionandInvitations:Wehavecuratedanexceptionallineupofspeakers,
+includingMichelin-starredchefs,AIpioneers,andindustryleaders.Invitationshavebeensentto
+notablepersonalitiessuchasChefGarimaArora,Dr.SoumyaSwaminathan,andMr.Krish
+Ashok,ensuringadiverserangeofexpertise.
+2. EventAgendaDesign:Thesymposiumagendaisstructuredtoincludekeynotespeeches,panel
+discussions,andinteractivesessions.TopicsrangedfromAI-poweredrecipegenerationto
+sustainabilityinfoodtechnology,ensuringacomprehensiveexplorationofcomputational
+gastronomy.
+
+=== Page 12 ===
+3. VenueandLogistics:ThevenueatRnD,IIITDelhi,waspreparedwithstate-of-the-artfacilities
+toaccommodateover200participants,includingspeakers,researchers,andstudents.
+Arrangementsforbanners,posters,standees,andotherbrandingmaterialshavebeenmadeto
+enhancetheevent’svisualappeal.
+4. PromotionandOutreach:ArobustsocialmediacampaignwasrunthroughFoodoscope’s
+Instagramhandle,featuringspeakerannouncements,eventteasers,andcountdowns.
+Collaborationswithmediaoutletshelpedamplifyvisibility.
+5. ExecutionandCoordination:Ontheeventday,thefoodoscopestudentteamanddedicated
+volunteerswillmanageregistrations,stageoperations,andhospitality.Speakerswillbeprovided
+withaseamlessexperience,andattendeescanengageactivelyindiscussionsandQ&Asessions.
+4 Key Takeaways
+● BridgingResearchandMarket:Foodoscopedemonstrateshowacademicinnovationscanevolve
+intoscalablebusinessventures.
+● CommunityBuilding:InitiativesliketheForkITHackathonfosteracollaborativeecosystem,
+promotinginnovationandengagement.
+● BrandingandVisibility:Establishingastrongbrandidentityandsocialmediapresenceiscrucial
+forgainingtractionandattractingstakeholders.
+● Event-DrivenGrowth:Hostingeventssuchashackathonsandsymposiumsboostscommunity
+engagementandreinforcesFoodoscope’spositionasaleaderincomputationalgastronomy.
+Reference Points:
+Todrivethisproject,Idrewinspirationandsupportfromthefollowingtoolsandworks:
+● RecipeDB
+● FlavorDB
+● DietRx
+● SpiceRx
+● CoSyLab
+● WhatDish
+● Ratatouille(IEEE-ICDE,2022)
+Byintegratingcomputationalgastronomywithdesign,entrepreneurship,andmarketing,Foodoscope
+successfullyevolvedintoaplatformthatcombinesinnovation,utility,andcommercialviability.
+
+=== Page 13 ===
+5 Plan for the upcoming Semester
+1. ProductDevelopment:Collaboratewithdeveloperstocreatecommercialapplicationsusing
+FoodoscopeAPIs,emphasizingusecasesinhealth,sustainability,andculinaryinnovation.
+2. BusinessModelRefinement:Defineclearrevenuestreams,suchasAPIsubscriptions,licensing,
+andconsultingservices.
+3. ExpandedOutreach:Increaseengagementonsocialmediaandexplorepartnershipswith
+culinaryschools,foodtechstartups,andhealthorganizations.
+4. SymposiumFollow-Up:UtilizetheoutcomesoftheComputationalGastronomySymposiumto
+attractinvestorsandcollaborators.
+5. HackathonExpansion:Planadditionalhackathonsincollaborationwithinternationalpartnersto
+broadenFoodoscope’sreachandimpact.
+

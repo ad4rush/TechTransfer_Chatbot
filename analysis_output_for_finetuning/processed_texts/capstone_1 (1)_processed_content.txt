@@ -1,0 +1,637 @@
+=== Page 1 ===
+Design of different topologies of Ring
+Oscillators for PVT Sensor application
+Submitted to -
+Dr. Anuj Grover
+Submitted by-
+Akshay Soni ( MT22153 )
+Abhishek Kumar Singh ( MT22135 )
+Submitted in partial fulfillment of the requirements for the
+degree of Master of Technology to
+Indraprastha Institute of Information Technology Delhi
+December, 2023
+1
+
+[Image page_1_image_0.png Analysis (by Gemini)]
+Here's an analysis of the image you provided, based on your instructions and context:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a stylized logo.
+*   **Components:** The logo consists of several distinct graphical elements.
+    *   Three gray vertical bars of varying shades. The leftmost is the lightest and the one to the right of the leftmost bar is the darkest of the three.
+    *   One vertical bar forming the left part of the letter 'I', and the top corner forming the top part of the letter 'I'. This bar is much darker than the three gray bars.
+    *   A teal (cyan) circular arc that forms the right side of a letter "D".
+*   **Arrangement:** The elements are arranged horizontally to form a cohesive mark. The bars seem to progress from lighter to darker. The "ID" graphic has the "I" part butted up against the "D" part, but the "I" and "D" are not fully connected.
+
+**Text Within the Image:**
+
+*   While there's no explicit text in a traditional font, the logo *implicitly* creates the letters "I," "I," and "D." (IIITD)
+
+**Context and Significance:**
+
+*   **Document Type:** Based on the surrounding text, this image is likely the logo of Indraprastha Institute of Information Technology Delhi (IIITD).
+*   **Document Context:** The document is a Master's thesis or project report on ring oscillator design for PVT (Process, Voltage, Temperature) sensors. This thesis is being submitted for academic credit at IIITD.
+*   **Image Importance:** The logo likely appears on the title page and possibly subsequent pages of the document. It identifies the source and affiliation of the research. Its primary function is branding and institutional identification.
+*   **Page Number:** As seen by the "1" present on the page, the image appears on the first page of the research paper.
+
+**Overall Analysis:**
+
+The logo serves as a visual identifier for the institution. Its presence on the title page immediately connects the research to IIITD. The surrounding text confirms this, establishing the logo's purpose within the context of the research document.
+
+
+
+=== Page 2 ===
+©Indraprastha Institute of Information Technology (IIITD),
+New Delhi, 2023
+2
+
+=== Page 3 ===
+CERTIFICATE
+This is to certify that the Capstone Project titled “Design of different topologies of Ring
+Oscillators for PVT Sensor application,” being submitted by Akshay Soni, Abhishek
+Singh to the Indraprastha Institute of Information Technology Delhi for the award of the
+Master of Technology, is an original research work carried out by them under my
+supervision. In my opinion, the Capstone Project has reached the standards of fulfilling
+the requirements of the regulations relating to the degree.
+The results of this capstone project have not been submitted in part or full to any other
+university or institute for the award of any degree/diploma.
+December, 2023
+Dr Anuj Grover
+Department of Electronics &
+Communications Engineering
+Indraprastha Institute of Information
+Technology Delhi
+New Delhi
+110020
+3
+
+=== Page 4 ===
+ACKNOWLEDGEMENTS
+We would like to thank our mentor Dr. Anuj Grover (Associate Professor, IIIT Delhi)
+for giving us this opportunity to take up the project. We thank him for his immense
+guidance, patience, and encouragement. Special thanks to Tanisha Gupta for
+personally guiding us and facilitating the project's flow; it was a fantastic experience
+working alongside her. Additionally, we would also thanks to our friends and group
+members of Design of different topologies of Ring Oscillators for PVT Sensor
+application who generously shared valuable insights about the PVT Sensor application
+they developed during their course project and allowed us to use it in our project.
+4
+
+=== Page 5 ===
+ABSTRACT
+This paper presents a comprehensive analysis of diverse 5-stage ring oscillator topologies in a
+65nm technology node supplied at 1.2 volts, considering various figures of merits, including
+leakage, power, performance, area, and PVT characteristics. The study emphasizes the pivotal
+role of topology selection in integrated circuit design, particularly in optimizing these critical
+metrics. The analysis encompasses a range of topologies, such as the Basic Ring Oscillator,
+Current Starved Ring Oscillator and Current Starved Skewed PMOS Ring Oscillator. By
+evaluating how various topologies impact each figure of merit, the research highlights their
+respective strengths and vulnerabilities. The review culminates by identifying superior
+topologies based on a comparative analysis tailored to specific application requirements. This
+approach aligns each topology's strengths with distinct application needs, ensuring an optimal
+matchbetween topology attributes andperformance objectives.
+5
+
+=== Page 6 ===
+TABLE OF CONTENTS
+I. INTRODUCTION 7
+II. DIFFERENT TOPOLOGIES OF RING OSCILLATORS 8
+A. Basic Ring Oscillator 8
+B. Current Starved Ring Oscillator 9
+C. Current Starved Skewed PMOS Ring Oscillator 10
+III. RESULTS AND DISCUSSION 11
+IV. CONCLUSION 15
+V. FUTURE WORK 16
+VI. REFERENCES 17
+6
+
+=== Page 7 ===
+I. INTRODUCTION
+Analog ICs and SOCsrequire clock signalgeneratorsthat arebothenergy-efficientand compact.
+While quartz crystals, RC, or LC components are commonly used in oscillator circuits,they are
+not optimal for on-chip applications. The Voltage Controlled Oscillator (VCO) can be realized
+using either a ring oscillator or an LC resonator within the CMOS process. While the LC
+resonator offers improved noise characteristics and higher operating frequencies, it occupies
+more layout area due to the on-chip spiral inductor and has a limited tuning range. Conversely,
+the ring oscillator design eliminates the need for inductance and can achieve a broad tuning
+range,though attheexpenseof poorernoise performance andlower operatingfrequencies.
+The Ring Oscillator (RO) is well-suited for on-chip applications because of its simple design,
+low cost, and expanded functionality. Additionally, ROs have a wide tuning range.CMOSRing
+Oscillators are an excellent alternative for energy-efficient applications due to their low power
+consumption. A Ring Oscillator (RO) circuit istypically built byinterconnectinganoddnumber
+of inverter cells. These inverters form a sequential chain in which the output of the last step is
+fed back to the first stage. Phase noise, consumption of power,frequency tuningrange,andchip
+space are all key concerns in RO design. Ring Oscillators are used to benchmark new Process
+Design Kits (PDK) for performance and power, providing valuable insights into the capabilities
+of new technologies. Their simple design and implementation make ring oscillators a
+budget-friendly yethighly functional choice.
+A PVT insensitive ring oscillator is designed to operate over a range of process variations,
+supply voltage fluctuations and temperature changes. We can use this type of ring oscillator in
+integrated circuit design to ensure that thecircuit works correctlyevenif environmentalchanges
+and manufacturing changes happen. In order to preserve frequency stability, a PVT-insensitive
+ring oscillator ismade tobe lesssensitive totheseprocessfluctuations. Reducingdesign margins
+when creating a PVT-insensitive ring oscillator can result in higher performance, moreeffective
+resource management, and lower power usage. By guaranteeing that a higher proportion of
+manufactured circuits fulfill the specified performance standards, a PVT-insensitive design can
+improve chip yield, leading to higher production yields and more dependable goods. Ring
+Oscillator provides precise timing for digital circuits, ensuring synchronization across
+components. They are also used as Voltage-Controlled Oscillators in PLLs, ring oscillators help
+in frequency synchronization, vital for communication systems. Through Built-in Self-Test
+(BIST), they help in measuring performance and detecting faults, ensuring reliability. By
+observing frequency changes, ring oscillators enable temperature monitoring, and their use in
+power management circuitsoptimizes distribution. Their inherentinstabilitycan beharnessed for
+cryptographic applications, enhancing security. In time-based ADCs, ring oscillators bridge the
+gap between analog signals and digital interpretation. As Local Oscillators in RF Circuits, they
+playa keyrolein frequencysynthesis for wirelesstechnology.
+7
+
+=== Page 8 ===
+II. DIFFERENT TOPOLOGIES OF RING OSCILLATORS
+A. Basic Ring Oscillator
+Fig. 1.Design ofBasic RingOscillator
+The basic Ring Oscillator (RO) is built by joining inverter cells in a cascade arrangement. To
+attain the specified oscillation frequency range, a five-stage design is used. The Barkhausen
+conditions, which require unity voltage gain and a phase shift of 2π, must be met by the RO
+circuit to assure persistent oscillations. The feedback network provides a phase shift of π, while
+the extra phase shift of π is accomplished by connecting the stages of the RO circuit. This
+permits the oscillating signal to travelthrough each stepand achievetheremaining phase shiftin
+Ntdtime,td refersto thepropagation delay introducedbyeach individualstage.
+8
+
+[Image page_8_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image, based on your provided text and the visual information:
+
+**Visual Elements and Structure:**
+
+*   **Diagram:** The image is a circuit diagram depicting a basic Ring Oscillator (RO).
+*   **Inverter Stages:** The core of the circuit consists of five identical inverter stages connected in a cascade configuration. Each inverter is constructed using a complementary metal-oxide-semiconductor (CMOS) design (PMOS on top, NMOS on bottom).
+*   **Transistors:** Each stage shows a PMOS transistor connected to Vdd (supply voltage) and an NMOS transistor connected to ground.
+*   **Feedback Loop:** The output of the last (fifth) stage is fed back to the input of the first stage, creating a closed loop and therefore the desired oscillation.
+*   **Output:** An output labeled "clk" is coming from the last stage via a triangular buffer.
+*   **Power Rails:** The diagram shows clear connections to Vdd (power supply) at the top and ground at the bottom of the inverter stages.
+
+**Text Within the Image:**
+
+*   **Vdd:** Indicates the positive supply voltage.
+*   **GND (Ground):** Indicates the ground connection (zero voltage reference).
+*   **clk:** Label for the clock output signal from the oscillator.
+
+**Context and Importance:**
+
+*   **Overall Context:** The image illustrates the basic design of a Ring Oscillator, a fundamental building block in analog and mixed-signal integrated circuits.
+*   **Importance from the Text:**
+    *   The text on page 8 directly refers to this image as "Fig. 1. Design of Basic Ring Oscillator". This signifies its role as the basic implementation of the RO.
+    *   The text states that Ring Oscillators (ROs) are crucial for on-chip clock generation, especially where compactness and a wide tuning range are important (from page 7).
+    *   The explanation on page 8 describes how the five-stage design is used to achieve a specific oscillation frequency range. It also references the Barkhausen criteria, meaning the RO's design and implementation should fulfil these conditions to produce sustained oscillations.
+    *   The introduction on page 7 highlights the advantages of ROs over LC oscillators for on-chip applications (smaller area, wider tuning range), and highlights their uses cases in BIST and PLLs.
+    *   The text also emphasizes that ROs are sensitive to process variations, voltage fluctuations, and temperature changes. Further RO topologies may be insensitive to PVT changes and variations.
+
+**In summary:** The image is significant because it visually represents the foundational architecture of a ring oscillator, a key component for on-chip clock generation discussed in the research paper. The text reinforces the importance of ROs due to their simplicity, small size, and wide tuning range, but also hints at the need for more robust designs that are insensitive to process, voltage, and temperature variations. The 5 stages of inverters are a way to achieve oscillation frequencies in a particular range. The figure complements the text by providing a visual understanding of the circuit's structure and how the feedback mechanism enables oscillation.
+
+
+
+=== Page 9 ===
+B. Current Starved Ring Oscillator
+Fig. 2 Current Starved Ring Oscillator
+This Topology Current Starved Stacked Ring Oscillator is where we are now. Out of all the
+topologies wehavediscussedin thisstudy, thistopology producedthesecond best results.
+9
+
+[Image page_9_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on the provided context:
+
+**Visual Elements and Structure:**
+
+The image is a circuit diagram representing a "Current Starved Ring Oscillator".  Here's a breakdown of the components:
+
+*   **Transistors:** The primary building blocks are NMOS and PMOS transistors.  These are represented by the standard schematic symbols.  Note the difference: PMOS transistors have a circle at the gate, while NMOS transistors do not.
+*   **Ring Structure:**  The core of the oscillator is the ring, formed by several cascaded stages. Each stage consists of what appears to be an inverter-like arrangement using the transistors. From the image you can count five stages in the middle.
+*   **Current Source (Icontrol):**  A circle with "Icontrol" and a downward-pointing arrow represents a current source. This is used to control the current available to the ring oscillator. The arrow represents the direction the current is coming *from*, not flowing to.
+*   **Voltage Source (Vdd):** Labeled as "Vdd", this is the supply voltage rail.  It powers the circuit.
+*   **Ground:**  The ground connection is denoted by the standard ground symbol (three horizontal lines).
+*   **Clock Output (clk):**  A triangle symbol represents a buffer or inverter connected to the ring's output. This buffer provides a clean, shaped clock signal "clk".
+
+The transistors are interconnected in a way that each stage's output feeds into the next stage's input, forming the ring. The current source likely modulates the current available to the transistors in the ring, influencing the oscillation frequency.
+
+**Text within the Image:**
+
+*   **Vdd:** The positive voltage supply.
+*   **Icontrol:** The control current for the current source.
+*   **clk:** The clock signal output from the ring oscillator.
+
+**Context and Importance:**
+
+Based on the text from page 9 and the surrounding pages (8-10), here's the context:
+
+*   **Ring Oscillators:** This research explores different ring oscillator topologies.  A ring oscillator is a circuit that produces an oscillating signal (a clock) using a ring of inverters.  The oscillation frequency is determined by the propagation delay of each inverter stage in the ring.
+*   **Current Starvation:** The image represents a "Current Starved Ring Oscillator" topology. Current starvation refers to limiting the current available to the inverters, which affects their switching speed and, therefore, the oscillation frequency.
+*   **Comparison:** The text states that this topology ("Current Starved Stacked Ring Oscillator") achieved the second-best results out of all the topologies considered in the study. This suggests the image depicts a relatively promising design in terms of performance.
+*   **Evolution of Designs:** The pages preceding this one describe the basic ring oscillator. This suggests the "Current Starved" topology is an improvement or alternative design aimed at addressing some limitations of the basic ring oscillator.
+*   **Further Exploration:**  Page 10 introduces the "Current Starved Skewed PMOS Ring Oscillator", implying that the research continues to refine ring oscillator designs by incorporating skewing techniques along with current starvation to optimize power consumption and frequency.
+
+**Importance:**
+
+The image is important because it provides a visual representation of a specific ring oscillator topology that performed well in the study. Understanding the structure and operation of this current-starved ring oscillator is crucial for comprehending the paper's findings and the rationale behind the subsequent design variations (like the skewed PMOS version). The image, combined with the surrounding text, explains how the circuit is constructed and its place within the study's broader investigation of ring oscillator design.
+
+
+
+=== Page 10 ===
+C. Current Starved Skewed PMOS Ring Oscillator
+Fig.3 Current Starved Skewed PMOS Ring Oscillator
+In this circuit, the MOSFETs Mbp and Mbn serve as current sources while the MOSFETs Mip
+and Min serve as an inverter. By mirroringoperation (and maintainingthe sameaspectratios for
+all biasing PMOS and NMOS transistors), Mbp and Mbn generate biasing current. Low power
+consumption is possible in this setup because the bias current, which is in the order of
+microamperes, keeps the transistors operating in the vicinity of the sub-threshold region. The
+negative delay elements are connectedtothe PMOS'sinput.Asa result,the PMOS'sinputsignal
+arrives before the NMOS's. The skewed delay cell accelerates the low-to-high output transition
+by turning the PMOS on early, in contrast to the standard inverter cell. Hence, the cell delay is
+minimized and results in improved frequency of operation. Negativelyskewed PMOSdelay RO
+with a 7-stage current starvation (PMOS skewedCS). TheCSand PMOSskewed techniquesare
+combined as the operating concept. Under same operating conditions, this circuitexhibits better
+power consumption in PMOS skewed as compared to NMOS skewed CS.Since NMOS is
+quicker than PMOS, frequency is higher inNMOSskewed thanin PMOSskewed withthesame
+inverter arrangement. In a similar vein, NMOS skewing consumes more power than PMOS
+skewing.
+10
+
+[Image page_10_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on the provided information:
+
+**Image Analysis**
+
+*   **Type:** The image is a circuit diagram. Specifically, it depicts a "Current Starved Skewed PMOS Ring Oscillator".
+*   **Elements:**
+
+    *   **MOSFETs:** The diagram shows a network of PMOS and NMOS transistors, which are the fundamental building blocks of the circuit. The transistors are labeled as Mbp (PMOS bias), Mbn (NMOS bias), Mip (PMOS inverter), and Min (NMOS inverter). Their names and numbers are: Mbp8, Mbp1-7, Mip1-7, Min1-7, Mbn9, Mbn8, Mbn1-7.
+    *   **Current Source:** There's a current source, labeled "Ib", which provides the bias current to the circuit.
+    *   **Power Supply:** Voltage supply indicated as "Vdd".
+    *   **Ground:** An earth ground symbol.
+    *   **Output:** The output signal, "Vout," is indicated, feeding into a buffer that outputs "clk".
+*   **Structure:**
+
+    *   **Ring Oscillator:** The core of the circuit is a ring oscillator, formed by an odd number of inverters (in this case, likely 7 stages, judging by the number of inverter pairs shown). The output of the last inverter is fed back to the input of the first, creating an oscillating signal.
+    *   **Current Starvation:** The transistors labeled Mbp and Mbn are used to control (starve) the current flowing through the inverters, thus controlling the speed of operation and reducing power consumption.
+    *   **Skewed Design:** The negative delay elements connected to the PMOS input create the skewed design. This is achieved by connecting the input of each PMOS transistor to the output of the previous inverter stage. This causes the PMOS transistor to turn on earlier in the cycle, accelerating the low-to-high transition.
+    *   **Mirroring Operation:** The transistors Mbp and Mbn generate biasing current using mirroring operation to maintain the same aspect ratios for all biasing PMOS and NMOS transistors.
+
+**Text within the Image:**
+
+*   Vdd (Power supply voltage)
+*   Ib (Bias current)
+*   Mbp1 - Mbp8 (PMOS transistors for biasing)
+*   Mbn1 - Mbn9 (NMOS transistors for biasing)
+*   Mip1 - Mip7 (PMOS transistors for inverters)
+*   Min1 - Min7 (NMOS transistors for inverters)
+*   Vout (Output voltage)
+*   clk (Clock output signal, buffered Vout)
+
+**Overall Context and Importance**
+
+*   **Context:** The image is a key element in a research paper exploring different ring oscillator topologies. The paper focuses on improving power consumption and frequency stability. The current-starved skewed PMOS ring oscillator shown in the image is one of the topologies being investigated.
+*   **Importance:**
+
+    *   The text explicitly states the circuit's purpose: to achieve low power consumption by operating transistors in the sub-threshold region using current starvation.
+    *   The skewed design, achieved by negatively skewing the PMOS delay, minimizes cell delay and improves the frequency of operation.
+    *   The paper compares the performance of this PMOS skewed CS (current starvation) design with NMOS skewed CS.
+    *   According to the text on page 10, the PMOS skewed design consumes less power than the NMOS skewed design.
+    *   Page 11 states that this topology, along with the regular current-starved ring oscillator, exhibits the least percentage variation in frequency with temperature changes compared to other topologies. This highlights its stability and reliability.
+
+In summary, the image represents a specific ring oscillator design intended to improve power efficiency and maintain frequency stability across temperature variations, showcasing a potential improvement in oscillator design for low-power applications.
+
+
+=== Page 11 ===
+III. RESULTS AND DISCUSSION
+The proposed circuit configuration is implemented in standard 65nm technology node and
+simulated withcadence tools.
+Fig.4 At constant Voltage 1.2V, Variation of Frequency at TT corner with temperature ranges
+from -40°Cto 125°C
+For the purpose of comparison, we implemented a number of topologies at constant voltagesof
+1.2V and process corner TT while varying the temperatures from -40C to 125C. As shown in
+Fig. 4, the Current Starved RingOscillatorand SkewedPMOSRing Oscillatorexhibitsthe least
+percentagevariation infrequency of9.85% and14.791%, whencomparedtoall othertopologies.
+11
+
+[Image page_11_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, based on the provided context and the image itself:
+
+**Visual Element Description:**
+
+The image is a bar chart.
+
+*   **X-axis (Horizontal):** Labeled "Topologies." It displays three categories: "Basic", "Current Starved", and "SPMOS".
+*   **Y-axis (Vertical):** Labeled "Frequency Variation in %." It ranges from 0 to 40 with gridlines at intervals of 10.
+*   **Bars:** Three rectangular bars, all colored reddish-brown with black borders.
+    *   "Basic" bar reaches approximately 35%.
+    *   "Current Starved" bar reaches approximately 10%.
+    *   "SPMOS" bar reaches approximately 15%.
+
+**Text Extraction:**
+
+*   **X-axis labels:** Basic, Current Starved, SPMOS, Topologies
+*   **Y-axis labels:** Frequency Variation in %, 0, 10, 20, 30, 40
+
+**Context and Importance:**
+
+Based on the provided text, Fig. 4 in the research paper depicts the percentage variation in frequency for different ring oscillator topologies when the temperature is varied from -40°C to 125°C at a constant voltage of 1.2V and process corner TT. The figure specifically compares "Basic," "Current Starved," and "SPMOS" (7-Stage Current Starved Skewed PMOS Ring Oscillator) topologies.
+
+The surrounding text mentions that "Current Starved Ring Oscillator" and "Skewed PMOS Ring Oscillator" (presumably "SPMOS") exhibit the least percentage variation in frequency compared to other topologies. The bar chart visually confirms this statement. The "Basic" topology shows a significantly higher frequency variation, indicating it's more sensitive to temperature changes than the "Current Starved" and "SPMOS" topologies.
+
+The "SPMOS" topology is of particular interest, as it is highlighted in surrounding text as having the least frequency variation with changes in voltage, as shown in Figure 8 from the surrounding pages.
+
+**Overall Importance:**
+
+The image is crucial for understanding the stability of different ring oscillator designs under varying temperature conditions. A lower percentage variation in frequency implies a more stable and reliable oscillator, which is essential for many electronic applications. This figure provides visual evidence supporting the claim that Current Starved and SPMOS topologies are more temperature-stable than the Basic topology. Together with text on the surrounding pages, the SPMOS oscillator is also better than other topologies in voltage variance too. The bar chart simplifies the comparison and emphasizes the benefits of using the "Current Starved" or "SPMOS" topology for applications where temperature stability is a primary concern.
+
+
+=== Page 12 ===
+Fig.5 At constant temperature 27°C, Variation of Frequency at TT corner with Voltage ranges
+from 1.08Vto 1.32V.
+For the purpose of comparison, we implemented a number of topologiesat constanttemperature
+27C and process corner TT while varying the Voltage ranges from 1.08V to 1.32V.As shownin
+Fig. 8, the 7-Stage Current Starved Skewed PMOS Ring Oscillator (SPMOS) exhibits the least
+percentagevariation infrequency of4.472%, whencomparedto allothertopologies.
+Fig.6 Frequencyat differentprocesscorners
+12
+
+[Image page_12_image_0.png Analysis (by Gemini)]
+Here's an analysis of the provided image within the context of the research paper:
+
+**Visual Elements and Structure**
+
+The image is a bar graph. It has the following key elements:
+
+*   **Axes:**
+    *   X-axis: Labeled "Topologies".  It shows three categories: "Basic", "Current Starved", and "SPMOS" (7-Stage Current Starved Skewed PMOS Ring Oscillator).
+    *   Y-axis: Labeled "Frequency Variation in %". The scale ranges from 0 to 30 with marked increments at 0, 10, 20, and 30.
+*   **Bars:** Three rectangular bars, each corresponding to one of the oscillator topologies. The height of the bar represents the percentage frequency variation. The bars are maroon with black outlines.
+*   **Gridlines:** Horizontal gridlines are present at each increment of 10 on the Y-axis, aiding in estimating the values of the bars.
+
+**Text Visible Within the Image**
+
+*   **X-axis Labels:** "Basic", "Current Starved", "SPMOS"
+*   **Y-axis Label:** "Frequency Variation in %"
+*   **Axis Labels:** "Topologies"
+*   **Scale Values:** 0, 10, 20, 30
+
+**Data Points (Estimated from the Graph)**
+
+*   Basic: Approximately 24%
+*   Current Starved: Approximately 28%
+*   SPMOS: Approximately 5%
+
+**Context and Importance**
+
+Based on the surrounding text, the image is *Fig. 6. Frequency at different process corners*.
+
+*   **Overall Context:** The research paper investigates the performance of different ring oscillator topologies implemented in 65nm technology. The key performance metrics appear to be frequency variation, power dissipation, and stability across process corners, temperature, and voltage.
+*   **Importance of the Image:** The image presents a *comparison* of the frequency variation across different process corners for three ring oscillator topologies: Basic, Current Starved, and SPMOS.  Based on the text, this comparison is done at a constant voltage of 1.2V and temperature of 27°C.  The data shows that SPMOS has significantly less frequency variation compared to the Basic and Current Starved topologies.
+*   **Relationship to Surrounding Text:** The image is tied to the paragraph on page 12 which introduces it. The discussion relates to optimizing the frequency of oscillation while minimizing power consumption and maintaining stability across various operating conditions. The image directly supports these points by visually showing the comparative frequency variation of different ring oscillator topologies. The lower frequency variation for the SPMOS topology indicates that it has superior performance for frequency stability between process corners. The surrounding text, particularly on page 13, mentions power dissipation and the desire to minimize frequency variation. This image allows for a quick visual assessment of how these topologies compare.
+
+
+
+[Image page_12_image_1.png Analysis (by Gemini)]
+Here's an analysis of the image based on your instructions:
+
+**Visual Elements:**
+
+*   **Type:** Bar graph
+*   **Structure:** The graph has a horizontal x-axis and a vertical y-axis. Three vertical bars are shown, each representing a different oscillator topology. The height of each bar corresponds to the frequency variation (in percentage). Grid lines are present along the y-axis to aid in reading values.
+*   **Bars:** Three rectangular bars in dark red color.
+*   **Axes:**
+    *   **X-axis (Horizontal):** Labeled "Topologies."
+    *   **Y-axis (Vertical):** Labeled "Frequency Variation in %." Range is 0 to 40, incrementing by 10.
+
+**Text within the Image:**
+
+*   **X-axis Labels:**
+    *   Basic
+    *   Current Starved
+    *   SPMOS
+*   **Y-axis Labels:**
+    *   0
+    *   10
+    *   20
+    *   30
+    *   40
+
+**Context and Importance:**
+
+Based on the provided text from page 12 and the surrounding pages:
+
+*   **Purpose:** The graph in Fig. 6 visually compares the percentage frequency variations of three different ring oscillator topologies across various process corners. The study is conducted at a constant voltage of 1.2V and a constant temperature of 27°C.
+*   **Significance:** The graph is presented to compare the performance of "Basic Ring Oscillator," "Current Starved Ring Oscillator," and "7-Stage Current Starved Skewed PMOS Ring Oscillator (SPMOS)" concerning frequency stability under process variations. It helps to determine which topology is least affected by variations. The text on page 12, referring to figure 8 (in error) says that the 7-Stage Current Starved Skewed PMOS Ring Oscillator (SPMOS) exhibits the least percentage variation. However, the graph shows that SPMOS exhibits the *greatest* percentage variation. This would seem to be an error in the text, but could be the basis of future discussion within the paper.
+*   **Overall,** the image provides a crucial visual comparison of frequency stability among different oscillator designs and gives insights into which topology is more robust against process variations. This information is valuable for selecting the most appropriate oscillator design for specific applications where frequency stability is critical.
+
+In summary, the bar graph in Fig. 6 is a key visual aid for comparing the frequency variation performance of different ring oscillator topologies under process variations.
+
+
+
+=== Page 13 ===
+Basic Ring Oscillator has minimum frequency variation from one corners to various corners at
+1.2V and27°C is19.85%
+Table 1.PowerDissipation for differenttopologiesat 1.2V,TT cornerand Temperatureof 27C.
+Topology Power Dissipation(µW)
+BasicRing Oscillator 121
+CurrentStarvedRing Oscillator 4.95
+7-StageCurrentStarvedSkewedPMOS 7.96
+Ring Oscillator
+Table 1.PowerDissipation ofdifferenttopologies.
+As it can be seen that Current Starved Ring Oscillator with 4.95µW is giving less power
+dissipation without much compensation with frequency.The best performance in terms of
+frequency of operation and power consumption this topology is good among all the other
+topologies.
+\
+Table 2. Percentage Frequency Variations across Process Corners with temperature
+rangingfrom -40Cto 125C
+13
+
+[Image page_13_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image, its elements, and its context based on the provided text:
+
+**Image Description:**
+
+The image presents a table. The table is formatted with a blue background for column headers and alternating rows of a light blue and white for data. It compares the percentage frequency variations of three different ring oscillator topologies across various process corners.
+
+**Visual Elements and Structure:**
+
+*   **Table:** The primary visual element is the table itself.
+*   **Columns:** The table has four columns:
+    *   `corners`: Lists different process corners.
+    *   `Basic RO`: Provides data for the "Basic Ring Oscillator" topology.
+    *   `Current Starved RO`: Provides data for the "Current Starved Ring Oscillator" topology.
+    *   `CS Skewed PMOS RO (7stage)`: Provides data for the "Current Starved Skewed PMOS Ring Oscillator (7-stage)" topology.
+*   **Rows:** The table has six rows representing the following data:
+    *   Header row
+    *   `SS`: Slow-Slow process corner.
+    *   `TT`: Typical-Typical process corner.
+    *   `FF`: Fast-Fast process corner.
+    *   `SF`: Slow-Fast process corner.
+    *   `FS`: Fast-Slow process corner.
+
+**Text within the Image:**
+
+*   **Column Headers:**
+    *   `corners`
+    *   `Basic RO`
+    *   `Current Starved RO`
+    *   `CS Skewed PMOS RO (7stage)`
+*   **Row Labels (Process Corners):**
+    *   `SS`
+    *   `TT`
+    *   `FF`
+    *   `SF`
+    *   `FS`
+*   **Data Values:** The numeric values represent percentage frequency variations for each topology at each process corner. These values include:
+    *   `35.2, 35.83, 36.33, 36.56, 34.54` (for Basic RO)
+    *   `9.85, 9.69, 10.0, 9.47, 9.64` (for Current Starved RO)
+    *   `14.791, 11.378, 9.0124, 19.135, 19.135` (for CS Skewed PMOS RO)
+
+**Image Context and Importance:**
+
+The table represents "Table 2. Percentage Frequency Variations across Process Corners with temperature ranging from -40C to 125C" and its purpose is to compare how the frequency of different ring oscillator topologies changes under varying manufacturing process conditions (process corners) when the temperature varies between -40C and 125C.
+
+*   **Process Corners:** Process corners (SS, TT, FF, SF, FS) are combinations of manufacturing process variations that can affect the performance of integrated circuits. Analyzing across process corners is crucial for ensuring robustness and reliability of the design.
+
+*   **Ring Oscillator Topologies:** The table focuses on the percentage frequency variations of three different ring oscillator topologies: Basic, Current Starved, and Current Starved Skewed PMOS.
+
+*   **Significance:** The table provides quantitative data allowing the reader to directly compare the robustness of each ring oscillator design against process variations and temperature changes. A lower percentage variation generally indicates better stability and predictability.
+
+*   **Based on the text:** The text mentions that the 7-Stage Current Starved Skewed PMOS Ring Oscillator (SPMOS) exhibits the least percentage variation in frequency, when compared to all other topologies.
+
+*   **Based on the table:** Table 1 shows that the Current Starved Ring Oscillator has the lowest power dissipation.
+
+In summary, the image and its surrounding context highlight a tradeoff between power consumption and frequency stability. While the Current Starved Ring Oscillator offers lower power consumption, the Current Starved Skewed PMOS Ring Oscillator provides better frequency stability across process variations and temperature variations.
+
+The table, alongside the textual analysis, helps the reader understand the strengths and weaknesses of each topology, supporting informed design decisions.
+
+
+
+=== Page 14 ===
+Table 3.Percentage FrequencyVariationsacrossProcessCornerswith voltagerangefrom
+1.08V to1.32V
+14
+
+[Image page_14_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image based on your provided context:
+
+**Image Description**
+
+The image is a table displaying percentage frequency variations across different process corners for three ring oscillator (RO) topologies:
+
+*   **Basic RO:** Basic Ring Oscillator
+*   **Current Starved RO:** Current Starved Ring Oscillator
+*   **CS Skewed PMOS RO (7stage):** Current Starved Skewed PMOS Ring Oscillator
+
+**Visual Elements and Structure**
+
+*   The table has a header row indicating the process corners and the type of Ring Oscillator (RO) topology being evaluated.
+*   The rows represent different process corners (SS, TT, FF, SF, FS).
+*   Each cell within the table provides a numerical value, representing the percentage frequency variation for a given process corner and RO topology.
+
+**Text within the Image (OCR)**
+
+*   **Columns:** `corners`, `Basic RO`, `Current Starved RO`, `CS Skewed PMOS RO (7stage)`
+*   **Rows:** `SS`, `TT`, `FF`, `SF`, `FS`
+*   **Data Values:** The numerical values for each cell, e.g., `26.38`, `28.32`, `5.49`, `25.18`, `28`, `4.72`, `24`, `27.31`, `7.031`, `24.95`, `27.18`, `32.27`, `25.59`, `28.31`, `8.86`
+
+**Context and Importance**
+
+The image shows Table 3 from page 14 of a research paper that is exploring and analyzing different ring oscillator topologies.  Specifically, Table 3 complements the information in Table 2 from page 13, which dealt with frequency variations across temperature. Table 3 is focused on the effect of *voltage* variations on the same set of ring oscillator topologies.
+
+Here's what we can infer from the surrounding text:
+
+*   **Objective:** The research aims to compare the performance characteristics (frequency stability and power consumption) of different ring oscillator topologies.
+*   **Ring Oscillator Topologies:** The study focuses on Basic Ring Oscillators, Current Starved Ring Oscillators, and a specific variant: 7-Stage Current Starved Skewed PMOS Ring Oscillator.
+*   **Process Corners:** The analysis examines the performance of these oscillators under different "process corners" (SS, TT, FF, SF, FS). These process corners represent extreme variations in manufacturing process parameters. SS ("slow-slow") indicates slow NMOS and slow PMOS transistors, TT ("typical-typical") represents typical transistors, FF ("fast-fast") represents fast transistors, and SF/FS combinations represent mismatches.
+*   **Voltage Variation:** The text on page 14 explicitly mentions that the data in Table 3 is related to percentage frequency variations with a voltage range of 1.08V to 1.32V. This implies that the researchers varied the supply voltage and measured how much the oscillation frequency changed for each topology under different process corners.
+*   **Importance:** Table 3 highlights how the different ring oscillator designs respond to voltage variations across various process conditions. Understanding this is crucial for designers to choose the optimal topology for their specific application and to ensure robust performance even with variations in supply voltage and manufacturing. We can also infer from surrounding text that designers will need to weigh the performance gains (frequency stability) against potential increases in power consumption.
+
+**In Summary**
+
+The image is a table within a research paper illustrating the performance of different ring oscillator topologies under varying process and voltage conditions. It's critical to the study's overall goal of identifying the trade-offs associated with each topology and providing guidelines for designers to select the best option for their specific needs.
+
+
+
+=== Page 15 ===
+IV. CONCLUSION
+The study and analysis of various topologies of 5-stage and 7-stage ring oscillators have
+provided valuable insights into their performance characteristics and trade-offs. Each topology
+exhibits distinct advantages and limitations that cater to specific design requirements. The
+standard 5-stage ring oscillator topology offers simplicity and ease of implementation. Its
+balanced designensuressymmetricalpropagation delaysandapredictable oscillationfrequency.
+However, its susceptibilityto processvariationsandtemperature effectsmight limitits frequency
+stability and overall performance in demanding applications. The current starved ring oscillator
+topology addressespowerconsumptionconcerns byutilizingcurrent-starved inverters,leadingto
+reduced energy consumption. This makes it a favorable choice for low-power applications.
+However, the trade-off is often reflected in a compromise on operational frequency and a
+potential increase in delay variability.ThenegativePMOSskewed delay ringoscillator topology
+optimizes performance by adjusting PMOS behavior to mitigate PMOS-NMOS speed
+imbalances. This results in improved frequency of operation. Ultimately, the choice of ring
+oscillator topology shouldbe guidedbyathorough understanding ofthe application’soperational
+profile, power constraints, frequency requirements and tolerance for design complexity. By
+leveraging the strengths of these different topologies, designers can make informed decisionsto
+achieve optimalperformanceand efficiencyfor theirspecific.
+15
+
+=== Page 16 ===
+V. FUTURE WORK
+Exploring thefuture prospects ofthis projectinvolvesconsidering variousaspects:
+1. Technological Advancements: Thisprojectallows for further in-depthresearch andanalysisof
+new and improved ring oscillator topologies. Discovering new and more effective technical
+solutions canhelptheprojectadvanceand becomemoreadvanced.
+2. Energy Efficiency: Additionally, concentrating on energy efficiency is critical.Astechnology
+advances, there may be chances to improvethe energyefficiency ofring oscillatorseven further.
+This could include investigating novel techniques to reduce power consumption while
+maintaining or boostingperformance.
+3. Applications in Emerging Technologies: The project's insights and improved topologies may
+have applications in emerging technology. For example, low-power circuits are in high demand
+in avarietyof industries,including Internet ofThings(IoT) andwearabletechnologies. Adapting
+theproject'soutcomes totheseareas couldlead tonewopportunities.
+4. Integration with Other Systems: Consider how the project can interact with or enhance
+existing systems and technologies. This interdisciplinary approach may result in collaborative
+projects that leverage the capabilities of many components to provide more comprehensive
+solutions.
+5. Further Optimization: Continuous efforts toimprovethe performanceof ring oscillatorsbased
+on real-world input and increasing technology standards willbe critical.Thisiterativeprocedure
+canhelptheprojectstay relevant andeffectiveover time.
+Finally, the future of this project seems promising in terms of technological developments,
+energy efficiency gains, applications in emerging industries, integration opportunities, and
+continued optimization efforts. By remaining focused on these factors, the project can continue
+to progressand contributetothe ever-changingfieldof electronicdesign.
+16
+
+=== Page 17 ===
+VI. REFERENCES
+[1] C. Jayaram and P. S. Rao, "A 10-MHz CMOS-based Ring Oscillator with Low Power
+consumption For On-chip IC Applications," 2022 IEEE International Symposium on Smart
+Electronic Systems (iSES), Warangal, India, 2022, pp. 53-56, doi:
+10.1109/iSES54909.2022.00022.
+[2] V. Kalenteridis, K. P. Pagkalos, O. Panetas-Felouris and S. Vlassis, "A CMOS VCO ring
+oscillator suitable for wide supply range applications," 2023 12th International Conference on
+Modern Circuits and Systems Technologies (MOCAST), Athens, Greece, 2023, pp. 1-4, doi:
+10.1109/MOCAST57943.2023.10176444.
+[3] H. H. Hammam, K. M. Hassan and S. A. Ibrahim, "An Ultra Low-Power
+Process-andTemperature Compensated Ring Oscillator," 2022 9th International Conference on
+Electrical and Electronics Engineering (ICEEE), Alanya, Turkey, 2022, pp. 1-5, doi:
+10.1109/ICEEE55327.2022.9772521.
+[4] Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, “Electron spectroscopy studies on
+magneto-optical media and plastic substrate interface,” IEEE Transl. J. Magn. Japan, vol. 2,pp.
+740–741,August 1987[Digests 9thAnnualConf.Magnetics Japan, p.301,1982].
+[5] Wadhwa, N., Bahubalindruni, P.G., Deb, S. (2019). A PVT Insensitive Low-Power
+Differential Ring Oscillator. In: Rajaram, S., Balamurugan, N., Gracia Nirmala Rani, D., Singh,
+V. (eds)VLSIDesignand Test. VDAT2018.Communicationsin Computerand Information
+Science,vol 892.Springer,Singapore.https://doi.org/10.1007/978-981-13-5950-7_7
+[6] W. Elgharbawy and M. Bayoumi, "A novel ultra-low-energy bulk dynamicthreshold PMOS
+scheme," 2003 46th Midwest Symposium on Circuits and Systems, Cairo, Egypt, 2003, pp.
+1388-1391 Vol. 3,doi: 10.1109/MWSCAS.2003.1562554.
+[7] S. K. Dash, S. N. Mishra, A. Bakshi and J. R. Panda, "Design of a Ring Oscillator for IoT
+Applications," 2023 International Conference on Intelligent Data Communication Technologies
+and Internet of Things (IDCIoT), Bengaluru, India, 2023, pp. 101-104,
+doi:10.1109/IDCIoT56793.2023.10053537.
+[8] Rajalingam, P., Jayakumar, S. & Routray, S. Design and Analysis of Low Power and High
+Frequency Current Starved Sleep Voltage Controlled Oscillator for Phase Locked Loop
+Application. Silicon13,2715–2726(2021). https://doi.org/10.1007/s12633-020-00619-7
+17
+

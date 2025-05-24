@@ -1,0 +1,860 @@
+=== Page 1 ===
+Charge Pump Topologies For Non Volatile Memories
+Submitted by
+Kalash Patil (MT23172)
+Under the supervision of
+Dr. Anuj Grover
+Indraprastha Institute of Information Technology, Delhi
+December 2024
+Submitted
+in partial fulfillment of the requirements for the degree of Master of Technology to
+Indraprastha Institute of Information Technology, Delhi
+December 2024
+©2024 Indraprastha Institute of Information Technology New Delhi , All rights reserved
+
+[Image page_1_image_0.jpeg Analysis (by Gemini)]
+Here's an analysis of the image in the context of the provided research paper information:
+
+**Visual Element Description:**
+
+The image is a logo. It consists of a stylized representation of the letters "IIITD." The "IIIT" portion is constructed from three rectangular bars of varying shades of gray. The "D" is represented by a teal-colored semi-circle, connected to the last gray rectangle.
+
+**Text within the Image:**
+
+There is no directly readable text within the image itself, but the arrangement of the shapes is intended to resemble the letters "IIITD."
+
+**Context and Significance:**
+
+Based on the surrounding text, the research paper is a Master's thesis titled "Charge Pump Topologies For Non-Volatile Memories" submitted by Kalash Patil to Indraprastha Institute of Information Technology, Delhi (IIITD).
+
+Therefore, the logo is the official logo for Indraprastha Institute of Information Technology, Delhi (IIITD). Its appearance on the title page signifies that the research was conducted at this institution and that the paper is an official publication of the institute. Including the logo lends legitimacy and institutional affiliation to the work.
+
+
+
+=== Page 2 ===
+1
+Certificate
+This is to certify that the capstone titled “Charge Pump topologies for non-volatile
+memories” submitted by Kalash Patil for the partial fulfillment of the requirements
+for the degree of Master of Technology in VLSI & Embedded Systems is a record of
+the bonafide work carried out by them under my guidance and supervision in the
+VLSI Circuits & System Lab group at Indraprastha Institute of Information
+Technology, Delhi. This work has not been submitted anywhere else for the reward
+of any other degree.
+Dr. Anuj Grover
+………………………
+2
+
+=== Page 3 ===
+Acknowledgment
+We take this opportunity to express our profound gratitude and deep regards to the
+Department of Electronics and Communication Engineering at Indraprastha Institute
+of Information Technology, Delhi, for providing us with this outstanding curriculum
+in the Master’s program. We gratefully acknowledge Professor Dr. Anuj Grover,
+Associate Professor, Indraprastha Institute of Information Technology - Delhi, for
+his cordial support, sound guidance, valuable information, monitoring, and
+encouragement throughout this project.
+Finally, we would like to express my sincere thanks to Ph.D. Scholar Mr.
+Ashutosh for her constant guidance and to all my friends and group mates who
+helped me directly or indirectly during this project work. We will strive to use gained
+skills and knowledge in the best possible way.
+3
+
+=== Page 4 ===
+List of Contents
+Title Page No.
+Abstract ………………….……………………………………..5
+List of Figures…………………………………………………..6
+1. Introduction…………………………………………………….7
+1.1 Introduction……………………………………………………….7
+1.2 Problem Statement………………………………………………..8
+2. Literature Review………………………………………………9
+3. Design Analysis & Proposed Work………………………...…17
+4. Results & Analysis……………………………………………..19
+5. Conclusion And Future Enhancement……………………….27
+References…………………………………………………………28
+4
+
+=== Page 5 ===
+Abstract
+This review presents an extensive examination of various charge pump
+topologies tailored for non-volatile memory (NVM) applications, essential for
+data retention without power. Charge pumps, pivotal in generating necessary
+high voltages for write and erase operations in low-power NVMs such as
+EEPROM and flash memory, are scrutinized for their design and efficiency.
+Traditional topologies like the Dickson charge pump, known for its voltage
+multiplication capabilities, are analyzed alongside modern advancements
+including improved Dickson schemes, cross-coupled charge pumps, and
+substrate control techniques. Each topology is evaluated based on parameters
+such as voltage efficiency, power consumption, and implementation complexity.
+Enhanced configurations that address the inherent limitations of conventional
+designs, such as threshold voltage losses and leakage currents, are highlighted.
+The study underscores the continuous evolution of charge pump circuits to meet
+the stringent demands of contemporary NVM technologies, offering insights
+into future directions for optimizing these critical components in memory
+applications.
+5
+
+=== Page 6 ===
+List of Figures
+Fig 2.1 : Basic Dickson Charge Pump
+Fig 2.2 : 1 stage of basic cross coupled charge pump
+Fig 2.3 : Clock Booster Circuit
+Fig 2.4 : 3-stage clock booster charge pump
+Fig 2.5 : 1-stage of pmos based charge pump
+Fig 2.6 : 1-stage of Dickson Charge Pump With Substrate Control.
+Fig 3.1 : Clock Booster Circuit
+Fig 3.2 : Cross Coupled Charge Pump
+Fig 4.1: Vout VS Time
+Fig 4.2: Iout VS Vout
+Fig 4.3: Iout VS Time
+Fig 4.4: Gain Margin
+Fig 4.5: DC Sweep w.r.t Load
+Fig 4.6: Efficiency VS Load
+Fig 4.7: Efficiency VS No Of Stages
+Fig 4.8 : Vout VS Vin
+Fig 4.9 : layout without pumping capacitor
+Fig 4.10 : DRC Window
+Fig 4.11 : Layout With Pumping Capacitor
+Fig 4.12 : Result of Eldo Simulation for Cross Coupled Charge Pump with Clock Booster.
+6
+
+=== Page 7 ===
+CHAPTER-1
+INTRODUCTION
+1.1 Introduction
+Charge pump circuits play a critical role in modern electronics, offering efficient
+solutions for generating higher or lower voltage levels without the need for bulky
+inductors or transformers. Among the various topologies, the Dickson Charge Pump
+(DCP) stands as a classic approach, widely used for its simplicity and ability to
+achieve high output voltages. However, it suffers from inherent limitations, such as
+threshold voltage loss and efficiency drops due to parasitic elements. To address
+these challenges, alternative topologies and techniques have been developed, each
+aiming to improve the performance metrics of charge pumps.
+One such topology is the Cross-Coupled Charge Pump (CCCP), which leverages
+complementary branches of NMOS and PMOS transistors. The alternating clock
+signals enable efficient charge transfer across capacitors, significantly reducing the
+threshold voltage loss that plagues the Dickson Charge Pump. This topology
+achieves higher efficiency and greater output voltage but faces design challenges,
+including reversion loss, conduction loss, and short-circuit loss.
+In addition, advanced techniques like the Clock Booster enhance the performance of
+charge pumps by increasing the clock signal amplitude. This approach improves
+gain, reduces the number of stages required, and leads to faster rise times and
+potential silicon area savings. The clock booster topology, when combined with the
+Dickson Charge Pump or Cross-Coupled Charge Pump, can further optimize
+performance metrics such as output voltage, efficiency, and gain.
+This project delves into a detailed analysis and comparison of various charge pump
+topologies, including the Dickson Charge Pump, Cross-Coupled Charge Pump, and
+Clock Booster configurations. Through extensive simulations and evaluations, the
+project explores key performance parameters such as output voltage (Vout), output
+current (Iout), gain, efficiency, rise time, and phase response under varying
+conditions, including supply voltage, load, and the number of stages. The objective
+is to identify and analyze the trade-offs among these topologies and optimize them
+for specific applications, ensuring maximum efficiency and performance in real-
+world scenarios.
+7
+
+=== Page 8 ===
+By understanding the strengths and limitations of these topologies and techniques,
+this study aims to contribute to the development of more efficient charge pump
+designs suitable for modern integrated circuits and power management systems.
+1.2 Problem Statement
+Our project involves analyzing various charge pump topologies for non-volatile
+memories and conducting a detailed comparison in terms of power, performance,
+and area (PPA) to identify the most optimal topology. The goal is to understand the
+trade-offs and design considerations inherent in each topology, evaluate their
+suitability for different memory applications, and select the best approach based on
+comprehensive PPA metrics. Additionally, we aim to consider factors such as
+scalability, ease of integration into existing systems, and potential challenges in
+implementation. Through this analysis, we seek to recommend a charge pump
+topology that offers the most balanced and efficient solution for modern non-volatile
+memory technologies.
+8
+
+=== Page 9 ===
+CHAPTER-2
+LITERATURE REVIEW
+2.1 Different Topologies of Charge Pump
+2.1.1 Dickson Charge Pump : The Dickson charge pump is a type of voltage
+multiplier circuit that John F. Dickson originally proposed in the late 1970s. It is
+commonly used in integrated circuits to generate higher voltages from a lower supply
+voltage, particularly in applications like EEPROM and flash memory programming.
+The conventional four-stage Dickson charge pump consists of capacitors and
+transistors. These components are arranged such that each capacitor is connected to
+the next through a transistor, and nonoverlapping clock signals drive all stages.
+Dickson charge pump has several disadvantages, including threshold voltage drops
+across each diode, reverse charge sharing between stages, reduced efficiency with
+increased stages, higher power consumption due to the need for non-overlapping
+clock signals, and performance degradation from leakage currents in modern
+semiconductor processes.
+Fig 2.1: Basic Dickson Charge Pump
+The output voltage of an N-stage Dickson Charge Pump is given as –
+1
+V
+out
+= V
+in
++N .
+C
+1+
+C
+2.1.2 Cross Coupled Charge Pump: Cross-Coupled Charge Pump, which
+consists of complementary branches with NMOS and PMOS transistors. The
+9
+
+[Image page_9_image_0.jpeg Analysis (by Gemini)]
+Here's a comprehensive analysis of the image based on the provided context:
+
+**Visual Elements and Structure:**
+
+The image depicts a schematic diagram of a five-stage Dickson charge pump circuit. Here's a breakdown:
+
+*   **Stages:** The circuit consists of five nearly identical stages connected in series.
+*   **Components:** Each stage primarily consists of a MOSFET transistor (labeled MD1, MD2, MD3, MD4, and MD5) acting as a diode-connected transistor and a capacitor (labeled C1, C2, C3, C4).
+*   **Transistors:** The MOSFETs have their gates connected to their drains, creating a diode-like behavior. The source of each transistor is connected to ground through a capacitor.
+*   **Capacitors:** Each capacitor is connected between the source of a transistor and ground. There is also a capacitor (Cf) connected to the output terminal (Vout) and ground.
+*   **Clock Signals:** Two non-overlapping clock signals, CLK1 and CLK2, are used to drive the capacitors in an alternating fashion. Specifically, the odd-numbered capacitors (C1 and C3) are connected to CLK1, while the even-numbered capacitors (C2 and C4) are connected to CLK2. Cf is not connected to a clock.
+*   **Input Voltage:** The circuit is powered by an input voltage Vdd, which is connected to the first transistor (MD1).
+*   **Output Voltage:** The output voltage (Vout) is generated at the end of the chain, after the fifth stage.
+
+**Text Within the Image:**
+
+*   **Vdd:** Represents the input DC voltage supply.
+*   **Vout:** Represents the output voltage generated by the charge pump.
+*   **MD1, MD2, MD3, MD4, MD5:** Labels the individual MOSFET transistors in each stage.
+*   **C1, C2, C3, C4:** Labels the capacitors in each stage.
+*   **Cf:** Labels the output capacitor.
+*   **Clk1, Clk2:** Labels the two non-overlapping clock signals.
+
+**Context and Importance:**
+
+Based on the surrounding text, this image (Fig 2.1) is fundamental to understanding the Dickson charge pump, a crucial circuit for generating higher voltages from lower ones in integrated circuits. Specifically:
+
+*   **Literature Review:** The image is included in the "Literature Review" chapter, indicating it's a well-established and fundamental concept.
+*   **Charge Pump Topologies:** The surrounding text mentions different charge pump topologies. This figure illustrates the most basic type of Dickson charge pump.
+*   **Problem Statement Relevance:** The problem statement mentions the analysis of various charge pump topologies for non-volatile memories. The Dickson charge pump is commonly used in EEPROM and flash memory programming as mentioned in the text, so understanding its operation is critical to the project's goal of finding the optimal topology.
+*   **Disadvantages of Dickson Charge Pump:** The text also mentions the disadvantages of the Dickson charge pump, such as threshold voltage drops, reverse charge sharing, and reduced efficiency. These drawbacks motivate the need for exploring and potentially developing improved charge pump designs, which the research project aims to address.
+*   **Comparison with Other Topologies:** The text also refers to other charge pump topologies like "Cross Coupled Charge Pump," which indicates that the Dickson charge pump (shown in the image) will be compared with other approaches in terms of power, performance, and area.
+*   **Clock Booster Circuits:** The fact that clock booster circuits are also discussed nearby emphasizes the importance of clock signals (Clk1, Clk2 in the image) in the operation and performance of charge pumps.
+
+**Overall Significance:**
+
+The image is a visual representation of a foundational circuit topology for voltage multiplication. Understanding the Dickson charge pump, including its structure, operation, and limitations (as described in the surrounding text), is essential for researchers aiming to develop more efficient and optimized charge pump designs for modern integrated circuits and non-volatile memory technologies. The image provides a concrete visualization of the concepts discussed in the literature review, making it easier to grasp the principles behind charge pump operation.
+
+
+
+[Image page_9_image_1.png Analysis (by Gemini)]
+Here's an analysis of the image based on the provided text and image:
+
+**Image Description:**
+
+The image shows a circuit diagram representing a basic Dickson charge pump. The diagram illustrates a four-stage circuit consisting of capacitors (C1, C2, C3, C4) and transistors (presumably diodes, given the description, but the exact transistor type isn't visually clear from this representation). The circuit is arranged in a cascade, where each capacitor is connected to the next through a transistor. Non-overlapping clock signals drive all the stages. The input voltage is labeled as Vin, and the output voltage is labeled as Vout. The clock signals driving the stages are labeled as Phi1 and Phi2.
+
+**Text within the Image:**
+
+*   Vin (input voltage)
+*   Vout (output voltage)
+*   C1, C2, C3, C4 (capacitors)
+*   Phi1, Phi2 (clock signals)
+
+**Context and Significance:**
+
+The image (Fig 2.1: Basic Dickson Charge Pump) visually represents the core concept discussed in Section 2.1.1 of the literature review. The surrounding text describes the Dickson charge pump as a voltage multiplier used in integrated circuits to generate higher voltages from a lower supply voltage, particularly for EEPROM and flash memory programming. The diagram complements the text by providing a visual representation of the circuit's architecture, showing how capacitors and transistors are connected to achieve voltage multiplication.
+
+The text also highlights the advantages and disadvantages of the Dickson charge pump. The image helps to understand the physical structure contributing to these limitations. For example, it visually reinforces the cascaded structure, which contributes to the threshold voltage drops and reduced efficiency with increasing stages, mentioned in the text.
+
+The image is important because it bridges the gap between the theoretical explanation and the practical implementation of the Dickson charge pump. It provides a concrete visual aid for understanding the circuit's operation and the relationship between its components. Furthermore, in the context of the paper's problem statement (analyzing and comparing charge pump topologies for non-volatile memories), understanding the Dickson charge pump (as depicted in the image) is a crucial starting point. The image serves as a reference point for discussing improvements and alternative topologies later in the literature review. The formula provided after the figure caption helps estimate the Vout of Dickson Charge Pump.
+
+
+
+[Image page_9_image_2.png Analysis (by Gemini)]
+Here's an analysis of the image, based on the surrounding text and the image itself (which seems to be a schematic of a Dickson charge pump):
+
+**Visual Elements and Structure:**
+
+The image appears to be a circuit diagram, likely a schematic. Based on the text and context, it depicts a *Dickson Charge Pump* circuit. The specific visual elements we would expect to see in such a diagram are:
+
+*   **Capacitors:** These would likely be represented by two parallel lines.
+*   **Transistors (acting as diodes):** Likely diodes represented by a triangle pointing to a line.
+*   **Connections (Wires):** Lines indicating electrical connections between components.
+*   **Clock Signals (Φ1, Φ2):** Symbols to represent the non-overlapping clock signals driving the circuit.
+*   **Input Voltage (Vin):** A label and connection point for the input voltage.
+*   **Output Voltage (Vout):** A label and connection point for the output voltage.
+
+**Text within the Image (based on context - the image itself is black):**
+
+We can infer the labels within the image based on the surrounding text:
+
+*   **Vin:**  Indicates the Input Voltage of the Charge Pump.
+*   **Vout:** Indicates the Output Voltage of the Charge Pump.
+*   **Φ1:** Represents one of the non-overlapping clock signals.
+*   **Φ2:** Represents the other non-overlapping clock signal.
+*   **C:** Likely represents the Capacitors.
+
+**Image Context and Importance:**
+
+Based on the surrounding text, the image represents a key component of the research: the *Dickson Charge Pump*.
+
+*   **Chapter Context:** The image appears in Chapter 2, "Literature Review," specifically section 2.1, "Different Topologies of Charge Pump." This places it within a broader discussion of various charge pump designs.
+*   **Dickson Charge Pump Significance:** The text explicitly states that the Dickson charge pump is a common voltage multiplier used in integrated circuits, especially for EEPROM and flash memory programming.
+*   **Purpose of the Image:** The image (Fig 2.1: Basic Dickson Charge Pump) serves to visually illustrate the structure and components of this charge pump topology. It is essential for readers to understand the arrangement of capacitors, transistors, and clock signals.
+*   **Problem Statement Relation:** The problem statement on page 8 mentions analyzing charge pump topologies in terms of power, performance, and area (PPA). Understanding the basic Dickson charge pump, as presented in the image, is the *first step* in this analysis. Later topologies are compared to and contrasted with the Dickson.
+*   **Limitations:** The text also mentions limitations of the Dickson charge pump, such as threshold voltage drops, reverse charge sharing, and reduced efficiency. These limitations motivate the exploration of alternative topologies.
+*   **Contribution of Study:** The research aims to contribute to developing more efficient charge pump designs. The Dickson charge pump is the starting point for understanding these improvements.
+
+In summary, the image is crucial because it visually represents the foundational Dickson charge pump, allowing readers to understand its operation and limitations before the study delves into more advanced topologies and optimizations. The image provides a concrete understanding that is necessary for the reader to grasp the subsequent analysis and comparisons.
+
+
+
+[Image page_9_image_3.png Analysis (by Gemini)]
+Here's an analysis of the provided image based on the surrounding text and general knowledge of electrical circuits:
+
+**Image Analysis**
+
+*   **Visual Elements:** The image depicts a schematic diagram of an N-stage Dickson Charge Pump. This is evident from the arrangement of components which is consist of capacitors and transistors
+*   **Components:** The key components present are:
+    *   Capacitors: Represented by two parallel lines.
+    *   Transistors/Diodes: Represented by the standard circuit symbol (arrow pointing in one direction)
+    *   Clock Signals: Shown as inputs labeled "Φ" (Phi). These likely represent non-overlapping clock signals driving the transistors.
+*   **Structure:** The structure consists of repeating stages connected in series. Each stage includes a capacitor and a transistor. The output of each stage connects to the input of the next, effectively creating a cascade. Non-overlapping clock signals (Φ1, Φ2) are used to control the switches within each stage, ensuring charge transfer in the correct direction.
+*   **Text within the image:**
+
+    *   **Φ1:** Clock signal 1
+    *   **Φ2:** Clock signal 2
+    *   **C:** Capacitor (labeled at each capacitor element)
+    *   **Vin:** Input Voltage
+    *   **Vout:** Output Voltage
+
+**Context and Importance**
+
+*   **Overall Context:** The image is part of a literature review on charge pump topologies within a research paper focused on charge pumps for non-volatile memories. The Dickson charge pump is being presented as a foundational topology.
+*   **Importance:** The Dickson charge pump serves as a starting point for understanding more advanced charge pump designs. While it has limitations (as mentioned in the surrounding text), it provides a basic mechanism for voltage multiplication. The image is essential for visually representing the structure and operation of this fundamental topology. It allows the reader to quickly understand how capacitors and transistors are arranged to achieve voltage boosting. Understanding the Dickson charge pump is crucial before delving into more complex designs like cross-coupled charge pumps, also discussed in the document. The later topologies try to address the disadvantages (threshold voltage drops, etc.) of the Dickson charge pump.
+
+In summary, the image is a visual aid that clarifies the structure of a basic Dickson charge pump, which is the basis for other charge pump topologies and used to increase voltage in a variety of applications. The analysis of this topology will contribute to the development of more efficient charge pump designs.
+
+
+
+[Image page_9_image_4.png Analysis (by Gemini)]
+Here's an analysis of the image, based on the provided text and context:
+
+**Image Description:**
+
+The image is a circuit diagram representing a basic Dickson charge pump. It consists of the following visual elements:
+
+*   **Capacitors (C1, C2, C3, C4):** Four capacitors, arranged in series. These are labelled C1, C2, C3, and C4.
+*   **Diodes (D1, D2, D3, D4):** Four diodes are connected between the capacitors. They are labelled D1, D2, D3, and D4.
+*   **Clock Signals (Φ1, Φ2):** Two alternating clock signals, denoted as Φ1 and Φ2, are connected to the capacitors. The clock signals are offset by 180 degrees to provide the voltage swings to the capacitors.
+*   **Input Voltage (Vin):** An input voltage source labelled "Vin" is at the left of the diagram.
+*   **Output Voltage (Vout):** An output voltage node labelled "Vout" is at the right of the diagram.
+
+**Text within the Image:**
+
+*   Vin (Input Voltage)
+*   Vout (Output Voltage)
+*   Φ1, Φ2 (Clock Signals)
+*   C1, C2, C3, C4 (Capacitors)
+*   D1, D2, D3, D4 (Diodes)
+
+**Image Context and Importance:**
+
+The image illustrates a key component of the project: the Dickson charge pump. The surrounding text describes the function of the Dickson charge pump as a voltage multiplier commonly used in integrated circuits to generate higher voltages from a lower supply voltage. The text specifically mentions applications in EEPROM and flash memory programming. The image (Fig 2.1: Basic Dickson Charge Pump) is essential to understand the working principle of this type of charge pump. The text also highlights the disadvantages of this topology, such as threshold voltage drops and reverse charge sharing.
+The analysis of charge pump topologies is central to the project's goal, which is to identify the most optimal topology for non-volatile memories based on power, performance, and area (PPA) metrics. This image serves as a visual representation of one of the topologies being considered and analyzed.
+The inclusion of the equation for the output voltage (Vout = Vin + N . C / (1 + C)) reinforces the quantitative aspect of the analysis.
+
+The image provides a basic understanding of the circuit, thus helping in the deeper understanding of charge pump topologies and the analysis of their performance.
+
+
+[Image page_9_image_5.png Analysis (by Gemini)]
+Okay, I will analyze the image and provide a comprehensive description as requested.
+
+**Analysis of the Image**
+
+The image appears to be completely black/dark and does not reveal any visual elements (e.g., graphs, diagrams, photos, charts). Therefore, it is impossible to analyze its structure, significance, or identify any text within it.
+
+**Context and Importance (Based on Surrounding Text)**
+
+Despite the image being uninterpretable, the context from the surrounding text on page 9 and adjacent pages allows us to infer its intended purpose.
+
+*   **Overall Context:** The surrounding text is from a chapter on "Literature Review," specifically discussing different topologies of charge pumps. Charge pumps are circuits that generate higher voltages from a lower supply voltage and are used in integrated circuits, particularly in EEPROM and flash memory programming. The project aims to analyze different charge pump topologies for non-volatile memories and identify the most optimal one based on power, performance, and area (PPA) metrics.
+
+*   **Importance of the missing Figure 2.1 (Inferred):** Given the section is titled "Dickson Charge Pump," and the caption is "Fig 2.1: Basic Dickson Charge Pump," the image is meant to show a schematic diagram of a basic Dickson charge pump circuit. A schematic diagram would typically show transistors, capacitors, and connections between them, illustrating how the circuit works to multiply voltage. Understanding the basic Dickson charge pump is essential as the text describes its operation, advantages, and disadvantages.
+
+*   **Significance of the Dickson Charge Pump:** The text highlights that the Dickson charge pump is a fundamental topology, but it suffers from limitations like threshold voltage drops and reduced efficiency with increased stages.  This motivates the need to explore other charge pump topologies and potentially improve upon the Dickson design.
+
+**In summary:** The image is intended to visually represent the "Basic Dickson Charge Pump," a fundamental circuit in voltage multiplication.  Its absence hinders a complete understanding of the topic discussed in the "Literature Review" and the subsequent research. The surrounding text emphasizes the importance of understanding different charge pump topologies and their trade-offs for efficient memory applications.
+
+
+
+[Image page_9_image_6.png Analysis (by Gemini)]
+Here's an analysis of the image, based on the provided context and visible elements:
+
+**Image Analysis:**
+
+The image is a circuit diagram.  It depicts a four-stage Dickson charge pump. The key components visible are:
+
+*   **Capacitors (C1, C2, C3, C4):** These are represented by two parallel lines, indicating their role in storing charge.
+*   **Diodes:** These are represented by triangles pointing towards a vertical line, which connect each capacitor to the next stage and the input voltage.
+*   **Voltage Source (Vin):** Located at the input side of the circuit.
+*   **Output Voltage (Vout):** Located at the output side of the circuit.
+*   **Clock Signals (Φ1, Φ2):** These are inputs to the circuit, controlling the switching of the transistors. Note that two different clock signals, Phi1 and Phi2, are used.
+
+**Text within the Image:**
+
+*   `Vin`: Indicates the input voltage.
+*   `Vout`: Indicates the output voltage.
+*   `C1`, `C2`, `C3`, `C4`: Labels for the capacitors in each stage.
+*   `Φ1`: Clock Signal 1
+*   `Φ2`: Clock Signal 2
+
+**Context and Significance:**
+
+*   **Overall Context:** The image illustrates the basic architecture of a Dickson charge pump, a voltage multiplier circuit commonly used in integrated circuits. This circuit is a critical component in applications requiring higher voltages than the available supply voltage, such as in EEPROM and flash memory programming.
+*   **Importance based on Text:**
+    *   The text from page 9 explicitly states, "Fig 2.1: Basic Dickson Charge Pump." Therefore, the image serves as a visual representation of the Dickson charge pump topology discussed in Section 2.1.1 of the literature review.
+    *   The surrounding text mentions the advantages and disadvantages of Dickson charge pumps, like threshold voltage drops and reverse charge sharing.  The image helps the reader understand how these issues arise from the circuit's architecture.
+    *   The formula on page 9 for Vout reinforces the purpose of the circuit: to generate an output voltage that is a multiple of the input voltage, determined by the number of stages (N). The diagram helps visualize how this multiplication is achieved through the arrangement of capacitors, diodes, and clock signals.
+    *   The surrounding pages discussing other charge pump topologies (Cross-Coupled Charge Pump) highlight the need for comparisons.  This Dickson charge pump diagram serves as a baseline topology for understanding the strengths and weaknesses of other designs.
+*   **In Summary:** The image is essential for understanding the fundamental operation of a Dickson charge pump.  It visually clarifies the description in the text, making the abstract concepts more concrete. It is also important in the context of the overall research to understand the basic operation of the dickson charge pump before comparing it to other topologies.
+
+
+
+[Image page_9_image_7.png Analysis (by Gemini)]
+Okay, I've analyzed the image and the surrounding text provided.
+
+**Image Analysis**
+
+The image appears to be completely black. This means there is no visible information within the image itself.
+
+**Text within the image:**
+
+There is no text visible in the image.
+
+**Context and Importance:**
+
+Given that the image is completely black, the assumption must be that the image is not properly loading or has been intentionally omitted. The text on page 9 refers to "Fig 2.1: Basic Dickson Charge Pump" and mentions a conventional four-stage Dickson charge pump consisting of capacitors and transistors. Therefore, the missing image should visually represent a circuit diagram of a basic Dickson Charge Pump.
+
+The surrounding text discusses various charge pump topologies for non-volatile memories and their comparison. The image is important as it provides a visual representation of one of the fundamental charge pump topologies, which is essential for understanding its operation and comparing it to other topologies. The goal is to improve charge pump design for use in integrated circuits and power management systems.
+
+
+
+=== Page 10 ===
+capacitors store and transfer charge between different stages driven by alternating
+clock signals. The elimination of threshold voltage loss, which is common in
+Dickson charge pumps, and generally higher efficiency due to avoiding large voltage
+drops are key advantages of this topology. However, the cross-coupled charge pump
+faces challenges such as reversion loss due to improper clock timing, conduction loss
+from the resistance of the MOSFETs, and short-circuit loss when both NMOS and
+PMOS transistors turn on simultaneously.
+Fig 3.3: Current Starved Stacked Ring Oscillator
+Fig 2.2: 1 stage of basic cross coupled charge pump
+2.1.3 Clock Booster Circuit: A clock booster circuit is a specialized topology
+designed to increase the amplitude of a clock signal, making it suitable for
+applications requiring high-voltage clocks to drive capacitive loads, such as charge
+pump circuits. This topology is essential in scenarios where standard low-voltage
+clock signals are insufficient to efficiently charge capacitive loads or meet the
+operational requirements of the circuit. By boosting the clock amplitude, the circuit
+ensures better driving capability and enhances performance, particularly in high-
+voltage operations.
+The primary advantages of using a clock booster include its ability to effectively
+drive large capacitive loads, improve the efficiency of charge pump circuits, and
+integrate seamlessly into compact designs without significant overhead. However,
+there are also disadvantages, such as increased power consumption, which can be a
+concern for low-power applications. Additionally, the incorporation of a clock
+10
+
+[Image page_10_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 11 ===
+booster adds complexity to the design and may introduce noise or coupling issues in
+sensitive parts of the circuit.
+The practical impact of the proposed differential charge pump (DCP) with a clock
+booster (CKB) topology is significant for non-volatile memory applications. It
+reduces rise time considerably, which is crucial for improving operational speed, or
+alternatively, it can save silicon area while maintaining the same level of
+performance. Furthermore, the design provides flexibility, allowing designers to
+trade off between speed and area based on specific application requirements, making
+it highly adaptable to diverse scenarios.
+Fig 2.3: Clock Booster Circuit
+2.1.4 Cross Coupled charge pump with Clock Booster: A clock booster integrated
+with a cross-coupled charge pump is a specialized circuit topology designed to
+enhance the efficiency and performance of charge pump systems. In this design, the
+clock booster amplifies the amplitude of the clock signals before driving the cross-
+coupled charge pump stages. This boosted clock signal improves the pump's ability
+to charge the output capacitance efficiently, enabling the generation of higher output
+voltages.
+The use of a cross-coupled topology in conjunction with a clock booster provides
+key advantages. The cross-coupled structure inherently reduces voltage ripple at the
+output and enhances charge transfer efficiency by balancing the operation of
+complementary charge transfer paths. When combined with a clock booster, the
+overall system can achieve higher pumping efficiency and reduced rise time, which
+is crucial for applications like non-volatile memory programming and high-voltage
+driver circuits.
+11
+
+[Image page_11_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 12 ===
+The advantages of this topology include improved driving capability for large
+capacitive loads, higher efficiency in voltage generation, and reduced rise time,
+which enhances the speed of operation. Additionally, it offers flexibility in
+optimizing the circuit for speed or area depending on application-specific needs.
+However, this approach also comes with challenges, such as increased power
+consumption due to the clock boosting stage and potential design complexity arising
+from integrating the clock booster with the cross-coupled pump.
+Fig 2.4: 3-stage clock booster charge pump
+2.1.5 Dickson Charge Pump with Clock Booster: This combines the functionality
+of a clock booster circuit with the traditional Dickson charge pump topology to
+enhance voltage generation efficiency. The Dickson charge pump, a popular
+topology for voltage multiplication, relies on diodes or diode-connected transistors
+and capacitors to transfer and boost charge progressively across stages. However,
+the voltage gain in a Dickson charge pump is influenced by the amplitude of the
+clock signals used to drive the capacitors.
+By incorporating a clock booster, the amplitude of the clock signals is increased
+beyond the standard supply voltage, enabling the Dickson charge pump to achieve
+higher output voltages with fewer stages. This configuration improves the overall
+efficiency of the charge pump, reduces power losses, and minimizes voltage drops
+due to parasitic resistances and diode forward voltages.
+The advantages of using a clock booster with a Dickson charge pump include
+enhanced output voltage levels, improved efficiency in charge transfer, and the
+ability to generate high voltages with a smaller number of stages, which saves silicon
+area. Additionally, the boosted clock signals reduce the dependency on the supply
+voltage, making the circuit suitable for low-power applications. However, the
+12
+
+[Image page_12_image_0.jpeg Error]
+No API key available for start.
+
+
+[Image page_12_image_1.jpeg Error]
+No API key available for start.
+
+
+[Image page_12_image_2.jpeg Error]
+No API key available for start.
+
+
+=== Page 13 ===
+disadvantages include added circuit complexity, increased power consumption for
+boosting the clock signals, and potential challenges in managing noise or coupling
+effects due to higher signal amplitudes.
+In practical applications, this integration is particularly beneficial for circuits that
+require high output voltages, such as non-volatile memory programming or driving
+sensors and actuators. The boosted clock ensures that the capacitors in the Dickson
+charge pump are optimally charged and discharged, significantly reducing rise times
+and enhancing performance. Moreover, it offers designers flexibility to optimize the
+trade-offs between speed, area, and power efficiency based on specific application
+requirements.
+2.1.6 PMOS Switch Based Charge Pump: The PMOS-switch-based charge pump
+is a novel and efficient topology designed to overcome the limitations of traditional
+charge pump circuits, particularly those based on the Dickson architecture. It
+leverages the advantages of PMOS transistors and a four-phase clocking mechanism
+to achieve high performance and cost-effective implementation in a standard 0.18µm
+CMOS process. Unlike conventional designs that rely on NMOS transistors and
+often face issues such as threshold voltage degradation and body effect, this topology
+employs low-voltage PMOS devices that inherently avoid these challenges. PMOS
+transistors eliminate the threshold voltage drop and are unaffected by the body effect,
+ensuring stable and efficient operation across varying supply voltages and
+temperature ranges.
+The design maintains a maximum voltage drop across any PMOS transistor below
+the power supply voltage, capped at 2.0V for the given process. By adhering to this
+limitation, the need for specialized high-voltage devices or thick gate oxides is
+eliminated, simplifying the manufacturing process and reducing overall costs. This
+simplicity allows the charge pump to be implemented entirely within a standard
+CMOS process, making it particularly appealing for large-scale applications where
+cost and integration are critical.
+13
+
+=== Page 14 ===
+Fig 2.5: 1-stage of pmos based charge pump
+A key feature of the charge pump is its four-phase clocking mechanism. This
+approach ensures precise timing for the switching operations of the PMOS
+transistors, enabling efficient charge transfer and minimizing energy losses. The
+clocking system is derived from a single reference clock, which is further divided
+into four non-overlapping phases to ensure proper operation without cross-
+conduction. This efficient clocking mechanism allows the charge pump to achieve
+high voltage gains while maintaining operational stability.
+The topology incorporates a cascade of stages, each consisting of PMOS switches
+and capacitors. Boost capacitors are employed to store and transfer charge between
+stages, with auxiliary capacitors regulating voltage undershoots at critical nodes to
+ensure reliable performance. In the 3-stage implementation, boost capacitance is set
+at 4pF, and auxiliary capacitance is 100fF, chosen to balance output requirements
+with minimal component overhead.
+Performance-wise, the charge pump achieves remarkable results. It can deliver an
+output voltage of up to 14V in an 11-stage configuration powered by a supply voltage
+as low as 1.2V. This corresponds to an impressive gain per stage of 97% of the supply
+voltage, indicating minimal loss across the stages. Furthermore, the design
+demonstrates a temperature-independent efficiency of 53%, maintaining stable
+operation across a wide range of temperatures (25°C to 125°C) and supply voltages
+(1.2V to 2V). These characteristics underscore its reliability and suitability for
+applications demanding consistent performance under varying conditions.
+Compared to traditional Dickson charge pumps, this design represents a significant
+improvement. Dickson charge pumps, which typically utilize NMOS switches,
+suffer from gain degradation due to the threshold voltage drop and body effect,
+especially in the final stages of the pump. These issues limit the number of stages
+14
+
+[Image page_14_image_0.png Error]
+No API key available for start.
+
+
+=== Page 15 ===
+that can be cascaded and reduce the overall efficiency of the circuit. The PMOS-
+switch-based topology not only avoids these drawbacks but also simplifies the
+design by eliminating the need for high-voltage or triple-well devices, making it
+more compatible with standard CMOS processes.
+This charge pump topology finds its primary application in low-voltage systems,
+such as Flash and EEPROM memories, where high output voltage and efficiency are
+essential. Its cost-effective design, achieved by leveraging standard CMOS
+technology, allows for widespread adoption in these domains. The combination of
+high gain, temperature independence, and simplified implementation establishes this
+charge pump as a robust and versatile solution for modern low-power electronic
+systems.
+2.1.7Substrate Control Charge Pump: Another variation of the Dickson Charge
+Pump is the Substrate Control Charge Pump, which uses the MOSFET body as an
+active terminal to mitigate issues related to the threshold voltage increase in the
+charge transfer device . For positive pumping, the circuit is composed solely of
+pMOSFETs, making it compact with minimal risk of latchup. Fig. 2.6. An illustration
+of the Substrate Charge Pump Figure 2.6 depicts the Substrate Control Charge Pump
+schematic, which consists of two auxiliary MOSFETs to control the body bias
+Charge Transfer MOSFET. In each charge-transfer stage, the bodies of all MOSFETs
+are connected and, simultaneously, separated from the bodies of other stages. In each
+Charge Transfer block, the source and gate of the Charge Transfer MOSFET are
+shared with the source of one auxiliary MOSFET, and another auxiliary MOSFET
+shares the drain. When the clk is low and clk is high, the ith charge transfer
+MOSFET, and the source-sharing auxiliary MOSFET are turned on. With this, the
+body and source of the Charge Transfer Block are connected while transferring
+charges to the next stage, making VSB equal to 0 resulting in the threshold voltage
+being equal to Vto(threshold voltage at zero back bias). The (i-1)th charge transfer
+MOSFET is off and it’s drain side auxiliary MOSFET turns on connecting the body
+and drain of the (i-1)th charge transfer MOSFET. In this way, the body effect of the
+Charge Transfer Switch MOSFET’s body is removed by connecting the substrate to
+the highest voltage potential in the stage so that the voltage gain improves with the
+increase in stages without much effect of the threshold voltage drop. Considering the
+second stage, i.e., i=2, when clk is high and clk is low, the charge transfer switch is
+ON and its source voltage is higher than the drain voltage by 2VDD and the source
+terminal MOSFET turns ON since it’s gate to source voltage is −2VDD. All the body
+terminals of all the PMOS in the 2nd stage are connected to the node V1, the highest
+potential of the stage. Additionally, when clk is low and clk is high, the Charge
+Transfer Switch in the 2nd stage is OFF and the and the node voltage at V2 is higher
+15
+
+=== Page 16 ===
+than V1 by 2VDD. The auxiliary PMOS at the drain side of the 2nd stage is turned
+ON as its gate to source voltage is −2VDD. The drain and body of the 2nd stage
+Charge Transfer Switch are connected and the substrate is prevented from floating .
+Fig 2.6: 1-stage of Dickson Charge Pump With Substrate Control.
+16
+
+[Image page_16_image_0.png Error]
+No API key available for start.
+
+
+=== Page 17 ===
+CHAPTER-3
+DESIGN ANALYSIS & PROPOSED WORK
+3.2 Proposed Work
+In the proposed work on a cross-coupled charge pump with a clock booster topology,
+we designed and implemented a clock booster circuit to enhance the voltage of the
+pulse driving the charge pump. This design is specifically tailored for applications
+in non-volatile memories, where higher voltage efficiency and faster operation are
+critical. One of the key advantages of this topology is the reduction in rise time,
+which enables faster memory operation. Additionally, by incorporating the clock
+booster, we can significantly reduce the number of stages in the charge pump. For
+instance, instead of requiring a 5-stage charge pump to achieve a target voltage, the
+same voltage can now be achieved with far fewer stages, resulting in a more compact
+and efficient design. The schematic of the circuit, created and simulated on Cadence
+Virtuoso, is shown below."
+Fig 3.1: Clock Booster Circuit
+This clock booster circuit is designed to drive the cross-coupled charge pump, whose
+schematic created on Cadence Virtuoso is shown below.
+17
+
+[Image page_17_image_0.png Error]
+No API key available for start.
+
+
+=== Page 18 ===
+Fig 3.2: Cross Coupled Charge Pump
+18
+
+[Image page_18_image_0.png Error]
+No API key available for start.
+
+
+=== Page 19 ===
+CHAPTER-4
+RESULTS & ANALYSIS
+4.1 PRE Layout Simulations
+4.1.1 Cross Coupled with Clock Booster
+4.1.1.1 Vout Vs Time
+Fig 4.1: Vout VS Time
+4.1.1.2 Vout Vs Iout
+19
+
+[Image page_19_image_0.png Error]
+No API key available for start.
+
+
+=== Page 20 ===
+Fig 4.2: Iout VS Vout
+4.1.1.3 Iout Vs Time
+Fig 4.3: Iout VS Time
+20
+
+[Image page_20_image_0.png Error]
+No API key available for start.
+
+
+[Image page_20_image_1.png Error]
+No API key available for start.
+
+
+=== Page 21 ===
+4.1.1.4 Gain Margin
+Fig 4.4: Gain Margin
+4.1.1.5 DC sweep w.r.t Load:
+Fig 4.5: DC Sweep w.r.t Load
+21
+
+[Image page_21_image_0.png Error]
+No API key available for start.
+
+
+[Image page_21_image_1.png Error]
+No API key available for start.
+
+
+=== Page 22 ===
+4.1.1.6 Efficiency VS Load:
+Fig 4.6: Efficiency VS Load
+Load is in picofarad.
+4.1.1.7 Efficiency VS No of Stages:
+Fig 4.7: Efficiency VS No Of Stages
+22
+
+[Image page_22_image_0.png Error]
+No API key available for start.
+
+
+[Image page_22_image_1.png Error]
+No API key available for start.
+
+
+=== Page 23 ===
+4.1.1.8 Vout VS Vdd
+Fig 4.8 : Vout VS Vin
+4.2 Layout
+In this work, we present two layouts: one without the pumping capacitor and another
+with the pumping capacitor. Both layouts were designed on 65 nm CMOS
+technology and successfully passed clean Design Rule Check (DRC) and Layout
+Versus Schematic (LVS) verification. While creating the layout for the pumping
+capacitor, we encountered challenges in achieving the required capacitance within
+the design constraints. To address this, we utilized a MOS capacitor by shorting the
+gate, source, and drain terminals, which provided an efficient solution for area
+optimization and design feasibility. The layouts were meticulously routed, with the
+highest metal layer used being Metal2, ensuring efficient signal routing while
+minimizing parasitics and maintaining layout simplicity. The design process adhered
+to strict guidelines for manufacturability and performance, ensuring the layouts are
+robust and meet the intended specifications.
+23
+
+[Image page_23_image_0.png Error]
+No API key available for start.
+
+
+=== Page 24 ===
+Fig 4.9: layout without pumping capacitor
+Fig 4.10: DRC Window
+24
+
+[Image page_24_image_0.png Error]
+No API key available for start.
+
+
+[Image page_24_image_1.png Error]
+No API key available for start.
+
+
+[Image page_24_image_2.png Error]
+No API key available for start.
+
+
+=== Page 25 ===
+Fig 4.11: Layout with Pumping Capacitor
+25
+
+[Image page_25_image_0.jpeg Error]
+No API key available for start.
+
+
+=== Page 26 ===
+4.3 Results
+Parameters Values
+Saturation Voltage 11 v
+Peak Current 1.77mA
+Load Cap 30pf
+Efficiency @30p @3stage 24.2%
+Rise Time 243.29ns
+Operating Frequency 20MHZ
+Voltage Gain 6.173
+Table 4.12 : Result of Eldo Simulation for Cross Coupled Charge Pump with Clock Booster.
+26
+
+=== Page 27 ===
+CHAPTER 5
+CONCLUSION & FUTURE ENHANCEMENTS
+5.1 Conclusion
+In this work, we proposed and implemented a cross-coupled charge pump with a
+clock booster topology, specifically designed for applications in non-volatile
+memories. The clock booster circuit enhances the voltage of the driving pulse,
+enabling faster memory operations by reducing the rise time and minimizing the
+number of charge pump stages. This innovation allows us to achieve the desired
+output voltage with fewer stages, resulting in a more compact and efficient design.
+The schematic designs and simulations were carried out in Cadence Virtuoso, where
+performance metrics such as output voltage, rise time, and power efficiency were
+thoroughly analyzed. The clock booster circuit effectively drives the cross-coupled
+charge pump, as demonstrated by its improved performance compared to
+conventional designs.
+This work demonstrates significant advancements in the design of efficient charge
+pump circuits for memory applications while highlighting areas for future work to
+improve efficiency and reliability in practical applications.
+5.2 Future Enhancements
+In our group, we analyzed various parameters of different charge pump designs. Our
+goal is to compile all these parameters into an Excel file and develop a machine
+learning model. This model will predict the design attributes, such as the size of
+transistors and the pumping capacitor, based on user-defined specifications.
+While we successfully extracted several parameters, we faced challenges in
+completing the layout due to issues with capacitor modeling. As a result, we
+currently lack the size parameter necessary for accurate modeling.
+Addressing these challenges forms the basis for our future enhancements.
+Specifically, we aim to resolve the capacitor modeling issues and extract the missing
+size parameters. Once these improvements are implemented, the machine learning
+model will enable automated design optimization and parameter estimation,
+streamlining the charge pump design process for a wide range of applications.
+27
+
+=== Page 28 ===
+References
+[1] X. Li, Y. Wang, Z. Wu, and Z. Xie, “A High Peak-efficiency Cross-coupled Charge Pump
+with Low Input Voltage for Energy Harvesting System,” J. Phys.: Conf. Ser., vol. 2524, no. 1,
+p. 012017, Jun. 2023, doi: 10.1088/1742-6596/2524/1/012017.
+[2] T. Yim and S. Lee, “A Low-Voltage Charge Pump with High Pumping Efficiency,” 2018.
+[3] E. Racape and J. Daga, “A PMOS-switch based charge pump, allowing lost cost
+implementation on a CMOS standard process,” in Proceedings of the 31st European Solid-
+State Circuits Conference, 2005. ESSCIRC 2005., Grenoble, France: IEEE, 2005, pp. 77–80.
+doi: 10.1109/ESSCIR.2005.1541562.
+[4] Feng Su, Wing-Hung Ki, and Chi-Ying Tsui, “High Efficiency Cross-Coupled Doubler with
+No Reversion Loss,” in 2006 IEEE International Symposium on Circuits and Systems, Island
+of Kos, Greece: IEEE, 2006, pp. 2761–2764. doi: 10.1109/ISCAS.2006.1693196.
+[5] A. Ballo, A. D. Grasso, G. Giustolisi, and G. Palumbo, “Optimized Charge Pump With Clock
+Booster for Reduced Rise Time or Silicon Area,” IEEE Trans. Circuits Syst. II, vol. 66, no.
+12, pp. 1977–1981, Dec. 2019, doi: 10.1109/TCSII.2019.2898716.
+[6] Jongshin Shin, In-Young Chung, Young June Park and Hong Shick Min, ”A new charge pump
+without degradation in threshold voltage due to body effect [memory applications],” in IEEE
+Journal of Solid-State Circuits, vol. 35, no. 8, pp. 1227-1230, Aug. 2000.
+28
+

@@ -1,0 +1,918 @@
+=== Page 1 ===
+Creativity, Innovation, and Inventive Problem Solving (CIIPS)
+Student Name: Divyam Khorwal, Kartik Bansal, Vinit Kumar Kushwaha
+Roll Number: 2021388,2021394,2021501
+BTP report submitted in partial fulfillment of the requirements
+for the Degree of B.Tech. in Computer Science & Social
+Sciences
+On April 23, 2025.
+BTP Track: Research Track
+BTP Advisor
+Professor Anuj Grover
+Indraprastha Institute of Information Technology
+New Delhi
+
+=== Page 2 ===
+Student’s Declaration
+I hereby declare that the work presented in the report entitled “Creativity, Innovation, and
+Inventive Problem Solving (CIIPS)” submitted by me for the partial fulfillment of the
+requirements for the degree of Bachelor of Technology in Computer Science & Social
+Sciences at Indraprastha Institute of Information Technology, Delhi, is an authentic record of
+my work carried out under guidance of Professor Anuj Grover. Due acknowledgements have
+been given in the report to all material used. This work has not been submitted anywhere else
+for the reward of any other degree.
+Kartik Bansal IIIT Delhi, April 23, 2025
+Certificate
+This is to certify that the above statement made by the candidate is correct to the best of my
+knowledge.
+………………………….. Place and Date: …………………….
+(advisor’s name)
+
+=== Page 3 ===
+Abstract
+The Creativity, Innovation, and Inventive Problem Solving (CIIPS) course serves as a cornerstone
+for fostering creative thinking, systematic innovation, and entrepreneurial skills among students.
+Through a structured curriculum integrating brainstorming methods, problem modeling, and
+solution evaluation techniques, the course aims to equip students with tools to address complex
+challenges and drive innovation. However, the evolving nature of the course, coupled with its
+diverse methodologies, necessitates a thorough evaluation to understand its impact and identify
+areas for improvement.
+Building upon the foundational work from the previous semester, this project not only
+investigates the effectiveness of the CIIPS course in enhancing creativity and problem-solving
+abilities but also actively contributes to its development through practical experimentation and
+technological integration. Last semester, we conducted an in-depth study analyzing the course's
+long-term relevance, the gap between theoretical knowledge and practical application, and the
+influence of different course iterations on student engagement and outcomes.
+Expanding on this, we have begun drafting a research paper targeting the IEEE Education
+Society, aiming to document our findings and contributions related to the CIIPS course. The
+paper explores how creativity and structured innovation techniques taught in the course influence
+students’ long-term academic and professional growth. We're currently framing it around three
+core research questions: how effectively students retain and apply these techniques over time,
+how different iterations of the course (such as patent-focused, socio-economic, or technical
+problem-solving approaches) impact engagement and skill development, and how the course can
+be redesigned to better support the generation of novel or patentable ideas. Alongside this, we’re
+exploring educational design principles, common creativity barriers like psychological inertia,
+and the broader pedagogical impact of embedding patent-based challenges into the curriculum.
+In a parallel but closely related initiative, we fine-tuned a large language model (LLM) to assist
+with the ideation process by automating the extraction of functional models from patent
+documents. This effort involved a deep dive into understanding patent structures and
+problem-solution mappings, curating a specialized dataset from diverse patents, and training the
+model to output structured functional models from raw patent text. This tool is intended to
+support students in generating novel and potentially patentable solutions, bridging the gap
+between idea generation and technical execution.
+
+=== Page 4 ===
+Together, these efforts aim to transform the CIIPS course into a more dynamic,
+technology-enhanced, and impactful learning experience. By addressing key challenges in
+creativity education and leveraging AI for inventive problem solving, this project aspires to
+empower students with the mindset and tools required for tackling real-world problems and
+contributing meaningfully to industry and society.
+
+=== Page 5 ===
+Acknowledgments:
+We extend our heartfelt gratitude to Prof. Anuj Grover for providing us with the opportunity to
+contribute to this project. His unwavering support, guidance, and encouragement have been
+instrumental in shaping our journey and fostering a conducive environment for learning and
+growth. We are deeply appreciative of his mentorship, which has empowered us to navigate
+challenges with resilience and determination. Prof. Anuj Grover's expertise and insights have
+enriched the project, inspiring us to strive for excellence and pursue innovation with passion and
+dedication.
+Work Distribution:
+The work distribution for this project was carried out collaboratively, with each team member
+contributing in different areas like research and analysis focused on gathering feedback from students
+and alumni, ensuring the data collected was comprehensive and relevant, writing and organizational
+skills worked on structuring the report, summarizing findings, and presenting actionable insights,
+innovation frameworks and systematic problem-solving contributed by analyzing the effectiveness of
+course methodologies and proposing recommendations for improvement. This division of tasks
+ensured that the project leveraged the strengths of each individual, resulting in a well-rounded and
+impactful final report.
+
+=== Page 6 ===
+Contents
+1) Problem Statement
+2) Context
+3) Purpose & Goals
+4) Target Audience
+5) Findings (Results)
+6) Conclusion
+
+=== Page 7 ===
+Problem Statement
+The Creativity, Innovation, and Inventive Problem Solving (CIIPS) course is designed to help
+students think creatively and systematically, equipping them with tools to develop inventive
+solutions to complex problems. Despite its ambitious goals, the course faces several challenges
+that need to be addressed to maximize its effectiveness. These challenges include:
+1. Understanding the Long-Term Impact: While the course incorporates a wide range of
+activities and tools, the extent to which these have a lasting impact on students' creativity,
+problem-solving skills, and professional development remains unclear. There is a lack of
+comprehensive data on how former students have applied these skills in their academic,
+entrepreneurial, or professional journeys.
+2. Relevance of Certain Concepts: During the course, some students perceive specific
+topics or activities as irrelevant to their immediate needs or career aspirations.
+Understanding whether these concepts later prove useful in real-life problem-solving is
+critical to assessing their true value.
+3. Diverse Approaches Over the Years: The course has evolved significantly over different
+batches, experimenting with approaches ranging from patent studies and startup ideation
+to solving socio-economic and technical challenges. However, these changes have not
+been systematically analyzed to determine which methodologies are most effective in
+achieving the course's objectives.
+4. Encouraging Innovation and Patentability: A major goal of the CIIPS course is to
+inspire students to create patentable solutions and innovative projects. However, students
+often find it difficult to generate novel ideas or apply systematic methods effectively to
+meet this goal.
+5. Catering to Diverse Student Needs: The course must address the varying levels of
+experience, creativity, and career aspirations of students. A one-size-fits-all approach may
+not work, as some students excel in technical problem-solving, while others thrive in
+creative or entrepreneurial activities. Customizing the course to provide a balance
+between structure and flexibility is necessary to ensure every student benefits.
+6. Limited Use of AI Tools in Enhancing Learning: Although patent-based problem
+solving is emphasized, there is untapped potential in leveraging AI to support this goal.
+To address this, we fine-tuned a large language model (LLM) to analyze patents and
+generate functional models from them. However, integrating such tools into the course
+remains unexplored and could significantly enhance students’ ability to ideate and
+
+=== Page 8 ===
+innovate.
+Addressing these challenges is essential for ensuring the CIIPS course fulfills its potential to
+prepare students for dynamic professional environments, foster creativity, and enable innovation.
+By evaluating the impact of past approaches and gathering insights from former students, this
+project seeks to identify the strengths and weaknesses of the current course structure.
+
+=== Page 9 ===
+Context
+The Creativity, Innovation, and Inventive Problem Solving (CIIPS) course is a unique educational
+initiative designed to equip students with the skills necessary for creative thinking, systematic
+innovation, and problem-solving. The course emphasizes moving beyond traditional teaching
+methods, providing students with practical tools to address complex challenges in engineering,
+entrepreneurship, and professional environments. It focuses on overcoming psychological
+barriers to creativity and fostering innovation as a critical skill.
+The Evolution of the CIIPS Course
+The CIIPS course has evolved over its iterations, with each batch experiencing different
+pedagogical approaches tailored to enhance student engagement and outcomes. These changes
+reflect the course’s adaptive nature, striving to meet the dynamic needs of students while staying
+relevant to real-world applications.
+Winter 2021 Batch: Patent Studies and Brainstorming
+The course initially emphasized studying patents and participating in brainstorming sessions.
+This approach aimed to introduce students to intellectual property and creative ideation.
+However, the focus on theoretical knowledge often led to a lack of engagement, as students
+found it challenging to connect these concepts to practical applications or their career goals.
+Winter 2022 Batch: Socio-Economic Issues
+Recognizing the need for relatable content, the Winter 2022 batch centered its efforts on tackling
+socio-economic challenges. Students were encouraged to apply creative problem-solving
+methods to real-world issues, such as environmental sustainability and social equity. This shift
+fostered a deeper understanding of how innovation can address societal problems, making the
+course more relevant and impactful.
+Winter 2024 Batch: Technical and Engineering Challenges
+The most recent iteration of the course narrowed its focus to solving specific technical and
+engineering problems. This approach enabled students to develop targeted and practical solutions
+to well-defined challenges. The structured and focused nature of this iteration highlighted the
+importance of applying systematic problem-solving methods, further preparing students for
+professional environments.
+
+=== Page 10 ===
+The CIIPS Course Framework
+Building on its evolving structure, the CIIPS course now integrates theoretical foundations with
+practical applications, focusing on:
+● Applying systematic innovation techniques, including Function Analysis and the 40
+Inventive Principles.
+● Developing innovative solutions through structured ideation and problem exploration.
+● Presenting and pitching ideas in a simulated entrepreneurial environment, such as a mock
+pitch café.
+This framework underscores the course’s commitment to nurturing well-rounded, creative
+problem solvers capable of addressing diverse challenges.
+Challenges in Assessing the Course’s Impact
+Despite its progress, the CIIPS course faces challenges in evaluating its long-term impact and
+relevance:
+● Perception of Relevance: Some concepts and methods may initially seem abstract or
+disconnected from students’ immediate career goals, requiring better demonstration of
+their real-world applications.
+● Diverse Student Needs: Students from varied backgrounds and disciplines bring unique
+learning preferences and expectations, making it essential to create a course structure that
+is inclusive and adaptable.
+● Feedback Mechanisms: A lack of systematic feedback from past batches has limited the
+ability to identify the most effective approaches and refine the course accordingly.
+Integration of AI and Patent-Based Problem Solving
+In response to the recurring challenge students face in generating novel and patentable ideas, a
+new layer of innovation was introduced: the fine-tuning of a large language model (LLM) to
+support patent analysis. This model was trained on a curated dataset of diverse patents, enabling
+it to extract underlying functional models and innovation patterns from complex patent
+documents.
+This work not only deepened students’ understanding of existing inventions but also served as a
+tool to inspire new ideas by revealing gaps, functions, and inventive principles behind successful
+patents. Integrating such AI-driven tools into the course represents a significant step toward
+
+=== Page 11 ===
+augmenting human creativity with machine-assisted insights, making the process of ideation
+more structured and impactful.
+This research builds upon the development of a comprehensive Patent Processing Pipeline,
+designed to automate the extraction, embedding, and modeling of patent documents and claims.
+The pipeline incorporates advanced language modeling techniques, including a custom fine-tuned
+transformer-based model, to generate patent-specific outputs. Key components include
+generating text and image embeddings from patent PDFs and associated claim files, training a
+specialized model (PatentGPT-J-1.6B) on these embeddings, and using the trained model to
+produce high-quality patent-related content. The system is optimized for CUDA-enabled GPUs,
+supports large-scale data processing, and emphasizes maintaining the relational integrity between
+textual claims and patent diagrams. This work demonstrates the potential of AI-assisted
+innovation in the patent domain, laying the foundation for scalable, intelligent IP analysis and
+content generation.
+
+=== Page 12 ===
+Purpose & Goals
+The Creativity, Innovation, and Inventive Problem Solving (CIIPS) course stands as a cornerstone
+of interdisciplinary education, aimed at fostering critical skills for the modern professional world.
+However, as the course has evolved over the years, its structure, methodologies, and outcomes
+have raised several key questions about its long-term effectiveness, practical relevance, and
+impact on students’ academic and professional journeys. The purpose of this project is to
+comprehensively evaluate the course, assess its strengths and limitations, and provide actionable
+insights for its improvement, ensuring it remains a valuable and impactful learning experience for
+future batches.
+1. Identifying the Course's Effectiveness
+While the course incorporates various methodologies such as brainstorming techniques, and
+systematic innovation frameworks, its true effectiveness in achieving these goals remains
+underexplored.
+● Determine whether students have successfully applied the skills and techniques taught in
+the course to real-world challenges in their academic, professional, or entrepreneurial
+endeavours.
+● Evaluate the relevance of specific tools and activities within the course framework and
+their contribution to fostering creativity and innovation.
+2. Bridging the Gap Between Theory and Practice
+One of the course’s primary objectives is to help students transition from theoretical
+understanding to practical application. While activities such as problem identification, solution
+generation, and patent drafting are integral to this process, it is crucial to understand whether
+students perceive these activities as practically useful or merely academic exercises.
+● Analyze the extent to which the course bridges the gap between theoretical knowledge
+and real-world application.
+● Identify areas where the course could better connect classroom learning to professional
+scenarios.
+● Gather insights into how students have used these skills in internships, entrepreneurial
+ventures, or other real-world settings.
+
+=== Page 13 ===
+3. Understanding the Impact of Course Evolution
+The CIIPS course has gone through significant transformations, from focusing on patents and
+brainstorming in earlier batches to addressing real-world problems and technical challenges in
+later iterations. These changes reflect a continuous effort to make the course more engaging and
+relevant. However, the impact of these different approaches on student learning outcomes has not
+been systematically evaluated.
+● Assess the effectiveness of each iteration of the course and identify the most impactful
+approaches.
+● Explore how shifts in focus, such as tackling socio-economic issues or technical
+challenges, have influenced student engagement and innovation outcomes.
+● Provide recommendations for integrating the most successful elements of past iterations
+into a cohesive and effective curriculum.
+4. Evaluating Long-Term Relevance
+While the CIIPS course provides students with a robust foundation in creativity and systematic
+problem-solving, some concepts and activities may not immediately resonate with students. For
+instance, methodologies like Function Analysis or Trimming might initially appear abstract or
+overly technical. However, their long-term relevance may become apparent as students encounter
+complex challenges in their professional lives.
+● Understand which aspects of the course students initially found irrelevant but later
+recognized as valuable in their careers.
+● Gather insights from alumni on how specific concepts, tools, or activities have impacted
+their ability to innovate, solve problems, or excel in their respective fields.
+● Highlight the importance of these long-term benefits to ensure students appreciate the
+course’s value from the outset.
+5. Enhancing Student Engagement and Learning Experience
+Engagement is a critical factor in the success of any educational program. While the CIIPS
+course incorporates interactive elements like brainstorming sessions, mock pitch cafes, and poster
+exhibitions, it is essential to understand whether these activities are effective in keeping students
+motivated and involved.
+● Identify activities and methodologies that students found most engaging and impactful.
+
+=== Page 14 ===
+● Explore potential barriers to engagement, such as a perceived lack of relevance,
+insufficient guidance, or overly theoretical content.
+● Provide recommendations for making the course more interactive, relatable, and aligned
+with students’ interests and career aspirations.
+6. Promoting Innovation and Patentable Solutions
+One of the key goals of the CIIPS course is to encourage students to generate innovative and
+patentable ideas. While some batches have successfully filed patents or developed novel
+solutions, others have struggled to achieve this goal due to challenges like psychological inertia,
+lack of exposure to real-world problems, or insufficient understanding of systematic innovation
+methods.
+This project seeks to:
+● Identify factors that enable or hinder students from generating innovative and patentable
+solutions.
+● Provide recommendations for enhancing the course’s focus on innovation, ensuring
+students are better equipped to create market-ready and patentable solutions.
+7. Informing Future Course Design
+The ultimate purpose of this project is to provide actionable insights that can shape the future
+design of the CIIPS course. By analyzing student feedback, alumni experiences, and the impact
+of past iterations, the project aims to create a more cohesive and effective curriculum that
+balances theory with practice and creativity with systematic innovation.
+Key outcomes of this project will include:
+● A comprehensive understanding of the course’s strengths, weaknesses, and opportunities
+for improvement.
+● Practical recommendations for refining the course structure, content, and activities to
+better meet student needs and expectations.
+● Strategies for ensuring the course remains relevant and impactful in preparing students for
+dynamic professional environments.
+
+=== Page 15 ===
+8. Leveraging LLMs for Function Model Generation and Innovation Support
+A fine-tuned large language model (LLM) has been integrated into the CIIPS course to support
+students in transforming patent documents and problem statements into structured function
+models. This initiative is designed to:
+● Evaluate the LLM's effectiveness in enhancing students' comprehension and practical
+use of systematic innovation frameworks such as Function Analysis and TRIZ.
+● Measure the impact on cognitive load, examining how the LLM streamlines the
+innovation process and improves the speed and quality of idea generation.
+● Identify actionable improvements for embedding LLM-based tools within the course to
+better foster creativity, aid in problem decomposition, and accelerate the development of
+patentable and innovative solutions.
+
+=== Page 16 ===
+Target Audience
+The primary audience includes former students who have participated in the Creativity,
+Innovation, and Inventive Problem Solving (CIIPS) course. These individuals represent a diverse
+group with firsthand experience of the course’s content, methodologies, and objectives. Their
+insights are valuable for assessing the course’s effectiveness and identifying areas for
+improvement.
+● Former Students: Alumni of the CIIPS course offer a retrospective viewpoint, enabling
+the evaluation of the course's long-term impact. Their experiences allow us to assess how
+well the course prepared them for professional challenges, fostered innovative thinking,
+and contributed to their creative problem-solving abilities. Additionally, former students
+can shed light on whether certain concepts or methods, which may have seemed abstract
+or irrelevant at the time, became useful in their careers or further studies.
+
+=== Page 17 ===
+Findings & Results
+Findings and Results
+1. Critical Role of Creative Thinking and Problem-Solving
+High Professional Relevance:
+Approximately 78% of respondents rated creative thinking as "very" or "extremely helpful" for
+job performance, emphasizing its critical importance in diverse professional roles
+
+[Image page_17_image_0.png Analysis (by Gemini)]
+Here's a detailed analysis of the image provided, considering its visual elements, embedded text, and context within the research paper:
+
+**Visual Elements and Structure**
+
+*   **Type:** The image is a pie chart.
+*   **Structure:** The pie chart is divided into sections representing the distribution of responses to the question: "In your role, how important is creative thinking for effective performance?". Sections are visually separated by color and slight "exploding" effects.
+*   **Colors:** Each section uses a distinct color: light blue for "Extremely helpful", light green for "Very helpful", orange for "Somewhat helpful". Colors for "Not Very helpful" and "Not helpful at all" are not displayed in the pie chart itself.
+*   **Legend:** The pie chart includes a legend on the right, mapping colors to response categories: "Extremely helpful", "Very helpful", "Somewhat helpful", "Not very helpful", "Not helpful at all". The colors of the label names match the colors used in the corresponding sections of the pie chart.
+*   **Exploding effect:** The "Extremely helpful" and "Somewhat helpful" slices have been pulled out slightly from the center of the circle.
+
+**Text within the Image**
+
+*   **Title:** "In your role, how important is creative thinking for effective performance?"
+*   **Labels and Percentages:**
+    *   "Extremely helpful" - 43.2%
+    *   "Very helpful" - 35.1%
+    *   "Somewhat helpful" - 21.6%
+    *   The chart legend includes "Not very helpful" and "Not helpful at all", although no data is shown for these.
+
+**Context and Importance**
+
+*   **Overall Context:** The image is part of a research paper analyzing the impact of a "Creativity, Innovation, and Inventive Problem Solving (CIIPS)" course on former students. The pie chart visually represents survey data collected from these former students regarding the perceived importance of creative thinking in their professional roles.
+*   **Importance:** The pie chart provides strong visual evidence supporting the "Critical Role of Creative Thinking and Problem-Solving" finding. The combined percentages for "Extremely helpful" (43.2%) and "Very helpful" (35.1%) total 78.3%. This aligns very closely with the reported finding on page 17 (78%) which strengthens the main conclusion. The fact that 'Not very helpful' and 'Not helpful at all' are not reflected on the chart suggests that no participants chose either of these. This suggests that the CIIPS course may be successful at instilling an appreciation for creative thinking in professional roles.
+
+**Interpretation**
+
+The pie chart strongly indicates that former students of the CIIPS course perceive creative thinking as a valuable asset in their professional lives. A substantial majority (78.3% based on the pie chart) consider creative thinking either "very" or "extremely helpful," confirming the course's positive impact. The chart serves as a compelling visual aid to communicate this key finding in the research paper.
+
+
+=== Page 18 ===
+Barrier Analysis:
+Key challenges identified include "Generating creative, new, and innovative ideas" (67.6%)
+and "Managing time and meeting deadlines" (62.2%), highlighting their significant impact on
+job performance. Balancing multiple priorities (51.4%) and solving technical problems (43.2%)
+were also cited as frequent challenges, while difficulties with stakeholder expectations (16.2%)
+and technology adaptation (21.6%) were less common.
+Insights on Applicability:
+While 48.6% of participants occasionally apply CIIPS principles, 32.4% use them weekly, and
+10.8% use them daily, showcasing variability in their integration into professional roles. Notably,
+no respondents selected "Never," underlining the universal relevance of these principles.
+2. Course Methodology and Learning Effectiveness
+Alignment with Learning Styles:
+The course effectively engaged diverse learning preferences, emphasizing hands-on and visual
+methods.
+91.9% of respondents endorsed the course as beneficial for fostering creative problem-solving
+skills.
+
+[Image page_18_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image you provided, in the context of the surrounding text from the research paper:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a horizontal bar chart (also known as a bar graph).
+*   **Structure:**
+    *   The chart has a title: "What is the major challenge you face in your current job?"
+    *   The Y-axis (vertical) lists "Major Challenges." Each challenge is a text label describing a specific workplace difficulty.
+    *   The X-axis (horizontal) represents "Percentage of Responses," ranging from 0% to 20%.
+    *   Each challenge is represented by a horizontal bar. The length of the bar corresponds to the percentage of respondents who identified that challenge as a major one.
+    *   The bars are visually differentiated by a gradient of blue, with the challenges having lower percentages of responses being a lighter blue and bars with higher percentages a darker blue.
+    *   A numerical percentage is listed at the end of each bar.
+
+**Text Within the Image:**
+
+*   **Title:** "What is the major challenge you face in your current job?"
+*   **Y-axis labels (Major Challenges):**
+    *   Collaborating effectively with team members
+    *   Balancing multiple projects or priorities
+    *   but they don't qualify as 'the major challenge'
+    *   Many unselected options are applicable to some extent
+    *   To identify the complex technical problem.
+    *   Not Applicable
+    *   Communicating ideas clearly to others
+    *   Meeting client or stakeholder expectations
+    *   Collaborating effectively with team members
+    *   Adapting to changes in technology or processes
+    *   Generating creative
+    *   Communicating ideas clearly to others
+    *   Solving complex or technical problems
+    *   Generating creative
+    *   Balancing multiple projects or priorities
+    *   Managing time and meeting deadlines
+    *   new and innovative ideas
+*   **X-axis Label:** "Percentage of Responses"
+*   **Data Labels (Percentages):** 0.68%, 0.68%, 0.68%, 0.68%, 0.68%, 0.68%, 1.35%, 4.05%, 4.73%, 5.41%, 5.41%, 8.11%, 10.81%, 11.49%, 12.16%, 15.54%, 16.89%
+
+**Image Context and Importance:**
+
+The image directly visualizes the "Barrier Analysis" discussed in the text. It graphically presents the results of a survey or study where participants were asked about the major challenges they face in their jobs.
+
+*   **Significance:** The bar chart effectively demonstrates the relative frequency with which different challenges were cited. It confirms the text's assertion that "Generating creative, new, and innovative ideas" and "Managing time and meeting deadlines" are the most significant challenges.
+*   **Connection to the Text:** The percentages in the chart align closely with the percentages mentioned in the text:
+    *   "Generating creative, new, and innovative ideas" (16.89% on chart, vs. 67.6% in the text - there is some discrepancy in the percentages, this could mean that 16.89% means "major challenge" versus 67.6% means "challenges identified")
+    *   "Managing time and meeting deadlines" (15.54% on chart, vs. 62.2% in the text - the same discrepancy appears)
+    *   Other challenges are ranked in the same order of prevalence as in the descriptive text.
+*   **Overall Importance:**  The image serves as a visual aid to support the research findings. It provides a clear and easily digestible overview of the barriers to job performance identified by the study participants.  It emphasizes the areas where interventions or training may be most beneficial, particularly in fostering creative thinking and improving time management skills. The fact that the "Critical Role of Creative Thinking and Problem-Solving" is a highlighted finding on a surrounding page underscores the importance of addressing the challenge of "Generating creative, new, and innovative ideas."
+
+In summary, the image is a crucial component of the research paper, providing visual confirmation and detail to the written analysis of workplace challenges. It strengthens the argument for focusing on creative thinking and time management skills in professional development programs.
+
+
+
+=== Page 19 ===
+A majority (83.8%) agreed the course balanced theory and practice well, with 10.8% perceiving
+an overemphasis on theory and 5.4% on practice.
+Participant Interaction:
+Interactive teaching methods were well-received, with 45.9% strongly agreeing and 37.8%
+agreeing that discussions were engaging. Neutral feedback (16.2%) indicated scope for deeper
+and more varied interactions, such as peer-to-peer teaching and small group discussions.
+
+[Image page_19_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on your request:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a pie chart.
+*   **Structure:** The pie chart is divided into three sections (slices), each representing a different response to the question posed in the title. Each slice is colored differently (light red, light blue, and light green). The size of each slice corresponds to the percentage of respondents who selected that answer.
+*   **Labels and Text:**
+    *   **Title:** "How would you rate the balance between theory and practical exercises in the course?"
+    *   **Slice Labels:**
+        *   "Too much theory, not enough practice"
+        *   "Good balance"
+        *   "Too much practice, not enough theory"
+    *   **Data Points:** The percentage values associated with each slice are shown both on the pie chart next to the slice and in the legend:
+        *   "Too much theory, not enough practice": 10.8%
+        *   "Good balance": 83.8%
+        *   "Too much practice, not enough theory": 5.4%
+    *   **Legend:** located to the lower-right side of the pie chart, providing color-coded key of the labels of pie slices.
+
+**Context and Importance:**
+
+The pie chart visually summarizes student feedback on the balance between theory and practical exercises in a course. The accompanying text on page 19 states, "A majority (83.8%) agreed the course balanced theory and practice well, with 10.8% perceiving an overemphasis on theory and 5.4% on practice." The pie chart directly illustrates these percentages, providing a clear and immediate understanding of the overall positive perception of the course's balance.
+
+The data suggests that the course effectively aligned with learning styles by emphasizing hands-on and visual methods, since 91.9% of respondents considered the course beneficial for fostering creative problem-solving skills.
+
+**Overall Importance:**
+
+The image is important because it allows the reader to quickly grasp the overall sentiment regarding the balance of theory and practice in the course. It supports the textual description with a clear visual representation of the data. The pie chart strengthens the argument that the course design was effective in this aspect. This information helps to evaluate the success of the course methodology and learning effectiveness by providing strong evidence of the perceived balance between theoretical and practical components. Additionally, understanding the perception of balance aids in identifying areas for potential improvement, even if the overall rating is positive.
+
+
+
+[Image page_19_image_1.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on the information provided:
+
+**Visual Elements and Structure:**
+
+*   **Type:** Pie chart
+*   **Purpose:** To visually represent the distribution of responses to the question, "Do you feel the teaching methods allowed for sufficient interaction and discussion?"
+*   **Structure:** The pie chart is divided into segments, each representing a response category (Strongly Agree, Agree, Neutral, Disagree, Strongly Disagree). Each segment's size is proportional to the percentage of respondents who selected that category. The 'Strongly Agree' and 'Neutral' segments are slightly separated from the rest of the pie chart, potentially to draw more attention to them.
+*   **Color Coding:** Each response category has a distinct color:
+    *   Strongly Agree: Light Blue
+    *   Agree: Light Green
+    *   Neutral: Orange
+    *   Disagree: Light Red
+    *   Strongly Disagree: Gray
+*   **Labels:** Each segment is labeled with the response category name and the corresponding percentage value.
+*   **Legend:** A legend is provided to the right of the pie chart, associating each color with its respective response category.
+
+**Text Within the Image:**
+
+*   **Title:** "Do you feel the teaching methods allowed for sufficient interaction and discussion?"
+*   **Segment Labels:**
+    *   Strongly Agree: "45.9%"
+    *   Agree: "37.8%"
+    *   Neutral: "16.2%"
+*   **Legend Labels:**
+    *   "Responses"
+    *   "Strongly agree"
+    *   "Agree"
+    *   "Neutral"
+    *   "Disagree"
+    *   "Strongly disagree"
+
+**Context and Importance:**
+
+The pie chart visually complements the text on page 19, which discusses participant interaction in the course. It reinforces the finding that interactive teaching methods were well-received, as the "Strongly Agree" (45.9%) and "Agree" (37.8%) segments constitute a large portion of the pie.
+
+The "Neutral" (16.2%) response is also significant, as the text suggests this indicates "scope for deeper and more varied interactions." The pie chart makes this potential area for improvement readily apparent.
+
+Based on the broader context:
+
+*   The image is used to illustrate learning effectiveness.
+*   The high levels of agreement that the course fostered creative problem-solving skills is mentioned on page 19, so this supports the value of discussion.
+*   The surrounding text highlights the importance of hands-on and visual methods, making the visual representation of data (i.e., the pie chart) even more relevant.
+*   The mention of challenges in retention (difficulty remembering specifics) could indirectly relate to the quality of interaction, suggesting a need to make discussions more memorable and impactful.
+
+**Overall, the image is important because:**
+
+1.  It provides a quick and easily understandable visual summary of participant feedback on the teaching methods used in the course.
+2.  It highlights the positive reception of interactive methods while also drawing attention to the area where improvements could be made (Neutral responses).
+3.  It supports the narrative presented in the text regarding course effectiveness and the need for continued development of interactive teaching strategies.
+
+
+
+
+=== Page 20 ===
+3. Challenges in Retention and Implementation
+Retention of Knowledge:
+Barriers to retention include "Difficulty remembering specifics" (59.5%), lack of confidence
+(27%), and perceived irrelevance (37.8%). Respondents suggested integrating more real-world
+examples, case studies, and refresher materials to address these gaps.
+4. Broader Course Feedback and Recommendations
+Earlier Introduction:
+100% of respondents agreed the course should be introduced earlier in the curriculum or made a
+mandatory subject, recognizing its foundational value.
+
+[Image page_20_image_0.png Analysis (by Gemini)]
+Here is an analysis of the image, incorporating the surrounding text for context:
+
+**Image Analysis:**
+
+*   **Type:** Horizontal Bar Chart
+*   **Purpose:** The chart visualizes the percentage of responses regarding possible reasons for the lack of concept usage following a course or training. The question posed is, "It is possible that none of the concepts were used? If so, what could be the possible reasons?".
+*   **Structure:** The chart has the "Possible Reasons for Lack of Concept Usage" listed vertically on the y-axis, and the "Percentage of Responses" displayed horizontally on the x-axis ranging from 0% to 30%. Each reason is represented by a horizontal bar, with the length of the bar corresponding to the percentage of respondents who selected that reason. The bars are colored with varying shades of green, potentially indicating relative importance (darker = more frequent).
+*   **Text and Labels:**
+    *   **Title:** "It is possible that none of the concepts were used? If so, what could be the possible reasons?"
+    *   **Y-axis Label:** "Possible Reasons for Lack of Concept Usage"
+    *   **X-axis Label:** "Percentage of Responses"
+    *   **Y-axis Categories (Reasons):**
+        *   "Each firm has their own strategies/processes to tackle problems and they might expect those frameworks to be followed instead"
+        *   "Prefer other methods" (appears twice)
+        *   "Question not clear"
+        *   "I faced less complex problem that can easily be solved through brainstorming"
+        *   "They were used"
+        *   "Lack of confidence in using them" (appears twice)
+        *   "Difficulty remembering the specifics" (appears twice)
+        *   "They are not applicable to my role"
+    *   **Data Labels (Percentages):** 1.89%, 3.77%, 9.43%, 18.87%, 22.64%, 26.42%
+
+**Significance and Context:**
+
+The text from page 20 focuses on challenges in knowledge retention. The chart directly supports this point by illustrating the reasons why the course concepts might not be used after the training. The most prevalent reasons, as indicated by the chart, are that the concepts are "not applicable" to the role of the participants (26.42%) followed by "difficulty remembering the specifics" (22.64% and 18.87% of respondents).
+
+Given the surrounding text, the image emphasizes the need to improve knowledge retention through more practical examples, case studies, and refresher materials. The chart reinforces the fact that a significant portion of the participants struggle with remembering specifics, which directly aligns with the suggestions offered to address these gaps.
+
+Furthermore, the fact that concepts are perceived as "not applicable" suggests a need to either better tailor the course content to the participants' roles or to better demonstrate the applicability of the concepts across a wider range of scenarios. The relatively high percentage associated with "lack of confidence" (9.43% and 9.43% of respondents) also implies a need for more hands-on practice and support.
+
+The additional suggestions from the surrounding pages, such as post-course workshops and alumni groups, are directly relevant to sustaining learning and addressing the retention challenges highlighted by the chart. Also "Expanding the course to include More Practical activities in class that require them to think end to end solutions for creative problem-solving and organizing innovation labs or hackathons were highly recommended." would probably alleviate the "lack of confidence" answers.
+
+**Overall Importance:**
+
+The image is crucial because it provides a visual representation of the key barriers to concept usage after the course. It directly connects the issues of retention and relevance to concrete feedback from the participants. It highlights the fact that despite the positive feedback on the course balancing theory and practice (83.8%), there are still significant challenges in translating the learned concepts into actual application. Therefore, the image justifies the need for the recommended improvements, such as integrating more real-world examples, offering refresher materials, providing post-course support, and optional certifications.
+
+
+
+[Image page_20_image_1.png Analysis (by Gemini)]
+Here's a breakdown of the image analysis:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a pie chart.
+*   **Structure:** The pie chart is divided into two segments representing the responses to a question about the perceived benefit of receiving a formal TRIZ certification.
+*   The larger segment (blue) represents "Yes" responses.
+*   The smaller segment (orange) represents "No" responses.
+*   A legend to the right indicates which color corresponds to "Yes" and "No" responses.
+*   The percentages are displayed within each segment.
+
+**Text Within the Image:**
+
+*   **Title:** "Do you think receiving a formal TRIZ certification upon completing this course would benefit you? (Certification charges are upwards of INR 8000)"
+*   **Labels:** "Yes," "No"
+*   **Data Points:** "64.3%" (Yes), "35.7%" (No)
+*   **Legend:** "Responses" (with labels) "Yes," "No"
+
+**Overall Context and Importance:**
+
+The pie chart visually represents survey data regarding participants' perception of the value of obtaining a formal TRIZ certification after completing a course. The text on the page and surrounding pages supports this.
+
+*   **Connection to Page Text:** The page text specifically mentions "Certification Preferences," stating that a majority (64.9%) did *not* perceive value in obtaining certification, while 35.1% expressed interest. The pie chart displays the percentage of people who believe certification would benefit them, with 64.3% saying "Yes" and 35.7% saying "No." This result is conflicting with the written text. Note that the text refers to if people believe there is *value* while the image shows the response to *benefit*, but the main concern is that the values in the pie chart and written text are swapped.
+*   **Importance:** This chart is important because it provides quantitative data regarding participant attitudes toward formal certification and its cost in Indian Rupees (INR). It helps the researchers understand the needs and priorities of the course participants and make informed decisions about offering certification as an option.
+*   **Broader Context:** Combined with the surrounding text regarding participant motivation for innovation and patent filing, the data on certification preference can guide decisions about resource allocation and how to best support the long-term application of TRIZ principles by participants. If cost is a concern, potentially offering subsidized or optional certifications could be considered, which is actually mentioned in the text.
+
+In conclusion, the pie chart offers a clear and concise visual representation of participant preferences regarding TRIZ certification. It complements the surrounding text and provides valuable insights into potential future steps for course design and delivery.
+
+
+
+=== Page 21 ===
+Certification Preferences:
+A majority (64.9%) did not perceive value in obtaining formal TRIZ certification, primarily due
+to cost and relevance concerns, while 35.1% expressed interest, suggesting optional certifications
+at a subsidized rate.
+Skill Development Opportunities:
+Expanding the course to include More Practical activities in class that require them to think end to
+end solutions for creative problem-solving and organizing innovation labs or hackathons
+were highly recommended.
+Reinforcement and Alumni Engagement:
+To sustain learning, respondents suggested post-course workshops, alumni groups, and
+refresher resources for long-term relevance.
+5. Batch-wise Findings:
+>> 2021
+Encouragement of Patent Filing and Innovation
+Motivation and Execution:
+While 58% of participants felt motivated to pursue patents after engaging in brainstorming and
+
+[Image page_21_image_0.png Analysis (by Gemini)]
+Here's a breakdown of the image and its context within the research paper:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a horizontal bar chart.
+*   **Structure:**
+    *   **X-axis:** Represents the "Percentage of Students" with a scale from 0 to 60.
+    *   **Y-axis:** Lists "Student Categories."
+    *   **Bars:** Three horizontal bars, each representing a student category. The length of each bar corresponds to the percentage of students in that category.
+    *   **Colors:** The bars are colored differently:
+        *   "Moderately Motivated Students" is salmon/coral.
+        *   "Highly Motivated Students" is light green.
+        *   "Actually Filed Patent" is light blue.
+*   **Labels:**
+    *   **Title:** "Motivation Levels Among Students"
+    *   **Y-axis labels:** "Moderately Motivated Students," "Highly Motivated Students," "Actually Filed Patent."
+    *   **Data labels:** Numerical values (percentages) displayed next to each bar (58.33, 33.33, 8.33).
+
+**Text Within the Image:**
+
+*   **Title:** "Motivation Levels Among Students"
+*   **Axis Labels:** "Student Categories", "Percentage of Students"
+*   **Category Labels:** "Moderately Motivated Students," "Highly Motivated Students," "Actually Filed Patent."
+*   **Data Values:** "58.33", "33.33", "8.33"
+
+**Interpretation and Significance:**
+
+The bar chart visually represents the levels of motivation among students, specifically concerning patent filing. It shows the following:
+
+*   **Most students are moderately motivated:** A substantial 58.33% are classified as "Moderately Motivated Students."
+*   **A significant portion is highly motivated:** 33.33% are categorized as "Highly Motivated Students."
+*   **Few actually filed patents:** A small percentage (8.33%) "Actually Filed Patent."
+
+**Context and Importance:**
+
+Based on the surrounding text, here's the image's likely context and importance:
+
+*   **TRIZ Course Evaluation:** The surrounding text discusses feedback on a TRIZ (Theory of Inventive Problem Solving) course or workshop.
+*   **Patent Filing Encouragement:** The text explicitly mentions the course's aim to encourage patent filing and innovation.
+*   **Batch-wise Findings (2021):**  The image likely depicts data from the 2021 batch of participants.
+*   **Motivation vs. Execution Gap:**  The text mentions that while 58% of participants felt motivated to pursue patents, only 8% actually filed them. The image provides a visual representation of this gap between motivation and execution.
+
+**Importance:**
+
+The image highlights a crucial issue: even with motivation and exposure to innovation techniques like TRIZ, actual patent filing rates remain low. This suggests that there are barriers preventing students from translating their motivation into concrete action. The text corroborates this, citing "procedural and resource-related barriers" and suggesting workshops on patent filing as a solution.
+
+In essence, the image is a visual aid that supports the argument that while the course is successful in fostering motivation, there's a need for additional support and resources to help students navigate the patent filing process and turn their ideas into patents.
+
+
+
+=== Page 22 ===
+analyzing existing patents, 8% successfully filed patents, citing procedural and resource-related
+barriers. Suggestions included offering workshops on patent filing and collaborations with
+experienced mentors to bridge the gap.
+Long-Term Perception:
+Over 58% of alumni recognized the course’s long-term value in their professional lives,
+particularly for problem-solving strategies like TRIZ and component analysis.
+>> 2022
+
+[Image page_22_image_0.png Analysis (by Gemini)]
+Here's a thorough analysis of the image based on the provided information:
+
+**Visual Elements and Structure:**
+
+*   **Type:** Pie chart
+*   **Structure:** The pie chart is divided into two sections, with a slight separation (or "exploded" view) between them. This highlights the segments.
+*   **Colors:**
+    *   Light blue: Represents "Yes, they are now valuable."
+    *   Light green: Represents "Somewhat valuable."
+*   **Labels:** Each slice has a label indicating the response category and the percentage of respondents who selected that category.
+*   **Legend:** A legend on the right-hand side maps the colors to the response categories. The legend lists "Yes, they are now valuable", "Somewhat valuable", and "Still find them irrelevant", but the third value does not have a color associated to it, suggesting that there were no respondents who said "still find them irrelevant."
+
+**Text Within the Image:**
+
+*   **Title:** "Looking back, do you now see the value of these concepts or activities in your professional life?"
+*   **Slice Labels:**
+    *   "Yes, they are now valuable" - 58.3%
+    *   "Somewhat valuable" - 41.7%
+*   **Legend Labels:**
+    *   "Yes, they are now valuable"
+    *   "Somewhat valuable"
+    *   "Still find them irrelevant"
+*   **Responses** : This heading seems to correspond to the legend.
+
+**Image Context and Importance:**
+
+The image (pie chart) visually represents the responses to a survey question posed to alumni regarding the perceived value of the course's concepts and activities in their professional lives. Based on the information provided, this question was part of an alumni survey from the year 2022.
+
+*   **Significance:** The chart demonstrates that a strong majority (58.3%) of alumni find the course content valuable in their professional careers, while a further 41.7% find it "somewhat valuable". This provides evidence for the long-term impact and relevance of the course. There were zero respondents that found the course concepts irrelevant.
+*   **Connection to Page Text:** The image directly supports the statement on page 22: "Over 58% of alumni recognized the course's long-term value in their professional lives..."
+*   **Broader Context:** The chart falls within a section discussing "Long-Term Perception," so it aims to evaluate the course's enduring benefits. The surrounding text provides further context. For example, the preceding section discusses encouragement of patent filing, and the text on either side discuss alumni responses from earlier years, so this chart represents an alumni response to the value of the class long-term.
+*   **Implications:** This positive feedback reinforces the course's value proposition and can be used to justify its continuation and potential expansion. The data suggests the curriculum (specifically TRIZ and component analysis, as mentioned in the page text) is useful.
+
+In summary, the pie chart is a clear and concise visual representation of alumni perceptions of the course's long-term value. It provides strong evidence of the course's positive impact on professional lives and aligns with the findings discussed in the surrounding text.
+
+
+[Image page_22_image_1.png Analysis (by Gemini)]
+Here's an analysis of the provided image based on your instructions:
+
+**Visual Elements and Structure:**
+
+*   **Type:** The image is a pie chart.
+*   **Structure:** The pie chart is divided into two primary sections, representing the responses to a survey question. One slice is light green and slightly separated from the rest of the chart for emphasis ("exploded" view). The other slice is orange.
+*   **Text:** The chart includes:
+    *   **Title:** "Did working on socio-economic issues help you better understand the real-world impact of creative problem-solving?"
+    *   **Slice Labels:** "It helped greatly" and "It helped somewhat"
+    *   **Percentage Values:** "26.7%" and "73.3%"
+    *   **Legend:** Provides the color key and labels corresponding to each response option: "It helped greatly" (light green), "It helped somewhat" (orange), "It helped minimally" (pink - but no pink segment), "No, it didn't help" (gray - but no gray segment). Note there aren't slices or values for "It helped minimally" or "No, it didn't help".
+
+**Significance:**
+
+The pie chart visually represents the distribution of responses to the question about the impact of working on socio-economic issues on understanding the real-world impact of creative problem-solving. The "exploded" slice highlighting that 26.7% responded with it helped greatly emphasizes the positive reception and could also be indicative of the importance that slice holds to the analysis/authors.
+
+**Overall Context and Importance:**
+
+Based on the surrounding text, the pie chart illustrates findings from a survey of 15 individuals regarding a course or program related to creative problem-solving, likely TRIZ or a similar methodology. The text accompanying the chart states that "73.3% stated that it helped somewhat, while 26.7% found that it helped greatly. None of the respondents reported minimal or no impact." This confirms what is being represented in the visual.
+
+The chart is important because it quantifies the perceived value of incorporating socio-economic challenges into the learning process. It supports the argument that engaging with real-world problems enhances understanding of the practical applications of creative problem-solving techniques. This is likely a point the authors are trying to make to justify the curriculum's design or to suggest improvements for future iterations. The chart adds visual weight to the statement in the paper.
+
+
+
+=== Page 23 ===
+The chart captures the responses of 15 individuals regarding whether working on socio-economic
+issues helped them understand the real-world impact of creative problem-solving. A majority,
+73.3%, stated that it helped somewhat, while 26.7% found that it helped greatly. None of the
+respondents reported minimal or no impact.
+These findings indicate that engaging with socio-economic challenges provides substantial
+insights into the practical applications of creative problem-solving, with varying degrees of
+effectiveness.
+The responses highlight the perceived relevance of problem analysis skills in navigating
+challenges in current roles among 15 individuals. A significant portion, 46.7%, reported that
+these skills provide a useful framework in some cases, while 33.3% found them occasionally
+relevant. Notably, 20% stated that these skills are essential for addressing challenges,
+demonstrating a direct and critical application. None of the respondents indicated that these skills
+are irrelevant.
+These results suggest that problem analysis skills are generally valuable, with varying levels
+of applicability depending on the situation.
+
+[Image page_23_image_0.png Error]
+No API key available for start.
+
+
+=== Page 24 ===
+>>2024
+The chart reflects the impact of focusing on specific technical challenges on problem-solving
+abilities in the current or aspiring roles of 10 respondents. Half of the respondents (50%)
+indicated that it significantly enhanced their skills. 40% stated that it helped, but only in certain
+technical areas, while 10% felt it did not make a significant difference.
+These findings suggest that focusing on technical challenges can lead to substantial skill
+improvement, particularly in relevant areas, although the impact may vary across different
+technical domains.
+The data presented in the chart regarding the impact of focusing on specific technical challenges
+has a low confidence level. This is because the respondents, primarily students, have either not
+yet entered the workforce or have not been in the industry long enough to fully assess the
+long-term impact of these skills in real-world professional contexts. Therefore, the conclusions
+drawn should be interpreted with caution and may require further validation through follow-up
+studies involving participants with more substantial industry experience.
+
+[Image page_24_image_0.png Error]
+No API key available for start.
+
+
+=== Page 25 ===
+The responses indicate the frequency of using technical skills learned in the course among 9
+participants in their current projects or jobs. A majority, 88.9%, reported using these skills
+sometimes, while 11.1% stated they use them very often. None of the respondents indicated
+rarely or never using these skills.
+These results highlight that while the technical skills acquired are utilized, their application
+is not consistent or frequent for most individuals, suggesting that these skills may
+complement other competencies in their roles.
+The data regarding the frequency of using technical skills learned in the course has a low
+confidence level. This is because the respondents, primarily students or early-career
+professionals, may not yet have sufficient exposure or opportunities to fully integrate these skills
+into their professional work.
+6. Patent Language Model (PatentGPT-J) on Claim Understanding and Generation
+● Successfully implemented a patent processing pipeline that combines OCR-extracted
+patent text and structured claims data to generate high-dimensional embeddings using
+state-of-the-art language models (e.g., Sentence-BERT and CLIP).
+● Leveraged claims such as those from US8654570, US9305633, and US20210343334A1
+to validate the model’s ability to distinguish nuanced legal language and technical
+specificity.
+
+[Image page_25_image_0.png Error]
+No API key available for start.
+
+
+=== Page 26 ===
+● Trained a custom LLM (PatentGPT-J-1.6B) using combined text and image embeddings,
+achieving accurate alignment between full patent context and individual claims—enabling
+context-aware output generation for tasks such as claim classification, prior art search,
+and semantic retrieval.
+● The model demonstrated effective generalization on unseen claims, maintaining structural
+understanding of elements like “data schema compliance,” “device-specific content
+formatting,” and “multi-source ML training data” from the respective claims.
+● Output generation using the trained model showed strong performance in reconstructing
+and summarizing claims from embedding vectors, highlighting its potential for
+downstream applications in automated patent drafting, claims comparison, and intelligent
+IP analysis.
+
+[Image page_26_image_0.png Error]
+No API key available for start.
+
+
+=== Page 27 ===
+
+
+[Image page_27_image_0.png Error]
+No API key available for start.
+
+
+[Image page_27_image_1.png Error]
+No API key available for start.
+
+
+=== Page 28 ===
+Conclusion
+The findings of this study emphasize the profound significance of creative thinking and
+problem-solving skills in professional environments, underscoring their critical role in
+overcoming challenges and fostering innovation. A substantial majority of respondents
+acknowledged the high professional relevance of these skills, particularly in generating novel
+ideas and balancing priorities, while barriers such as time management and technical
+problem-solving were frequently cited. The variability in the application of CIIPS
+principles—ranging from occasional to frequent use—demonstrates their adaptability to diverse
+roles and contexts, though certain areas, such as stakeholder management, exhibited lower
+applicability.
+The course methodology effectively engaged diverse learning styles, leveraging hands-on and
+visual approaches. Interactive teaching methods and a balanced integration of theory and practice
+were well-received, though feedback highlighted opportunities to further enhance peer-to-peer
+interactions and group discussions. Retention challenges, including difficulty remembering
+specifics, perceived irrelevance, and lack of confidence, indicate the need for more real-world
+examples, refresher materials, and sustained reinforcement of course concepts.
+Batch-wise Insights:
+● 2021 Batch:
+○ High levels of motivation for patent filing and innovation, with 8% successfully
+filing patents.
+○ Proposed enhancements include workshops on patent filing and collaborations
+with experienced mentors to address procedural and resource barriers.
+● 2022 Batch:
+○ Engagement with socio-economic challenges improved understanding of
+real-world applications, with 73.3% finding it somewhat beneficial and 26.7%
+greatly beneficial.
+○ Problem analysis skills were considered essential by 20% of participants, while
+others noted variable relevance based on the challenges faced.
+● 2024 Batch:
+○ Focus on technical challenges led to skill improvement for 50% of respondents,
+with 40% finding these helpful in specific areas and 10% reporting limited impact.
+○ Technical skills were applied occasionally by 88.9% of participants, and
+
+=== Page 29 ===
+frequently by 11.1%, highlighting inconsistencies in professional relevance.
+LLM Integration Outcomes: The integration of a fine-tuned large language model (LLM) to
+generate function models and assist with systematic innovation tools significantly enhanced
+students’ ability to structure problems and ideate effectively. Students found the LLM
+particularly useful for translating abstract patent language into actionable insights, reducing
+cognitive load, and accelerating the innovation process. However, broader adoption would
+benefit from guided tutorials and more contextual examples to maximize its utility across varying
+problem domains.
+Future Plans
+With the research paper now finalized and ready for submission, our focus will shift towards
+leveraging our findings to advance both academic discourse and practical applications of the
+CIIPS methodology. Building on the momentum of this study, our future plans include:
+● Research Dissemination:
+We will submit our paper to reputed journals and conferences focused on innovation in
+education and interdisciplinary learning. This will help share our insights with a broader
+academic and professional audience and invite collaborative feedback for refinement.
+● Scaling LLM Capabilities:
+We aim to train our fine-tuned large language model (LLM) on an even larger and more
+diverse dataset, enabling it to generate more accurate and context-aware function models.
+This will improve its ability to assist students in ideation, problem framing, and
+translating abstract concepts into practical solutions.
+● Educational Toolkit Development:
+Based on the positive feedback regarding the LLM's support in systematic innovation, we
+plan to develop an educational toolkit powered by the model. This toolkit will include
+step-by-step innovation guides, automated function model generators, and real-world case
+studies to enhance learning outcomes.
+Through these initiatives, we aim to bridge educational research with scalable, tech-driven
+innovation support—ensuring that the principles of creativity and problem-solving not only
+remain relevant but become more accessible and impactful in shaping future-ready professionals.
+
