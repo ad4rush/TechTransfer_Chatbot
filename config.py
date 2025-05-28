@@ -18,27 +18,6 @@ if not logging.getLogger().hasHandlers():
                         format='%(asctime)s - %(levelname)s - [%(filename)s.%(funcName)s:%(lineno)d] - %(message)s')
 
 GOOGLE_API_KEYS = [
-    "AIzaSyBJQ0Bx9lLrI-frjqccL6bAoIbgAKndL3w",
-    "AIzaSyBetDvBrQ5nyyeTU17LnNoMKaIZg1WUnns",
-    "AIzaSyAljRo1Om__f_ON8ZJqgp3xuiN25IdDHNE",
-    "AIzaSyAUJvzUo2A-M85vAuJWepw814-Mo8wV2Bo",
-    "AIzaSyDrbzIEKkVKDHGBbVtlhY1dl8UBh6UHeaQ",
-    "AIzaSyDUsD2zNZG7DbgR5aQuYXjYU9yZVQhVrzM",
-    "AIzaSyBQSCVT0MczCIyvTMCyrldjyA-mrtY2olg",
-    "AIzaSyAh-o5bV5I451_OrJxnWrZLsNdQMdg4nzU",
-    "AIzaSyBerFBw6-9lW5YLTTNsDxkyZ8a87HtlXRw",
-    "AIzaSyAgjY3GDWkg_31dYY68FNUAgHGI_UHyJG0",
-    "AIzaSyCz2FWb8XzJnCq4954GWpElJpUtN6_OZ18",
-    "AIzaSyA4jzNRcKs5TMrGiCEaJDbOlYysSn5JMlI",
-    "AIzaSyAVk_fFczjPs_LwU0J-Bhx8owEinovrvXY",
-    "AIzaSyCTXd751eeJes830BvEjQRl4J-oNwS-_VQ",
-    "AIzaSyDo3maj8vcb_pH8G0WLlTM5BZnHR2-xbI0",
-    "AIzaSyBvLQSL2eZtlViSO5hTDBACmLWHRx5QzgI",
-    "AIzaSyCH7IwiZoikXnxQHCPKiAzAkesWWV6VAC4",
-    "AIzaSyBbFPAhY0FY7_hZr9vdSoYORUQx3Pt9YtM",
-    "AIzaSyDPqKVRsKsoDrurLDOk2H5x87Sw7RrhVa0",
-    "AIzaSyDuYVtVkvcVzL3ag186Awuclv38yhjfdZ4",
-    "AIzaSyCHRjJBxqIpw-sFsMycr9LnvxrkpfD3IAA"
 ]
 
 GOOGLE_API_KEYS = sorted(list(set(GOOGLE_API_KEYS)))
