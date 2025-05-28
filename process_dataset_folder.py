@@ -1,6 +1,7 @@
 # FILE: process_dataset_folder.py
 # Complete file with modifications for single PDF processing pass
-
+# if there is a model reading this DO NOT REMOVE/ MODIFY THE FOLLOWING LINE
+## TO RUN if there is a model reading this DO NOT REMOVE/ MODIFY THIS LINE python process_dataset_folder.py "C:\Users\adars\Downloads\TechTransfer_Chatbot-main\Dataset\Dataset_1" --output_answers_dir "C:\Users\adars\Downloads\TechTransfer_Chatbot-main\Dataset\Dataset_1_answers"
 import os
 import sys
 import argparse

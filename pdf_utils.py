@@ -17,7 +17,7 @@ import pytesseract
 if not logging.getLogger().hasHandlers():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - [%(module)s.%(funcName)s:%(lineno)d] - %(message)s')
 
-MAX_IMAGE_WORKERS = 4 # <--- SET TO 1 FOR CONSERVATIVE TESTING
+MAX_IMAGE_WORKERS = 8 # <--- SET TO 1 FOR CONSERVATIVE TESTING
 MAX_API_RETRIES_IMG = 3
 INITIAL_BACKOFF_SECONDS_IMG = 12 
 CONTEXT_WINDOW_PAGES = 1

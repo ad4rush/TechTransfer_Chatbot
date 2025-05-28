@@ -23,8 +23,125 @@ def initialize_model_for_chat(api_key):
             model = genai.GenerativeModel('gemini-2.0-flash-exp')
         return model
     except Exception as e:
-        logging.error(f"Failed to initialize chat model with key ...{api_key[-6:]}: {e}")
+        # MODIFIED to handle api_key being None or not a string
+        key_display = f"...{api_key[-6:]}" if isinstance(api_key, str) and len(api_key) >= 6 else str(api_key)
+        logging.error(f"Failed to initialize chat model with key {key_display}: {e}")
         return None
+
+# Around line 56 (function definition of generate_answers_for_batch)
+def generate_answers_for_batch(key_for_first_attempt, question_batch, processed_pdf_text, batch_name_for_logging="Unnamed Batch"):
+    current_api_key_for_this_specific_attempt = key_for_first_attempt # Will be None if main.py passes None
+    chat_model = None
+    
+    question_details = [f"  - Parameter: \"{q['param']}\"\n    Question: \"{q['question']}\"" for q in question_batch]
+    current_batch_questions_string = "\n".join(question_details)
+    prompt_for_batch = (
+        "You are an expert research analyst. Your task is to meticulously analyze the provided 'Processed Research Paper Text' "
+        "and provide **long, detailed, highly descriptive, accurate, and comprehensive answers** to the questions in this batch. "
+        "These answers will serve as a high-quality dataset for fine-tuning. Precision, completeness, extensive detail, and direct relevance are paramount. "
+        "Elaborate as much as possible based *solely* on the information in the 'Processed Research Paper Text'. Do not use external knowledge.\n\n"
+        "Instructions for your response:\n"
+        "1. Provide a direct, thorough, and **elaborate answer for each question in this batch, making it as long and detailed as the text supports**.\n"
+        "2. Ensure each answer addresses all aspects of its corresponding question with significant detail.\n"
+        "3. Avoid introductory phrases, conversational fluff, or disclaimers.\n"
+        "4. Your output *must* be a single, valid JSON object. This JSON object should map each question's 'Parameter' name from this batch to its **long and detailed string answer**.\n\n"
+        f"Questions to Answer in this Batch (use these 'Parameter' names as keys in your JSON output for this batch):\n{current_batch_questions_string}\n\n"
+        f"Processed Research Paper Text:\n{processed_pdf_text}\n\n"
+        "JSON Response for this batch (ensure this is only the JSON object and nothing else):"
+    )
+
+    for attempt in range(MAX_API_RETRIES_QNA):
+        try:
+            # MODIFIED: Ensure a key is obtained if not provided or if it's a retry
+            if attempt == 0 and current_api_key_for_this_specific_attempt:
+                # Use the provided key for the very first attempt if one was given
+                logging.info(f"Q&A Batch '{batch_name_for_logging}': Attempt 1 using provided key ...{current_api_key_for_this_specific_attempt[-6:]}.")
+            else:
+                # For retries, or if no initial key was provided for the first attempt
+                log_prefix = f"Q&A Batch '{batch_name_for_logging}': Attempt {attempt + 1}."
+                if attempt == 0 and not current_api_key_for_this_specific_attempt: # Specifically for first attempt if no key was passed
+                    logging.info(f"{log_prefix} No initial key provided, getting a new API key.")
+                else: # This covers retries where previous key might have failed or just for a new attempt
+                    logging.info(f"{log_prefix} This is a retry or previous key attempt was problematic, getting a new API key.")
+                
+                current_api_key_for_this_specific_attempt = config.get_available_api_key() # Raises ValueError if no key is ready
+                logging.info(f"{log_prefix} Got key ...{current_api_key_for_this_specific_attempt[-6:]} for this attempt.")
+
+            # Now, current_api_key_for_this_specific_attempt is expected to be a valid key string
+            chat_model = initialize_model_for_chat(current_api_key_for_this_specific_attempt) # Uses the modified initialize_model_for_chat
+            
+            if not chat_model:
+                # Logging here is safer as current_api_key_for_this_specific_attempt should be a string
+                logging.error(f"Q&A Batch '{batch_name_for_logging}': Model init failed with key ...{current_api_key_for_this_specific_attempt[-6:]} on attempt {attempt + 1}.")
+                if attempt < MAX_API_RETRIES_QNA - 1:
+                    time.sleep(INITIAL_BACKOFF_SECONDS_QNA * (1.5**attempt) + random.uniform(0,1)) 
+                    current_api_key_for_this_specific_attempt = None # Ensure next loop iteration gets a fresh key explicitly
+                    continue 
+                else: # Max retries for model config
+                    break 
+
+            logging.info(f"Q&A Batch '{batch_name_for_logging}' attempt {attempt + 1}. Key used: ...{current_api_key_for_this_specific_attempt[-6:]}.")
+            chat_session_for_batch = chat_model.start_chat()
+            
+            response = chat_session_for_batch.send_message(prompt_for_batch)
+            config.record_key_success(current_api_key_for_this_specific_attempt) # Record success with the key used
+
+            response_text = response.text.strip()
+            match = re.search(r"\{.*\}", response_text, re.DOTALL)
+            json_str = match.group(0) if match else response_text
+            if json_str.startswith("```json"): json_str = json_str[len("```json"):]
+            if json_str.startswith("```"): json_str = json_str[len("```"):]
+            if json_str.endswith("```"): json_str = json_str[:-len("```")]
+            json_str = json_str.strip()
+            batch_answers_dict = json.loads(json_str)
+            final_batch_answers = {q["param"]: batch_answers_dict.get(q["param"], f"Info for '{q['param']}' not in AI JSON for batch.") for q in question_batch}
+            logging.info(f"Successfully generated and parsed answers for batch '{batch_name_for_logging}'.")
+            return final_batch_answers
+
+        except ValueError as e_get_key: # Raised by config.get_available_api_key
+            logging.warning(f"Q&A Batch '{batch_name_for_logging}': Attempt {attempt+1} failed to get an API key: {e_get_key}.")
+            if attempt < MAX_API_RETRIES_QNA - 1:
+                wait_duration = INITIAL_BACKOFF_SECONDS_QNA * (1.5**attempt) + random.uniform(0,1)
+                logging.info(f"Q&A Batch '{batch_name_for_logging}': Waiting {wait_duration:.2f}s before retrying to get a key.")
+                time.sleep(wait_duration)
+                current_api_key_for_this_specific_attempt = None # Ensure next loop iteration tries to get a key
+            else: # Max retries for getting a key
+                logging.error(f"Q&A Batch '{batch_name_for_logging}': Max retries ({MAX_API_RETRIES_QNA}) reached, failed to get an available key.")
+                return {q["param"]: f"Error: Failed to get an API key after max retries for batch." for q in question_batch}
+
+        except json.JSONDecodeError as je:
+            error_detail = f"Batch '{batch_name_for_logging}': Failed to decode JSON on attempt {attempt+1}. Error: {je}. Response: {response.text[:500] if 'response' in locals() else 'N/A'}"
+            logging.warning(error_detail)
+            if attempt < MAX_API_RETRIES_QNA - 1:
+                time.sleep(INITIAL_BACKOFF_SECONDS_QNA * (2 ** attempt) + random.uniform(0,1))
+            else:
+                logging.error(f"Max retries for JSON decoding for batch '{batch_name_for_logging}'.")
+                return {q["param"]: f"Error: {error_detail}" for q in question_batch}
+        
+        except Exception as e: # Other API errors, including 429
+            error_message_str = str(e)
+            # MODIFIED: Robust key display in logging
+            key_display_on_error = f"...{current_api_key_for_this_specific_attempt[-6:]}" if isinstance(current_api_key_for_this_specific_attempt, str) and len(current_api_key_for_this_specific_attempt) >=6 else str(current_api_key_for_this_specific_attempt)
+            logging.warning(f"Q&A Batch '{batch_name_for_logging}' attempt {attempt + 1} (key {key_display_on_error}) failed: {error_message_str}")
+            
+            is_rate_limit_error = "429" in error_message_str or "rate limit" in error_message_str.lower() or "quota" in error_message_str.lower()
+
+            if is_rate_limit_error and isinstance(current_api_key_for_this_specific_attempt, str): # Only mark if a key (string) was actually involved
+                config.mark_key_as_rate_limited(current_api_key_for_this_specific_attempt, error_message_str=error_message_str)
+            
+            if attempt < MAX_API_RETRIES_QNA - 1:
+                general_retry_sleep = INITIAL_BACKOFF_SECONDS_QNA / 2 * (1.5**attempt) + random.uniform(0,0.5)
+                logging.info(f"Q&A Batch '{batch_name_for_logging}': API error. Sleeping {general_retry_sleep:.2f}s before next retry attempt.")
+                time.sleep(general_retry_sleep)
+                current_api_key_for_this_specific_attempt = None # Ensure next loop iteration gets a fresh key explicitly
+            else: # Max retries for this task reached after API error
+                logging.error(f"Max retries ({MAX_API_RETRIES_QNA}) for Q&A batch '{batch_name_for_logging}' after API error.")
+                return {q["param"]: f"Error: API call failed for batch after retries. Original error: {error_message_str[:100]}..." for q in question_batch}
+
+    # Fallback if loop completes without returning
+    logging.error(f"Q&A Batch '{batch_name_for_logging}': Failed to generate answers after all retries (loop exhausted).")
+    return {q["param"]: "Failed to generate answer for this batch after all retries." for q in question_batch}
+
 
 def get_questions_raw():
     return [
@@ -78,101 +195,101 @@ def get_questions():
     return get_questions_raw()
 
 
-def generate_answers_for_batch(key_for_first_attempt, question_batch, processed_pdf_text, batch_name_for_logging="Unnamed Batch"):
-    current_api_key = key_for_first_attempt
-    chat_model = None
+# def generate_answers_for_batch(key_for_first_attempt, question_batch, processed_pdf_text, batch_name_for_logging="Unnamed Batch"):
+#     current_api_key = key_for_first_attempt
+#     chat_model = None
     
-    question_details = [f"  - Parameter: \"{q['param']}\"\n    Question: \"{q['question']}\"" for q in question_batch]
-    current_batch_questions_string = "\n".join(question_details)
-    prompt_for_batch = (
-        "You are an expert research analyst. Your task is to meticulously analyze the provided 'Processed Research Paper Text' "
-        "and provide **long, detailed, highly descriptive, accurate, and comprehensive answers** to the questions in this batch. "
-        "These answers will serve as a high-quality dataset for fine-tuning. Precision, completeness, extensive detail, and direct relevance are paramount. "
-        "Elaborate as much as possible based *solely* on the information in the 'Processed Research Paper Text'. Do not use external knowledge.\n\n"
-        "Instructions for your response:\n"
-        "1. Provide a direct, thorough, and **elaborate answer for each question in this batch, making it as long and detailed as the text supports**.\n"
-        "2. Ensure each answer addresses all aspects of its corresponding question with significant detail.\n"
-        "3. Avoid introductory phrases, conversational fluff, or disclaimers.\n"
-        "4. Your output *must* be a single, valid JSON object. This JSON object should map each question's 'Parameter' name from this batch to its **long and detailed string answer**.\n\n"
-        f"Questions to Answer in this Batch (use these 'Parameter' names as keys in your JSON output for this batch):\n{current_batch_questions_string}\n\n"
-        f"Processed Research Paper Text:\n{processed_pdf_text}\n\n"
-        "JSON Response for this batch (ensure this is only the JSON object and nothing else):"
-    )
+#     question_details = [f"  - Parameter: \"{q['param']}\"\n    Question: \"{q['question']}\"" for q in question_batch]
+#     current_batch_questions_string = "\n".join(question_details)
+#     prompt_for_batch = (
+#         "You are an expert research analyst. Your task is to meticulously analyze the provided 'Processed Research Paper Text' "
+#         "and provide **long, detailed, highly descriptive, accurate, and comprehensive answers** to the questions in this batch. "
+#         "These answers will serve as a high-quality dataset for fine-tuning. Precision, completeness, extensive detail, and direct relevance are paramount. "
+#         "Elaborate as much as possible based *solely* on the information in the 'Processed Research Paper Text'. Do not use external knowledge.\n\n"
+#         "Instructions for your response:\n"
+#         "1. Provide a direct, thorough, and **elaborate answer for each question in this batch, making it as long and detailed as the text supports**.\n"
+#         "2. Ensure each answer addresses all aspects of its corresponding question with significant detail.\n"
+#         "3. Avoid introductory phrases, conversational fluff, or disclaimers.\n"
+#         "4. Your output *must* be a single, valid JSON object. This JSON object should map each question's 'Parameter' name from this batch to its **long and detailed string answer**.\n\n"
+#         f"Questions to Answer in this Batch (use these 'Parameter' names as keys in your JSON output for this batch):\n{current_batch_questions_string}\n\n"
+#         f"Processed Research Paper Text:\n{processed_pdf_text}\n\n"
+#         "JSON Response for this batch (ensure this is only the JSON object and nothing else):"
+#     )
 
-    for attempt in range(MAX_API_RETRIES_QNA):
-        try:
-            if attempt > 0: # For retries, always try to get a fresh key
-                logging.info(f"Q&A Batch '{batch_name_for_logging}': Retry attempt {attempt + 1}. Attempting to get a new key.")
-                current_api_key = config.get_available_api_key() # This will raise ValueError if no key is ready
-                logging.info(f"Q&A Batch '{batch_name_for_logging}': Got key ...{current_api_key[-6:]} for retry attempt {attempt + 1}.")
+#     for attempt in range(MAX_API_RETRIES_QNA):
+#         try:
+#             if attempt > 0: # For retries, always try to get a fresh key
+#                 logging.info(f"Q&A Batch '{batch_name_for_logging}': Retry attempt {attempt + 1}. Attempting to get a new key.")
+#                 current_api_key = config.get_available_api_key() # This will raise ValueError if no key is ready
+#                 logging.info(f"Q&A Batch '{batch_name_for_logging}': Got key ...{current_api_key[-6:]} for retry attempt {attempt + 1}.")
 
-            chat_model = initialize_model_for_chat(current_api_key)
-            if not chat_model:
-                logging.error(f"Q&A Batch '{batch_name_for_logging}': Model init failed with key ...{current_api_key[-6:]} on attempt {attempt + 1}.")
-                if attempt < MAX_API_RETRIES_QNA - 1:
-                    time.sleep(INITIAL_BACKOFF_SECONDS_QNA * (1.5**attempt) + random.uniform(0,1)) # General wait
-                    continue # To next retry attempt, will try to get a key again
-                else: # Max retries for model config
-                    break # Break from retries
+#             chat_model = initialize_model_for_chat(current_api_key)
+#             if not chat_model:
+#                 logging.error(f"Q&A Batch '{batch_name_for_logging}': Model init failed with key ...{current_api_key[-6:]} on attempt {attempt + 1}.")
+#                 if attempt < MAX_API_RETRIES_QNA - 1:
+#                     time.sleep(INITIAL_BACKOFF_SECONDS_QNA * (1.5**attempt) + random.uniform(0,1)) # General wait
+#                     continue # To next retry attempt, will try to get a key again
+#                 else: # Max retries for model config
+#                     break # Break from retries
 
-            logging.info(f"Q&A Batch '{batch_name_for_logging}' attempt {attempt + 1}. Key: ...{current_api_key[-6:]}.")
-            chat_session_for_batch = chat_model.start_chat()
+#             logging.info(f"Q&A Batch '{batch_name_for_logging}' attempt {attempt + 1}. Key: ...{current_api_key[-6:]}.")
+#             chat_session_for_batch = chat_model.start_chat()
             
-            # config.record_key_usage(current_api_key) # <--- REMOVED (handled by get_available_api_key)
-            response = chat_session_for_batch.send_message(prompt_for_batch)
-            config.record_key_success(current_api_key) # Still record success
+#             # config.record_key_usage(current_api_key) # <--- REMOVED (handled by get_available_api_key)
+#             response = chat_session_for_batch.send_message(prompt_for_batch)
+#             config.record_key_success(current_api_key) # Still record success
 
-            response_text = response.text.strip()
-            match = re.search(r"\{.*\}", response_text, re.DOTALL)
-            json_str = match.group(0) if match else response_text
-            if json_str.startswith("```json"): json_str = json_str[len("```json"):]
-            if json_str.startswith("```"): json_str = json_str[len("```"):]
-            if json_str.endswith("```"): json_str = json_str[:-len("```")]
-            json_str = json_str.strip()
-            batch_answers_dict = json.loads(json_str)
-            final_batch_answers = {q["param"]: batch_answers_dict.get(q["param"], f"Info for '{q['param']}' not in AI JSON for batch.") for q in question_batch}
-            logging.info(f"Successfully generated and parsed answers for batch '{batch_name_for_logging}'.")
-            return final_batch_answers
+#             response_text = response.text.strip()
+#             match = re.search(r"\{.*\}", response_text, re.DOTALL)
+#             json_str = match.group(0) if match else response_text
+#             if json_str.startswith("```json"): json_str = json_str[len("```json"):]
+#             if json_str.startswith("```"): json_str = json_str[len("```"):]
+#             if json_str.endswith("```"): json_str = json_str[:-len("```")]
+#             json_str = json_str.strip()
+#             batch_answers_dict = json.loads(json_str)
+#             final_batch_answers = {q["param"]: batch_answers_dict.get(q["param"], f"Info for '{q['param']}' not in AI JSON for batch.") for q in question_batch}
+#             logging.info(f"Successfully generated and parsed answers for batch '{batch_name_for_logging}'.")
+#             return final_batch_answers
 
-        except ValueError as e_get_key: # Raised by get_available_api_key if no key is ready
-            logging.warning(f"Q&A Batch '{batch_name_for_logging}': Attempt {attempt+1} failed to get an API key: {e_get_key}.")
-            if attempt < MAX_API_RETRIES_QNA - 1:
-                # Wait before retrying to get a key in the next loop iteration
-                wait_duration = INITIAL_BACKOFF_SECONDS_QNA * (1.5**attempt) + random.uniform(0,1)
-                logging.info(f"Q&A Batch '{batch_name_for_logging}': Waiting {wait_duration:.2f}s before retrying to get a key.")
-                time.sleep(wait_duration)
-            else: # Max retries for getting a key
-                logging.error(f"Q&A Batch '{batch_name_for_logging}': Max retries ({MAX_API_RETRIES_QNA}) reached, failed to get an available key.")
-                return {q["param"]: f"Error: Failed to get an API key after max retries for batch." for q in question_batch}
+#         except ValueError as e_get_key: # Raised by get_available_api_key if no key is ready
+#             logging.warning(f"Q&A Batch '{batch_name_for_logging}': Attempt {attempt+1} failed to get an API key: {e_get_key}.")
+#             if attempt < MAX_API_RETRIES_QNA - 1:
+#                 # Wait before retrying to get a key in the next loop iteration
+#                 wait_duration = INITIAL_BACKOFF_SECONDS_QNA * (1.5**attempt) + random.uniform(0,1)
+#                 logging.info(f"Q&A Batch '{batch_name_for_logging}': Waiting {wait_duration:.2f}s before retrying to get a key.")
+#                 time.sleep(wait_duration)
+#             else: # Max retries for getting a key
+#                 logging.error(f"Q&A Batch '{batch_name_for_logging}': Max retries ({MAX_API_RETRIES_QNA}) reached, failed to get an available key.")
+#                 return {q["param"]: f"Error: Failed to get an API key after max retries for batch." for q in question_batch}
 
-        except json.JSONDecodeError as je:
-            error_detail = f"Batch '{batch_name_for_logging}': Failed to decode JSON on attempt {attempt+1}. Error: {je}. Response: {response.text[:500] if 'response' in locals() else 'N/A'}"
-            logging.warning(error_detail)
-            if attempt < MAX_API_RETRIES_QNA - 1:
-                time.sleep(INITIAL_BACKOFF_SECONDS_QNA * (2 ** attempt) + random.uniform(0,1))
-            else:
-                logging.error(f"Max retries for JSON decoding for batch '{batch_name_for_logging}'.")
-                return {q["param"]: f"Error: {error_detail}" for q in question_batch}
+#         except json.JSONDecodeError as je:
+#             error_detail = f"Batch '{batch_name_for_logging}': Failed to decode JSON on attempt {attempt+1}. Error: {je}. Response: {response.text[:500] if 'response' in locals() else 'N/A'}"
+#             logging.warning(error_detail)
+#             if attempt < MAX_API_RETRIES_QNA - 1:
+#                 time.sleep(INITIAL_BACKOFF_SECONDS_QNA * (2 ** attempt) + random.uniform(0,1))
+#             else:
+#                 logging.error(f"Max retries for JSON decoding for batch '{batch_name_for_logging}'.")
+#                 return {q["param"]: f"Error: {error_detail}" for q in question_batch}
         
-        except Exception as e: # Other API errors, including 429
-            error_message_str = str(e)
-            logging.warning(f"Q&A Batch '{batch_name_for_logging}' attempt {attempt + 1} (key ...{current_api_key[-6:]}) failed: {error_message_str}")
-            is_rate_limit_error = "429" in error_message_str or "rate limit" in error_message_str.lower() or "quota" in error_message_str.lower()
+#         except Exception as e: # Other API errors, including 429
+#             error_message_str = str(e)
+#             logging.warning(f"Q&A Batch '{batch_name_for_logging}' attempt {attempt + 1} (key ...{current_api_key[-6:]}) failed: {error_message_str}")
+#             is_rate_limit_error = "429" in error_message_str or "rate limit" in error_message_str.lower() or "quota" in error_message_str.lower()
 
-            if is_rate_limit_error:
-                config.mark_key_as_rate_limited(current_api_key, error_message_str=error_message_str)
+#             if is_rate_limit_error:
+#                 config.mark_key_as_rate_limited(current_api_key, error_message_str=error_message_str)
             
-            if attempt < MAX_API_RETRIES_QNA - 1:
-                # General sleep before next attempt, which will try to get a fresh key.
-                general_retry_sleep = INITIAL_BACKOFF_SECONDS_QNA / 2 * (1.5**attempt) + random.uniform(0,0.5)
-                logging.info(f"Q&A Batch '{batch_name_for_logging}': API error. Sleeping {general_retry_sleep:.2f}s before next retry attempt.")
-                time.sleep(general_retry_sleep)
-            else: # Max retries for this task reached after API error
-                logging.error(f"Max retries ({MAX_API_RETRIES_QNA}) for Q&A batch '{batch_name_for_logging}' after API error.")
-                return {q["param"]: f"Error: API call failed for batch after retries. Original error: {error_message_str[:100]}..." for q in question_batch}
+#             if attempt < MAX_API_RETRIES_QNA - 1:
+#                 # General sleep before next attempt, which will try to get a fresh key.
+#                 general_retry_sleep = INITIAL_BACKOFF_SECONDS_QNA / 2 * (1.5**attempt) + random.uniform(0,0.5)
+#                 logging.info(f"Q&A Batch '{batch_name_for_logging}': API error. Sleeping {general_retry_sleep:.2f}s before next retry attempt.")
+#                 time.sleep(general_retry_sleep)
+#             else: # Max retries for this task reached after API error
+#                 logging.error(f"Max retries ({MAX_API_RETRIES_QNA}) for Q&A batch '{batch_name_for_logging}' after API error.")
+#                 return {q["param"]: f"Error: API call failed for batch after retries. Original error: {error_message_str[:100]}..." for q in question_batch}
 
-    logging.error(f"Q&A Batch '{batch_name_for_logging}': Failed to generate answers after all retries (loop exhausted).")
-    return {q["param"]: "Failed to generate answer for this batch after all retries." for q in question_batch}
+#     logging.error(f"Q&A Batch '{batch_name_for_logging}': Failed to generate answers after all retries (loop exhausted).")
+#     return {q["param"]: "Failed to generate answer for this batch after all retries." for q in question_batch}
 
 
 def generate_answer( 
