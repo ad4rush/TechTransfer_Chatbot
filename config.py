@@ -8,15 +8,7 @@ load_dotenv()
 
 # Using the list of API keys you provided
 GOOGLE_API_KEYS = [
-    "AIzaSyBJQ0Bx9lLrI-frjqccL6bAoIbgAKndL3w", 
-    "AIzaSyBetDvBrQ5nyyeTU17LnNoMKaIZg1WUnns",  
-    "AIzaSyAljRo1Om__f_ON8ZJqgp3xuiN25IdDHNE", 
-    "AIzaSyAUJvzUo2A-M85vAuJWepw814-Mo8wV2Bo", 
-    "AIzaSyDrbzIEKkVKDHGBbVtlhY1dl8UBh6UHeaQ", 
-    "AIzaSyDUsD2zNZG7DbgR5aQuYXjYU9yZVQhVrzM",
-    "AIzaSyBQSCVT0MczCIyvTMCyrldjyA-mrtY2olg",
-    "AIzaSyAh-o5bV5I451_OrJxnWrZLsNdQMdg4nzU",
-    "AIzaSyBerFBw6-9lW5YLTTNsDxkyZ8a87HtlXRw"
+    
 ]
 # Ensure no duplicates if any were present in the original list
 GOOGLE_API_KEYS = sorted(list(set(GOOGLE_API_KEYS)))
