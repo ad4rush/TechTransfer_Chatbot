@@ -21,13 +21,15 @@ if not logging.getLogger().hasHandlers():
 # --- Configuration for Individual Image Analysis ---
 MAX_IMAGE_ANALYSIS_WORKERS = max(1, len(config.GOOGLE_API_KEYS))
 MAX_OCR_WORKERS = os.cpu_count() or 4
+# --- NEW: Batch size for image analysis ---
+IMAGE_ANALYSIS_BATCH_SIZE = 5
 
 # --- API Call Settings ---
 MAX_API_RETRIES_IMG = 3
 INITIAL_BACKOFF_SECONDS_IMG = 5
 CONTEXT_WINDOW_PAGES = 1
 OCR_TEXT_WORTHINESS_THRESHOLD = 25
-IMAGE_PROCESSING_TIMEOUT = 180 
+IMAGE_PROCESSING_TIMEOUT = 300 # Increased timeout for larger batch calls
 OCR_TIMEOUT_SECONDS = 60
 
 def _format_table_as_markdown(table_data: list[list[str]]) -> str:
@@ -64,8 +66,7 @@ def _configure_gemini_model_for_task_internal(api_key_for_task):
     """Initializes the Generative AI model for vision tasks."""
     try:
         genai.configure(api_key=api_key_for_task)
-        # Using a standard, powerful vision model is best for this task
-        model = genai.GenerativeModel('gemini-2.0-flash-exp') 
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
         return model
     except Exception as e:
         logging.error(f"Failed to configure Gemini model with key ...{api_key_for_task[-6:]}: {e}")
@@ -130,39 +131,41 @@ def is_image_worthy_for_gemini(image_bytes, min_text_len=OCR_TEXT_WORTHINESS_THR
         logging.warning(f"Error during OCR worthiness check: {e}. Assuming worthy for vision analysis.", exc_info=True)
         return True, f"[OCR failed due to error: {str(e)}]"
 
-def analyze_single_image_task(api_key, image_data):
+def analyze_image_batch_task(api_key, image_batch_data):
     """
-    Analyzes a single image with its surrounding text context.
+    Analyzes a batch of images, each with its surrounding text context, in a single API call.
     """
-    page_num, img_idx = image_data['page_num'], image_data['img_idx']
-    img_name, analysis_file_path = image_data['img_name'], image_data['analysis_file_path']
     key_for_task = api_key
-    
+    batch_identifiers = [f"page_{img_data['page_num']}_image_{img_data['img_idx']}" for img_data in image_batch_data]
+
     prompt = (
-        "You are an expert research paper analyst. Your task is to analyze the following image in the context of the surrounding text from the research paper. "
-        "Provide a complete, detailed, and comprehensive analysis. Your goal is to infer the knowledge and significance of the image based on the provided text.\n\n"
-        "Your analysis must include:\n"
-        "1.  **Detailed Visual Description:** Describe every element of the image, including graphs, diagrams, charts, and their labels.\n"
-        "2.  **Text Transcription:** Accurately transcribe all visible text from the image.\n"
-        "3.  **Table Formatting:** If the image contains a table, extract its data and format it as a clean Markdown table.\n"
-        "4.  **Inferred Knowledge & Summary:** This is the most important part. Synthesize the information from the image and the context text. Explain what the image represents, what conclusions can be drawn, and what its overall significance is to the paper. This should be a detailed, multi-paragraph explanation.\n\n"
-        "Do not just state what you see; explain what it means."
+        "You are an expert research paper analyst. Your task is to analyze a batch of images, each with its own surrounding text context from a research paper. "
+        "Provide a complete, detailed, and comprehensive analysis for each image. Your goal is to infer the knowledge and significance of each image based on the provided text. "
+        "Your ENTIRE output MUST be a single, valid JSON object and nothing else. The JSON object should have keys corresponding to each image's unique identifier that I provide.\n\n"
+        "For each image's analysis, you must:\n"
+        "1.  Provide an in-depth explanation of what the image represents, what conclusions can be drawn, and its overall significance to the paper. **Highlight key findings and important terms in bold using Markdown.**\n"
+        "2.  If the image contains a table, implicitly extract its data and format it as a clean Markdown table within the explanation.\n"
+        "3.  If the image contains graphs, diagrams, or charts, describe them in detail, including their labels and the data they represent.\n"
+        "4.  Accurately transcribe any other important visible text from the image.\n\n"
+        "Do not just state what you see; explain what it means in detail. Synthesize information from both the image and its context.\n\n"
+        "Here is the batch of images and their contexts. Process them in order and use the provided identifiers as keys in your final JSON response."
     )
 
-    content_for_api_call = [
-        prompt,
-        "\n--- Surrounding Text Context ---\n",
-        image_data['focused_contextual_text'],
-        "\n--- Image for Analysis ---\n",
-        Image.open(BytesIO(image_data['image_bytes']))
-    ]
+    content_for_api_call = [prompt]
+    for i, img_data in enumerate(image_batch_data):
+        identifier = batch_identifiers[i]
+        content_for_api_call.append(f"\n--- Image Identifier: {identifier} ---\n")
+        content_for_api_call.append("\n--- Surrounding Text Context ---\n")
+        content_for_api_call.append(img_data['focused_contextual_text'])
+        content_for_api_call.append("\n--- Image for Analysis ---\n")
+        content_for_api_call.append(Image.open(BytesIO(img_data['image_bytes'])))
 
     for attempt in range(MAX_API_RETRIES_IMG):
         try:
             if attempt > 0:
-                logging.info(f"Retrying analysis for {img_name}, attempt {attempt + 1}")
+                logging.info(f"Retrying analysis for batch starting with {batch_identifiers[0]}, attempt {attempt + 1}")
                 key_for_task = config.get_available_api_key()
-            
+
             model = _configure_gemini_model_for_task_internal(key_for_task)
             if not model:
                 if attempt < MAX_API_RETRIES_IMG - 1: time.sleep(INITIAL_BACKOFF_SECONDS_IMG); continue
@@ -170,30 +173,56 @@ def analyze_single_image_task(api_key, image_data):
 
             response = model.generate_content(content_for_api_call, request_options={'timeout': IMAGE_PROCESSING_TIMEOUT})
             config.record_key_success(key_for_task)
-            
-            analysis_text = response.text
-            with open(analysis_file_path, "w", encoding="utf-8") as f_analysis:
-                f_analysis.write(analysis_text)
-            
-            result_text = f"\n[Image {img_name} Analysis (by Gemini)]\n{analysis_text}\n"
-            return (page_num, img_idx), result_text
 
+            response_text = response.text.strip()
+            match = re.search(r"\{.*\}", response_text, re.DOTALL)
+            json_str = match.group(0) if match else response_text
+            if json_str.startswith("```json"): json_str = json_str[len("```json"):]
+            if json_str.endswith("```"): json_str = json_str[:-len("```")]
+            json_str = json_str.strip()
+
+            batch_analysis_results = json.loads(json_str)
+            batch_processed_results = {}
+
+            for i, img_data in enumerate(image_batch_data):
+                identifier = batch_identifiers[i]
+                analysis_content = batch_analysis_results.get(identifier, f"Analysis for {identifier} not found in batched JSON response.")
+                
+                # FIX: Ensure the content to be written is a string.
+                if isinstance(analysis_content, dict):
+                    analysis_text_to_write = json.dumps(analysis_content, indent=4)
+                else:
+                    analysis_text_to_write = str(analysis_content)
+
+                with open(img_data['analysis_file_path'], "w", encoding="utf-8") as f_analysis:
+                    f_analysis.write(analysis_text_to_write)
+                
+                result_text = f"\n[Image {img_data['img_name']} Analysis (by Gemini)]\n{analysis_text_to_write}\n"
+                img_key = (img_data['page_num'], img_data['img_idx'])
+                batch_processed_results[img_key] = result_text
+            
+            return batch_processed_results
+
+        except json.JSONDecodeError as je:
+             logging.warning(f"Attempt {attempt + 1} for batch {batch_identifiers[0]} failed to decode JSON: {je}. Response: {response.text[:500] if 'response' in locals() else 'N/A'}")
         except Exception as e:
             error_message_str = str(e)
-            logging.warning(f"Attempt {attempt + 1}/{MAX_API_RETRIES_IMG} for {img_name} failed: {error_message_str}")
+            logging.warning(f"Attempt {attempt + 1}/{MAX_API_RETRIES_IMG} for batch {batch_identifiers[0]} failed: {error_message_str}")
             if "429" in error_message_str or "rate limit" in error_message_str.lower() or "quota" in error_message_str.lower():
                 config.mark_key_as_rate_limited(key_for_task, error_message_str)
 
-            if attempt < MAX_API_RETRIES_IMG - 1:
-                time.sleep(INITIAL_BACKOFF_SECONDS_IMG * (1.5**attempt) + random.uniform(0, 1))
-            else:
-                error_text_final = f"\n[Image {img_name} Error]\nAPI call failed after retries: {error_message_str}\n"
-                with open(analysis_file_path, "w", encoding="utf-8") as f_analysis:
-                    f_analysis.write(error_text_final)
-                return (page_num, img_idx), error_text_final
+        if attempt < MAX_API_RETRIES_IMG - 1:
+            time.sleep(INITIAL_BACKOFF_SECONDS_IMG * (1.5**attempt) + random.uniform(0, 1))
 
-    fallback_error = f"\n[Image {img_name} Error]\nCould not be analyzed after {MAX_API_RETRIES_IMG} attempts.\n"
-    return (page_num, img_idx), fallback_error
+    batch_error_results = {}
+    for img_data in image_batch_data:
+        error_text = f"\n[Image {img_data['img_name']} Error]\nBatch API call failed after retries.\n"
+        with open(img_data['analysis_file_path'], "w", encoding="utf-8") as f_analysis:
+            f_analysis.write(error_text)
+        img_key = (img_data['page_num'], img_data['img_idx'])
+        batch_error_results[img_key] = error_text
+    return batch_error_results
+
 
 def _determine_pdf_layout_with_gemini(pdf_path, num_pages_to_sample=3) -> str:
     """
@@ -229,7 +258,6 @@ def _determine_pdf_layout_with_gemini(pdf_path, num_pages_to_sample=3) -> str:
         gemini_response_text = response.text
         logging.info(f"Gemini layout analysis raw response: {gemini_response_text}")
 
-        # --- FIX: Robust parsing using regex instead of json.loads ---
         match = re.search(r'\b([136])\b', gemini_response_text)
         if match:
             psm_value = int(match.group(1))
@@ -332,18 +360,22 @@ def _process_pdf_core(pdf_path, output_text_file, images_folder_root, is_streaml
 
     if images_for_analysis:
         if is_streamlit_run:
-            st_progress_objects['status_text'].info(f"Step 3/3: Analyzing {len(images_for_analysis)} complex images in parallel...")
+            st_progress_objects['status_text'].info(f"Step 3/3: Analyzing {len(images_for_analysis)} complex images in batches...")
             st_progress_objects['progress_bar'].progress(0.45)
         
+        image_batches = [images_for_analysis[i:i + IMAGE_ANALYSIS_BATCH_SIZE] for i in range(0, len(images_for_analysis), IMAGE_ANALYSIS_BATCH_SIZE)]
+        
         with ThreadPoolExecutor(max_workers=MAX_IMAGE_ANALYSIS_WORKERS) as executor:
-            futures = {executor.submit(analyze_single_image_task, config.get_available_api_key(), img_data): img_data['img_name'] for img_data in images_for_analysis}
+            futures = {executor.submit(analyze_image_batch_task, config.get_available_api_key(), batch): batch for batch in image_batches}
             
             for i, future in enumerate(as_completed(futures), 1):
                 try:
-                    img_key, result_text = future.result()
-                    processed_image_results[img_key] = result_text
+                    batch_results = future.result()
+                    processed_image_results.update(batch_results)
                 except Exception as e_future:
-                    logging.error(f"Future for image '{futures[future]}' failed: {e_future}", exc_info=True)
+                    batch_info = futures[future]
+                    batch_start_name = batch_info[0]['img_name'] if batch_info else "N/A"
+                    logging.error(f"Future for image batch starting with '{batch_start_name}' failed: {e_future}", exc_info=True)
                 if is_streamlit_run:
                     st_progress_objects['progress_bar'].progress(0.45 + 0.50 * (i / len(futures)))
 
