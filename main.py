@@ -187,13 +187,22 @@ def render_main_analysis_page():
         html_file, pdf_file_report = f"Analyzed_{safe_title}.html", f"Analyzed_{safe_title}.pdf"
         with open(html_file, "w", encoding="utf-8") as f: f.write(html_content)
 
+        # --- MODIFICATION START ---
         try:
-            loop = asyncio.new_event_loop(); asyncio.set_event_loop(loop)
+            # Fix for Playwright's NotImplementedError on Windows
+            if platform.system() == "Windows":
+                asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+            
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
             loop.run_until_complete(html_to_pdf(html_content, pdf_file_report))
         except Exception as e:
-            st.error(f"PDF conversion failed: {e}"); pdf_file_report = None
+            st.error(f"PDF conversion failed: {e}")
+            pdf_file_report = None
         finally:
-            loop.close()
+            if 'loop' in locals() and not loop.is_closed():
+                loop.close()
+        # --- MODIFICATION END ---
 
         col1, col2 = st.columns(2)
         with col1:
@@ -217,25 +226,18 @@ def render_image_gallery_page():
             st.image(img_data['image_path'], use_container_width=True)
         
         with st.expander("View Analysis"):
-            # --- NEW DISPLAY LOGIC START ---
             try:
-                # Try to parse the analysis as JSON
                 parsed_data = json.loads(img_data['analysis'])
                 if isinstance(parsed_data, dict):
-                    # If it's a dictionary, iterate and display all key-value pairs
                     for key, value in parsed_data.items():
                         if value and str(value).strip().lower() not in ['null', 'n/a', '']:
-                            # Make key into a nice title, e.g. "explanation" -> "Explanation"
                             title = key.replace('_', ' ').title()
                             st.markdown(f"### {title}")
                             st.markdown(str(value))
                 else:
-                    # If it's valid JSON but not a dict (e.g., just a string), display it
                     st.markdown(str(parsed_data))
             except (json.JSONDecodeError, TypeError):
-                # If it's not valid JSON, treat it as a single block of Markdown text
                 st.markdown(img_data['analysis'])
-            # --- NEW DISPLAY LOGIC END ---
         st.divider()
 
 
