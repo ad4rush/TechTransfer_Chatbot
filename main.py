@@ -2,7 +2,6 @@ import streamlit as st
 import random
 import os
 import config
-import json
 from chatbot import initialize_model_for_chat, get_questions, define_question_batches, generate_answers_for_batch, generate_chat_response
 from datetime import datetime
 import asyncio
@@ -12,6 +11,7 @@ from pdf_utils import process_pdf_with_progress
 import re
 import platform
 import logging
+import json
 
 # Configure logging
 if not logging.getLogger().hasHandlers():
@@ -217,24 +217,28 @@ def render_image_gallery_page():
             st.image(img_data['image_path'], use_container_width=True)
         
         with st.expander("View Analysis"):
-            # --- MODIFICATION START ---
-            analysis_text = "Analysis not available."
+            # --- NEW DISPLAY LOGIC START ---
             try:
                 # Try to parse the analysis as JSON
                 parsed_data = json.loads(img_data['analysis'])
                 if isinstance(parsed_data, dict):
-                    # If it's a dictionary, get the explanation
-                    analysis_text = parsed_data.get('explanation', "No explanation found in the analysis.")
+                    # If it's a dictionary, iterate and display all key-value pairs
+                    for key, value in parsed_data.items():
+                        if value and str(value).strip().lower() not in ['null', 'n/a', '']:
+                            # Make key into a nice title, e.g. "explanation" -> "Explanation"
+                            title = key.replace('_', ' ').title()
+                            st.markdown(f"### {title}")
+                            st.markdown(str(value))
                 else:
-                    # If it parsed but isn't a dict, just show the string version
-                    analysis_text = str(parsed_data)
+                    # If it's valid JSON but not a dict (e.g., just a string), display it
+                    st.markdown(str(parsed_data))
             except (json.JSONDecodeError, TypeError):
-                # If it's not valid JSON, treat it as a plain string
-                analysis_text = img_data['analysis']
-            
-            st.markdown(analysis_text)
-            # --- MODIFICATION END ---
+                # If it's not valid JSON, treat it as a single block of Markdown text
+                st.markdown(img_data['analysis'])
+            # --- NEW DISPLAY LOGIC END ---
         st.divider()
+
+
 def render_chatbot_page():
     st.header("Chat with Your Document")
     
@@ -260,13 +264,10 @@ def render_chatbot_page():
                 st.markdown(response)
         
         st.session_state.chat_messages.append({"role": "assistant", "content": response})
-
-        # --- FIX: Save the summary of the current turn for the next turn's context ---
         new_q_summary = response_data.get("question_summary", "")
         new_a_summary = response_data.get("answer_summary", "")
         if new_q_summary and new_a_summary:
              st.session_state.chat_context_summaries.append((new_q_summary, new_a_summary))
-        # --- End of fix ---
 
 # --- Main App Logic ---
 st.title("Tech Transfer ChatBot")
