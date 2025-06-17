@@ -28,7 +28,7 @@ IMAGE_ANALYSIS_BATCH_SIZE = 5
 MAX_API_RETRIES_IMG = 3
 INITIAL_BACKOFF_SECONDS_IMG = 5
 CONTEXT_WINDOW_PAGES = 1
-OCR_TEXT_WORTHINESS_THRESHOLD = 25
+OCR_TEXT_WORTHINESS_THRESHOLD = 1
 IMAGE_PROCESSING_TIMEOUT = 300 # Increased timeout for larger batch calls
 OCR_TIMEOUT_SECONDS = 60
 
@@ -125,7 +125,7 @@ def is_image_worthy_for_gemini(image_bytes, min_text_len=OCR_TEXT_WORTHINESS_THR
         custom_oem_psm_config = psm_config_override if psm_config_override else r'--oem 3 --psm 6'
         ocr_text = _ocr_image_with_options(Image.open(BytesIO(image_bytes)), psm_config=custom_oem_psm_config)
         ocr_text_stripped = ocr_text.strip()
-        is_worthy = len(ocr_text_stripped) < min_text_len
+        is_worthy = len(ocr_text_stripped) > min_text_len
         return is_worthy, ocr_text_stripped
     except Exception as e:
         logging.warning(f"Error during OCR worthiness check: {e}. Assuming worthy for vision analysis.", exc_info=True)
