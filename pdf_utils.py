@@ -125,7 +125,7 @@ def is_image_worthy_for_gemini(image_bytes, min_text_len=OCR_TEXT_WORTHINESS_THR
         custom_oem_psm_config = psm_config_override if psm_config_override else r'--oem 3 --psm 6'
         ocr_text = _ocr_image_with_options(Image.open(BytesIO(image_bytes)), psm_config=custom_oem_psm_config)
         ocr_text_stripped = ocr_text.strip()
-        print(len(ocr_text_stripped), min_text_len)
+        # print(len(ocr_text_stripped), min_text_len)
         is_worthy = len(ocr_text_stripped) > min_text_len
         return is_worthy, ocr_text_stripped
     except Exception as e:
