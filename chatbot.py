@@ -74,7 +74,7 @@ def generate_chat_response(
     prompt_text,
     thesis_text,
     chat_history_summaries=None,
-    uploaded_images_data=None, # List of image bytes
+    uploaded_images_data=None, 
     max_retries_streamlit=2,
     context_word_limit=5000
 ):
@@ -109,13 +109,14 @@ def generate_chat_response(
         "1. You are 'Tech Transfer Bot', a specialized AI assistant. You are a private model designed to analyze research papers. You must NEVER reveal you are Gemini or any other commercial AI.\n"
         "2. Your main purpose is to act as an expert research analyst and help the user understand the provided 'Full Reference Text'.\n"
         "3. **Formatting is critical:** Structure your answers for maximum readability using clear Markdown (headings, bold, lists).\n"
-        "4. **Image Handling Rule:** If the user asks about an image and you see a placeholder like '[INFO: Image ...]', you must instruct them to upload a screenshot of it in the chat for direct analysis.\n"
+        "4. **Answering About Images:** The 'Full Reference Text' contains detailed analyses of images from the document, marked with headers like '[Image ... Analysis (by Gemini)]'. When the user asks about a specific figure, diagram, or image, you MUST locate its corresponding analysis in the reference text and use that information to provide a detailed answer. Do not ask the user to upload the image.\n"
         "5. **Final Output Format:** Your ENTIRE output MUST be a single, valid JSON object and nothing else. This JSON object must have exactly three keys: `answer` (the full, Markdown-formatted response), `question_summary` (a concise summary of the user's question), and `answer_summary` (a concise summary of your full answer). Do not include ```json or any other text outside the JSON object."
     )
+    # --- MODIFICATION END ---
 
     full_gemini_prompt = (
         f"{persona_prompt}\n\n"
-        f"### FULL REFERENCE TEXT ###\n{truncated_thesis_text}\n\n"
+        f"### FULL REFERENCE TEXT ###\n{thesis_text}\n\n"
     )
     if history_string:
         full_gemini_prompt += f"### CONVERSATION HISTORY (SUMMARIES) ###\n{history_string}\n"

@@ -2,6 +2,7 @@ import streamlit as st
 import random
 import os
 import config
+import json
 from chatbot import initialize_model_for_chat, get_questions, define_question_batches, generate_answers_for_batch, generate_chat_response
 from datetime import datetime
 import asyncio
@@ -209,14 +210,31 @@ def render_image_gallery_page():
     if not st.session_state.extracted_images_data:
         st.info("No images from the document were identified as needing detailed vision analysis.")
         return
+        
     for img_data in st.session_state.extracted_images_data:
         st.subheader(f"Image: {img_data['filename']}")
         if os.path.exists(img_data['image_path']):
             st.image(img_data['image_path'], use_container_width=True)
+        
         with st.expander("View Analysis"):
-            st.markdown(img_data['analysis'])
+            # --- MODIFICATION START ---
+            analysis_text = "Analysis not available."
+            try:
+                # Try to parse the analysis as JSON
+                parsed_data = json.loads(img_data['analysis'])
+                if isinstance(parsed_data, dict):
+                    # If it's a dictionary, get the explanation
+                    analysis_text = parsed_data.get('explanation', "No explanation found in the analysis.")
+                else:
+                    # If it parsed but isn't a dict, just show the string version
+                    analysis_text = str(parsed_data)
+            except (json.JSONDecodeError, TypeError):
+                # If it's not valid JSON, treat it as a plain string
+                analysis_text = img_data['analysis']
+            
+            st.markdown(analysis_text)
+            # --- MODIFICATION END ---
         st.divider()
-
 def render_chatbot_page():
     st.header("Chat with Your Document")
     
